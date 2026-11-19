@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Die t-Test-Kaskade · Stats Lab</title>
+<meta name="description" content="Interaktiv: vom Rohwert über Signal und Rauschen zur t-Verteilung, zum p-Wert, zu Alpha, Beta und Power.">
+<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="t-test.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="column">
+    <a class="brand" href="../">
+      <svg class="brand-mark" viewBox="0 0 22 22" aria-hidden="true"><path d="M1 19 C5 19 6 4 9 4 S13 19 17 19" fill="none" stroke="#DE8A5A" stroke-width="2.2" stroke-linecap="round"/><path d="M5 19 C9 19 10 7 13 7 S17 19 21 19" fill="none" stroke="#008080" stroke-width="2.2" stroke-linecap="round"/></svg>
+      Stats Lab
+    </a>
+    <nav class="site-nav" aria-label="Hauptnavigation">
+      <a href="../">Visualisierungen</a>
+      <a href="https://github.com/jnshsrs/stats-lab">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main class="column">
+  <section class="intro">
+    <a class="back" href="../">← Alle Visualisierungen</a>
+    <h1>Die t-Test-Kaskade</h1>
+    <p class="byline">Dr. Jens Hüsers · Forschungsmethodik</p>
+    <p class="lede">Beispiel: Schmerzreduktion in mm auf der VAS nach sechs Wochen, Therapie gegen Kontrolle. Die Daten sind simuliert. Verschieben Sie Signal, Rauschen und Stichprobengröße und verfolgen Sie, wie sich jede Stufe des t-Tests verändert.</p>
+  </section>
+
+  <section class="controls" aria-label="Parameter">
+    <div class="ctrl-grid">
+      <div class="ctrl">
+        <div class="ctrl-head"><label for="delta"><span class="ink-therapie">Signal</span> Δ</label><output id="delta-v" for="delta" class="num"></output></div>
+        <input id="delta" type="range" min="0" max="30" step="1" value="10">
+      </div>
+      <div class="ctrl">
+        <div class="ctrl-head"><label for="sigma"><span class="ink-kontrolle">Rauschen</span> σ</label><output id="sigma-v" for="sigma" class="num"></output></div>
+        <input id="sigma" type="range" min="5" max="40" step="1" value="20">
+      </div>
+      <div class="ctrl">
+        <div class="ctrl-head"><label for="n">n pro Gruppe</label><output id="n-v" for="n" class="num"></output></div>
+        <input id="n" type="range" min="3" max="100" step="1" value="20">
+      </div>
+      <div class="ctrl">
+        <div class="ctrl-head"><span id="alpha-lbl" class="lbl">Signifikanzniveau α</span></div>
+        <div class="seg" role="group" aria-labelledby="alpha-lbl">
+          <button type="button" data-alpha="0.01" aria-pressed="false">0,01</button>
+          <button type="button" data-alpha="0.05" aria-pressed="true">0,05</button>
+          <button type="button" data-alpha="0.10" aria-pressed="false">0,10</button>
+        </div>
+      </div>
+    </div>
+    <div class="ctrl-row">
+      <button class="btn" type="button" id="resample">Neue Stichprobe ziehen</button>
+      <span class="presets-lbl">Szenarien:</span>
+      <button class="chip" type="button" data-preset="h0">H0 ist wahr</button>
+      <button class="chip" type="button" data-preset="pilot">Pilotstudie, n = 8</button>
+      <button class="chip" type="button" data-preset="big">Große Studie, n = 100</button>
+      <button class="chip" type="button" data-preset="clean">Präzise Messung, σ = 8</button>
+    </div>
+  </section>
+
+  <section class="step" aria-labelledby="s1">
+    <span class="eyebrow">Schritt 1 von 5 · Rohdaten</span>
+    <h2 id="s1">Zwei Gruppen, zwei Mittelwerte, viel Streuung</h2>
+    <p class="text">Jeder Punkt ist eine Person. Die Kurven sind Normalverteilungen mit Mittelwert und Standardabweichung der Stichprobe, die gestrichelten Linien die Gruppenmittelwerte, die Balken darunter ± eine Standardabweichung.</p>
+    <div class="chart-tools">
+      <div class="seg seg-small" role="group" aria-label="Darstellung der Rohdaten">
+        <button type="button" data-view="dots" aria-pressed="true">Punkte</button>
+        <button type="button" data-view="box" aria-pressed="false">Boxplot</button>
+        <button type="button" data-view="both" aria-pressed="false">Beides</button>
+      </div>
+      <div class="legend"><span><i class="sw" style="background:var(--kontrolle)"></i>Kontrolle</span><span><i class="sw" style="background:var(--therapie)"></i>Therapie</span></div>
+    </div>
+    <svg class="chart" id="raw" viewBox="0 0 920 330" role="img"></svg>
+    <div class="readouts" id="raw-stats"></div>
+  </section>
+
+  <section class="step" aria-labelledby="s2">
+    <span class="eyebrow">Schritt 2 von 5 · Verdichten</span>
+    <h2 id="s2">Signal geteilt durch Rauschen ergibt t</h2>
+    <p class="text">Das Signal ist die Mittelwertdifferenz. Das Rauschen ist ihr Standardfehler: die gepoolte Streuung, verkleinert durch die Wurzel aus n. t zählt, wie oft der Standardfehler in die Differenz passt. Darum macht ein größeres n denselben Unterschied „lauter“.</p>
+    <div class="formula" id="formula"></div>
+    <svg class="chart" id="ruler" viewBox="0 0 920 124" role="img"></svg>
+  </section>
+
+  <section class="step" aria-labelledby="s3">
+    <span class="eyebrow">Schritt 3 von 5 · Einordnen</span>
+    <h2 id="s3">Wo liegt dieses t, wenn H0 stimmt?</h2>
+    <p class="text">Die t-Verteilung zeigt, welche t-Werte allein durch Zufall entstehen, wenn die Therapie nichts bewirkt. Ihre Form hängt nur von den Freiheitsgraden ab. Der p-Wert ist die dunkle Fläche jenseits des beobachteten t, auf beiden Seiten.</p>
+    <div class="chart-tools">
+      <label class="check"><input type="checkbox" id="shownormal"> Standardnormalverteilung zum Vergleich</label>
+      <div class="legend"><span><i class="sw" style="background:var(--alpha-fill)"></i>Ablehnungsbereich α</span><span><i class="sw" style="background:var(--pval)"></i>p-Wert</span></div>
+    </div>
+    <svg class="chart" id="tdist" viewBox="0 0 920 280" role="img"></svg>
+    <div class="readouts" id="t-stats"></div>
+  </section>
+
+  <section class="step" aria-labelledby="s4">
+    <span class="eyebrow">Schritt 4 von 5 · Vorausdenken</span>
+    <h2 id="s4">Alpha, Beta und Power</h2>
+    <p class="text">Warm die Verteilung von t, wenn H0 stimmt. Kühl die Verteilung, wenn der wahre Effekt Δ existiert (nichtzentrale t-Verteilung). Die Schwellen kommen aus α. Dieser Schritt nutzt die wahren Parameter, nicht die Stichprobe: Er beschreibt das Studiendesign, bevor die erste Person gemessen wird.</p>
+    <div class="chart-tools">
+      <div class="legend"><span><i class="sw" style="background:var(--alpha-fill)"></i>α: Fehlalarm, falls H0 stimmt</span><span><i class="sw" style="background:var(--beta-fill)"></i>β: Effekt übersehen</span><span><i class="sw" style="background:var(--power-fill);opacity:.7"></i>Power: Effekt entdeckt</span></div>
+    </div>
+    <svg class="chart" id="power" viewBox="0 0 920 280" role="img"></svg>
+    <div class="readouts" id="p-stats"></div>
+  </section>
+
+  <section class="step" aria-labelledby="s5">
+    <span class="eyebrow">Schritt 5 von 5 · Wiederholen</span>
+    <h2 id="s5">100 Studien mit demselben Design</h2>
+    <p class="text">Eine einzelne Studie ist ein Zufallszug. Simulieren Sie 100 Studien mit den aktuellen Parametern: Der Anteil signifikanter Ergebnisse nähert sich der Power. Bei Δ = 0 nähert er sich α.</p>
+    <div class="sim-row">
+      <button class="btn" type="button" id="simulate">100 Studien simulieren</button>
+      <p class="sim-text" id="sim-text" aria-live="polite"></p>
+    </div>
+    <div class="tiles" id="tiles" aria-hidden="true"></div>
+    <div class="legend"><span><i class="sw" style="background:var(--therapie)"></i>signifikant, Effekt existiert</span><span><i class="sw" style="background:var(--pval)"></i>signifikant, obwohl Δ = 0</span><span><i class="sw sw-empty"></i>nicht signifikant</span></div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="column">
+    <span>© 2026 Dr. Jens Hüsers · Lehrmaterial für Forschungsmethodik und Statistik</span>
+    <span class="footer-links"><a href="https://github.com/jnshsrs/stats-lab">Quellcode auf GitHub</a><span>Ohne Cookies und Tracking</span></span>
+  </div>
+</footer>
+<script src="t-test.js"></script>
+</body>
+</html>

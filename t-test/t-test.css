@@ -1,0 +1,73 @@
+/* t-Test-Kaskade: Steuerleiste oben (am Desktop mitlaufend), darunter fünf Schritte in einer Spalte */
+.intro { padding-block: 40px 28px; display: flex; flex-direction: column; gap: 12px; }
+.back { font-size: 15px; color: var(--muted); text-decoration: none; }
+.back:hover { color: var(--fg); }
+
+.ink-therapie { color: var(--therapie-ink); }
+.ink-kontrolle { color: var(--kontrolle-ink); }
+
+/* Steuerleiste */
+.controls { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px 20px; display: flex; flex-direction: column; gap: 14px; z-index: 5; }
+@media (min-width: 820px) {
+  .controls { position: sticky; top: 8px; box-shadow: 0 6px 18px -14px rgba(30, 43, 41, .45); }
+}
+.ctrl-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px 28px; }
+@media (max-width: 819px) { .ctrl-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 480px) { .ctrl-grid { grid-template-columns: minmax(0, 1fr); } }
+.ctrl { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.ctrl-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.ctrl label, .ctrl .lbl { font-size: 14px; font-weight: 500; }
+.ctrl output { white-space: nowrap; font-family: var(--font-mono); font-size: 15px; font-weight: 600; }
+input[type=range] { width: 100%; accent-color: var(--therapie); margin: 4px 0 0; }
+.ctrl-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; border-top: 1px solid var(--line); padding-top: 12px; }
+.presets-lbl { font-size: 13px; color: var(--muted); margin-left: 8px; }
+
+.seg { display: flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+.seg button { flex: 1; background: transparent; color: var(--fg); border: 0; padding: 6px 8px; font: 500 14px var(--font-mono); cursor: pointer; }
+.seg button + button { border-left: 1px solid var(--line); }
+.seg button[aria-pressed="true"] { background: var(--fg); color: var(--bg); }
+.seg-small { display: inline-flex; }
+.seg-small button { font-size: 13px; padding: 5px 12px; }
+
+.btn { border: 1px solid var(--therapie); background: var(--therapie); color: var(--bg); border-radius: 8px; padding: 8px 14px; font: 600 14px var(--font-sans); cursor: pointer; }
+.btn:hover { filter: brightness(1.08); }
+.chip { border: 1px solid var(--line); background: transparent; color: var(--fg); border-radius: 999px; padding: 5px 12px; font: 500 13px var(--font-sans); cursor: pointer; }
+.chip:hover { border-color: var(--geyser-2); background: var(--highlight); }
+
+/* Schritte */
+.step { padding-block: 56px 8px; display: flex; flex-direction: column; gap: 12px; border-bottom: 1px solid var(--line); padding-bottom: 48px; }
+.step:last-of-type { border-bottom: 0; }
+.step .text { color: var(--muted); max-width: 68ch; }
+.chart-tools { display: flex; flex-wrap: wrap; gap: 10px 24px; align-items: center; justify-content: space-between; margin-top: 8px; }
+.chart { width: 100%; height: auto; display: block; overflow: visible; margin-top: 4px; }
+.chart text { font-family: var(--font-mono); font-size: 13px; fill: var(--muted); }
+.chart .strong { fill: var(--fg); font-weight: 600; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 14px; color: var(--muted); }
+.sw { display: inline-block; width: 12px; height: 12px; border-radius: 3px; vertical-align: -1px; margin-right: 6px; }
+.sw-empty { border: 1px solid var(--muted); }
+.check { display: inline-flex; gap: 8px; align-items: center; font-size: 14px; cursor: pointer; }
+
+/* Kennzahlen im Stil großer Ablesewerte */
+.readouts { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-top: 8px; }
+.readout { border-top: 3px solid var(--line); padding-top: 8px; }
+.readout .val { font-size: 30px; font-weight: 600; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.readout .lbl { font-size: 14px; color: var(--muted); }
+.readout.r-kontrolle { border-top-color: var(--kontrolle); }
+.readout.r-therapie { border-top-color: var(--therapie); }
+.readout.r-alpha { border-top-color: var(--alpha-fill); } .readout.r-alpha .val { color: var(--alpha-ink); }
+.readout.r-beta { border-top-color: var(--beta-fill); } .readout.r-beta .val { color: var(--beta-ink); }
+.readout.r-power { border-top-color: var(--therapie); } .readout.r-power .val { color: var(--therapie-ink); }
+.readout.r-p { border-top-color: var(--pval); } .readout.r-p .val { color: var(--alpha-ink); }
+.readout.r-decision { background: var(--highlight); border-radius: 0 0 8px 8px; padding: 8px 12px 10px; }
+.readout.r-decision.sig { border-top-color: var(--therapie); }
+
+.formula { font-family: var(--font-mono); font-size: clamp(14px, 2vw, 18px); background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; overflow-x: auto; white-space: nowrap; font-variant-numeric: tabular-nums; margin-top: 8px; }
+.formula b { font-weight: 600; }
+
+.sim-row { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; margin-top: 8px; }
+.sim-text { font-size: 16px; max-width: 62ch; }
+.tiles { display: grid; grid-template-columns: repeat(20, minmax(0, 1fr)); gap: 5px; width: 100%; max-width: 640px; margin-top: 12px; }
+.tile { aspect-ratio: 1; border-radius: 3px; border: 1px solid var(--line); background: transparent; }
+.tile.sig { background: var(--therapie); border-color: var(--therapie); }
+.tile.sig.h0 { background: var(--pval); border-color: var(--pval); }
+@media (max-width: 480px) { .tiles { grid-template-columns: repeat(10, minmax(0, 1fr)); } }

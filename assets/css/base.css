@@ -1,0 +1,107 @@
+/* Stats Lab · gemeinsame Basis für alle Visualisierungen
+   Layout: eine zentrierte Lesespalte wie bei rpsychologist.com, schmale Kopfzeile, ruhiger Footer.
+   Farben: CARTO-Palette „Geyser“ (7 Stufen), warm = Welt ohne Effekt (H0), kühl = Welt mit Effekt (H1). */
+
+/* ---------- Schriften (lokal, SIL Open Font License) ---------- */
+@font-face { font-family: "IBM Plex Sans"; font-style: normal; font-weight: 400; font-display: swap;
+  src: url("../fonts/ibm-plex-sans-latin-400-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "IBM Plex Sans"; font-style: normal; font-weight: 500; font-display: swap;
+  src: url("../fonts/ibm-plex-sans-latin-500-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "IBM Plex Sans"; font-style: normal; font-weight: 600; font-display: swap;
+  src: url("../fonts/ibm-plex-sans-latin-600-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "IBM Plex Sans"; font-style: normal; font-weight: 700; font-display: swap;
+  src: url("../fonts/ibm-plex-sans-latin-700-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "IBM Plex Sans"; font-style: normal; font-weight: 400 500; font-display: swap;
+  src: url("../fonts/ibm-plex-sans-greek-400-normal.woff2") format("woff2");
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF; }
+@font-face { font-family: "IBM Plex Sans"; font-style: normal; font-weight: 600 700; font-display: swap;
+  src: url("../fonts/ibm-plex-sans-greek-600-normal.woff2") format("woff2");
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF; }
+@font-face { font-family: "IBM Plex Mono"; font-style: normal; font-weight: 400; font-display: swap;
+  src: url("../fonts/ibm-plex-mono-latin-400-normal.woff2") format("woff2"); }
+@font-face { font-family: "IBM Plex Mono"; font-style: normal; font-weight: 600; font-display: swap;
+  src: url("../fonts/ibm-plex-mono-latin-600-normal.woff2") format("woff2"); }
+
+/* ---------- Tokens ---------- */
+:root {
+  /* Geyser-7 */
+  --geyser-1: #008080; --geyser-2: #70A494; --geyser-3: #B4C8A8; --geyser-4: #F6EDBD;
+  --geyser-5: #EDBB8A; --geyser-6: #DE8A5A; --geyser-7: #CA562C;
+
+  --bg: #FCFBF7;
+  --surface: #FFFFFF;
+  --fg: #1E2B29;
+  --muted: #5A6966;
+  --line: #E3E5DD;
+  --grid: #EEF0E9;
+  --highlight: #FBF6DF;
+
+  /* Bedeutungen */
+  --kontrolle: var(--geyser-6);
+  --therapie: var(--geyser-1);
+  --alpha-fill: var(--geyser-5);
+  --pval: var(--geyser-7);
+  --beta-fill: var(--geyser-3);
+  --power-fill: var(--geyser-1);
+  /* Textfarben mit ausreichendem Kontrast auf hellem Grund */
+  --kontrolle-ink: #A9532A;
+  --therapie-ink: #006B6B;
+  --alpha-ink: #A9461F;
+  --beta-ink: #4C7A6B;
+
+  --font-sans: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "IBM Plex Mono", "IBM Plex Sans", Menlo, Consolas, monospace;
+  --column: 960px;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --geyser-1: #2AA9A2; --geyser-2: #86BAA9; --geyser-6: #E39B6E; --geyser-7: #E2703F;
+    --bg: #121917; --surface: #18211F; --fg: #E6ECE8; --muted: #9DACA6; --line: #28332F; --grid: #1D2724; --highlight: #2A2A1C;
+    --kontrolle-ink: #EBA77E; --therapie-ink: #5CC9C1; --alpha-ink: #F0A574; --beta-ink: #B2CFC1;
+    color-scheme: dark;
+  }
+}
+
+/* ---------- Grundgerüst ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--font-sans); font-size: 17px; line-height: 1.6; }
+a { color: var(--therapie-ink); text-underline-offset: 3px; }
+a:hover { text-decoration-thickness: 2px; }
+:focus-visible { outline: 2px solid var(--therapie); outline-offset: 3px; }
+img, svg { max-width: 100%; }
+
+.column { max-width: var(--column); margin: 0 auto; padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-right: max(20px, env(safe-area-inset-right, 0px)); }
+
+/* Kopfzeile */
+.site-header { border-bottom: 1px solid var(--line); background: var(--surface); }
+.site-header .column { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 60px; }
+.brand { display: inline-flex; align-items: center; gap: 10px; font-weight: 700; font-size: 18px; color: var(--fg); text-decoration: none; letter-spacing: -0.01em; }
+.brand-mark { display: inline-block; width: 22px; height: 22px; }
+.site-nav { display: flex; gap: 20px; font-size: 15px; }
+.site-nav a { color: var(--muted); text-decoration: none; }
+.site-nav a:hover, .site-nav a[aria-current="page"] { color: var(--fg); }
+
+/* Typografie */
+h1, h2, h3 { line-height: 1.15; letter-spacing: -0.015em; text-wrap: balance; }
+h1 { font-size: clamp(32px, 5vw, 46px); font-weight: 700; margin: 0; }
+h2 { font-size: clamp(24px, 3vw, 30px); font-weight: 600; margin: 0; }
+h3 { font-size: 20px; font-weight: 600; margin: 0; }
+p { margin: 0; }
+.lede { font-size: 19px; color: var(--muted); max-width: 64ch; }
+.byline { font-size: 15px; color: var(--muted); }
+.eyebrow { font-family: var(--font-mono); font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--therapie-ink); }
+.prose { max-width: 66ch; display: flex; flex-direction: column; gap: 14px; }
+.num { font-variant-numeric: tabular-nums; }
+
+/* Footer */
+.site-footer { border-top: 1px solid var(--line); margin-top: 72px; padding-block: 28px 40px; font-size: 14px; color: var(--muted); }
+.site-footer .column { display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between; }
+.site-footer a { color: var(--muted); }
+.footer-links { display: flex; flex-wrap: wrap; gap: 6px 20px; }
+
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; animation: none !important; } }
