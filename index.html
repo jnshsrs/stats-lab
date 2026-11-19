@@ -27,7 +27,8 @@
   .t-emp { fill: var(--surface); stroke: var(--empiric); }
   .t-theo { fill: var(--surface); stroke: var(--theory); }
   .t-theo-on { fill: var(--theory); stroke: var(--theory); }
-  .t-hyp { fill: var(--surface); stroke: var(--accent-soft); }
+  .t-hyp { fill: var(--surface); stroke: var(--accent-soft); stroke-width: 2; }
+  .t-up { fill: var(--kontrolle); } .t-down { fill: var(--therapie); }
 </style>
 </head>
 <body>
@@ -72,20 +73,19 @@
     <a class="card" href="inferenzzyklus/">
       <div class="card-thumb">
         <svg viewBox="0 0 320 180" aria-hidden="true">
-          <rect x="0" y="0" width="320" height="90" class="t-band"/>
-          <circle cx="160" cy="92" r="58" fill="none" class="t-axis" stroke-width="3"/>
-          <circle cx="110" cy="122" r="14" class="t-emp" stroke-width="3"/>
-          <circle cx="104" cy="70" r="14" class="t-theo-on" stroke-width="3"/>
-          <rect x="140" y="24" width="40" height="18" rx="9" class="t-hyp" stroke-width="2"/>
-          <circle cx="216" cy="70" r="14" class="t-theo" stroke-width="3"/>
-          <circle cx="210" cy="122" r="14" class="t-emp" stroke-width="3"/>
-          <circle cx="160" cy="150" r="14" class="t-emp" stroke-width="3"/>
+          <rect x="0" y="0" width="320" height="80" class="t-band"/>
+          <rect x="70" y="22" width="180" height="40" rx="10" class="t-hyp"/>
+          <rect x="70" y="122" width="180" height="40" rx="10" class="t-hyp"/>
+          <line x1="110" x2="110" y1="118" y2="72" class="t-h0-line" stroke-width="5" stroke-linecap="round"/>
+          <polygon points="101,76 119,76 110,64" class="t-up"/>
+          <line x1="210" x2="210" y1="66" y2="112" class="t-h1-line" stroke-width="5" stroke-linecap="round"/>
+          <polygon points="201,108 219,108 210,120" class="t-down"/>
         </svg>
       </div>
       <div class="card-body">
-        <h3>Der Inferenzzyklus</h3>
-        <p>Beobachtung, Induktion, Deduktion, Prüfung und Bewertung als Kreislauf. Mit Peirce, Popper, de Groot und Box.</p>
-        <div class="tags"><span class="tag">Induktion</span><span class="tag">Deduktion</span><span class="tag">Wissenschaftstheorie</span></div>
+        <h3>Induktion, Deduktion und der Signifikanztest</h3>
+        <p>Vom Speziellen aufs Allgemeine und zurück, aus Poppers Perspektive. Mit Schwan-Experiment und der Frage, was ein p-Wert logisch leistet.</p>
+        <div class="tags"><span class="tag">Popper</span><span class="tag">Falsifikation</span><span class="tag">Inferenz</span></div>
       </div>
     </a>
   </div>

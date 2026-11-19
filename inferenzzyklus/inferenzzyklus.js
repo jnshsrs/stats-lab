@@ -1,196 +1,152 @@
-/* Inferenzzyklus · Stats Lab
-   Fünf Phasen des empirischen Zyklus nach de Groot, oben die Welt der Theorie, unten die Welt der Daten. */
+/* Induktion und Deduktion · Stats Lab
+   Oben die Ebene des Allgemeinen, unten die des Speziellen.
+   Links der Weg nach oben, rechts der Weg nach unten. Jeder Schritt setzt Inhalt und Zustand der beiden Pfeile. */
 (() => {
 "use strict";
 
-const STATIONS = [
+const STEPS = [
   {
-    id: "beobachtung", name: "Beobachtung", angle: 236, kind: "empiric", mode: "Empirie · Ausgangspunkt",
-    what: "Am Anfang steht eine Erfahrung, die auffällt oder überrascht. Sie ist noch keine Erkenntnis, sondern ein Anlass zu fragen.",
-    example: "In der Praxis fällt auf: Patientinnen und Patienten mit akuten unspezifischen Rückenschmerzen berichten nach einer <b>Mobilisation der Lendenwirbelsäule</b> oft schnell von weniger Schmerz. Das sind Einzelfälle ohne Kontrollgruppe.",
-    who: ["peirce", "degroot"],
-    whoText: "<b>Peirce:</b> Eine überraschende Beobachtung verlangt nach einer Erklärung. Daraus entsteht durch Abduktion die erste Vermutung.",
-    pitfall: "<b>Falle:</b> Was man erwartet, sieht man leichter. Spontane Besserung und der natürliche Verlauf akuter Rückenschmerzen sehen in der Praxis genauso aus wie ein Therapieeffekt."
+    kicker: "Schritt 1 · Induktion", title: "Vom Speziellen aufs Allgemeine",
+    top: ["Alle Schwäne sind weiß."], bottom: ["Schwan 1 bis 1.000", "war weiß."],
+    up: { label: "Induktion", sub: "erweitert, aber unsicher", state: "on", color: "var(--kontrolle)" },
+    down: { label: "Deduktion", sub: "", state: "off" },
+    text: "Aus vielen Einzelbeobachtungen wird ein allgemeiner Satz. So lernen wir im Alltag und in der Praxis.",
+    plus: "erweitert das Wissen", minus: "nie sicher",
+    example: "Praxis: Zwanzig Patientinnen ging es nach der Mobilisation besser. Also wirkt Mobilisation. Klingt plausibel, folgt aber nicht zwingend.",
+    note: "David Hume (1748): Aus noch so vielen Fällen folgt logisch kein allgemeiner Satz. Der nächste Fall kann anders sein."
   },
   {
-    id: "induktion", name: "Induktion", angle: 300, kind: "theory", mode: "Schluss nach oben · vom Einzelnen zum Allgemeinen",
-    what: "Aus vielen einzelnen Fällen wird eine allgemeine Hypothese. Peirce unterscheidet davon die Abduktion: das Finden der plausibelsten Erklärung, der eigentlich kreative Schritt.",
-    example: "<b>Hypothese:</b> Mobilisation zusätzlich zur Standardversorgung reduziert den Schmerz nach sechs Wochen stärker als die Standardversorgung allein.<br><b>Statistisch:</b> H1: μ<sub>Therapie</sub> ≠ μ<sub>Kontrolle</sub> · H0: kein Unterschied.",
-    who: ["peirce", "degroot", "box"],
-    whoText: "<b>Peirce:</b> Abduktion ist die einzige Schlussart, die eine neue Idee hervorbringt. <b>Box:</b> Die Daten verändern das Modell, das Modell lenkt den Blick auf neue Daten.",
-    pitfall: "<b>Falle:</b> Aus endlich vielen Fällen folgt nie sicher ein allgemeiner Satz. Die Hypothese kann falsch sein, so überzeugend die Einzelfälle auch wirken."
+    kicker: "Schritt 2 · Deduktion", title: "Vom Allgemeinen aufs Spezielle",
+    top: ["Alle Schwäne sind weiß."], bottom: ["Also ist der nächste", "Schwan weiß."],
+    up: { label: "Induktion", sub: "", state: "off" },
+    down: { label: "Deduktion", sub: "sicher, aber nichts Neues", state: "on", color: "var(--therapie)" },
+    text: "Aus einem allgemeinen Satz wird ein Einzelfall abgeleitet. Stimmt die Prämisse, stimmt zwingend auch die Folgerung.",
+    plus: "wahrheitserhaltend", minus: "erweitert kein Wissen",
+    example: "Wenn Mobilisation bei allen Betroffenen den Schmerz senkt, dann muss sie ihn auch bei Frau M. senken. Die Folgerung steckt schon in der Prämisse."
   },
   {
-    id: "deduktion", name: "Deduktion", angle: 60, kind: "theory", mode: "Schluss nach unten · vom Allgemeinen zum Einzelnen",
-    what: "Aus der Hypothese werden prüfbare Vorhersagen logisch abgeleitet. Wenn die Hypothese stimmt, muss unter bestimmten Bedingungen etwas Bestimmtes beobachtbar sein.",
-    example: "<b>Wenn</b> die Mobilisation wirkt, <b>dann</b> muss in einer randomisierten Studie die mittlere Schmerzreduktion auf der VAS in der Therapiegruppe größer sein.<br><b>Und:</b> Wenn H0 stimmt, folgt t einer t-Verteilung mit 2n − 2 Freiheitsgraden.",
-    who: ["popper", "degroot"],
-    whoText: "<b>Popper:</b> Eine Hypothese ist nur dann wissenschaftlich, wenn sie Vorhersagen macht, die an der Erfahrung scheitern können.",
-    pitfall: "<b>Falle:</b> Vage Hypothesen sind unwiderlegbar. „Mobilisation hilft manchen irgendwie“ verbietet kein einziges Studienergebnis.",
-    tlink: true
+    kicker: "Schritt 3 · Poppers Antwort", title: "Prüfen statt beweisen",
+    top: ["Hypothese H:", "Alle Schwäne sind weiß."], bottom: ["Beobachtung:", "ein schwarzer Schwan."],
+    up: { label: "Falsifikation", sub: "B tritt nicht ein, also gilt H nicht", state: "on", color: "var(--accent)" },
+    down: { label: "Deduktion", sub: "Vorhersage B ableiten", state: "on", color: "var(--therapie)" },
+    text: "Popper streicht die Induktion als Begründung. Woher eine Hypothese kommt, ist egal. Wissenschaftlich zählt nur, was man aus ihr ableitet und an der Erfahrung scheitern lassen kann.",
+    plus: "Falsifikation ist logisch gültig", minus: "Verifikation ist unmöglich",
+    example: "1.000 weiße Schwäne beweisen den Satz nicht. Ein schwarzer widerlegt ihn. Eine Hypothese, die viele ernsthafte Widerlegungsversuche übersteht, gilt als bewährt, nicht als wahr.",
+    note: "Karl Popper, Logik der Forschung (1935). Probieren Sie es unten im Schwan-Experiment aus."
   },
   {
-    id: "pruefung", name: "Prüfung", angle: 120, kind: "empiric", mode: "Empirie · Vorhersage trifft Daten",
-    what: "Neue Daten werden gezielt erhoben, um die Vorhersage zu prüfen. Design, Fallzahl und Analyse werden vorher festgelegt.",
-    example: "Randomisierte Studie mit zwei Gruppen, Fallzahl aus einer Poweranalyse, primärer Endpunkt Schmerz auf der VAS nach sechs Wochen. Auswertung mit dem <b>t-Test</b> für unabhängige Stichproben.",
-    who: ["popper", "box", "degroot"],
-    whoText: "<b>Box:</b> Statistik ist das Werkzeug an der Nahtstelle zwischen Modell und Daten. <b>Popper:</b> Der Test ist ein ernsthafter Versuch, die eigene Hypothese zu widerlegen.",
-    pitfall: "<b>Falle:</b> Eine zu kleine Studie hat zu wenig Power. Sie kann einen echten Effekt kaum entdecken, und der Zyklus dreht sich ins Leere.",
-    tlink: true
+    kicker: "Schritt 4 · Signifikanztest", title: "Popper mit Wahrscheinlichkeiten",
+    top: ["H0: Die Therapie", "wirkt nicht."], bottom: ["Daten:", "t = 2,50 · p = 0,017"],
+    up: { label: "H0 verwerfen", sub: "probabilistisch, kein gültiger Schluss", state: "dashed", color: "var(--accent)" },
+    down: { label: "Deduktion", sub: "aus H0 folgt die t-Verteilung", state: "on", color: "var(--therapie)" },
+    text: "Der Test leitet aus H0 ab, welche Ergebnisse zu erwarten wären. Liegen die Daten im unwahrscheinlichen Bereich, wird H0 verworfen. Der Weg nach oben ist aber kein strenger Modus tollens: Unwahrscheinliche Daten sind unter H0 trotzdem möglich.",
+    plus: "deduktiver Kern: die Verteilung unter H0", minus: "Verwerfen bleibt fehlbar (α)",
+    example: "Unter H0 wäre ein Betrag von t ab 2,50 in nur 1,7 % der Studien zu erwarten. Wir verwerfen H0 und irren uns dabei auf lange Sicht in höchstens α der Fälle, in denen H0 stimmt.",
+    note: "Popper schlug selbst vor, sehr unwahrscheinliche Ergebnisse per Konvention wie Falsifikationen zu behandeln. Diese Konvention heißt heute α.",
+    link: true
   },
   {
-    id: "bewertung", name: "Bewertung", angle: 180, kind: "empiric", mode: "Empirie · Was folgt daraus?",
-    what: "Das Ergebnis wird auf die Hypothese zurückbezogen. Sie hat sich vorläufig bewährt, muss eingeschränkt werden oder ist gescheitert. In jedem Fall entstehen neue Fragen.",
-    example: "<b>Signifikant:</b> Die Hypothese hat sich bewährt, bewiesen ist sie nicht.<br><b>Nicht signifikant:</b> Die Hypothese ist nicht automatisch widerlegt, vielleicht war die Power zu gering.<br><b>Neue Fragen:</b> Für wen wirkt es? In welcher Dosis? Wie lange hält der Effekt?",
-    who: ["popper", "box", "degroot"],
-    whoText: "<b>Popper:</b> Hypothesen werden nie verifiziert, nur bewährt oder falsifiziert. <b>Box:</b> Jede Antwort ist der Anfang der nächsten Iteration.",
-    pitfall: "<b>Falle:</b> „Nicht signifikant“ heißt nicht „kein Effekt“. Und ein einzelnes signifikantes Ergebnis kann ein Alpha-Fehler sein."
+    kicker: "Schritt 5 · Induktion und Inferenz", title: "Ein und dasselbe? Nein.",
+    top: ["Population:", "wahre Differenz Δ"], bottom: ["Stichprobe:", "beobachtete Differenz"],
+    up: { label: "Statistische Inferenz", sub: "induktive Richtung, Unsicherheit beziffert", state: "dashed", color: "var(--kontrolle)" },
+    down: { label: "Modell", sub: "deduktiver Kern: Stichprobenverteilung", state: "on", color: "var(--therapie)" },
+    text: "Inferenz ist der Oberbegriff für jedes Schließen: deduktiv, induktiv, abduktiv. Statistische Inferenz schließt von der Stichprobe auf die Population, also induktiv der Richtung nach. Die Rechnung dahinter ist aber deduktiv: Unter festen Annahmen wird die Stichprobenverteilung mathematisch abgeleitet.",
+    plus: "macht die Unsicherheit messbar", minus: "beseitigt sie nicht",
+    example: "Ein 95-%-Konfidenzintervall sagt nicht, wo Δ sicher liegt. Es sagt, dass so konstruierte Intervalle Δ auf lange Sicht in 95 % der Studien einfangen."
   }
 ];
 
-const PEOPLE = [
-  { id: "peirce", initials: "CP", name: "Charles S. Peirce", years: "1839 bis 1914", role: "Philosoph und Logiker, USA", color: "var(--person-1)",
-    idea: "Unterschied drei Schlussarten: Deduktion, Induktion und Abduktion. Nur die Abduktion bringt neue Hypothesen hervor.",
-    work: "Begründer des Pragmatismus" },
-  { id: "popper", initials: "KP", name: "Karl Popper", years: "1902 bis 1994", role: "Wissenschaftsphilosoph, Wien und London", color: "var(--person-2)",
-    idea: "Theorien lassen sich nicht beweisen, nur an der Erfahrung prüfen. Gute Hypothesen sind kühn und können scheitern.",
-    work: "Logik der Forschung, 1934" },
-  { id: "degroot", initials: "AG", name: "Adriaan de Groot", years: "1914 bis 2006", role: "Psychologe und Methodiker, Niederlande", color: "var(--person-3)",
-    idea: "Beschrieb den empirischen Zyklus in fünf Phasen: Beobachtung, Induktion, Deduktion, Prüfung, Bewertung.",
-    work: "Methodologie, 1961" },
-  { id: "box", initials: "GB", name: "George E. P. Box", years: "1919 bis 2013", role: "Statistiker, England und USA", color: "var(--person-4)",
-    idea: "Sah Forschung als iteratives Wechselspiel zwischen Theorie und Daten, mit der Statistik als Motor dazwischen.",
-    work: "Science and Statistics, 1976" }
-];
-
-const NS = "http://www.w3.org/2000/svg";
-const CX = 280, CY = 290, R = 180, NODE_R = 52;
 const $ = id => document.getElementById(id);
-const rad = d => d * Math.PI / 180;
-const pt = (deg, r = R) => [CX + r * Math.sin(rad(deg)), CY - r * Math.cos(rad(deg))];
+let cur = 0;
 
-let current = 0;
-let person = null;
-
-function arc(a1, a2, off1, off2) {
-  // Kreisbogen im Uhrzeigersinn von a1 nach a2, an beiden Enden um den Knotenradius gekürzt
-  if (a2 <= a1) a2 += 360;
-  const s = a1 + off1, e = a2 - off2;
-  const [x1, y1] = pt(s), [x2, y2] = pt(e);
-  const large = (e - s) > 180 ? 1 : 0;
-  return `M${x1.toFixed(1)},${y1.toFixed(1)} A${R},${R} 0 ${large} 1 ${x2.toFixed(1)},${y2.toFixed(1)}`;
-}
-
-function build() {
-  const svg = $("cycle");
-  const nodeOff = (NODE_R + 8) / R * 180 / Math.PI;
-  const hypOff = 58 / R * 180 / Math.PI;
-  let s = `<defs><marker id="head" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="context-stroke"/></marker></defs>`;
-  // Hintergrund: oben Theorie, unten Empirie
-  s += `<rect x="0" y="0" width="560" height="${CY}" fill="var(--theory-band)"/>`;
-  s += `<rect x="0" y="${CY}" width="560" height="${560 - CY}" fill="var(--empiric-band)"/>`;
-  s += `<line x1="0" x2="560" y1="${CY}" y2="${CY}" stroke="var(--line)" stroke-dasharray="4 5"/>`;
-  s += `<text class="band-label" x="16" y="26">WELT DER THEORIE</text>`;
-  s += `<text class="band-label" x="16" y="${560 - 14}">WELT DER DATEN</text>`;
-  // Kanten
-  const edges = [
-    { from: 236, to: 300, o1: nodeOff, o2: nodeOff, label: "Abduktion", la: 268, step: 1 },
-    { from: 300, to: 360, o1: nodeOff, o2: hypOff, label: "", la: 330, step: 1 },
-    { from: 0, to: 60, o1: hypOff, o2: nodeOff, label: "", la: 30, step: 2 },
-    { from: 60, to: 120, o1: nodeOff, o2: nodeOff, label: "Vorhersage", la: 90, step: 3 },
-    { from: 120, to: 180, o1: nodeOff, o2: nodeOff, label: "Daten", la: 150, step: 4 },
-    { from: 180, to: 236, o1: nodeOff, o2: nodeOff, label: "neue Fragen", la: 208, step: 0 }
-  ];
-  edges.forEach((e, i) => {
-    s += `<path class="edge" data-step="${e.step}" id="edge-${i}" d="${arc(e.from, e.to, e.o1, e.o2)}" marker-end="url(#head)"/>`;
-    if (e.label) {
-      const [x, y] = pt(e.la, R + 30);
-      const anchor = Math.abs(x - CX) < 20 ? "middle" : (x > CX ? "start" : "end");
-      s += `<text class="edge-label" data-step="${e.step}" x="${x.toFixed(1)}" y="${(y + 4).toFixed(1)}" text-anchor="${anchor}">${e.label}</text>`;
-    }
-  });
-  // Hypothese als Scheitelpunkt
-  const [hx, hy] = pt(0);
-  s += `<g class="hyp" id="hyp"><rect x="${hx - 56}" y="${hy - 18}" width="112" height="36" rx="18"/><text x="${hx}" y="${hy + 5}" text-anchor="middle">Hypothese</text></g>`;
-  // Knoten
-  STATIONS.forEach((st, i) => {
-    const [x, y] = pt(st.angle);
-    s += `<g class="node" data-i="${i}" role="button" tabindex="0" aria-label="Station ${i + 1}: ${st.name}">
-      <circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${NODE_R}"/>
-      <text class="n-no" x="${x.toFixed(1)}" y="${(y - 8).toFixed(1)}" text-anchor="middle">${i + 1}</text>
-      <text class="n-lbl" x="${x.toFixed(1)}" y="${(y + 12).toFixed(1)}" text-anchor="middle">${st.name}</text>
+function drawLadder(st) {
+  const box = (y, lines) => {
+    const h = 92, x = 70, w = 420;
+    let s = `<rect class="box" x="${x}" y="${y}" width="${w}" height="${h}" rx="14"/>`;
+    const lh = 24, y0 = y + h / 2 - (lines.length - 1) * lh / 2 + 6;
+    lines.forEach((l, i) => { s += `<text class="box-text" x="280" y="${y0 + i * lh}" text-anchor="middle">${l}</text>`; });
+    return s;
+  };
+  const arrow = (x, y1, y2, a, side) => {
+    const col = a.state === "off" ? "var(--line)" : a.color;
+    const dash = a.state === "dashed" ? ' stroke-dasharray="10 8"' : "";
+    const op = a.state === "off" ? .55 : 1;
+    const dir = y2 < y1 ? -1 : 1;
+    const head = `${x - 11},${y2 - dir * 16} ${x + 11},${y2 - dir * 16} ${x},${y2}`;
+    const tx = side === "left" ? x + 22 : x - 22, anchor = side === "left" ? "start" : "end";
+    const mid = (y1 + y2) / 2 + (side === "left" ? -26 : 30);
+    return `<g class="arr" opacity="${op}">
+      <line x1="${x}" x2="${x}" y1="${y1}" y2="${y2 - dir * 14}" stroke="${col}" stroke-width="${a.state === "off" ? 3 : 5}"${dash} stroke-linecap="round"/>
+      <polygon points="${head}" fill="${col}"/>
+      <text class="arrow-label" x="${tx}" y="${mid - 4}" text-anchor="${anchor}" fill="${a.state === "off" ? "var(--muted)" : "var(--fg)"}">${a.label}</text>
+      ${a.sub ? `<text class="arrow-sub" x="${tx}" y="${mid + 18}" text-anchor="${anchor}">${a.sub}</text>` : ""}
     </g>`;
-  });
-  // Mitte: Leitfrage
-  s += `<text x="${CX}" y="${CY - 8}" text-anchor="middle" style="font-size:13px;fill:var(--muted)">Theorie und Daten</text>`;
-  s += `<text x="${CX}" y="${CY + 14}" text-anchor="middle" style="font-size:13px;fill:var(--muted)">prüfen sich gegenseitig</text>`;
+  };
+  let s = "";
+  s += `<rect x="0" y="0" width="560" height="190" fill="var(--theory-band)"/><rect x="0" y="280" width="560" height="190" fill="var(--empiric-band)"/>`;
+  s += `<text class="band-label" x="16" y="24">ALLGEMEIN · THEORIE</text>`;
+  s += `<text class="band-label" x="16" y="458">SPEZIELL · BEOBACHTUNG</text>`;
+  s += box(48, st.top) + box(330, st.bottom);
+  s += arrow(100, 326, 146, st.up, "left");
+  s += arrow(460, 146, 326, st.down, "right");
+  const svg = $("ladder");
   svg.innerHTML = s;
-
-  svg.querySelectorAll(".node").forEach(g => {
-    g.addEventListener("click", () => go(+g.dataset.i));
-    g.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); go(+g.dataset.i); } });
-  });
-
-  $("people").innerHTML = PEOPLE.map(p => {
-    const initials = p.initials;
-    const stations = STATIONS.filter(st => st.who.includes(p.id)).map(st => `<span class="chip">${st.name}</span>`).join("");
-    return `<button class="person" type="button" data-p="${p.id}" aria-pressed="false">
-      <div class="person-top"><span class="mono" style="background:${p.color}" aria-hidden="true">${initials}</span>
-      <div><h3>${p.name}</h3><div class="years">${p.years}</div></div></div>
-      <div class="role">${p.role}</div>
-      <p class="idea">${p.idea}</p>
-      <div class="work">${p.work}</div>
-      <div class="stations">${stations}</div>
-    </button>`;
-  }).join("");
-  document.querySelectorAll(".person").forEach(b => b.addEventListener("click", () => {
-    person = person === b.dataset.p ? null : b.dataset.p;
-    document.querySelectorAll(".person").forEach(x => x.setAttribute("aria-pressed", x.dataset.p === person));
-    if (person) { const first = STATIONS.findIndex(st => st.who.includes(person)); if (!STATIONS[current].who.includes(person)) current = first; }
-    render();
-  }));
+  svg.setAttribute("aria-label", `${st.kicker}. Oben: ${st.top.join(" ")} Unten: ${st.bottom.join(" ")} Nach oben: ${st.up.label}. Nach unten: ${st.down.label}.`);
 }
 
 function render() {
-  const st = STATIONS[current];
-  document.querySelectorAll("#cycle .node").forEach(g => {
-    const i = +g.dataset.i, s = STATIONS[i], on = i === current;
-    const col = s.kind === "theory" ? "var(--theory)" : "var(--empiric)";
-    const c = g.querySelector("circle");
-    c.setAttribute("fill", on ? col : "var(--surface)");
-    c.setAttribute("stroke", col);
-    g.querySelectorAll("text").forEach(t => t.setAttribute("fill", !on ? "var(--fg)" : s.kind === "theory" ? "var(--on-theory)" : "var(--on-empiric)"));
-    g.classList.toggle("dim", !!person && !s.who.includes(person));
-    g.setAttribute("aria-current", on ? "step" : "false");
-  });
-  document.querySelectorAll("#cycle .edge, #cycle .edge-label").forEach(e => {
-    e.classList.toggle("active", +e.dataset.step === current);
-  });
-  // Hervorgehoben ist jeweils der Weg, der zur aktuellen Station führt
-  $("hyp").classList.toggle("dim", !!person && !["induktion", "deduktion"].some(id => STATIONS.find(s => s.id === id).who.includes(person)));
-
-  const who = st.who.map(id => PEOPLE.find(p => p.id === id).name).join(" · ");
+  const st = STEPS[cur];
+  drawLadder(st);
   $("detail").innerHTML = `
-    <span class="mode ${st.kind}">${st.mode}</span>
-    <h2>${current + 1} · ${st.name}</h2>
-    <p class="what">${st.what}</p>
+    <span class="kicker">${st.kicker}</span>
+    <h2>${st.title}</h2>
+    <p>${st.text}</p>
+    <div class="props"><span class="prop plus">+ ${st.plus}</span><span class="prop minus">− ${st.minus}</span></div>
     <div class="example">${st.example}</div>
-    <p class="who">${st.whoText}</p>
-    <p class="pitfall">${st.pitfall}</p>
-    ${st.tlink ? `<p class="tlink"><a href="../t-test/">Diesen Schritt in der t-Test-Kaskade ansehen →</a></p>` : ""}
-    <p class="who">Geprägt von: ${who}</p>`;
-  $("step-count").textContent = `${current + 1} von ${STATIONS.length}`;
+    ${st.note ? `<p class="note">${st.note}</p>` : ""}
+    ${st.link ? `<p class="note"><a href="../t-test/">Diesen Schritt in der t-Test-Kaskade ansehen →</a></p>` : ""}`;
+  $("step-count").textContent = `${cur + 1} von ${STEPS.length}`;
+  document.querySelectorAll("#dots button").forEach((b, i) => b.setAttribute("aria-selected", i === cur));
+  $("prev").disabled = cur === 0; $("next").disabled = cur === STEPS.length - 1;
+  $("prev").style.opacity = cur === 0 ? .4 : 1; $("next").style.opacity = cur === STEPS.length - 1 ? .4 : 1;
 }
-
-function go(i) { current = (i + STATIONS.length) % STATIONS.length; render(); }
-$("prev").addEventListener("click", () => go(current - 1));
-$("next").addEventListener("click", () => go(current + 1));
+const go = i => { cur = Math.max(0, Math.min(STEPS.length - 1, i)); render(); };
+$("dots").innerHTML = STEPS.map(s => `<button type="button" role="tab" aria-label="${s.kicker}"></button>`).join("");
+document.querySelectorAll("#dots button").forEach((b, i) => b.addEventListener("click", () => go(i)));
+$("prev").addEventListener("click", () => go(cur - 1));
+$("next").addEventListener("click", () => go(cur + 1));
 document.addEventListener("keydown", e => {
-  if (e.target.closest && e.target.closest("input, textarea")) return;
-  if (e.key === "ArrowRight") go(current + 1);
-  if (e.key === "ArrowLeft") go(current - 1);
+  if (e.key === "ArrowRight") go(cur + 1);
+  if (e.key === "ArrowLeft") go(cur - 1);
 });
 
-build();
+// ---------- Schwan-Experiment ----------
+let white = 0, black = 0;
+const SHOW = 400;
+function renderSwans() {
+  const n = Math.min(white, SHOW);
+  $("swans").innerHTML = '<span class="swan"></span>'.repeat(n) + '<span class="swan black"></span>'.repeat(black);
+  const st = $("swan-status"), hyp = document.querySelector(".hyp-text"), tx = $("swan-text");
+  const nf = white.toLocaleString("de-DE");
+  hyp.classList.toggle("struck", black > 0);
+  if (black > 0) {
+    st.className = "status no"; st.textContent = "falsifiziert";
+    tx.innerHTML = `${nf} weiße Schwäne haben nichts bewiesen. <b>Ein einziger schwarzer Schwan</b> genügt, um die Hypothese logisch zu widerlegen. Das ist Poppers Asymmetrie.`;
+  } else if (white > 0) {
+    st.className = "status ok"; st.textContent = "bewährt, nicht bewiesen";
+    tx.innerHTML = `${nf} weiße Schwäne${white > SHOW ? " (angezeigt: " + SHOW + ")" : ""}. Die Hypothese hat sich bewährt. Bewiesen ist sie nicht, und daran ändert auch der nächste weiße Schwan nichts.`;
+  } else {
+    st.className = "status"; st.textContent = "ungeprüft";
+    tx.textContent = "Noch keine Beobachtung.";
+  }
+  $("w1").disabled = $("w100").disabled = black > 0;
+  $("w1").style.opacity = $("w100").style.opacity = black > 0 ? .4 : 1;
+}
+$("w1").addEventListener("click", () => { white += 1; renderSwans(); });
+$("w100").addEventListener("click", () => { white += 100; renderSwans(); });
+$("b1").addEventListener("click", () => { black = 1; renderSwans(); });
+$("reset").addEventListener("click", () => { white = 0; black = 0; renderSwans(); });
+
 render();
+white = 12; renderSwans();
 })();
