@@ -6,7 +6,7 @@
    1. Schriften   (Dateien liegen in assets/fonts/)
    2. Palette     (Rohfarben, hier: ColorBrewer PuBu, 6 Stufen)
    3. Bedeutungen (welche Rolle welche Farbe übernimmt)
-   4. Dunkelmodus
+   4. Dunkelmodus (ausgeschaltet; nur über data-theme="dark" am <html> aktivierbar)
    ========================================================================== */
 
 /* ---------- 1. Schriften ----------
@@ -35,7 +35,7 @@
 
   /* ---------- 3. Bedeutungen ---------- */
   /* Flächen und Text */
-  --bg: #FAFAFC;
+  --bg: #FFFFFF;
   --surface: #FFFFFF;
   --fg: #1B2433;
   --muted: #5B6475;
@@ -80,9 +80,11 @@
   --on-person: #10233A;
 }
 
-/* ---------- 4. Dunkelmodus (folgt der Systemeinstellung) ---------- */
-@media (prefers-color-scheme: dark) {
-  :root {
+/* ---------- 4. Dunkelmodus ----------
+   Die Seiten sind immer hell, auch wenn das Betriebssystem dunkel eingestellt ist.
+   Die dunklen Werte bleiben erhalten und lassen sich mit <html data-theme="dark"> einschalten. */
+:root { color-scheme: light; }
+:root[data-theme="dark"] {
     --bg: #0E1520;
     --surface: #151E2B;
     --fg: #E6EAF2;
@@ -116,5 +118,4 @@
     --theory-band: rgba(79, 168, 222, .08);
     --empiric-band: rgba(166, 189, 219, .07);
     color-scheme: dark;
-  }
 }

@@ -35,7 +35,7 @@ Farben und Schriften stehen ausschließlich in `assets/css/theme.css`. Alle Seit
 
 - **Farbschema wechseln:** die sechs Werte `--pal-1` bis `--pal-6` ersetzen (aktuell ColorBrewer PuBu, hell nach dunkel). Wer Rollen anders verteilen will, passt den Block „Bedeutungen“ an, etwa welche Farbe für Kontrolle, Therapie, α, β und Power steht.
 - **Schrift wechseln:** die woff2-Dateien nach `assets/fonts/` legen, die `@font-face`-Einträge oben in `theme.css` anpassen und den Namen in `--font-sans` bzw. `--font-mono` eintragen.
-- **Dunkelmodus:** eigener Block am Ende von `theme.css`, folgt der Systemeinstellung.
+- **Dunkelmodus:** Die Seiten sind immer hell. Die dunklen Werte stehen am Ende von `theme.css` und lassen sich über `data-theme="dark"` oder wieder per Systemeinstellung aktivieren.
 - **Ausnahme:** `assets/img/favicon.svg` ist eine eigene Bilddatei und wird bei einem Farbwechsel von Hand angepasst.
 
 Aktuell: Palette ColorBrewer PuBu, Schrift Geist und Geist Mono (SIL OFL), griechische Buchstaben aus IBM Plex Sans (SIL OFL), da Geist keine enthält.
