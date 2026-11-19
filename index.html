@@ -29,6 +29,8 @@
   .t-theo-on { fill: var(--theory); stroke: var(--theory); }
   .t-hyp { fill: var(--surface); stroke: var(--accent-soft); stroke-width: 2; }
   .t-up { fill: var(--kontrolle); } .t-down { fill: var(--therapie); }
+  .t-soft { fill: var(--area-a); } .t-strong { fill: var(--therapie); } .t-bonly { fill: var(--area-b); stroke: var(--accent-soft); }
+  .t-dash { stroke: var(--fg); stroke-width: 1.5; stroke-dasharray: 5 4; }
 </style>
 </head>
 <body>
@@ -54,6 +56,22 @@
 
   <h2 class="section-title">Visualisierungen</h2>
   <div class="grid">
+    <a class="card" href="wahrscheinlichkeit/">
+      <div class="card-thumb">
+        <svg viewBox="0 0 320 180" aria-hidden="true">
+          <rect x="90" y="20" width="140" height="140" class="t-hyp"/>
+          <rect x="90" y="20" width="105" height="62" class="t-soft"/>
+          <rect x="90" y="82" width="105" height="78" class="t-strong"/>
+          <rect x="195" y="106" width="35" height="54" class="t-bonly"/>
+          <line x1="90" x2="230" y1="90" y2="90" class="t-dash"/>
+        </svg>
+      </div>
+      <div class="card-body">
+        <h3>Wahrscheinlichkeit als Fläche</h3>
+        <p>Multiplikationssatz, bedingte Wahrscheinlichkeit und Satz von Bayes als Rechtecke im Möglichkeitsraum. Mit Würfel, Münze, echten Mikrozensus-Daten und Leberzirrhose.</p>
+        <div class="tags"><span class="tag">Multiplikationssatz</span><span class="tag">bedingt</span><span class="tag">Bayes</span></div>
+      </div>
+    </a>
     <a class="card" href="t-test/">
       <div class="card-thumb">
         <svg viewBox="0 0 320 180" aria-hidden="true">

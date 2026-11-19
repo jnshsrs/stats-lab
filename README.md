@@ -6,6 +6,7 @@ Interaktive Visualisierungen für die Statistiklehre in den Gesundheits- und The
 
 | Seite | Inhalt |
 |---|---|
+| [`wahrscheinlichkeit/`](wahrscheinlichkeit/) | Wahrscheinlichkeit als Fläche: Möglichkeitsraum, Multiplikationssatz, bedingte Wahrscheinlichkeit (Mikrozensus 2024: Ehe und Kinder) und Satz von Bayes (Beispiel Leberzirrhose) |
 | [`t-test/`](t-test/) | Die t-Test-Kaskade: Rohdaten, Signal und Rauschen, t-Verteilung, p-Wert, α, β, Power und ein Simulator für 100 Studien |
 | [`inferenzzyklus/`](inferenzzyklus/) | Induktion, Deduktion und der Signifikanztest: Poppers Perspektive in fünf Schritten, Schwan-Experiment, Modus tollens und die Frage, ob Induktion und Inferenz dasselbe sind |
 

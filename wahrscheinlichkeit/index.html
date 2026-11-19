@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wahrscheinlichkeit als Fläche · Stats Lab</title>
+<meta name="description" content="Multiplikationssatz, bedingte Wahrscheinlichkeit und Satz von Bayes als Flächen in einem Quadrat.">
+<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="wahrscheinlichkeit.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="column">
+    <a class="brand" href="../">
+      <svg class="brand-mark" viewBox="0 0 22 22" aria-hidden="true"><path d="M1 19 C5 19 6 4 9 4 S13 19 17 19" fill="none" class="bm-a" stroke-width="2.2" stroke-linecap="round"/><path d="M5 19 C9 19 10 7 13 7 S17 19 21 19" fill="none" class="bm-b" stroke-width="2.2" stroke-linecap="round"/></svg>
+      Stats Lab
+    </a>
+    <nav class="site-nav" aria-label="Hauptnavigation">
+      <a href="../">Visualisierungen</a>
+      <a href="https://github.com/jnshsrs/stats-lab">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main class="column">
+  <section class="intro">
+    <a class="back" href="../">← Alle Visualisierungen</a>
+    <h1>Wahrscheinlichkeit als Fläche</h1>
+    <p class="byline">Dr. Jens Hüsers · Forschungsmethodik</p>
+    <p class="lede">Das Quadrat ist der Möglichkeitsraum, seine Fläche ist 1. Jede Wahrscheinlichkeit ist ein Teil dieser Fläche. Vom Würfel über abhängige Ereignisse bis zum Satz von Bayes in sechs Schritten.</p>
+  </section>
+
+  <section class="stage" aria-label="Sechs Schritte">
+    <div class="figure">
+      <svg id="square" class="square" viewBox="0 0 560 540" role="img"></svg>
+      <div class="stepper">
+        <button class="btn ghost" type="button" id="prev">← Zurück</button>
+        <span class="step-count num" id="step-count" aria-live="polite"></span>
+        <button class="btn" type="button" id="next">Weiter →</button>
+      </div>
+      <div class="dots" id="dots" role="tablist" aria-label="Schritt wählen"></div>
+    </div>
+    <article class="detail" id="detail" aria-live="polite"></article>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="column">
+    <span>© 2026 Dr. Jens Hüsers · Lehrmaterial für Forschungsmethodik und Statistik</span>
+    <span class="footer-links"><a href="https://github.com/jnshsrs/stats-lab">Quellcode auf GitHub</a><span>Ohne Cookies und Tracking</span></span>
+  </div>
+</footer>
+<script src="wahrscheinlichkeit.js"></script>
+</body>
+</html>

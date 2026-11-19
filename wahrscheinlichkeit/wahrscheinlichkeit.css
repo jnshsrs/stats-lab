@@ -1,0 +1,51 @@
+/* Wahrscheinlichkeit als Fläche: Quadrat links, Erklärung mit Reglern und Formeln rechts */
+.intro { padding-block: 40px 28px; display: flex; flex-direction: column; gap: 12px; }
+.back { font-size: 15px; color: var(--muted); text-decoration: none; }
+.back:hover { color: var(--fg); }
+
+.btn { border: 1px solid var(--accent); background: var(--accent); color: var(--on-accent); border-radius: 8px; padding: 8px 14px; font: 600 14px var(--font-sans); cursor: pointer; }
+.btn:hover { filter: brightness(1.08); }
+.btn.ghost { background: transparent; color: var(--fg); border-color: var(--line); }
+
+.stage { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px; align-items: start; }
+@media (max-width: 860px) { .stage { grid-template-columns: minmax(0, 1fr); } }
+@media (min-width: 861px) { .figure { position: sticky; top: 16px; } }
+.figure { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.square { width: 100%; height: auto; display: block; }
+.square text { font-family: var(--font-sans); }
+.square .col-label { font-size: 15px; font-weight: 600; fill: var(--fg); }
+.square .col-sub { font-family: var(--font-mono); font-size: 12.5px; fill: var(--muted); }
+.square .cell-label { font-size: 14px; font-weight: 600; }
+.square .cell-sub { font-family: var(--font-mono); font-size: 12px; }
+.square .indep { font-family: var(--font-mono); font-size: 12px; fill: var(--muted); }
+.stepper { display: flex; align-items: center; justify-content: center; gap: 16px; }
+.step-count { font-family: var(--font-mono); font-size: 14px; color: var(--muted); min-width: 8ch; text-align: center; }
+.dots { display: flex; justify-content: center; gap: 8px; }
+.dots button { width: 10px; height: 10px; border-radius: 50%; border: 1px solid var(--accent); background: transparent; padding: 0; cursor: pointer; }
+.dots button[aria-selected="true"] { background: var(--accent); }
+
+.detail { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 24px; display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.detail .kicker { font-family: var(--font-mono); font-size: 12.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+.detail h2 { font-size: 26px; }
+.detail p { font-size: 16.5px; }
+.formula { font-family: var(--font-mono); font-size: 15.5px; background: var(--highlight); border-radius: 8px; padding: 12px 14px; display: flex; flex-direction: column; gap: 6px; overflow-x: auto; font-variant-numeric: tabular-nums; }
+.formula .big { font-size: 18px; font-weight: 600; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 14px; color: var(--muted); }
+.sw { display: inline-block; width: 14px; height: 14px; border-radius: 3px; vertical-align: -2px; margin-right: 6px; border: 1px solid var(--line); }
+.sw.outline { border: 2.5px dashed var(--accent); background: transparent; }
+
+.ctrls { display: flex; flex-direction: column; gap: 12px; border-top: 1px solid var(--line); padding-top: 14px; }
+.ctrl { display: flex; flex-direction: column; gap: 4px; }
+.ctrl-head { display: flex; justify-content: space-between; gap: 8px; font-size: 14px; }
+.ctrl-head label { font-weight: 500; }
+.ctrl output { font-family: var(--font-mono); font-weight: 600; white-space: nowrap; }
+input[type=range] { width: 100%; accent-color: var(--accent); }
+.seg { display: flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+.seg button { flex: 1; background: transparent; color: var(--fg); border: 0; padding: 7px 8px; font: 500 13.5px var(--font-mono); cursor: pointer; }
+.seg button + button { border-left: 1px solid var(--line); }
+.seg button[aria-pressed="true"] { background: var(--fg); color: var(--bg); }
+.linkbtn { align-self: flex-start; background: none; border: 0; padding: 0; color: var(--accent); font: 500 14px var(--font-sans); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+
+.freq { font-size: 15.5px; border-left: 3px solid var(--accent-soft); padding-left: 12px; }
+.source { font-size: 13px; color: var(--muted); }
+.callout { font-size: 15.5px; border-left: 3px solid var(--alpha-fill); padding-left: 12px; }

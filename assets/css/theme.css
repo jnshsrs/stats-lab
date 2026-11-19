@@ -62,6 +62,10 @@
   --alpha-ink: #2F6E9E;
   --beta-ink: #57528F;
 
+  /* Flächen in Wahrscheinlichkeitsdiagrammen: nur A, nur B (A und B nutzt --therapie) */
+  --area-a: var(--pal-3);
+  --area-b: var(--pal-2);
+
   /* Inferenzzyklus */
   --theory: var(--pal-6);
   --on-theory: #FFFFFF;
@@ -103,6 +107,8 @@
     --alpha-ink: #A9CBE8;
     --beta-ink: #C3C0E8;
 
+    --area-a: #3F5F86;
+    --area-b: #33405E;
     --theory: #4FA8DE;
     --on-theory: #0E1520;
     --empiric: var(--pal-3);
