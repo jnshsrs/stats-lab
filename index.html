@@ -6,7 +6,7 @@
 <title>Stats Lab</title>
 <meta name="description" content="Interaktive Visualisierungen für die Statistiklehre in Gesundheits- und Therapiewissenschaften.">
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="assets/css/base.css?v=202611192212">
+<link rel="stylesheet" href="assets/css/base.css?v=202611192219">
 <style>
   .hero { padding-block: 56px 40px; display: flex; flex-direction: column; gap: 16px; }
   .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; }
@@ -33,6 +33,7 @@
   .t-dash { stroke: var(--fg); stroke-width: 1.5; stroke-dasharray: 5 4; }
   .t-peg circle { fill: var(--surface); stroke: var(--accent-soft); stroke-width: 2; }
   .t-step { stroke: var(--fg); stroke-width: 2; }
+  .t-euro { fill: var(--therapie); font-family: var(--font-sans); }
   .t-bar { fill: var(--area-b); } .t-curve { fill: none; stroke: var(--therapie); stroke-width: 3; }
   .t-ci { stroke: var(--area-a); stroke-width: 4; stroke-linecap: round; } .t-ci-miss { stroke: var(--therapie); stroke-width: 5; stroke-linecap: round; }
 </style>
@@ -136,6 +137,22 @@
         <h3>Die t-Test-Kaskade</h3>
         <p>Von den Rohdaten über Signal und Rauschen zur t-Verteilung, zum p-Wert und zur Power. Mit Simulator für 100 Studien.</p>
         <div class="tags"><span class="tag">t-Test</span><span class="tag">p-Wert</span><span class="tag">α · β · Power</span></div>
+      </div>
+    </a>
+    <a class="card" href="entscheidung/">
+      <div class="card-thumb">
+        <svg viewBox="0 0 320 180" aria-hidden="true">
+          <path d="M40 150 C 85 150 95 50 125 50 S 165 150 210 150 Z" class="t-h0"/>
+          <path d="M110 150 C 155 150 165 50 195 50 S 235 150 280 150 Z" class="t-h1"/>
+          <line x1="168" x2="168" y1="30" y2="150" class="t-dash"/>
+          <line x1="30" x2="290" y1="150" y2="150" class="t-axis" stroke-width="2"/>
+          <text x="244" y="40" font-size="22" font-weight="700" class="t-euro">€</text>
+        </svg>
+      </div>
+      <div class="card-body">
+        <h3>Entscheidungstheorie: α, β und was Fehler kosten</h3>
+        <p>Entscheidungsmatrix, Power-Kurve und ein Gedankenexperiment: Welches α wäre günstig, wenn Fehlalarme und übersehene Therapien Geld und Lebensjahre kosten?</p>
+        <div class="tags"><span class="tag">α · β · Power</span><span class="tag">Fallzahl</span><span class="tag">QALY</span></div>
       </div>
     </a>
     <a class="card" href="inferenzzyklus/">

@@ -11,6 +11,7 @@ Interaktive Visualisierungen für die Statistiklehre in den Gesundheits- und The
 | [`verteilungen/`](verteilungen/) | Diskret und stetig: Binomialverteilung neben Normal-, t- und Exponentialverteilung, je Wahrscheinlichkeits- bzw. Dichtefunktion und Verteilungsfunktion, mit Wahrscheinlichkeitsrechner |
 | [`zgws/`](zgws/) | Grenzwertsatz, Standardfehler, Konfidenzintervall: vier Populationen, gemeinsame Regler, drei aufklappbare Abschnitte |
 | [`t-test/`](t-test/) | Die t-Test-Kaskade: Rohdaten, Signal und Rauschen, t-Verteilung, p-Wert, α, β, Power und ein Simulator für 100 Studien |
+| [`entscheidung/`](entscheidung/) | Entscheidungstheorie: H0/H1 mit α, β und Power, Entscheidungsmatrix, Power-Kurve mit Fallzahl für 80 %, Gedankenexperiment zu den Kosten von α- und β-Fehlern (QALY, Euro) mit günstigstem α, Verständnis-Check |
 | [`inferenzzyklus/`](inferenzzyklus/) | Induktion, Deduktion und der Signifikanztest: Poppers Perspektive in fünf Schritten, Schwan-Experiment, Modus tollens und die Frage, ob Induktion und Inferenz dasselbe sind |
 
 ## Aufbau
