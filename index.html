@@ -6,7 +6,7 @@
 <title>Stats Lab</title>
 <meta name="description" content="Interaktive Visualisierungen für die Statistiklehre in Gesundheits- und Therapiewissenschaften.">
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="assets/css/base.css?v=202611192154">
+<link rel="stylesheet" href="assets/css/base.css?v=202611192212">
 <style>
   .hero { padding-block: 56px 40px; display: flex; flex-direction: column; gap: 16px; }
   .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; }
@@ -32,6 +32,7 @@
   .t-soft { fill: var(--area-a); } .t-strong { fill: var(--therapie); } .t-bonly { fill: var(--area-b); stroke: var(--accent-soft); }
   .t-dash { stroke: var(--fg); stroke-width: 1.5; stroke-dasharray: 5 4; }
   .t-peg circle { fill: var(--surface); stroke: var(--accent-soft); stroke-width: 2; }
+  .t-step { stroke: var(--fg); stroke-width: 2; }
   .t-bar { fill: var(--area-b); } .t-curve { fill: none; stroke: var(--therapie); stroke-width: 3; }
   .t-ci { stroke: var(--area-a); stroke-width: 4; stroke-linecap: round; } .t-ci-miss { stroke: var(--therapie); stroke-width: 5; stroke-linecap: round; }
 </style>
@@ -87,6 +88,22 @@
         <h3>Pascal und die Binomialverteilung</h3>
         <p>Galton-Brett mit Pascalschem Dreieck: Wie aus vielen Ja-Nein-Entscheidungen die Binomialverteilung entsteht. Beispiel Therapieerfolg.</p>
         <div class="tags"><span class="tag">Binomial</span><span class="tag">Pascal</span><span class="tag">Galton</span></div>
+      </div>
+    </a>
+    <a class="card" href="verteilungen/">
+      <div class="card-thumb">
+        <svg viewBox="0 0 320 180" aria-hidden="true">
+          <rect x="40" y="118" width="12" height="22" class="t-bar"/><rect x="58" y="88" width="12" height="52" class="t-strong"/><rect x="76" y="70" width="12" height="70" class="t-strong"/><rect x="94" y="96" width="12" height="44" class="t-bar"/><rect x="112" y="124" width="12" height="16" class="t-bar"/>
+          <path d="M40 160 L58 160 L58 150 L76 150 L76 128 L94 128 L94 112 L112 112 L112 104 L130 104" fill="none" class="t-step"/>
+          <path d="M180 140 C 205 140 212 64 235 64 S 265 140 290 140 Z" class="t-h1"/>
+          <path d="M180 166 C 220 166 230 104 290 104" fill="none" class="t-step"/>
+          <line x1="34" x2="136" y1="140" y2="140" class="t-axis" stroke-width="2"/><line x1="174" x2="296" y1="140" y2="140" class="t-axis" stroke-width="2"/>
+        </svg>
+      </div>
+      <div class="card-body">
+        <h3>Diskret und stetig</h3>
+        <p>Binomial gegen Normal-, t- und Exponentialverteilung: Wahrscheinlichkeits- bzw. Dichtefunktion und Verteilungsfunktion, mit Rechner für P(a ≤ X ≤ b).</p>
+        <div class="tags"><span class="tag">PMF · PDF</span><span class="tag">Verteilungsfunktion</span></div>
       </div>
     </a>
     <a class="card" href="zgws/">

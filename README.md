@@ -8,6 +8,7 @@ Interaktive Visualisierungen für die Statistiklehre in den Gesundheits- und The
 |---|---|
 | [`wahrscheinlichkeit/`](wahrscheinlichkeit/) | Wahrscheinlichkeit als Fläche in drei Reitern: Multiplikationssatz im Einheitsquadrat (Würfel und Münze), bedingte Wahrscheinlichkeit als flächentreues Venn-Diagramm (Mikrozensus 2024: Ehe und Kinder) und Satz von Bayes als Venn-Diagramm (Beispiel Leberzirrhose). Direkt verlinkbar über `#multiplikation`, `#bedingt`, `#bayes` |
 | [`binomial/`](binomial/) | Pascal und die Binomialverteilung: Galton-Brett mit Pascalschem Dreieck, Histogramm gegen Binomialverteilung, Beispiel Therapieerfolg |
+| [`verteilungen/`](verteilungen/) | Diskret und stetig: Binomialverteilung neben Normal-, t- und Exponentialverteilung, je Wahrscheinlichkeits- bzw. Dichtefunktion und Verteilungsfunktion, mit Wahrscheinlichkeitsrechner |
 | [`zgws/`](zgws/) | Grenzwertsatz, Standardfehler, Konfidenzintervall: vier Populationen, gemeinsame Regler, drei aufklappbare Abschnitte |
 | [`t-test/`](t-test/) | Die t-Test-Kaskade: Rohdaten, Signal und Rauschen, t-Verteilung, p-Wert, α, β, Power und ein Simulator für 100 Studien |
 | [`inferenzzyklus/`](inferenzzyklus/) | Induktion, Deduktion und der Signifikanztest: Poppers Perspektive in fünf Schritten, Schwan-Experiment, Modus tollens und die Frage, ob Induktion und Inferenz dasselbe sind |

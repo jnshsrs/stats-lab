@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Diskret und stetig · Stats Lab</title>
+<meta name="description" content="Wahrscheinlichkeits- bzw. Dichtefunktion und Verteilungsfunktion für diskrete und stetige Verteilungen, mit Reglern und Wahrscheinlichkeitsrechner.">
+<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/css/base.css?v=202611192212">
+<link rel="stylesheet" href="verteilungen.css?v=202611192212">
+</head>
+<body>
+<header class="site-header">
+  <div class="column">
+    <a class="brand" href="../">
+      <svg class="brand-mark" viewBox="0 0 22 22" aria-hidden="true"><path d="M1 19 C5 19 6 4 9 4 S13 19 17 19" fill="none" class="bm-a" stroke-width="2.2" stroke-linecap="round"/><path d="M5 19 C9 19 10 7 13 7 S17 19 21 19" fill="none" class="bm-b" stroke-width="2.2" stroke-linecap="round"/></svg>
+      Stats Lab
+    </a>
+    <nav class="site-nav" aria-label="Hauptnavigation">
+      <a href="../">Visualisierungen</a>
+      <a href="https://github.com/jnshsrs/stats-lab">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main class="column">
+  <section class="intro">
+    <a class="back" href="../">← Alle Visualisierungen</a>
+    <h1>Diskret und stetig</h1>
+    <p class="byline">Dr. Jens Hüsers · Forschungsmethodik</p>
+    <p class="lede">Links eine diskrete Verteilung, rechts eine stetige. Oben jeweils, wie sich die Wahrscheinlichkeit verteilt, unten die Verteilungsfunktion F(x) = P(X ≤ x). Wählen Sie einen Bereich: Er erscheint oben als Balken oder Fläche und unten als Höhenunterschied.</p>
+  </section>
+
+  <div class="duo">
+    <section class="panel" aria-labelledby="d-h">
+      <span class="kicker">Diskret</span>
+      <h2 id="d-h">Binomialverteilung</h2>
+      <p class="text">Anzahl Therapieerfolge X bei n Personen mit Erfolgswahrscheinlichkeit p. X kann nur ganze Zahlen annehmen.</p>
+      <div class="ctrl"><div class="ctrl-head"><label for="bn">n · Personen</label><output id="bn-v"></output></div><input id="bn" type="range" min="1" max="40" step="1" value="10"></div>
+      <div class="ctrl"><div class="ctrl-head"><label for="bp">p · Erfolgswahrscheinlichkeit</label><output id="bp-v"></output></div><input id="bp" type="range" min="0.05" max="0.95" step="0.05" value="0.6"></div>
+      <div class="calc">
+        <span class="lbl" id="dm-lbl">Wahrscheinlichkeit berechnen</span>
+        <div class="seg" role="group" aria-labelledby="dm-lbl" id="dmode"></div>
+        <div class="ctrl" id="da-wrap"><div class="ctrl-head"><label for="da" id="da-l">a</label><output id="da-v"></output></div><input id="da" type="range" min="0" max="10" step="1" value="4"></div>
+        <div class="ctrl" id="db-wrap"><div class="ctrl-head"><label for="db" id="db-l">b</label><output id="db-v"></output></div><input id="db" type="range" min="0" max="10" step="1" value="7"></div>
+      </div>
+      <div class="result" id="d-result"></div>
+      <h3 class="chart-title">Wahrscheinlichkeitsfunktion P(X = k)</h3>
+      <svg class="chart" id="d-pmf" viewBox="0 0 470 230" role="img"></svg>
+      <h3 class="chart-title">Verteilungsfunktion F(k) = P(X ≤ k)</h3>
+      <svg class="chart" id="d-cdf" viewBox="0 0 470 230" role="img"></svg>
+      <div class="formula" id="d-formula"></div>
+      <div class="readouts" id="d-stats"></div>
+    </section>
+
+    <section class="panel" aria-labelledby="c-h">
+      <span class="kicker">Stetig</span>
+      <h2 id="c-h">Stetige Verteilung</h2>
+      <div class="seg" role="group" aria-label="Verteilung wählen" id="cdist"></div>
+      <p class="text" id="c-text"></p>
+      <div id="c-params"></div>
+      <div class="calc">
+        <span class="lbl" id="cm-lbl">Wahrscheinlichkeit berechnen</span>
+        <div class="seg" role="group" aria-labelledby="cm-lbl" id="cmode"></div>
+        <div class="ctrl" id="ca-wrap"><div class="ctrl-head"><label for="ca" id="ca-l">a</label><output id="ca-v"></output></div><input id="ca" type="range"></div>
+        <div class="ctrl" id="cb-wrap"><div class="ctrl-head"><label for="cb" id="cb-l">b</label><output id="cb-v"></output></div><input id="cb" type="range"></div>
+      </div>
+      <div class="result" id="c-result"></div>
+      <h3 class="chart-title" id="c-pdf-title">Dichtefunktion f(x)</h3>
+      <svg class="chart" id="c-pdf" viewBox="0 0 470 230" role="img"></svg>
+      <h3 class="chart-title">Verteilungsfunktion F(x) = P(X ≤ x)</h3>
+      <svg class="chart" id="c-cdf" viewBox="0 0 470 230" role="img"></svg>
+      <div class="formula" id="c-formula"></div>
+      <div class="readouts" id="c-stats"></div>
+    </section>
+  </div>
+
+  <section class="compare" aria-labelledby="cmp-h">
+    <span class="eyebrow">Auf einen Blick</span>
+    <h2 id="cmp-h">Was diskret und stetig unterscheidet</h2>
+    <div class="table-wrap">
+      <table>
+        <tr><th></th><th>diskret</th><th>stetig</th></tr>
+        <tr><td>Werte</td><td>abzählbar, etwa 0 bis n</td><td>jeder Wert in einem Intervall</td></tr>
+        <tr><td>Obere Grafik</td><td>Wahrscheinlichkeitsfunktion: Balkenhöhe = P(X = k)</td><td>Dichtefunktion: Höhe ist keine Wahrscheinlichkeit, erst die Fläche</td></tr>
+        <tr><td>P(X = x)</td><td>kann größer als 0 sein</td><td>immer 0, eine Linie hat keine Fläche</td></tr>
+        <tr><td>P(a ≤ X ≤ b)</td><td>Summe der Balken = F(b) − F(a − 1)</td><td>Fläche unter f = F(b) − F(a)</td></tr>
+        <tr><td>Verteilungsfunktion</td><td>Treppe, springt bei jedem k um P(X = k)</td><td>glatte Kurve, Steigung = Dichte</td></tr>
+        <tr><td>≤ oder &lt;</td><td>macht einen Unterschied</td><td>egal, weil P(X = x) = 0</td></tr>
+      </table>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="column">
+    <span>© 2026 Dr. Jens Hüsers · Lehrmaterial für Forschungsmethodik und Statistik</span>
+    <span class="footer-links"><a href="https://github.com/jnshsrs/stats-lab">Quellcode auf GitHub</a><span>Ohne Cookies und Tracking</span></span>
+  </div>
+</footer>
+<script src="verteilungen.js?v=202611192212"></script>
+</body>
+</html>
