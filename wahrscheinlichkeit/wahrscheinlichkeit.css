@@ -30,9 +30,12 @@
 .detail p { font-size: 16.5px; }
 .formula { font-family: var(--font-mono); font-size: 15.5px; background: var(--highlight); border-radius: 8px; padding: 12px 14px; display: flex; flex-direction: column; gap: 6px; overflow-x: auto; font-variant-numeric: tabular-nums; }
 .formula .big { font-size: 18px; font-weight: 600; }
-.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 14px; color: var(--muted); }
-.sw { display: inline-block; width: 14px; height: 14px; border-radius: 3px; vertical-align: -2px; margin-right: 6px; border: 1px solid var(--line); }
-.sw.outline { border: 2.5px dashed var(--accent); background: transparent; }
+/* Legende: reine Farberklärung, bewusst nicht wie Auswahlfelder gestaltet */
+.legend { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; font-size: 13.5px; color: var(--muted); cursor: default; user-select: none; }
+.legend::before { content: "Farben im Quadrat:"; font-family: var(--font-mono); font-size: 12px; letter-spacing: .04em; color: var(--muted); }
+.legend span { display: inline-flex; align-items: center; }
+.sw { display: inline-block; width: 22px; height: 12px; border-radius: 2px; margin-right: 6px; }
+.sw.outline { border: 2px dashed var(--accent); background: transparent; height: 14px; }
 
 .ctrls { display: flex; flex-direction: column; gap: 12px; border-top: 1px solid var(--line); padding-top: 14px; }
 .ctrl { display: flex; flex-direction: column; gap: 4px; }
