@@ -22,7 +22,7 @@
 .step-count { font-family: var(--font-mono); font-size: 14px; color: var(--muted); min-width: 8ch; text-align: center; }
 .dots { display: flex; justify-content: center; gap: 8px; }
 .dots button { width: 10px; height: 10px; border-radius: 50%; border: 1px solid var(--accent); background: transparent; padding: 0; cursor: pointer; }
-.dots button[aria-selected="true"] { background: var(--accent); }
+.dots button[aria-pressed="true"] { background: var(--accent); }
 
 .detail { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 24px; display: flex; flex-direction: column; gap: 16px; min-width: 0; }
 .detail .kicker { font-family: var(--font-mono); font-size: 12.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
@@ -32,7 +32,7 @@
 .formula .big { font-size: 18px; font-weight: 600; }
 /* Legende: reine Farberklärung, bewusst nicht wie Auswahlfelder gestaltet */
 .legend { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; font-size: 13.5px; color: var(--muted); cursor: default; user-select: none; }
-.legend::before { content: "Farben im Quadrat:"; font-family: var(--font-mono); font-size: 12px; letter-spacing: .04em; color: var(--muted); }
+.legend::before { content: "Farben:"; font-family: var(--font-mono); font-size: 12px; letter-spacing: .04em; color: var(--muted); }
 .legend span { display: inline-flex; align-items: center; }
 .sw { display: inline-block; width: 22px; height: 12px; border-radius: 2px; margin-right: 6px; }
 .sw.outline { border: 2px dashed var(--accent); background: transparent; height: 14px; }
@@ -52,3 +52,24 @@ input[type=range] { width: 100%; accent-color: var(--accent); }
 .freq { font-size: 15.5px; border-left: 3px solid var(--accent-soft); padding-left: 12px; }
 .source { font-size: 13px; color: var(--muted); }
 .callout { font-size: 15.5px; border-left: 3px solid var(--alpha-fill); padding-left: 12px; }
+
+/* Reiter */
+.tabs { display: flex; flex-wrap: wrap; gap: 4px; border-bottom: 1px solid var(--line); margin-bottom: 28px; }
+.tab { display: inline-flex; align-items: center; gap: 8px; background: transparent; border: 0; border-bottom: 3px solid transparent; margin-bottom: -1px; padding: 10px 14px; font: 600 15px var(--font-sans); color: var(--muted); cursor: pointer; }
+.tab:hover { color: var(--fg); }
+.tab[aria-selected="true"] { color: var(--fg); border-bottom-color: var(--accent); }
+.tab-no { font-family: var(--font-mono); font-size: 12px; width: 22px; height: 22px; border-radius: 50%; display: inline-grid; place-items: center; border: 1px solid var(--line); }
+.tab[aria-selected="true"] .tab-no { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+
+/* Venn */
+.venn { width: 100%; height: auto; display: block; }
+.venn text { font-family: var(--font-sans); }
+.venn .v-name { font-size: 15px; font-weight: 600; fill: var(--fg); }
+.venn .v-sub { font-family: var(--font-mono); font-size: 12.5px; fill: var(--muted); }
+.venn .v-val { font-family: var(--font-mono); font-size: 14px; font-weight: 600; }
+.venn .v-note { font-family: var(--font-mono); font-size: 12px; fill: var(--muted); }
+.regions { width: 100%; border-collapse: collapse; font-size: 14.5px; font-variant-numeric: tabular-nums; }
+.regions th, .regions td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--line); }
+.regions th { font-weight: 600; color: var(--muted); font-size: 13px; }
+.regions td.n { text-align: right; font-family: var(--font-mono); }
+.regions .sw { vertical-align: 0; }

@@ -28,10 +28,16 @@
     <a class="back" href="../">← Alle Visualisierungen</a>
     <h1>Wahrscheinlichkeit als Fläche</h1>
     <p class="byline">Dr. Jens Hüsers · Forschungsmethodik</p>
-    <p class="lede">Das Quadrat ist der Möglichkeitsraum, seine Fläche ist 1. Jede Wahrscheinlichkeit ist ein Teil dieser Fläche. Vom Würfel über abhängige Ereignisse bis zum Satz von Bayes in sechs Schritten.</p>
+    <p class="lede">Jede Wahrscheinlichkeit ist ein Anteil an der Fläche des Möglichkeitsraums. Erst als Rechtecke im Quadrat, dann als Kreise im Venn-Diagramm: vom Würfel über abhängige Ereignisse bis zum Satz von Bayes.</p>
   </section>
 
-  <section class="stage" aria-label="Sechs Schritte">
+  <div class="tabs" role="tablist" aria-label="Themen">
+    <button class="tab" type="button" role="tab" id="tab-multiplikation" aria-controls="panel-multiplikation" data-tab="multiplikation"><span class="tab-no">1</span>Multiplikationssatz</button>
+    <button class="tab" type="button" role="tab" id="tab-bedingt" aria-controls="panel-bedingt" data-tab="bedingt"><span class="tab-no">2</span>Bedingte Wahrscheinlichkeit</button>
+    <button class="tab" type="button" role="tab" id="tab-bayes" aria-controls="panel-bayes" data-tab="bayes"><span class="tab-no">3</span>Satz von Bayes</button>
+  </div>
+
+  <section class="stage" id="panel-multiplikation" role="tabpanel" aria-labelledby="tab-multiplikation">
     <div class="figure">
       <svg id="square" class="square" viewBox="0 0 560 540" role="img"></svg>
       <div class="stepper">
@@ -39,9 +45,31 @@
         <span class="step-count num" id="step-count" aria-live="polite"></span>
         <button class="btn" type="button" id="next">Weiter →</button>
       </div>
-      <div class="dots" id="dots" role="tablist" aria-label="Schritt wählen"></div>
+      <div class="dots" id="dots" role="group" aria-label="Schritt wählen"></div>
     </div>
     <article class="detail" id="detail" aria-live="polite"></article>
+  </section>
+
+  <section class="stage" id="panel-bedingt" role="tabpanel" aria-labelledby="tab-bedingt" hidden>
+    <div class="figure">
+      <svg id="venn-bedingt" class="venn" viewBox="0 0 560 420" role="img"></svg>
+      <div class="seg" role="group" aria-label="Richtung der Bedingung">
+        <button type="button" data-d5="KgV">P(Kinder | verheiratet)</button>
+        <button type="button" data-d5="VgK">P(verheiratet | Kinder)</button>
+      </div>
+    </div>
+    <article class="detail" id="detail-bedingt" aria-live="polite"></article>
+  </section>
+
+  <section class="stage" id="panel-bayes" role="tabpanel" aria-labelledby="tab-bayes" hidden>
+    <div class="figure">
+      <svg id="venn-bayes" class="venn" viewBox="0 0 560 420" role="img"></svg>
+      <div class="seg" role="group" aria-label="Richtung der Bedingung">
+        <button type="button" data-d6="SgZ">P(keine Sympt. | Zirrhose)</button>
+        <button type="button" data-d6="ZgS">P(Zirrhose | keine Sympt.)</button>
+      </div>
+    </div>
+    <article class="detail" id="detail-bayes" aria-live="polite"></article>
   </section>
 </main>
 
