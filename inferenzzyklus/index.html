@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Der Inferenzzyklus · Stats Lab</title>
+<meta name="description" content="Interaktiv: der empirische Zyklus aus Beobachtung, Induktion, Deduktion, Prüfung und Bewertung, mit Peirce, Popper, de Groot und Box.">
+<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="inferenzzyklus.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="column">
+    <a class="brand" href="../">
+      <svg class="brand-mark" viewBox="0 0 22 22" aria-hidden="true"><path d="M1 19 C5 19 6 4 9 4 S13 19 17 19" fill="none" stroke="#DE8A5A" stroke-width="2.2" stroke-linecap="round"/><path d="M5 19 C9 19 10 7 13 7 S17 19 21 19" fill="none" stroke="#008080" stroke-width="2.2" stroke-linecap="round"/></svg>
+      Stats Lab
+    </a>
+    <nav class="site-nav" aria-label="Hauptnavigation">
+      <a href="../">Visualisierungen</a>
+      <a href="https://github.com/jnshsrs/stats-lab">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main class="column">
+  <section class="intro">
+    <a class="back" href="../">← Alle Visualisierungen</a>
+    <h1>Der Inferenzzyklus</h1>
+    <p class="byline">Dr. Jens Hüsers · Forschungsmethodik</p>
+    <p class="lede">Forschung läuft im Kreis: Aus Beobachtungen werden Hypothesen, aus Hypothesen Vorhersagen, aus Vorhersagen Daten, aus Daten neue Fragen. Gehen Sie den Zyklus Schritt für Schritt durch, am Beispiel einer Studie zur Mobilisation bei Rückenschmerzen.</p>
+  </section>
+
+  <section class="cycle-wrap" aria-label="Interaktiver Zyklus">
+    <div class="cycle-figure">
+      <svg id="cycle" class="cycle" viewBox="0 0 560 560" role="group" aria-label="Der empirische Zyklus mit fünf Stationen"></svg>
+      <div class="stepper">
+        <button class="btn ghost" type="button" id="prev" aria-label="Vorherige Station">← Zurück</button>
+        <span class="step-count num" id="step-count" aria-live="polite"></span>
+        <button class="btn" type="button" id="next" aria-label="Nächste Station">Weiter →</button>
+      </div>
+    </div>
+    <article class="detail" id="detail" aria-live="polite"></article>
+  </section>
+
+  <section class="people" aria-labelledby="people-h">
+    <span class="eyebrow">Die Köpfe hinter dem Zyklus</span>
+    <h2 id="people-h">Vier Perspektiven auf denselben Kreislauf</h2>
+    <p class="text">Wählen Sie eine Person, um ihre Stationen im Zyklus hervorzuheben.</p>
+    <div class="people-grid" id="people"></div>
+  </section>
+
+  <section class="link-ttest" aria-labelledby="tt-h">
+    <span class="eyebrow">Brücke zur Statistik</span>
+    <h2 id="tt-h">Wo steckt der Signifikanztest?</h2>
+    <div class="prose">
+      <p>Der t-Test ist im Kern ein deduktiver Schritt. Aus H0 folgt rein logisch, welche t-Werte bei einer Studie dieser Größe zu erwarten wären. Das ist die t-Verteilung.</p>
+      <p>Der Schluss vom Ergebnis zurück auf die Welt ist dagegen induktiv: Aus „p &lt; α“ folgt nicht mit Sicherheit, dass die Therapie wirkt, und aus „p ≥ α“ nicht, dass sie nicht wirkt. Genau an dieser Stelle entstehen Alpha- und Beta-Fehler.</p>
+      <p><a href="../t-test/">Zur t-Test-Kaskade →</a></p>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="column">
+    <span>© 2026 Dr. Jens Hüsers · Lehrmaterial für Forschungsmethodik und Statistik</span>
+    <span class="footer-links"><a href="https://github.com/jnshsrs/stats-lab">Quellcode auf GitHub</a><span>Ohne Cookies und Tracking</span></span>
+  </div>
+</footer>
+<script src="inferenzzyklus.js"></script>
+</body>
+</html>

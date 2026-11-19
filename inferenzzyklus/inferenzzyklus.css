@@ -1,0 +1,62 @@
+/* Inferenzzyklus: Kreis links, Erklärung rechts; darunter die vier Personen als Filterkarten */
+.intro { padding-block: 40px 28px; display: flex; flex-direction: column; gap: 12px; }
+.back { font-size: 15px; color: var(--muted); text-decoration: none; }
+.back:hover { color: var(--fg); }
+.text { color: var(--muted); max-width: 68ch; }
+
+.cycle-wrap { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 32px; align-items: start; }
+@media (max-width: 860px) { .cycle-wrap { grid-template-columns: minmax(0, 1fr); } }
+.cycle-figure { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.cycle { width: 100%; height: auto; display: block; }
+.cycle text { font-family: var(--font-sans); }
+.cycle .band-label { font-family: var(--font-mono); font-size: 12px; letter-spacing: .1em; fill: var(--muted); }
+.cycle .edge { fill: none; stroke: var(--line); stroke-width: 3; transition: stroke .25s, opacity .25s; }
+.cycle .edge.active { stroke: var(--fg); }
+.cycle .edge-label { font-size: 14px; fill: var(--muted); transition: fill .25s, opacity .25s; }
+.cycle .edge-label.active { fill: var(--fg); font-weight: 600; }
+.cycle .node { cursor: pointer; transition: opacity .25s; }
+.cycle .node circle { stroke-width: 3; transition: fill .25s, stroke .25s; }
+.cycle .node .n-no { font-family: var(--font-mono); font-size: 12px; }
+.cycle .node .n-lbl { font-size: 15px; font-weight: 600; }
+.cycle .node:focus { outline: none; }
+.cycle .node:focus-visible circle { stroke-width: 5; }
+.cycle .dim { opacity: .2; }
+.cycle .hyp rect { fill: var(--surface); stroke: var(--geyser-2); stroke-width: 2; }
+.cycle .hyp text { font-size: 13px; font-weight: 600; fill: var(--therapie-ink); }
+
+.stepper { display: flex; align-items: center; justify-content: center; gap: 16px; }
+.step-count { font-family: var(--font-mono); font-size: 14px; color: var(--muted); min-width: 8ch; text-align: center; }
+.btn { border: 1px solid var(--therapie); background: var(--therapie); color: var(--bg); border-radius: 8px; padding: 8px 14px; font: 600 14px var(--font-sans); cursor: pointer; }
+.btn:hover { filter: brightness(1.08); }
+.btn.ghost { background: transparent; color: var(--fg); border-color: var(--line); }
+
+.detail { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 24px 24px 22px; display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.detail .mode { align-self: flex-start; font-family: var(--font-mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; padding: 3px 10px; border-radius: 999px; }
+.mode.theory { background: color-mix(in srgb, var(--geyser-1) 14%, transparent); color: var(--therapie-ink); }
+.mode.empiric { background: color-mix(in srgb, var(--geyser-6) 18%, transparent); color: var(--kontrolle-ink); }
+.detail h2 { font-size: 26px; }
+.detail .what { font-size: 17px; }
+.example { background: var(--highlight); border-radius: 8px; padding: 12px 14px; font-size: 15.5px; line-height: 1.55; }
+.example b { font-weight: 600; }
+.detail .who { font-size: 14.5px; color: var(--muted); }
+.detail .who b { color: var(--fg); font-weight: 600; }
+.detail .pitfall { font-size: 14.5px; color: var(--muted); border-left: 3px solid var(--geyser-5); padding-left: 12px; }
+.detail .pitfall b { color: var(--alpha-ink); font-weight: 600; }
+.detail .tlink { font-size: 14.5px; }
+
+.people { padding-block: 64px 8px; display: flex; flex-direction: column; gap: 12px; }
+.people-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 16px; margin-top: 8px; }
+.person { text-align: left; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 18px; display: flex; flex-direction: column; gap: 10px; color: var(--fg); font: inherit; cursor: pointer; transition: border-color .15s, box-shadow .15s; }
+.person:hover { border-color: var(--geyser-2); }
+.person[aria-pressed="true"] { border-color: var(--therapie); box-shadow: 0 0 0 2px var(--therapie); }
+.person-top { display: flex; gap: 12px; align-items: center; }
+.mono { flex: none; width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; font-weight: 700; font-size: 16px; color: #1E2B29; }
+.person h3 { font-size: 17px; }
+.person .years { font-family: var(--font-mono); font-size: 12.5px; color: var(--muted); }
+.person .role { font-size: 13.5px; color: var(--muted); }
+.person .idea { font-size: 14.5px; line-height: 1.5; }
+.person .work { font-size: 13px; color: var(--muted); font-style: italic; }
+.person .stations { display: flex; flex-wrap: wrap; gap: 5px; margin-top: auto; }
+.person .chip { font-family: var(--font-mono); font-size: 11.5px; padding: 1px 8px; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); }
+
+.link-ttest { padding-block: 64px 0; display: flex; flex-direction: column; gap: 12px; }
