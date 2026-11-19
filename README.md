@@ -40,6 +40,10 @@ Farben und Schriften stehen ausschließlich in `assets/css/theme.css`. Alle Seit
 
 Aktuell: Palette ColorBrewer PuBu, Schrift Geist und Geist Mono (SIL OFL), griechische Buchstaben aus IBM Plex Sans (SIL OFL), da Geist keine enthält.
 
+## Cache und Versionsnummer
+
+GitHub Pages erlaubt Browsern, CSS und JS zehn Minuten zwischenzuspeichern. Damit Änderungen sofort ankommen, hängen alle Verweise auf eigene CSS- und JS-Dateien eine Versionsnummer an (`?v=…`), ebenso der `@import` von `theme.css` in `base.css`. Nach Änderungen an CSS oder JS die Nummer überall erhöhen, zum Beispiel per Suchen und Ersetzen.
+
 ## Veröffentlichen mit GitHub Pages
 
 Settings → Pages → Source: „Deploy from a branch“, Branch `main`, Ordner `/ (root)`. Die Seite ist danach unter `https://jnshsrs.github.io/stats-lab/` erreichbar.
