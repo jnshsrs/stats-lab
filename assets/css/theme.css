@@ -1,0 +1,114 @@
+/* ==========================================================================
+   Stats Lab · THEME
+   Die einzige Datei, die man für ein neues Aussehen ändern muss.
+   Alle Seiten laden sie über base.css, Änderungen wirken überall.
+
+   1. Schriften   (Dateien liegen in assets/fonts/)
+   2. Palette     (Rohfarben, hier: ColorBrewer PuBu, 6 Stufen)
+   3. Bedeutungen (welche Rolle welche Farbe übernimmt)
+   4. Dunkelmodus
+   ========================================================================== */
+
+/* ---------- 1. Schriften ----------
+   Geist und Geist Mono (Vercel, SIL Open Font License).
+   Geist hat keine griechischen Buchstaben; α, β, σ, Δ kommen aus IBM Plex Sans (ebenfalls SIL OFL). */
+@font-face { font-family: "Geist"; font-weight: 400; font-style: normal; font-display: swap; src: url("../fonts/geist-sans-latin-400-normal.woff2") format("woff2"); }
+@font-face { font-family: "Geist"; font-weight: 500; font-style: normal; font-display: swap; src: url("../fonts/geist-sans-latin-500-normal.woff2") format("woff2"); }
+@font-face { font-family: "Geist"; font-weight: 600; font-style: normal; font-display: swap; src: url("../fonts/geist-sans-latin-600-normal.woff2") format("woff2"); }
+@font-face { font-family: "Geist"; font-weight: 700; font-style: normal; font-display: swap; src: url("../fonts/geist-sans-latin-700-normal.woff2") format("woff2"); }
+@font-face { font-family: "Geist Mono"; font-weight: 400; font-style: normal; font-display: swap; src: url("../fonts/geist-mono-latin-400-normal.woff2") format("woff2"); }
+@font-face { font-family: "Geist Mono"; font-weight: 600; font-style: normal; font-display: swap; src: url("../fonts/geist-mono-latin-600-normal.woff2") format("woff2"); }
+@font-face { font-family: "Stats Greek"; font-weight: 400 500; font-style: normal; font-display: swap; src: url("../fonts/ibm-plex-sans-greek-400-normal.woff2") format("woff2"); unicode-range: U+0370-03FF; }
+@font-face { font-family: "Stats Greek"; font-weight: 600 700; font-style: normal; font-display: swap; src: url("../fonts/ibm-plex-sans-greek-600-normal.woff2") format("woff2"); unicode-range: U+0370-03FF; }
+
+:root {
+  --font-sans: "Geist", "Stats Greek", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "Geist Mono", "Geist", "Stats Greek", Menlo, Consolas, monospace;
+
+  /* ---------- 2. Palette: ColorBrewer PuBu (6), hell nach dunkel ---------- */
+  --pal-1: #F1EEF6;
+  --pal-2: #D0D1E6;
+  --pal-3: #A6BDDB;
+  --pal-4: #74A9CF;
+  --pal-5: #2B8CBE;
+  --pal-6: #045A8D;
+
+  /* ---------- 3. Bedeutungen ---------- */
+  /* Flächen und Text */
+  --bg: #FAFAFC;
+  --surface: #FFFFFF;
+  --fg: #1B2433;
+  --muted: #5B6475;
+  --line: #E1E3EC;
+  --grid: #EEF0F5;
+  --highlight: var(--pal-1);
+
+  /* Interaktion: Buttons, Links, Fokus */
+  --accent: var(--pal-6);
+  --accent-soft: var(--pal-3);
+  --on-accent: #FFFFFF;
+
+  /* Statistik: hell = Welt ohne Effekt (H0), dunkel = Welt mit Effekt (H1) */
+  --kontrolle: var(--pal-4);
+  --therapie: var(--pal-6);
+  --alpha-fill: var(--pal-3);
+  --pval: var(--pal-6);
+  --beta-fill: var(--pal-2);
+  --power-fill: var(--pal-5);
+
+  /* Textfarben mit ausreichendem Kontrast auf hellem Grund */
+  --kontrolle-ink: #2F6E9E;
+  --therapie-ink: var(--pal-6);
+  --alpha-ink: #2F6E9E;
+  --beta-ink: #57528F;
+
+  /* Inferenzzyklus */
+  --theory: var(--pal-6);
+  --on-theory: #FFFFFF;
+  --empiric: var(--pal-3);
+  --on-empiric: #10233A;
+  --theory-band: rgba(4, 90, 141, .06);
+  --empiric-band: rgba(166, 189, 219, .18);
+  --person-1: var(--pal-2);
+  --person-2: var(--pal-3);
+  --person-3: var(--pal-4);
+  --person-4: var(--pal-5);
+  --on-person: #10233A;
+}
+
+/* ---------- 4. Dunkelmodus (folgt der Systemeinstellung) ---------- */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0E1520;
+    --surface: #151E2B;
+    --fg: #E6EAF2;
+    --muted: #9AA5B8;
+    --line: #263244;
+    --grid: #1B2534;
+    --highlight: #1C2638;
+
+    --accent: #5AB0E0;
+    --accent-soft: var(--pal-4);
+    --on-accent: #0E1520;
+
+    --kontrolle: var(--pal-3);
+    --therapie: #4FA8DE;
+    --alpha-fill: var(--pal-4);
+    --pval: #9FD0F0;
+    --beta-fill: #8E8CC4;
+    --power-fill: #4FA8DE;
+
+    --kontrolle-ink: #B9CFEA;
+    --therapie-ink: #7CC0EA;
+    --alpha-ink: #A9CBE8;
+    --beta-ink: #C3C0E8;
+
+    --theory: #4FA8DE;
+    --on-theory: #0E1520;
+    --empiric: var(--pal-3);
+    --on-empiric: #0E1520;
+    --theory-band: rgba(79, 168, 222, .08);
+    --empiric-band: rgba(166, 189, 219, .07);
+    color-scheme: dark;
+  }
+}

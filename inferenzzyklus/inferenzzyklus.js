@@ -49,16 +49,16 @@ const STATIONS = [
 ];
 
 const PEOPLE = [
-  { id: "peirce", initials: "CP", name: "Charles S. Peirce", years: "1839 bis 1914", role: "Philosoph und Logiker, USA", color: "var(--geyser-5)",
+  { id: "peirce", initials: "CP", name: "Charles S. Peirce", years: "1839 bis 1914", role: "Philosoph und Logiker, USA", color: "var(--person-1)",
     idea: "Unterschied drei Schlussarten: Deduktion, Induktion und Abduktion. Nur die Abduktion bringt neue Hypothesen hervor.",
     work: "Begründer des Pragmatismus" },
-  { id: "popper", initials: "KP", name: "Karl Popper", years: "1902 bis 1994", role: "Wissenschaftsphilosoph, Wien und London", color: "var(--geyser-6)",
+  { id: "popper", initials: "KP", name: "Karl Popper", years: "1902 bis 1994", role: "Wissenschaftsphilosoph, Wien und London", color: "var(--person-2)",
     idea: "Theorien lassen sich nicht beweisen, nur an der Erfahrung prüfen. Gute Hypothesen sind kühn und können scheitern.",
     work: "Logik der Forschung, 1934" },
-  { id: "degroot", initials: "AG", name: "Adriaan de Groot", years: "1914 bis 2006", role: "Psychologe und Methodiker, Niederlande", color: "var(--geyser-3)",
+  { id: "degroot", initials: "AG", name: "Adriaan de Groot", years: "1914 bis 2006", role: "Psychologe und Methodiker, Niederlande", color: "var(--person-3)",
     idea: "Beschrieb den empirischen Zyklus in fünf Phasen: Beobachtung, Induktion, Deduktion, Prüfung, Bewertung.",
     work: "Methodologie, 1961" },
-  { id: "box", initials: "GB", name: "George E. P. Box", years: "1919 bis 2013", role: "Statistiker, England und USA", color: "var(--geyser-2)",
+  { id: "box", initials: "GB", name: "George E. P. Box", years: "1919 bis 2013", role: "Statistiker, England und USA", color: "var(--person-4)",
     idea: "Sah Forschung als iteratives Wechselspiel zwischen Theorie und Daten, mit der Statistik als Motor dazwischen.",
     work: "Science and Statistics, 1976" }
 ];
@@ -87,8 +87,8 @@ function build() {
   const hypOff = 58 / R * 180 / Math.PI;
   let s = `<defs><marker id="head" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="context-stroke"/></marker></defs>`;
   // Hintergrund: oben Theorie, unten Empirie
-  s += `<rect x="0" y="0" width="560" height="${CY}" fill="var(--geyser-1)" fill-opacity=".06"/>`;
-  s += `<rect x="0" y="${CY}" width="560" height="${560 - CY}" fill="var(--geyser-6)" fill-opacity=".08"/>`;
+  s += `<rect x="0" y="0" width="560" height="${CY}" fill="var(--theory-band)"/>`;
+  s += `<rect x="0" y="${CY}" width="560" height="${560 - CY}" fill="var(--empiric-band)"/>`;
   s += `<line x1="0" x2="560" y1="${CY}" y2="${CY}" stroke="var(--line)" stroke-dasharray="4 5"/>`;
   s += `<text class="band-label" x="16" y="26">WELT DER THEORIE</text>`;
   s += `<text class="band-label" x="16" y="${560 - 14}">WELT DER DATEN</text>`;
@@ -155,11 +155,11 @@ function render() {
   const st = STATIONS[current];
   document.querySelectorAll("#cycle .node").forEach(g => {
     const i = +g.dataset.i, s = STATIONS[i], on = i === current;
-    const col = s.kind === "theory" ? "var(--geyser-1)" : "var(--geyser-6)";
+    const col = s.kind === "theory" ? "var(--theory)" : "var(--empiric)";
     const c = g.querySelector("circle");
     c.setAttribute("fill", on ? col : "var(--surface)");
     c.setAttribute("stroke", col);
-    g.querySelectorAll("text").forEach(t => t.setAttribute("fill", !on ? "var(--fg)" : s.kind === "theory" ? "var(--bg)" : "#1E2B29"));
+    g.querySelectorAll("text").forEach(t => t.setAttribute("fill", !on ? "var(--fg)" : s.kind === "theory" ? "var(--on-theory)" : "var(--on-empiric)"));
     g.classList.toggle("dim", !!person && !s.who.includes(person));
     g.setAttribute("aria-current", on ? "step" : "false");
   });

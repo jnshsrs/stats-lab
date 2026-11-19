@@ -160,9 +160,9 @@ function drawRuler(c) {
   s += `<text x="${(sx(c.mK) + sx(c.mT)) / 2}" y="${y - 13}" text-anchor="middle" class="strong">Signal ${fmt(c.diff)} mm</text>`;
   const dir = c.diff >= 0 ? 1 : -1, full = Math.floor(Math.abs(c.t)), y2 = 56, h = 20;
   let x0 = c.mK;
-  for (let i = 0; i < full && i < 80; i++) { const x1 = x0 + dir * c.se; s += `<rect x="${Math.min(sx(x0), sx(x1))}" y="${y2}" width="${Math.abs(sx(x1) - sx(x0))}" height="${h}" fill="var(--geyser-2)" fill-opacity="${i % 2 ? .45 : .8}"/>`; x0 = x1; }
+  for (let i = 0; i < full && i < 80; i++) { const x1 = x0 + dir * c.se; s += `<rect x="${Math.min(sx(x0), sx(x1))}" y="${y2}" width="${Math.abs(sx(x1) - sx(x0))}" height="${h}" fill="var(--accent-soft)" fill-opacity="${i % 2 ? .45 : .8}"/>`; x0 = x1; }
   const rest = Math.abs(c.t) - full;
-  if (rest > 0.01) { const x1 = x0 + dir * c.se * rest; s += `<rect x="${Math.min(sx(x0), sx(x1))}" y="${y2}" width="${Math.abs(sx(x1) - sx(x0))}" height="${h}" fill="none" stroke="var(--geyser-2)" stroke-dasharray="3 2"/>`; }
+  if (rest > 0.01) { const x1 = x0 + dir * c.se * rest; s += `<rect x="${Math.min(sx(x0), sx(x1))}" y="${y2}" width="${Math.abs(sx(x1) - sx(x0))}" height="${h}" fill="none" stroke="var(--accent-soft)" stroke-dasharray="3 2"/>`; }
   s += `<text x="${L}" y="${y2 + h + 16}">Ein Block = ein Standardfehler (${fmt(c.se, 2)} mm) · ${fmt(Math.abs(c.t), 2)} Blöcke passen in das Signal</text>`;
   $("ruler").innerHTML = s;
   $("ruler").setAttribute("aria-label", `Signal ${fmt(c.diff)} mm entspricht ${fmt(Math.abs(c.t), 2)} Standardfehlern`);
@@ -184,7 +184,7 @@ function drawT(c) {
   s += `<path d="${path(pts(f, a, b))}" fill="none" stroke="var(--fg)" stroke-width="2"/>`;
   if (S.showNormal) s += `<path d="${path(pts(phi, a, b))}" fill="none" stroke="var(--muted)" stroke-width="1.6" stroke-dasharray="6 4"/>`;
   s += `<line x1="${L}" x2="${R}" y1="${base}" y2="${base}" stroke="var(--line)"/>`;
-  [c.tc, -c.tc].forEach(v => { s += `<line x1="${sx(v)}" x2="${sx(v)}" y1="${top + 26}" y2="${base}" stroke="var(--geyser-6)" stroke-width="1.5" stroke-dasharray="4 3"/>`; });
+  [c.tc, -c.tc].forEach(v => { s += `<line x1="${sx(v)}" x2="${sx(v)}" y1="${top + 26}" y2="${base}" stroke="var(--kontrolle)" stroke-width="1.5" stroke-dasharray="4 3"/>`; });
   s += `<text x="${sx(-c.tc) - 8}" y="${top + 36}" text-anchor="end" style="fill:var(--alpha-ink)">kritisches t = ±${fmt(c.tc, 2)}</text>`;
   const tx = Math.max(a, Math.min(b, c.t)), off = Math.abs(c.t) > b;
   s += `<line x1="${sx(tx)}" x2="${sx(tx)}" y1="${top}" y2="${base}" stroke="var(--pval)" stroke-width="2.5"/>`;

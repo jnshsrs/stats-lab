@@ -13,7 +13,7 @@
 <header class="site-header">
   <div class="column">
     <a class="brand" href="../">
-      <svg class="brand-mark" viewBox="0 0 22 22" aria-hidden="true"><path d="M1 19 C5 19 6 4 9 4 S13 19 17 19" fill="none" stroke="#DE8A5A" stroke-width="2.2" stroke-linecap="round"/><path d="M5 19 C9 19 10 7 13 7 S17 19 21 19" fill="none" stroke="#008080" stroke-width="2.2" stroke-linecap="round"/></svg>
+      <svg class="brand-mark" viewBox="0 0 22 22" aria-hidden="true"><path d="M1 19 C5 19 6 4 9 4 S13 19 17 19" fill="none" class="bm-a" stroke-width="2.2" stroke-linecap="round"/><path d="M5 19 C9 19 10 7 13 7 S17 19 21 19" fill="none" class="bm-b" stroke-width="2.2" stroke-linecap="round"/></svg>
       Stats Lab
     </a>
     <nav class="site-nav" aria-label="Hauptnavigation">
@@ -103,7 +103,7 @@
   <section class="step" aria-labelledby="s4">
     <span class="eyebrow">Schritt 4 von 5 · Vorausdenken</span>
     <h2 id="s4">Alpha, Beta und Power</h2>
-    <p class="text">Warm die Verteilung von t, wenn H0 stimmt. Kühl die Verteilung, wenn der wahre Effekt Δ existiert (nichtzentrale t-Verteilung). Die Schwellen kommen aus α. Dieser Schritt nutzt die wahren Parameter, nicht die Stichprobe: Er beschreibt das Studiendesign, bevor die erste Person gemessen wird.</p>
+    <p class="text">Hell die Verteilung von t, wenn H0 stimmt. Dunkel die Verteilung, wenn der wahre Effekt Δ existiert (nichtzentrale t-Verteilung). Die Schwellen kommen aus α. Dieser Schritt nutzt die wahren Parameter, nicht die Stichprobe: Er beschreibt das Studiendesign, bevor die erste Person gemessen wird.</p>
     <div class="chart-tools">
       <div class="legend"><span><i class="sw" style="background:var(--alpha-fill)"></i>α: Fehlalarm, falls H0 stimmt</span><span><i class="sw" style="background:var(--beta-fill)"></i>β: Effekt übersehen</span><span><i class="sw" style="background:var(--power-fill);opacity:.7"></i>Power: Effekt entdeckt</span></div>
     </div>
@@ -120,7 +120,7 @@
       <p class="sim-text" id="sim-text" aria-live="polite"></p>
     </div>
     <div class="tiles" id="tiles" aria-hidden="true"></div>
-    <div class="legend"><span><i class="sw" style="background:var(--therapie)"></i>signifikant, Effekt existiert</span><span><i class="sw" style="background:var(--pval)"></i>signifikant, obwohl Δ = 0</span><span><i class="sw sw-empty"></i>nicht signifikant</span></div>
+    <div class="legend"><span><i class="sw" style="background:var(--therapie)"></i>signifikant, Effekt existiert</span><span><i class="sw" style="background:var(--kontrolle)"></i>signifikant, obwohl Δ = 0</span><span><i class="sw sw-empty"></i>nicht signifikant</span></div>
   </section>
 </main>
 

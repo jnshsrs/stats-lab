@@ -18,7 +18,7 @@
 .ctrl-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
 .ctrl label, .ctrl .lbl { font-size: 14px; font-weight: 500; }
 .ctrl output { white-space: nowrap; font-family: var(--font-mono); font-size: 15px; font-weight: 600; }
-input[type=range] { width: 100%; accent-color: var(--therapie); margin: 4px 0 0; }
+input[type=range] { width: 100%; accent-color: var(--accent); margin: 4px 0 0; }
 .ctrl-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; border-top: 1px solid var(--line); padding-top: 12px; }
 .presets-lbl { font-size: 13px; color: var(--muted); margin-left: 8px; }
 
@@ -29,10 +29,10 @@ input[type=range] { width: 100%; accent-color: var(--therapie); margin: 4px 0 0;
 .seg-small { display: inline-flex; }
 .seg-small button { font-size: 13px; padding: 5px 12px; }
 
-.btn { border: 1px solid var(--therapie); background: var(--therapie); color: var(--bg); border-radius: 8px; padding: 8px 14px; font: 600 14px var(--font-sans); cursor: pointer; }
+.btn { border: 1px solid var(--accent); background: var(--accent); color: var(--on-accent); border-radius: 8px; padding: 8px 14px; font: 600 14px var(--font-sans); cursor: pointer; }
 .btn:hover { filter: brightness(1.08); }
 .chip { border: 1px solid var(--line); background: transparent; color: var(--fg); border-radius: 999px; padding: 5px 12px; font: 500 13px var(--font-sans); cursor: pointer; }
-.chip:hover { border-color: var(--geyser-2); background: var(--highlight); }
+.chip:hover { border-color: var(--accent-soft); background: var(--highlight); }
 
 /* Schritte */
 .step { padding-block: 56px 8px; display: flex; flex-direction: column; gap: 12px; border-bottom: 1px solid var(--line); padding-bottom: 48px; }
@@ -69,5 +69,5 @@ input[type=range] { width: 100%; accent-color: var(--therapie); margin: 4px 0 0;
 .tiles { display: grid; grid-template-columns: repeat(20, minmax(0, 1fr)); gap: 5px; width: 100%; max-width: 640px; margin-top: 12px; }
 .tile { aspect-ratio: 1; border-radius: 3px; border: 1px solid var(--line); background: transparent; }
 .tile.sig { background: var(--therapie); border-color: var(--therapie); }
-.tile.sig.h0 { background: var(--pval); border-color: var(--pval); }
+.tile.sig.h0 { background: var(--kontrolle); border-color: var(--kontrolle); }
 @media (max-width: 480px) { .tiles { grid-template-columns: repeat(10, minmax(0, 1fr)); } }
