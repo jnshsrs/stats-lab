@@ -1,0 +1,58 @@
+/* Fallzahl und Power: Eingabeformular links, Ergebnis mit Methodensatz, Kurve und Tabelle rechts */
+.intro { padding-block: 40px 28px; display: flex; flex-direction: column; gap: 12px; }
+.back { font-size: 15px; color: var(--muted); text-decoration: none; }
+.back:hover { color: var(--fg); }
+
+.calc-layout { display: grid; grid-template-columns: minmax(0, 340px) minmax(0, 1fr); gap: 28px; align-items: start; }
+@media (max-width: 860px) { .calc-layout { grid-template-columns: minmax(0, 1fr); } }
+.form { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 18px; }
+@media (min-width: 861px) { .form { position: sticky; top: 16px; } }
+.field { display: flex; flex-direction: column; gap: 6px; }
+.lbl { font-size: 14px; font-weight: 600; }
+.seg { display: flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+.seg button { flex: 1; background: transparent; color: var(--fg); border: 0; padding: 8px 8px; font: 500 13.5px var(--font-sans); cursor: pointer; text-align: center; }
+.seg button + button { border-left: 1px solid var(--line); }
+.seg button[aria-pressed="true"] { background: var(--fg); color: var(--bg); }
+.seg-col { flex-direction: column; }
+.seg-col button { text-align: left; padding: 9px 12px; }
+.seg-col button + button { border-left: 0; border-top: 1px solid var(--line); }
+.seg-col small { display: block; font-size: 12px; opacity: .75; font-weight: 400; }
+
+.inputs { display: flex; flex-direction: column; gap: 14px; border-top: 1px solid var(--line); padding-top: 16px; }
+.in { display: grid; grid-template-columns: minmax(0, 1fr) 110px; gap: 4px 10px; align-items: center; }
+.in label { font-size: 14px; font-weight: 500; }
+.in .help { grid-column: 1 / -1; font-size: 12.5px; color: var(--muted); }
+.in input[type=number] { width: 100%; font: 500 15px var(--font-mono); padding: 7px 9px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); color: var(--fg); text-align: right; }
+.in input:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+.in.solved { opacity: .45; }
+.in.solved input { pointer-events: none; }
+.sub-seg { grid-column: 1 / -1; }
+
+.out { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.result { background: var(--surface); border: 1px solid var(--line); border-top: 5px solid var(--therapie); border-radius: 12px; padding: 18px 20px; display: flex; flex-direction: column; gap: 6px; }
+.result .k { font-family: var(--font-mono); font-size: 12.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+.result .big { font-size: clamp(30px, 4.5vw, 44px); font-weight: 700; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.result .sub { font-size: 15.5px; color: var(--muted); }
+.result .warn { font-size: 14px; color: var(--alpha-ink); }
+.report { background: var(--highlight); border-radius: 10px; padding: 14px 16px; display: flex; flex-direction: column; gap: 8px; }
+.report-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.report p { font-size: 15.5px; }
+.btn { border: 1px solid var(--accent); background: var(--accent); color: var(--on-accent); border-radius: 8px; padding: 8px 14px; font: 600 14px var(--font-sans); cursor: pointer; }
+.btn.ghost { background: var(--surface); color: var(--fg); border-color: var(--line); }
+.btn.small { padding: 4px 10px; font-size: 13px; }
+
+.chart-title { font-size: 18px; margin-top: 8px; }
+.chart { width: 100%; height: auto; display: block; overflow: visible; }
+.chart text { font-family: var(--font-mono); font-size: 12.5px; fill: var(--muted); }
+.chart .strong { fill: var(--fg); font-weight: 600; }
+.legend { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; font-size: 13.5px; color: var(--muted); }
+.legend span { display: inline-flex; align-items: center; }
+.sw { display: inline-block; width: 22px; height: 0; border-top: 3px solid; margin-right: 6px; }
+
+.table-wrap { overflow-x: auto; }
+.sens { width: 100%; border-collapse: collapse; font-size: 14.5px; font-variant-numeric: tabular-nums; min-width: 380px; }
+.sens th, .sens td { padding: 8px 10px; border-bottom: 1px solid var(--line); text-align: right; }
+.sens th:first-child, .sens td:first-child { text-align: left; }
+.sens th { font-weight: 600; background: var(--highlight); }
+.sens td.cur { font-weight: 700; color: var(--therapie-ink); }
+.note { font-size: 13px; color: var(--muted); }
