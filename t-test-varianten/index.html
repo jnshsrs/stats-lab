@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Welcher t-Test? · Stats Lab</title>
+<meta name="description" content="Einstichproben-, gepaarter und ungepaarter t-Test an drei Beispielen aus der Physiotherapie, jeweils mit Hypothesen, Rechenweg, kritischem Wert und p-Wert.">
+<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/css/base.css?v=202611202317">
+<link rel="stylesheet" href="t-test-varianten.css?v=202611202317">
+</head>
+<body>
+<header class="site-header">
+  <div class="column">
+    <a class="brand" href="../">
+      <svg class="brand-mark" viewBox="0 0 22 22" aria-hidden="true"><path d="M1 19 C5 19 6 4 9 4 S13 19 17 19" fill="none" class="bm-a" stroke-width="2.2" stroke-linecap="round"/><path d="M5 19 C9 19 10 7 13 7 S17 19 21 19" fill="none" class="bm-b" stroke-width="2.2" stroke-linecap="round"/></svg>
+      Stats Lab
+    </a>
+    <nav class="site-nav" aria-label="Hauptnavigation">
+      <a href="../">Visualisierungen</a>
+      <a href="https://github.com/jnshsrs/stats-lab">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main class="column">
+  <section class="intro">
+    <a class="back" href="../">← Alle Visualisierungen</a>
+    <h1>Welcher t-Test?</h1>
+    <p class="byline">Dr. Jens Hüsers · Forschungsmethodik</p>
+    <p class="lede">Drei Fragen, drei t-Tests, dieselbe Logik: Signal geteilt durch Standardfehler. Was sich ändert, ist nur, wie man den Standardfehler berechnet. Jeder Abschnitt zeigt Hypothesen, Daten, Rechenweg und Entscheidung.</p>
+    <div class="ctrl alpha-ctrl"><span class="lbl" id="a-lbl">Signifikanzniveau α für alle drei</span><div class="seg" role="group" aria-labelledby="a-lbl" id="alpha"><button type="button" data-a="0.01" aria-pressed="false">0,01</button><button type="button" data-a="0.05" aria-pressed="true">0,05</button><button type="button" data-a="0.1" aria-pressed="false">0,10</button></div></div>
+  </section>
+
+  <!-- ================= 1 Einstichproben ================= -->
+  <details class="acc" id="acc-1" open>
+    <summary><span class="acc-no">1</span><span class="acc-title">Einstichproben-t-Test: Erfüllt die Klinik das Kriterium?<span class="acc-teaser">Eine Gruppe, verglichen mit einem festen Sollwert.</span></span></summary>
+    <div class="acc-body">
+      <p class="text">Angenommen, ein Qualitätskriterium verlangt nach Knie-TEP am dritten postoperativen Tag im Mittel mindestens 90° Flexion. Eine Klinik misst ihre Patientinnen und Patienten. Welche Hypothese getestet wird, hängt davon ab, wer was beweisen muss.</p>
+      <p class="fict">Das Kriterium ist fiktiv und dient nur als Beispiel. Die Daten sind simuliert.</p>
+      <div class="ctrl"><span class="lbl" id="v1-lbl">Wer muss etwas zeigen?</span><div class="seg" role="group" aria-labelledby="v1-lbl" id="view1"><button type="button" data-v="klinik" aria-pressed="true">Klinik: Kriterium erfüllt</button><button type="button" data-v="pruef" aria-pressed="false">Prüfstelle: Kriterium verfehlt</button></div></div>
+      <div class="hyp" id="hyp1"></div>
+      <div class="panel-grid">
+        <div class="ctrl"><div class="ctrl-head"><label for="m1">wahrer Mittelwert der Klinik</label><output id="m1-v" class="num"></output></div><input id="m1" type="range" min="80" max="100" step="1" value="94"></div>
+        <div class="ctrl"><div class="ctrl-head"><label for="s1">Streuung (SD)</label><output id="s1-v" class="num"></output></div><input id="s1" type="range" min="5" max="20" step="1" value="10"></div>
+        <div class="ctrl"><div class="ctrl-head"><label for="n1">n Patientinnen und Patienten</label><output id="n1-v" class="num"></output></div><input id="n1" type="range" min="5" max="60" step="1" value="20"></div>
+      </div>
+      <div class="ctrl-row"><button class="btn" type="button" id="new1">Neue Stichprobe</button><button class="chip" type="button" id="edge1">Grenzfall: 91°, n = 12</button></div>
+      <div class="two-charts">
+        <figure><figcaption>Flexion am 3. Tag (Grad)</figcaption><svg class="chart" id="d1" viewBox="0 0 520 200" role="img"></svg></figure>
+        <figure><figcaption>t-Verteilung unter H0</figcaption><svg class="chart" id="t1" viewBox="0 0 440 200" role="img"></svg></figure>
+      </div>
+      <ol class="calc-steps" id="c1"></ol>
+      <p class="verdict" id="v1"></p>
+    </div>
+  </details>
+
+  <!-- ================= 2 Gepaart ================= -->
+  <details class="acc" id="acc-2" open>
+    <summary><span class="acc-no">2</span><span class="acc-title">Gepaarter t-Test: Wird der Bizeps durch Training dicker?<span class="acc-teaser">Dieselben Personen zweimal gemessen.</span></span></summary>
+    <div class="acc-body">
+      <p class="text">Aus dem Messpraktikum: Der Oberarmumfang am Trainingsarm wird vor und direkt nach Kettlebell-Curls gemessen. Jede Person liefert ein Paar. Der gepaarte t-Test bildet zuerst für jede Person die Differenz und prüft dann, ob deren Mittelwert von null abweicht. Er ist also ein Einstichproben-t-Test auf die Differenzen mit Sollwert 0.</p>
+      <p class="fict">Simulierte Daten. Den Kontrollarm aus dem Praktikum lassen wir hier weg, um den Test selbst zu zeigen.</p>
+      <div class="hyp" id="hyp2"></div>
+      <div class="panel-grid">
+        <div class="ctrl"><div class="ctrl-head"><label for="m2">wahrer Pump</label><output id="m2-v" class="num"></output></div><input id="m2" type="range" min="0" max="1.5" step="0.1" value="0.6"></div>
+        <div class="ctrl"><div class="ctrl-head"><label for="s2">Messrauschen je Messung (SD)</label><output id="s2-v" class="num"></output></div><input id="s2" type="range" min="0.1" max="1" step="0.05" value="0.4"></div>
+        <div class="ctrl"><div class="ctrl-head"><label for="n2">n Personen</label><output id="n2-v" class="num"></output></div><input id="n2" type="range" min="4" max="30" step="1" value="10"></div>
+      </div>
+      <div class="ctrl-row"><button class="btn" type="button" id="new2">Neue Stichprobe</button></div>
+      <div class="two-charts">
+        <figure><figcaption>Je Person: vorher → nachher (cm)</figcaption><svg class="chart" id="d2" viewBox="0 0 520 240" role="img"></svg></figure>
+        <figure><figcaption>Differenzen nachher − vorher (cm)</figcaption><svg class="chart" id="dd2" viewBox="0 0 440 240" role="img"></svg></figure>
+      </div>
+      <ol class="calc-steps" id="c2"></ol>
+      <p class="verdict" id="v2"></p>
+      <div class="contrast">
+        <h3>Was wäre, wenn man dieselben Daten ungepaart auswertet?</h3>
+        <div class="table-wrap"><table class="cmp-tab" id="cmp2"></table></div>
+        <p class="note" id="cmpn2"></p>
+      </div>
+    </div>
+  </details>
+
+  <!-- ================= 3 Ungepaart ================= -->
+  <details class="acc" id="acc-3" open>
+    <summary><span class="acc-no">3</span><span class="acc-title">Ungepaarter t-Test: Hilft Rhythmus beim Gehen mit Parkinson?<span class="acc-teaser">Zwei unabhängige Gruppen, verschiedene Personen.</span></span></summary>
+    <div class="acc-body">
+      <p class="text">Menschen mit Parkinson werden zufällig auf zwei Gruppen verteilt: rhythmisch-auditive Stimulation (Gehen zum Metronom oder zur Musik) oder herkömmliche Krankengymnastik. Nach vier Wochen wird die Schrittlänge gemessen, als Maß für die Mobilität. Jede Person ist nur in einer Gruppe.</p>
+      <p class="fict">Simulierte Beispielwerte, keine Studiendaten.</p>
+      <div class="hyp" id="hyp3"></div>
+      <div class="panel-grid">
+        <div class="ctrl"><div class="ctrl-head"><label for="m3">wahrer Unterschied (Rhythmus − KG)</label><output id="m3-v" class="num"></output></div><input id="m3" type="range" min="0" max="0.15" step="0.01" value="0.06"></div>
+        <div class="ctrl"><div class="ctrl-head"><label for="s3">Streuung je Gruppe (SD)</label><output id="s3-v" class="num"></output></div><input id="s3" type="range" min="0.04" max="0.2" step="0.01" value="0.1"></div>
+        <div class="ctrl"><div class="ctrl-head"><label for="n3">n je Gruppe</label><output id="n3-v" class="num"></output></div><input id="n3" type="range" min="5" max="60" step="1" value="25"></div>
+      </div>
+      <div class="ctrl-row"><button class="btn" type="button" id="new3">Neue Stichprobe</button></div>
+      <div class="two-charts">
+        <figure><figcaption>Schrittlänge nach 4 Wochen (m)</figcaption><svg class="chart" id="d3" viewBox="0 0 520 220" role="img"></svg></figure>
+        <figure><figcaption>t-Verteilung unter H0</figcaption><svg class="chart" id="t3" viewBox="0 0 440 220" role="img"></svg></figure>
+      </div>
+      <ol class="calc-steps" id="c3"></ol>
+      <p class="verdict" id="v3"></p>
+      <p class="note" id="welch3"></p>
+    </div>
+  </details>
+
+  <section class="block" aria-labelledby="dec-h">
+    <span class="eyebrow">Entscheidungshilfe</span>
+    <h2 id="dec-h">Welcher t-Test passt?</h2>
+    <div class="table-wrap"><table class="dec-tab">
+      <thead><tr><th>Frage</th><th>Test</th><th>Beispiel</th><th>Standardfehler</th><th>df</th></tr></thead>
+      <tbody>
+        <tr><td>Eine Gruppe gegen einen festen Wert?</td><td><b>Einstichproben</b></td><td>Flexion gegen 90°</td><td>s / √n</td><td>n − 1</td></tr>
+        <tr><td>Dieselben Personen zweimal, oder sinnvoll gebildete Paare?</td><td><b>gepaart</b></td><td>Bizeps vorher und nachher</td><td>s<sub>d</sub> / √n</td><td>n − 1</td></tr>
+        <tr><td>Zwei Gruppen aus verschiedenen Personen?</td><td><b>ungepaart</b></td><td>Rhythmus gegen KG</td><td>s<sub>p</sub> · √(1/n₁ + 1/n₂)</td><td>n₁ + n₂ − 2</td></tr>
+      </tbody>
+    </table></div>
+    <p class="text">Bei ungleichen Streuungen der Gruppen nimmt man die Welch-Variante des ungepaarten Tests, viele Programme tun das inzwischen standardmäßig. Woher t, kritischer Wert und p-Wert kommen, zeigt ausführlich die <a href="../t-test/#calc">t-Test-Kaskade</a>.</p>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="column">
+    <span>© 2026 Dr. Jens Hüsers · Lehrmaterial für Forschungsmethodik und Statistik</span>
+    <span class="footer-links"><a href="https://github.com/jnshsrs/stats-lab">Quellcode auf GitHub</a><span>Ohne Cookies und Tracking</span></span>
+  </div>
+</footer>
+<script src="t-test-varianten.js?v=202611202317"></script>
+<script src="../assets/js/path.js?v=202611202317"></script>
+</body>
+</html>
