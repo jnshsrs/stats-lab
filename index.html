@@ -6,7 +6,7 @@
 <title>Stats Lab</title>
 <meta name="description" content="Interaktive Visualisierungen für die Statistiklehre in Gesundheits- und Therapiewissenschaften.">
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="assets/css/base.css?v=202611200721">
+<link rel="stylesheet" href="assets/css/base.css?v=202611200731">
 <style>
   .hero { padding-block: 56px 40px; display: flex; flex-direction: column; gap: 16px; }
   .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; }
@@ -36,6 +36,14 @@
   .t-euro { fill: var(--therapie); font-family: var(--font-sans); }
   .t-bar { fill: var(--area-b); } .t-curve { fill: none; stroke: var(--therapie); stroke-width: 3; }
   .t-ci { stroke: var(--area-a); stroke-width: 4; stroke-linecap: round; } .t-ci-miss { stroke: var(--therapie); stroke-width: 5; stroke-linecap: round; }
+  .hint { font-size: 15px; color: var(--muted); max-width: 70ch; }
+  .hint code { font-family: var(--font-mono); font-size: 13.5px; background: var(--highlight); padding: 1px 6px; border-radius: 4px; }
+  .path-block { margin-bottom: 48px; }
+  .block-head { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 18px; }
+  .block-head p { color: var(--muted); font-size: 15.5px; margin-top: 2px; }
+  .block-no { flex: none; width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; background: var(--accent); color: var(--on-accent); font: 600 16px var(--font-mono); }
+  .card-thumb { position: relative; }
+  .path-no { position: absolute; top: 10px; left: 10px; min-width: 26px; height: 26px; padding: 0 6px; border-radius: 999px; display: grid; place-items: center; background: var(--surface); border: 1px solid var(--line); font: 600 12.5px var(--font-mono); color: var(--fg); }
 </style>
 </head>
 <body>
@@ -57,12 +65,14 @@
     <span class="eyebrow">Statistik zum Anfassen</span>
     <h1>Stats Lab</h1>
     <p class="lede">Interaktive Visualisierungen für die Statistiklehre in den Gesundheits- und Therapiewissenschaften. Parameter verschieben, Verteilungen beobachten, Zusammenhänge verstehen.</p>
+    <p class="hint">Ein Lernpfad in vier Blöcken, die Nummern geben die Reihenfolge vor. Alles läuft im Browser, ohne Anmeldung und ohne Tracking. Jede Seite und jeder Reiter lässt sich direkt verlinken, etwa <code>wahrscheinlichkeit/#bayes</code>.</p>
   </section>
 
-  <h2 class="section-title">Visualisierungen</h2>
-  <div class="grid">
+  <section class="path-block" aria-labelledby="b1">
+    <div class="block-head"><span class="block-no">1</span><div><h2 id="b1">Grundlagen</h2><p>Messen, beschreiben, Wahrscheinlichkeit: das Handwerkszeug für alles Weitere.</p></div></div>
+    <div class="grid">
     <a class="card" href="skalenniveaus/">
-      <div class="card-thumb">
+      <div class="card-thumb"><span class="path-no">1</span>
         <svg viewBox="0 0 320 180" aria-hidden="true">
           <circle cx="56" cy="70" r="12" class="t-bar"/><rect x="46" y="100" width="20" height="20" rx="2" class="t-bar"/>
           <circle cx="118" cy="120" r="11" class="t-soft"/><circle cx="148" cy="96" r="11" class="t-soft"/><circle cx="178" cy="72" r="11" class="t-strong"/>
@@ -78,8 +88,24 @@
         <div class="tags"><span class="tag">Skalenniveau</span><span class="tag">ROM</span><span class="tag">LSI</span></div>
       </div>
     </a>
+    <a class="card" href="lage-streuung/">
+      <div class="card-thumb"><span class="path-no">2</span>
+        <svg viewBox="0 0 320 180" aria-hidden="true">
+          <rect x="150" y="62" width="80" height="80" class="t-soft" opacity=".55"/><rect x="150" y="104" width="38" height="38" class="t-strong" opacity=".55"/>
+          <rect x="112" y="118" width="38" height="24" class="t-soft" opacity=".55"/>
+          <line x1="150" x2="150" y1="40" y2="142" class="t-dash"/>
+          <circle cx="70" cy="142" r="7" class="t-bar"/><circle cx="112" cy="142" r="7" class="t-bar"/><circle cx="188" cy="142" r="7" class="t-bar"/><circle cx="230" cy="142" r="7" class="t-bar"/>
+          <line x1="30" x2="290" y1="150" y2="150" class="t-axis" stroke-width="2"/>
+        </svg>
+      </div>
+      <div class="card-body">
+        <h3>Lage und Streuung</h3>
+        <p>Mittelwert als Schwerpunkt, Median als Mitte, Quartile und Boxplot. Varianz als echte Abweichungsquadrate, Standardabweichung als ihre Seitenlänge. Punkte zum Ziehen.</p>
+        <div class="tags"><span class="tag">Median</span><span class="tag">IQR</span><span class="tag">Varianz · SD</span></div>
+      </div>
+    </a>
     <a class="card" href="wahrscheinlichkeit/">
-      <div class="card-thumb">
+      <div class="card-thumb"><span class="path-no">3</span>
         <svg viewBox="0 0 320 180" aria-hidden="true">
           <rect x="90" y="20" width="140" height="140" class="t-hyp"/>
           <rect x="90" y="20" width="105" height="62" class="t-soft"/>
@@ -95,7 +121,7 @@
       </div>
     </a>
     <a class="card" href="binomial/">
-      <div class="card-thumb">
+      <div class="card-thumb"><span class="path-no">4</span>
         <svg viewBox="0 0 320 180" aria-hidden="true">
           <g class="t-peg"><circle cx="160" cy="22" r="7"/><circle cx="145" cy="44" r="7"/><circle cx="175" cy="44" r="7"/><circle cx="130" cy="66" r="7"/><circle cx="160" cy="66" r="7"/><circle cx="190" cy="66" r="7"/><circle cx="115" cy="88" r="7"/><circle cx="145" cy="88" r="7"/><circle cx="175" cy="88" r="7"/><circle cx="205" cy="88" r="7"/></g>
           <rect x="94" y="152" width="22" height="8" class="t-bar"/><rect x="124" y="128" width="22" height="32" class="t-bar"/><rect x="154" y="114" width="22" height="46" class="t-strong"/><rect x="184" y="128" width="22" height="32" class="t-bar"/><rect x="214" y="152" width="22" height="8" class="t-bar"/>
@@ -109,7 +135,7 @@
       </div>
     </a>
     <a class="card" href="verteilungen/">
-      <div class="card-thumb">
+      <div class="card-thumb"><span class="path-no">5</span>
         <svg viewBox="0 0 320 180" aria-hidden="true">
           <rect x="40" y="118" width="12" height="22" class="t-bar"/><rect x="58" y="88" width="12" height="52" class="t-strong"/><rect x="76" y="70" width="12" height="70" class="t-strong"/><rect x="94" y="96" width="12" height="44" class="t-bar"/><rect x="112" y="124" width="12" height="16" class="t-bar"/>
           <path d="M40 160 L58 160 L58 150 L76 150 L76 128 L94 128 L94 112 L112 112 L112 104 L130 104" fill="none" class="t-step"/>
@@ -124,8 +150,13 @@
         <div class="tags"><span class="tag">PMF · PDF</span><span class="tag">Verteilungsfunktion</span></div>
       </div>
     </a>
+    </div>
+  </section>
+  <section class="path-block" aria-labelledby="b2">
+    <div class="block-head"><span class="block-no">2</span><div><h2 id="b2">Schätzen</h2><p>Von der Stichprobe auf die Population: Standardfehler und Konfidenzintervall.</p></div></div>
+    <div class="grid">
     <a class="card" href="zgws/">
-      <div class="card-thumb">
+      <div class="card-thumb"><span class="path-no">6</span>
         <svg viewBox="0 0 320 180" aria-hidden="true">
           <rect x="120" y="70" width="14" height="40" class="t-bar"/><rect x="136" y="44" width="14" height="66" class="t-bar"/><rect x="152" y="30" width="14" height="80" class="t-bar"/><rect x="168" y="40" width="14" height="70" class="t-bar"/><rect x="184" y="66" width="14" height="44" class="t-bar"/>
           <path d="M90 110 C 130 110 135 26 160 26 S 190 110 230 110" class="t-curve"/>
@@ -140,8 +171,13 @@
         <div class="tags"><span class="tag">ZGWS</span><span class="tag">SE</span><span class="tag">KI</span></div>
       </div>
     </a>
+    </div>
+  </section>
+  <section class="path-block" aria-labelledby="b3">
+    <div class="block-head"><span class="block-no">3</span><div><h2 id="b3">Testen</h2><p>Der Signifikanztest von innen: p-Wert, Fehlerarten, Fallzahl, viele Tests, Kreuztabellen.</p></div></div>
+    <div class="grid">
     <a class="card" href="t-test/">
-      <div class="card-thumb">
+      <div class="card-thumb"><span class="path-no">7</span>
         <svg viewBox="0 0 320 180" aria-hidden="true">
           <path d="M20 160 C 80 160 95 40 130 40 S 180 160 240 160" class="t-h0" stroke-width="3"/>
           <path d="M80 160 C 140 160 155 40 190 40 S 240 160 300 160" class="t-h1" stroke-width="3"/>
@@ -157,7 +193,7 @@
       </div>
     </a>
     <a class="card" href="entscheidung/">
-      <div class="card-thumb">
+      <div class="card-thumb"><span class="path-no">8</span>
         <svg viewBox="0 0 320 180" aria-hidden="true">
           <path d="M40 150 C 85 150 95 50 125 50 S 165 150 210 150 Z" class="t-h0"/>
           <path d="M110 150 C 155 150 165 50 195 50 S 235 150 280 150 Z" class="t-h1"/>
@@ -172,22 +208,8 @@
         <div class="tags"><span class="tag">α · β · Power</span><span class="tag">Fallzahl</span><span class="tag">QALY</span></div>
       </div>
     </a>
-    <a class="card" href="multiples-testen/">
-      <div class="card-thumb">
-        <svg viewBox="0 0 320 180" aria-hidden="true">
-          <g><rect x="40" y="24" width="40" height="30" rx="5" class="t-bar"/><rect x="90" y="24" width="40" height="30" rx="5" class="t-bar"/><rect x="140" y="24" width="40" height="30" rx="5" class="t-bar"/><rect x="190" y="24" width="40" height="30" rx="5" class="t-bar"/><rect x="240" y="24" width="40" height="30" rx="5" class="t-bar"/><rect x="40" y="64" width="40" height="30" rx="5" class="t-bar"/><rect x="90" y="64" width="40" height="30" rx="5" class="t-bar"/><rect x="140" y="64" width="40" height="30" rx="5" class="t-bar"/><rect x="190" y="64" width="40" height="30" rx="5" class="t-strong"/><rect x="240" y="64" width="40" height="30" rx="5" class="t-bar"/><rect x="40" y="104" width="40" height="30" rx="5" class="t-bar"/><rect x="90" y="104" width="40" height="30" rx="5" class="t-bar"/><rect x="140" y="104" width="40" height="30" rx="5" class="t-bar"/><rect x="190" y="104" width="40" height="30" rx="5" class="t-bar"/><rect x="240" y="104" width="40" height="30" rx="5" class="t-bar"/></g>
-          <line x1="30" x2="290" y1="150" y2="150" class="t-axis" stroke-width="2"/>
-          <text x="40" y="172" font-size="14" class="t-euro">1 − 0,95ᵏ</text>
-        </svg>
-      </div>
-      <div class="card-body">
-        <h3>Multiples Testen und α-Korrektur</h3>
-        <p>Vom 20er-Würfel zu 20 Subgruppen: Warum viele Tests fast sicher einen Fehlalarm liefern und was Bonferroni, Holm und Benjamini-Hochberg dagegen tun.</p>
-        <div class="tags"><span class="tag">FWER</span><span class="tag">Bonferroni</span><span class="tag">Subgruppen</span></div>
-      </div>
-    </a>
     <a class="card" href="fallzahl/">
-      <div class="card-thumb">
+      <div class="card-thumb"><span class="path-no">9</span>
         <svg viewBox="0 0 320 180" aria-hidden="true">
           <line x1="50" x2="280" y1="60" y2="60" class="t-dash"/>
           <path d="M50 150 C 90 120 110 70 160 60 S 240 46 280 44" fill="none" class="t-curve"/>
@@ -202,8 +224,22 @@
         <div class="tags"><span class="tag">Fallzahlplanung</span><span class="tag">Power</span><span class="tag">Rechner</span></div>
       </div>
     </a>
+    <a class="card" href="multiples-testen/">
+      <div class="card-thumb"><span class="path-no">10</span>
+        <svg viewBox="0 0 320 180" aria-hidden="true">
+          <g><rect x="40" y="24" width="40" height="30" rx="5" class="t-bar"/><rect x="90" y="24" width="40" height="30" rx="5" class="t-bar"/><rect x="140" y="24" width="40" height="30" rx="5" class="t-bar"/><rect x="190" y="24" width="40" height="30" rx="5" class="t-bar"/><rect x="240" y="24" width="40" height="30" rx="5" class="t-bar"/><rect x="40" y="64" width="40" height="30" rx="5" class="t-bar"/><rect x="90" y="64" width="40" height="30" rx="5" class="t-bar"/><rect x="140" y="64" width="40" height="30" rx="5" class="t-bar"/><rect x="190" y="64" width="40" height="30" rx="5" class="t-strong"/><rect x="240" y="64" width="40" height="30" rx="5" class="t-bar"/><rect x="40" y="104" width="40" height="30" rx="5" class="t-bar"/><rect x="90" y="104" width="40" height="30" rx="5" class="t-bar"/><rect x="140" y="104" width="40" height="30" rx="5" class="t-bar"/><rect x="190" y="104" width="40" height="30" rx="5" class="t-bar"/><rect x="240" y="104" width="40" height="30" rx="5" class="t-bar"/></g>
+          <line x1="30" x2="290" y1="150" y2="150" class="t-axis" stroke-width="2"/>
+          <text x="40" y="172" font-size="14" class="t-euro">1 − 0,95ᵏ</text>
+        </svg>
+      </div>
+      <div class="card-body">
+        <h3>Multiples Testen und α-Korrektur</h3>
+        <p>Vom 20er-Würfel zu 20 Subgruppen: Warum viele Tests fast sicher einen Fehlalarm liefern und was Bonferroni, Holm und Benjamini-Hochberg dagegen tun.</p>
+        <div class="tags"><span class="tag">FWER</span><span class="tag">Bonferroni</span><span class="tag">Subgruppen</span></div>
+      </div>
+    </a>
     <a class="card" href="chi-quadrat/">
-      <div class="card-thumb">
+      <div class="card-thumb"><span class="path-no">11</span>
         <svg viewBox="0 0 320 180" aria-hidden="true">
           <rect x="70" y="30" width="90" height="80" class="t-strong"/><rect x="70" y="110" width="90" height="40" class="t-soft"/>
           <rect x="166" y="30" width="84" height="52" class="t-strong"/><rect x="166" y="82" width="84" height="68" class="t-soft"/>
@@ -217,8 +253,13 @@
         <div class="tags"><span class="tag">Kreuztabelle</span><span class="tag">χ²</span><span class="tag">Cramérs V</span></div>
       </div>
     </a>
+    </div>
+  </section>
+  <section class="path-block" aria-labelledby="b4">
+    <div class="block-head"><span class="block-no">4</span><div><h2 id="b4">Hintergrund</h2><p>Was ein Test logisch leisten kann und was nicht: Popper, Fisher, Neyman und Pearson.</p></div></div>
+    <div class="grid">
     <a class="card" href="inferenzzyklus/">
-      <div class="card-thumb">
+      <div class="card-thumb"><span class="path-no">12</span>
         <svg viewBox="0 0 320 180" aria-hidden="true">
           <rect x="0" y="0" width="320" height="80" class="t-band"/>
           <rect x="70" y="22" width="180" height="40" rx="10" class="t-hyp"/>
@@ -235,7 +276,8 @@
         <div class="tags"><span class="tag">Popper</span><span class="tag">Falsifikation</span><span class="tag">Inferenz</span></div>
       </div>
     </a>
-  </div>
+    </div>
+  </section>
 </main>
 
 <footer class="site-footer">

@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lage und Streuung · Stats Lab</title>
+<meta name="description" content="Mittelwert, Median, Quartile und Interquartilsabstand, Quadratsumme, Varianz und Standardabweichung zum Anfassen.">
+<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/css/base.css?v=202611200731">
+<link rel="stylesheet" href="lage-streuung.css?v=202611200731">
+</head>
+<body>
+<header class="site-header">
+  <div class="column">
+    <a class="brand" href="../">
+      <svg class="brand-mark" viewBox="0 0 22 22" aria-hidden="true"><path d="M1 19 C5 19 6 4 9 4 S13 19 17 19" fill="none" class="bm-a" stroke-width="2.2" stroke-linecap="round"/><path d="M5 19 C9 19 10 7 13 7 S17 19 21 19" fill="none" class="bm-b" stroke-width="2.2" stroke-linecap="round"/></svg>
+      Stats Lab
+    </a>
+    <nav class="site-nav" aria-label="Hauptnavigation">
+      <a href="../">Visualisierungen</a>
+      <a href="https://github.com/jnshsrs/stats-lab">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main class="column">
+  <section class="intro">
+    <a class="back" href="../">← Alle Visualisierungen</a>
+    <h1>Lage und Streuung</h1>
+    <p class="byline">Dr. Jens Hüsers · Forschungsmethodik</p>
+    <p class="lede">Wie viele Tage waren Beschäftigte wegen Rückenschmerzen arbeitsunfähig? Wo liegt die Mitte, und wie weit streuen die Werte? Ziehen Sie die Punkte mit der Maus oder dem Finger, alle Kennwerte rechnen mit.</p>
+  </section>
+
+  <section class="controls" aria-label="Daten">
+    <div class="ctrl-row">
+      <span class="lbl" id="preset-lbl">Datensatz</span>
+      <div class="seg" role="group" aria-labelledby="preset-lbl" id="preset">
+        <button type="button" data-p="sym" aria-pressed="true">symmetrisch</button>
+        <button type="button" data-p="skew" aria-pressed="false">rechtsschief</button>
+        <button type="button" data-p="out" aria-pressed="false">mit Ausreißer</button>
+      </div>
+      <button class="btn ghost" type="button" id="add">+ Punkt</button>
+      <button class="btn ghost" type="button" id="del">− Punkt</button>
+      <button class="btn ghost" type="button" id="rnd">Zufallsstichprobe</button>
+      <span class="count num" id="count"></span>
+    </div>
+    <div class="values num" id="values"></div>
+  </section>
+
+  <details class="acc" id="acc-1" open>
+    <summary><span class="acc-no">1</span><span class="acc-title">Lagemaße: Mittelwert und Median<span class="acc-teaser">Der Mittelwert ist der Schwerpunkt, der Median die Mitte der Reihe.</span></span></summary>
+    <div class="acc-body">
+      <svg class="chart" id="c1" viewBox="0 0 900 260" role="img" aria-label="Punktdiagramm mit Mittelwert und Median"></svg>
+      <div class="legend"><span><i class="sw" style="background:var(--therapie)"></i>Mittelwert (Schwerpunkt)</span><span><i class="sw" style="background:var(--kontrolle)"></i>Median (mittlerer Rang)</span></div>
+      <div class="two-col">
+        <div class="formula" id="f1"></div>
+        <div class="readouts" id="r1"></div>
+      </div>
+      <p class="callout" id="t1"></p>
+    </div>
+  </details>
+
+  <details class="acc" id="acc-2" open>
+    <summary><span class="acc-no">2</span><span class="acc-title">Quartile, Interquartilsabstand und Boxplot<span class="acc-teaser">Drei Schnitte teilen die sortierten Werte in vier gleich große Teile.</span></span></summary>
+    <div class="acc-body">
+      <svg class="chart" id="c2" viewBox="0 0 900 280" role="img" aria-label="Punktdiagramm mit Quartilen und Boxplot"></svg>
+      <div class="legend"><span><i class="sw" style="background:var(--area-b)"></i>Box: mittlere 50 % (Q1 bis Q3)</span><span><i class="sw line"></i>Whisker bis 1,5 × IQR</span><span><i class="sw" style="background:var(--surface);border:2px solid var(--therapie);border-radius:50%;width:12px"></i>Ausreißer</span></div>
+      <div class="readouts" id="r2"></div>
+      <p class="note">Quartile werden wie in R und Excel (QUARTILE.INC) interpoliert. Lehrbücher nutzen teils andere Regeln, bei kleinem n weichen die Werte dann leicht ab.</p>
+    </div>
+  </details>
+
+  <details class="acc" id="acc-3" open>
+    <summary><span class="acc-no">3</span><span class="acc-title">Varianz und Standardabweichung<span class="acc-teaser">Abweichungen quadrieren, aufsummieren, mitteln, Wurzel ziehen.</span></span></summary>
+    <div class="acc-body">
+      <div class="steps-row">
+        <div class="seg" role="group" aria-label="Rechenschritt" id="step">
+          <button type="button" data-s="0" aria-pressed="false">1 Abweichungen</button>
+          <button type="button" data-s="1" aria-pressed="true">2 Quadrate</button>
+          <button type="button" data-s="2" aria-pressed="false">3 Varianz</button>
+          <button type="button" data-s="3" aria-pressed="false">4 Standardabweichung</button>
+        </div>
+        <div class="seg" role="group" aria-label="Nenner" id="den">
+          <button type="button" data-d="n1" aria-pressed="true">÷ (n − 1) Stichprobe</button>
+          <button type="button" data-d="n" aria-pressed="false">÷ n Population</button>
+        </div>
+      </div>
+      <svg class="chart" id="c3" viewBox="0 0 900 420" role="img" aria-label="Abweichungsquadrate über der Zahlengeraden"></svg>
+      <div class="legend" id="lg3"></div>
+      <div class="formula" id="f3"></div>
+      <div class="readouts" id="r3"></div>
+      <p class="callout" id="t3"></p>
+      <div class="table-wrap"><table class="vtab" id="tab3"></table></div>
+    </div>
+  </details>
+
+  <section class="block" aria-labelledby="when-h">
+    <span class="eyebrow">Merkhilfe</span>
+    <h2 id="when-h">Welches Maß wann?</h2>
+    <div class="table-wrap"><table class="vtab when">
+      <thead><tr><th>Daten</th><th>Lage</th><th>Streuung</th></tr></thead>
+      <tbody>
+        <tr><td>Nominal</td><td>Modus</td><td>Anteile je Kategorie</td></tr>
+        <tr><td>Ordinal, z. B. Schmerz in Stufen</td><td>Median</td><td>Quartile, IQR</td></tr>
+        <tr><td>Metrisch, symmetrisch</td><td>Mittelwert</td><td>Standardabweichung</td></tr>
+        <tr><td>Metrisch, schief oder mit Ausreißern</td><td>Median</td><td>Quartile, IQR</td></tr>
+      </tbody>
+    </table></div>
+    <p class="text">Welche Rechnung überhaupt erlaubt ist, hängt vom <a href="../skalenniveaus/">Skalenniveau</a> ab. Der Standardfehler, also die Streuung von Mittelwerten, ist Thema beim <a href="../zgws/">Grenzwertsatz</a>.</p>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="column">
+    <span>© 2026 Dr. Jens Hüsers · Lehrmaterial für Forschungsmethodik und Statistik</span>
+    <span class="footer-links"><a href="https://github.com/jnshsrs/stats-lab">Quellcode auf GitHub</a><span>Ohne Cookies und Tracking</span></span>
+  </div>
+</footer>
+<script src="lage-streuung.js?v=202611200731"></script>
+<script src="../assets/js/path.js?v=202611200731"></script>
+</body>
+</html>

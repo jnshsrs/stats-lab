@@ -7,6 +7,7 @@ Interaktive Visualisierungen für die Statistiklehre in den Gesundheits- und The
 | Seite | Inhalt |
 |---|---|
 | [`skalenniveaus/`](skalenniveaus/) | Skalenniveaus in drei Reitern: vier Stufen animiert mit Tabelle der erlaubten Operationen; Kniewinkel nach Neutral-Null-Methode mit verschiebbarer Nulllinie (Stellung = Intervall, Bewegungsumfang = Verhältnis); Hop-Tests mit LSI bei verschobener Null und Timed Hop mit der Falle „21 % schneller“, Logarithmus als Exkurs |
+| [`lage-streuung/`](lage-streuung/) | Lage und Streuung: Mittelwert als Schwerpunkt, Median, Quartile mit Boxplot und IQR, Varianz als Abweichungsquadrate mit n − 1 oder n, Standardabweichung; ziehbare Punkte, Datensätze symmetrisch, schief, mit Ausreißer |
 | [`wahrscheinlichkeit/`](wahrscheinlichkeit/) | Wahrscheinlichkeit als Fläche in drei Reitern: Multiplikationssatz im Einheitsquadrat (Würfel und Münze), bedingte Wahrscheinlichkeit als flächentreues Venn-Diagramm (Mikrozensus 2024: Ehe und Kinder) und Satz von Bayes als Venn-Diagramm (Beispiel Leberzirrhose). Direkt verlinkbar über `#multiplikation`, `#bedingt`, `#bayes` |
 | [`binomial/`](binomial/) | Pascal und die Binomialverteilung: Galton-Brett mit Pascalschem Dreieck, Histogramm gegen Binomialverteilung, Beispiel Therapieerfolg |
 | [`verteilungen/`](verteilungen/) | Diskret und stetig: Binomialverteilung neben Normal-, t- und Exponentialverteilung, je Wahrscheinlichkeits- bzw. Dichtefunktion und Verteilungsfunktion, mit Wahrscheinlichkeitsrechner |
@@ -55,3 +56,7 @@ GitHub Pages erlaubt Browsern, CSS und JS zehn Minuten zwischenzuspeichern. Dami
 ## Veröffentlichen mit GitHub Pages
 
 Settings → Pages → Source: „Deploy from a branch“, Branch `main`, Ordner `/ (root)`. Die Seite ist danach unter `https://jnshsrs.github.io/stats-lab/` erreichbar.
+
+## Lernpfad
+
+Reihenfolge und Blöcke stehen zentral in `assets/js/path.js`. Daraus entsteht unten auf jeder Seite die Leiste „Zurück / Weiter“. Wer eine Seite ergänzt, trägt sie dort ein und legt auf der Startseite die Karte im passenden Block an.

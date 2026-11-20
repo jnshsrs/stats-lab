@@ -1,7 +1,7 @@
 /* Stats Lab · gemeinsame Basis für alle Visualisierungen
    Layout: eine zentrierte Lesespalte, schmale Kopfzeile, ruhiger Footer.
    Farben und Schriften kommen ausschließlich aus theme.css. Hier stehen keine festen Farbwerte. */
-@import url("theme.css?v=202611200721");
+@import url("theme.css?v=202611200731");
 
 :root { --column: 960px; }
 
@@ -47,3 +47,15 @@ p { margin: 0; }
 .footer-links { display: flex; flex-wrap: wrap; gap: 6px 20px; }
 
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; animation: none !important; } }
+
+/* Lernpfad: Vor/Zurück-Leiste unten auf jeder Seite (assets/js/path.js) */
+.path-nav { margin-top: 64px; display: flex; flex-direction: column; gap: 10px; }
+.pn-where { font-family: var(--font-mono); font-size: 12.5px; letter-spacing: .04em; color: var(--muted); }
+.pn-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; }
+@media (max-width: 560px) { .pn-row { grid-template-columns: minmax(0, 1fr); } }
+.pn-row a { display: flex; flex-direction: column; gap: 2px; border: 1px solid var(--line); border-radius: 12px; padding: 12px 16px; text-decoration: none; color: var(--fg); background: var(--surface); transition: border-color .15s; }
+.pn-row a:hover { border-color: var(--accent-soft); }
+.pn-row .pn-next { text-align: right; }
+.pn-dir { font-size: 13px; color: var(--accent); font-weight: 600; }
+.pn-title { font-weight: 600; }
+.path-nav + .site-footer { margin-top: 40px; }
