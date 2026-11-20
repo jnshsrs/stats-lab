@@ -1,0 +1,118 @@
+/* Exkurs Mammografie: Basis wie Wahrscheinlichkeit, plus Baum, Quiz und Vergleich */
+/* Wahrscheinlichkeit als Fläche: Quadrat links, Erklärung mit Reglern und Formeln rechts */
+.intro { padding-block: 40px 28px; display: flex; flex-direction: column; gap: 12px; }
+.back { font-size: 15px; color: var(--muted); text-decoration: none; }
+.back:hover { color: var(--fg); }
+
+.btn { border: 1px solid var(--accent); background: var(--accent); color: var(--on-accent); border-radius: 8px; padding: 8px 14px; font: 600 14px var(--font-sans); cursor: pointer; }
+.btn:hover { filter: brightness(1.08); }
+.btn.ghost { background: transparent; color: var(--fg); border-color: var(--line); }
+
+.stage { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px; align-items: start; }
+@media (max-width: 860px) { .stage { grid-template-columns: minmax(0, 1fr); } }
+@media (min-width: 861px) { .figure { position: sticky; top: 16px; } }
+.figure { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.square { width: 100%; height: auto; display: block; }
+.square text { font-family: var(--font-sans); }
+.square .col-label { font-size: 15px; font-weight: 600; fill: var(--fg); }
+.square .col-sub { font-family: var(--font-mono); font-size: 12.5px; fill: var(--muted); }
+.square .cell-label { font-size: 14px; font-weight: 600; }
+.square .cell-sub { font-family: var(--font-mono); font-size: 12px; }
+.square .indep { font-family: var(--font-mono); font-size: 12px; fill: var(--muted); }
+.stepper { display: flex; align-items: center; justify-content: center; gap: 16px; }
+.step-count { font-family: var(--font-mono); font-size: 14px; color: var(--muted); min-width: 8ch; text-align: center; }
+.dots { display: flex; justify-content: center; gap: 8px; }
+.dots button { width: 10px; height: 10px; border-radius: 50%; border: 1px solid var(--accent); background: transparent; padding: 0; cursor: pointer; }
+.dots button[aria-pressed="true"] { background: var(--accent); }
+
+.detail { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 24px; display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.detail .kicker { font-family: var(--font-mono); font-size: 12.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+.detail h2 { font-size: 26px; }
+.detail p { font-size: 16.5px; }
+.formula { font-family: var(--font-mono); font-size: 15.5px; background: var(--highlight); border-radius: 8px; padding: 12px 14px; display: flex; flex-direction: column; gap: 6px; overflow-x: auto; font-variant-numeric: tabular-nums; }
+.formula .big { font-size: 18px; font-weight: 600; }
+/* Legende: reine Farberklärung, bewusst nicht wie Auswahlfelder gestaltet */
+.legend { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; font-size: 13.5px; color: var(--muted); cursor: default; user-select: none; }
+.legend::before { content: "Farben:"; font-family: var(--font-mono); font-size: 12px; letter-spacing: .04em; color: var(--muted); }
+.legend span { display: inline-flex; align-items: center; }
+.sw { display: inline-block; width: 22px; height: 12px; border-radius: 2px; margin-right: 6px; }
+.sw.outline { border: 2px dashed var(--accent); background: transparent; height: 14px; }
+
+.ctrls { display: flex; flex-direction: column; gap: 12px; border-top: 1px solid var(--line); padding-top: 14px; }
+.ctrl { display: flex; flex-direction: column; gap: 4px; }
+.ctrl-head { display: flex; justify-content: space-between; gap: 8px; font-size: 14px; }
+.ctrl-head label { font-weight: 500; }
+.ctrl output { font-family: var(--font-mono); font-weight: 600; white-space: nowrap; }
+input[type=range] { width: 100%; accent-color: var(--accent); }
+.seg { display: flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+.seg button { flex: 1; background: transparent; color: var(--fg); border: 0; padding: 7px 8px; font: 500 13.5px var(--font-mono); cursor: pointer; }
+.seg button + button { border-left: 1px solid var(--line); }
+.seg button[aria-pressed="true"] { background: var(--fg); color: var(--bg); }
+.linkbtn { align-self: flex-start; background: none; border: 0; padding: 0; color: var(--accent); font: 500 14px var(--font-sans); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+
+.freq { font-size: 15.5px; border-left: 3px solid var(--accent-soft); padding-left: 12px; }
+.source { font-size: 13px; color: var(--muted); }
+.callout { font-size: 15.5px; border-left: 3px solid var(--alpha-fill); padding-left: 12px; }
+
+/* Reiter */
+.tabs { display: flex; flex-wrap: wrap; gap: 4px; border-bottom: 1px solid var(--line); margin-bottom: 28px; }
+.tab { display: inline-flex; align-items: center; gap: 8px; background: transparent; border: 0; border-bottom: 3px solid transparent; margin-bottom: -1px; padding: 10px 14px; font: 600 15px var(--font-sans); color: var(--muted); cursor: pointer; }
+.tab:hover { color: var(--fg); }
+.tab[aria-selected="true"] { color: var(--fg); border-bottom-color: var(--accent); }
+.tab-no { font-family: var(--font-mono); font-size: 12px; width: 22px; height: 22px; border-radius: 50%; display: inline-grid; place-items: center; border: 1px solid var(--line); }
+.tab[aria-selected="true"] .tab-no { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+
+/* Venn */
+.venn { width: 100%; height: auto; display: block; }
+.venn text { font-family: var(--font-sans); }
+.venn .v-name { font-size: 15px; font-weight: 600; fill: var(--fg); }
+.venn .v-sub { font-family: var(--font-mono); font-size: 12.5px; fill: var(--muted); }
+.venn .v-val { font-family: var(--font-mono); font-size: 14px; font-weight: 600; }
+.venn .v-note { font-family: var(--font-mono); font-size: 12px; fill: var(--muted); }
+.regions { width: 100%; border-collapse: collapse; font-size: 14.5px; font-variant-numeric: tabular-nums; }
+.regions th, .regions td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--line); }
+.regions th { font-weight: 600; color: var(--muted); font-size: 13px; }
+.regions td.n { text-align: right; font-family: var(--font-mono); }
+.regions .sw { vertical-align: 0; }
+
+/* Mammografie */
+.mammo { display: flex; flex-direction: column; gap: 18px; }
+.m-head { display: flex; flex-direction: column; gap: 8px; max-width: 80ch; }
+.m-head .kicker { font-family: var(--font-mono); font-size: 12.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+.m-head h2 { font-size: 26px; }
+.m-head p { font-size: 16.5px; }
+.quiz { border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; display: flex; flex-direction: column; gap: 10px; }
+.quiz .question { font-weight: 600; font-size: 17px; }
+.answers { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+@media (max-width: 700px) { .answers { grid-template-columns: minmax(0, 1fr); } }
+.answers button { text-align: left; border: 1px solid var(--line); background: var(--surface); color: var(--fg); border-radius: 8px; padding: 10px 12px; font: 400 15px var(--font-sans); cursor: pointer; }
+.answers button:hover { border-color: var(--accent-soft); }
+.answers button.right { border-color: var(--therapie); background: var(--highlight); font-weight: 600; }
+.answers button.wrong { border-color: var(--alpha-fill); color: var(--muted); }
+.feedback { font-size: 15.5px; min-height: 1.2em; }
+.m-ctrls { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px 24px; background: var(--highlight); border-radius: 12px; padding: 14px 16px; }
+.m-ctrls .wide { grid-column: 1 / -1; }
+@media (max-width: 760px) { .m-ctrls { grid-template-columns: minmax(0, 1fr); } }
+.m-ctrls .lbl { font-size: 14px; font-weight: 500; }
+.seg.wrap { flex-wrap: wrap; background: var(--surface); }
+.seg.wrap button { flex: 1 1 auto; font-family: var(--font-sans); }
+.m-ctrls .seg { background: var(--surface); }
+.m-ctrls .seg button { font-family: var(--font-sans); }
+.tree, .icons { width: 100%; height: auto; display: block; overflow: visible; }
+.tree .n-main { font: 700 21px var(--font-sans); font-variant-numeric: tabular-nums; }
+.tree .n-sub, .icons .n-sub { font: 500 13px var(--font-mono); fill: var(--muted); }
+.tree .e-lab { font: 600 13px var(--font-mono); fill: var(--accent); }
+.tree .h-lab { font: 500 12.5px var(--font-mono); fill: var(--muted); letter-spacing: .06em; text-transform: uppercase; }
+.m-sub { font-size: 18px; }
+.m-sub b { color: var(--therapie-ink); }
+.m-compare { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+@media (max-width: 760px) { .m-compare { grid-template-columns: minmax(0, 1fr); } }
+.cbox { border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; display: flex; flex-direction: column; gap: 4px; }
+.cbox.good { background: var(--highlight); border-color: var(--accent-soft); }
+.cbox .k { font-size: 13px; color: var(--muted); }
+.cbox .v { font-size: 30px; font-weight: 700; font-variant-numeric: tabular-nums; line-height: 1.1; }
+.cbox .s { font-size: 13.5px; color: var(--muted); }
+.formula .dim { color: var(--muted); font-size: 13.5px; white-space: normal; }
+
+.mammo { margin-top: 8px; }
+.kicker-x { font-family: var(--font-mono); font-size: 12.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }

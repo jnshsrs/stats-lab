@@ -17,6 +17,7 @@ const PATH = [
   ["multiples-testen", "Multiples Testen", 2],
   ["chi-quadrat", "Chi-Quadrat-Test", 2],
   ["regression-mitte", "Regression zur Mitte", 3],
+  ["mammografie", "Positiver Befund: Gigerenzers Mammografie-Aufgabe", 3],
   ["inferenzzyklus", "Induktion, Deduktion und der Signifikanztest", 3]
 ];
 window.STATS_LAB_PATH = { BLOCKS, PATH };

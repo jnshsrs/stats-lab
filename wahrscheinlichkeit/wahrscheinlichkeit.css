@@ -74,41 +74,8 @@ input[type=range] { width: 100%; accent-color: var(--accent); }
 .regions td.n { text-align: right; font-family: var(--font-mono); }
 .regions .sw { vertical-align: 0; }
 
-/* Reiter 4: Mammografie (mammografie.js) */
-.mammo { display: flex; flex-direction: column; gap: 18px; }
-.m-head { display: flex; flex-direction: column; gap: 8px; max-width: 80ch; }
-.m-head .kicker { font-family: var(--font-mono); font-size: 12.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
-.m-head h2 { font-size: 26px; }
-.m-head p { font-size: 16.5px; }
-.quiz { border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; display: flex; flex-direction: column; gap: 10px; }
-.quiz .question { font-weight: 600; font-size: 17px; }
-.answers { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
-@media (max-width: 700px) { .answers { grid-template-columns: minmax(0, 1fr); } }
-.answers button { text-align: left; border: 1px solid var(--line); background: var(--surface); color: var(--fg); border-radius: 8px; padding: 10px 12px; font: 400 15px var(--font-sans); cursor: pointer; }
-.answers button:hover { border-color: var(--accent-soft); }
-.answers button.right { border-color: var(--therapie); background: var(--highlight); font-weight: 600; }
-.answers button.wrong { border-color: var(--alpha-fill); color: var(--muted); }
-.feedback { font-size: 15.5px; min-height: 1.2em; }
-.m-ctrls { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px 24px; background: var(--highlight); border-radius: 12px; padding: 14px 16px; }
-.m-ctrls .wide { grid-column: 1 / -1; }
-@media (max-width: 760px) { .m-ctrls { grid-template-columns: minmax(0, 1fr); } }
-.m-ctrls .lbl { font-size: 14px; font-weight: 500; }
-.seg.wrap { flex-wrap: wrap; background: var(--surface); }
-.seg.wrap button { flex: 1 1 auto; font-family: var(--font-sans); }
-.m-ctrls .seg { background: var(--surface); }
-.m-ctrls .seg button { font-family: var(--font-sans); }
-.tree, .icons { width: 100%; height: auto; display: block; overflow: visible; }
-.tree .n-main { font: 700 21px var(--font-sans); font-variant-numeric: tabular-nums; }
-.tree .n-sub, .icons .n-sub { font: 500 13px var(--font-mono); fill: var(--muted); }
-.tree .e-lab { font: 600 13px var(--font-mono); fill: var(--accent); }
-.tree .h-lab { font: 500 12.5px var(--font-mono); fill: var(--muted); letter-spacing: .06em; text-transform: uppercase; }
-.m-sub { font-size: 18px; }
-.m-sub b { color: var(--therapie-ink); }
-.m-compare { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
-@media (max-width: 760px) { .m-compare { grid-template-columns: minmax(0, 1fr); } }
-.cbox { border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; display: flex; flex-direction: column; gap: 4px; }
-.cbox.good { background: var(--highlight); border-color: var(--accent-soft); }
-.cbox .k { font-size: 13px; color: var(--muted); }
-.cbox .v { font-size: 30px; font-weight: 700; font-variant-numeric: tabular-nums; line-height: 1.1; }
-.cbox .s { font-size: 13.5px; color: var(--muted); }
-.formula .dim { color: var(--muted); font-size: 13.5px; white-space: normal; }
+/* Verweis auf den Exkurs Mammografie */
+.excursion { display: flex; flex-direction: column; gap: 2px; border: 1px solid var(--accent-soft); border-left: 4px solid var(--accent); border-radius: 8px; padding: 10px 14px; text-decoration: none; color: var(--fg); background: var(--surface); }
+.excursion:hover { background: var(--highlight); }
+.ex-k { font: 600 12px var(--font-mono); letter-spacing: .06em; text-transform: uppercase; color: var(--accent); }
+.ex-t { font-weight: 600; font-size: 15px; }

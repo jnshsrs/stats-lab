@@ -288,7 +288,7 @@ document.querySelectorAll("[data-d6]").forEach(b => b.addEventListener("click", 
 /* =====================================================================
    Reiter-Steuerung
    ===================================================================== */
-const TABS = ["multiplikation", "bedingt", "bayes", "mammografie"];
+const TABS = ["multiplikation", "bedingt", "bayes"];
 let tab = "multiplikation";
 function showTab(name, scroll) {
   tab = TABS.includes(name) ? name : "multiplikation";
@@ -299,7 +299,6 @@ function showTab(name, scroll) {
   });
   if (tab === "bedingt") renderBedingt();
   if (tab === "bayes") updateBayes();
-  if (tab === "mammografie" && window.renderMammo) window.renderMammo();
   if (location.hash !== "#" + tab) history.replaceState(null, "", "#" + tab);
   if (scroll) document.querySelector(".tabs").scrollIntoView({ behavior: "smooth", block: "start" });
 }
