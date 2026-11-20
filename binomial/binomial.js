@@ -31,9 +31,9 @@ function layout() {
   const n = S.n;
   const dx = Math.min(56, (W - 40) / (n + 1));
   const dy = Math.min(40, 400 / Math.max(n, 1));
-  const top = 34, boardH = n * dy;
+  const top = 34, boardH = (n + 1) * dy;
   const binTop = top + boardH + 10, histH = 190;
-  G = { n, dx, dy, top, cx: W / 2, binTop, histH, H: binTop + histH + 66, pegR: Math.min(dx * 0.42, 17) };
+  G = { n, dx, dy, top, cx: W / 2, binTop, histH, H: binTop + histH + 50, pegR: Math.min(dx * 0.42, 17) };
   const cssW = canvas.clientWidth || W, dpr = window.devicePixelRatio || 1;
   const scale = cssW / W;
   canvas.style.height = (G.H * scale) + "px";
@@ -53,7 +53,7 @@ function newBall() {
 function ballPos(b) {
   // t läuft von 0 bis n (je Reihe 1), danach Fall in die Ablage
   const r = Math.floor(b.t), f = b.t - r;
-  if (r >= S.n) return [binX(b.k), G.binTop + Math.min(1, f) * 20];
+  if (r >= S.n) return [binX(b.k), pegY(S.n) + Math.min(1, f) * (G.binTop + 20 - pegY(S.n))];
   const x0 = r === 0 ? G.cx : pegX(r, b.steps[r]);
   const y0 = pegY(r) - G.pegR - 5;
   const nextJ = r + 1 < S.n ? b.steps[r + 1] : b.k;
@@ -83,6 +83,23 @@ function draw() {
       }
     }
   }
+  // Zeile n des Dreiecks: die Fächer, in denen die Kugeln landen
+  for (let j = 0; j <= n; j++) {
+    const x = binX(j), y = pegY(n), w = Math.min(G.dx * 0.86, 46), h = Math.min(G.dy * 0.8, 28);
+    ctx.beginPath(); ctx.roundRect(x - w / 2, y - h / 2, w, h, 6);
+    ctx.fillStyle = j === k ? C.strong : C.areaA; ctx.fill();
+    ctx.lineWidth = 1.2; ctx.strokeStyle = j === k ? C.strong : C.line; ctx.stroke();
+    if (G.dx >= 22) {
+      const label = S.mode === "paths" ? String(binom(n, j)) : Math.round(pmf(n, j, S.p) * 100) + "%";
+      const fs = Math.min(13, w / Math.max(2.2, label.length * 0.62));
+      ctx.font = `700 ${fs}px ${C.mono}`; ctx.fillStyle = j === k ? C.onStrong : C.fg; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+      ctx.fillText(label, x, y + 0.5);
+    }
+  }
+  ctx.font = `400 11.5px ${C.mono}`; ctx.fillStyle = C.muted; ctx.textAlign = "left"; ctx.textBaseline = "middle";
+  const lx = binX(n) + Math.min(G.dx * 0.43, 23) + 8;
+  if (lx + 62 <= W) ctx.fillText(`Zeile ${n}`, lx, pegY(n));
+  ctx.fillText("Zeile 0", G.cx + G.pegR + 8, pegY(0));
   // Ablagen und Histogramm
   const total = counts.reduce((a, b) => a + b, 0);
   const exp = Array.from({ length: n + 1 }, (_, i) => pmf(n, i, S.p));
@@ -104,10 +121,9 @@ function draw() {
     ctx.textAlign = "center"; ctx.textBaseline = "alphabetic";
     ctx.font = `${i === k ? 700 : 500} 13px ${C.font}`; ctx.fillStyle = i === k ? C.fg : C.muted;
     ctx.fillText(String(i), x, base + 18);
-    if (G.dx >= 30) { ctx.font = `400 11px ${C.mono}`; ctx.fillStyle = C.muted; ctx.fillText(String(binom(n, i)), x, base + 34); }
   }
   ctx.textAlign = "center"; ctx.font = `400 11.5px ${C.mono}`; ctx.fillStyle = C.muted;
-  ctx.fillText(G.dx >= 30 ? "oben: k Erfolge · unten: Anzahl Wege (n über k)" : "k Erfolge", G.cx, base + 54);
+  ctx.fillText("k Erfolge", G.cx, base + 38);
   ctx.textAlign = "right";
   ctx.fillText(total ? `${intf(total)} Kugeln` : "noch keine Kugeln", W - 8, G.binTop + 14);
   // Kugeln im Flug
