@@ -6,7 +6,7 @@
 <title>Stats Lab</title>
 <meta name="description" content="Interaktive Visualisierungen für die Statistiklehre in Gesundheits- und Therapiewissenschaften.">
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="assets/css/base.css?v=202611200745">
+<link rel="stylesheet" href="assets/css/base.css?v=202611200756">
 <style>
   .hero { padding-block: 56px 40px; display: flex; flex-direction: column; gap: 16px; }
   .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; }
@@ -153,10 +153,25 @@
     </div>
   </section>
   <section class="path-block" aria-labelledby="b2">
-    <div class="block-head"><span class="block-no">2</span><div><h2 id="b2">Schätzen</h2><p>Von der Stichprobe auf die Population: Standardfehler und Konfidenzintervall.</p></div></div>
+    <div class="block-head"><span class="block-no">2</span><div><h2 id="b2">Schätzen</h2><p>Von der Stichprobe auf die Population: Gesetz der großen Zahlen, Standardfehler, Konfidenzintervall.</p></div></div>
     <div class="grid">
-    <a class="card" href="zgws/">
+    <a class="card" href="grosse-zahlen/">
       <div class="card-thumb"><span class="path-no">6</span>
+        <svg viewBox="0 0 320 180" aria-hidden="true">
+          <path d="M40 40 C 90 120, 140 92, 290 92" fill="none" class="t-curve"/>
+          <path d="M40 140 C 90 70, 150 94, 290 90" fill="none" stroke-width="3" class="t-ci"/>
+          <line x1="40" x2="290" y1="91" y2="91" class="t-dash"/>
+          <line x1="30" x2="290" y1="150" y2="150" class="t-axis" stroke-width="2"/>
+        </svg>
+      </div>
+      <div class="card-body">
+        <h3>Große und kleine Zahlen</h3>
+        <p>Der Erfolgsanteil pendelt sich bei p ein. Und warum die höchsten und die niedrigsten Krebsraten beide in kleinen, ländlichen Countys liegen.</p>
+        <div class="tags"><span class="tag">Gesetz der großen Zahlen</span><span class="tag">Funnel-Plot</span></div>
+      </div>
+    </a>
+    <a class="card" href="zgws/">
+      <div class="card-thumb"><span class="path-no">7</span>
         <svg viewBox="0 0 320 180" aria-hidden="true">
           <rect x="120" y="70" width="14" height="40" class="t-bar"/><rect x="136" y="44" width="14" height="66" class="t-bar"/><rect x="152" y="30" width="14" height="80" class="t-bar"/><rect x="168" y="40" width="14" height="70" class="t-bar"/><rect x="184" y="66" width="14" height="44" class="t-bar"/>
           <path d="M90 110 C 130 110 135 26 160 26 S 190 110 230 110" class="t-curve"/>
@@ -177,7 +192,7 @@
     <div class="block-head"><span class="block-no">3</span><div><h2 id="b3">Testen</h2><p>Der Signifikanztest von innen: p-Wert, Fehlerarten, Fallzahl, viele Tests, Kreuztabellen.</p></div></div>
     <div class="grid">
     <a class="card" href="t-test/">
-      <div class="card-thumb"><span class="path-no">7</span>
+      <div class="card-thumb"><span class="path-no">8</span>
         <svg viewBox="0 0 320 180" aria-hidden="true">
           <path d="M20 160 C 80 160 95 40 130 40 S 180 160 240 160" class="t-h0" stroke-width="3"/>
           <path d="M80 160 C 140 160 155 40 190 40 S 240 160 300 160" class="t-h1" stroke-width="3"/>
@@ -193,7 +208,7 @@
       </div>
     </a>
     <a class="card" href="entscheidung/">
-      <div class="card-thumb"><span class="path-no">8</span>
+      <div class="card-thumb"><span class="path-no">9</span>
         <svg viewBox="0 0 320 180" aria-hidden="true">
           <path d="M40 150 C 85 150 95 50 125 50 S 165 150 210 150 Z" class="t-h0"/>
           <path d="M110 150 C 155 150 165 50 195 50 S 235 150 280 150 Z" class="t-h1"/>
@@ -209,7 +224,7 @@
       </div>
     </a>
     <a class="card" href="fallzahl/">
-      <div class="card-thumb"><span class="path-no">9</span>
+      <div class="card-thumb"><span class="path-no">10</span>
         <svg viewBox="0 0 320 180" aria-hidden="true">
           <line x1="50" x2="280" y1="60" y2="60" class="t-dash"/>
           <path d="M50 150 C 90 120 110 70 160 60 S 240 46 280 44" fill="none" class="t-curve"/>
@@ -225,7 +240,7 @@
       </div>
     </a>
     <a class="card" href="multiples-testen/">
-      <div class="card-thumb"><span class="path-no">10</span>
+      <div class="card-thumb"><span class="path-no">11</span>
         <svg viewBox="0 0 320 180" aria-hidden="true">
           <g><rect x="40" y="24" width="40" height="30" rx="5" class="t-bar"/><rect x="90" y="24" width="40" height="30" rx="5" class="t-bar"/><rect x="140" y="24" width="40" height="30" rx="5" class="t-bar"/><rect x="190" y="24" width="40" height="30" rx="5" class="t-bar"/><rect x="240" y="24" width="40" height="30" rx="5" class="t-bar"/><rect x="40" y="64" width="40" height="30" rx="5" class="t-bar"/><rect x="90" y="64" width="40" height="30" rx="5" class="t-bar"/><rect x="140" y="64" width="40" height="30" rx="5" class="t-bar"/><rect x="190" y="64" width="40" height="30" rx="5" class="t-strong"/><rect x="240" y="64" width="40" height="30" rx="5" class="t-bar"/><rect x="40" y="104" width="40" height="30" rx="5" class="t-bar"/><rect x="90" y="104" width="40" height="30" rx="5" class="t-bar"/><rect x="140" y="104" width="40" height="30" rx="5" class="t-bar"/><rect x="190" y="104" width="40" height="30" rx="5" class="t-bar"/><rect x="240" y="104" width="40" height="30" rx="5" class="t-bar"/></g>
           <line x1="30" x2="290" y1="150" y2="150" class="t-axis" stroke-width="2"/>
@@ -239,7 +254,7 @@
       </div>
     </a>
     <a class="card" href="chi-quadrat/">
-      <div class="card-thumb"><span class="path-no">11</span>
+      <div class="card-thumb"><span class="path-no">12</span>
         <svg viewBox="0 0 320 180" aria-hidden="true">
           <rect x="70" y="30" width="90" height="80" class="t-strong"/><rect x="70" y="110" width="90" height="40" class="t-soft"/>
           <rect x="166" y="30" width="84" height="52" class="t-strong"/><rect x="166" y="82" width="84" height="68" class="t-soft"/>
@@ -259,7 +274,7 @@
     <div class="block-head"><span class="block-no">4</span><div><h2 id="b4">Hintergrund</h2><p>Denkfallen und Wissenschaftstheorie: Regression zur Mitte, Popper, Fisher, Neyman und Pearson.</p></div></div>
     <div class="grid">
     <a class="card" href="regression-mitte/">
-      <div class="card-thumb"><span class="path-no">12</span>
+      <div class="card-thumb"><span class="path-no">13</span>
         <svg viewBox="0 0 320 180" aria-hidden="true">
           <line x1="40" x2="290" y1="150" y2="30" class="t-dash"/>
           <line x1="40" x2="290" y1="128" y2="52" class="t-curve"/>
@@ -275,7 +290,7 @@
       </div>
     </a>
     <a class="card" href="inferenzzyklus/">
-      <div class="card-thumb"><span class="path-no">13</span>
+      <div class="card-thumb"><span class="path-no">14</span>
         <svg viewBox="0 0 320 180" aria-hidden="true">
           <rect x="0" y="0" width="320" height="80" class="t-band"/>
           <rect x="70" y="22" width="180" height="40" rx="10" class="t-hyp"/>

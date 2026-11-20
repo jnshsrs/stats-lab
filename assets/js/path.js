@@ -9,6 +9,7 @@ const PATH = [
   ["wahrscheinlichkeit", "Wahrscheinlichkeit als Fläche", 0],
   ["binomial", "Pascal und die Binomialverteilung", 0],
   ["verteilungen", "Diskret und stetig", 0],
+  ["grosse-zahlen", "Große und kleine Zahlen", 1],
   ["zgws", "Grenzwertsatz, Standardfehler, Konfidenzintervall", 1],
   ["t-test", "Die t-Test-Kaskade", 2],
   ["entscheidung", "Entscheidungstheorie", 2],
