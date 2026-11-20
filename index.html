@@ -6,7 +6,7 @@
 <title>Stats Lab</title>
 <meta name="description" content="Interaktive Visualisierungen für die Statistiklehre in Gesundheits- und Therapiewissenschaften.">
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="assets/css/base.css?v=202611200731">
+<link rel="stylesheet" href="assets/css/base.css?v=202611200745">
 <style>
   .hero { padding-block: 56px 40px; display: flex; flex-direction: column; gap: 16px; }
   .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; }
@@ -256,10 +256,26 @@
     </div>
   </section>
   <section class="path-block" aria-labelledby="b4">
-    <div class="block-head"><span class="block-no">4</span><div><h2 id="b4">Hintergrund</h2><p>Was ein Test logisch leisten kann und was nicht: Popper, Fisher, Neyman und Pearson.</p></div></div>
+    <div class="block-head"><span class="block-no">4</span><div><h2 id="b4">Hintergrund</h2><p>Denkfallen und Wissenschaftstheorie: Regression zur Mitte, Popper, Fisher, Neyman und Pearson.</p></div></div>
     <div class="grid">
-    <a class="card" href="inferenzzyklus/">
+    <a class="card" href="regression-mitte/">
       <div class="card-thumb"><span class="path-no">12</span>
+        <svg viewBox="0 0 320 180" aria-hidden="true">
+          <line x1="40" x2="290" y1="150" y2="30" class="t-dash"/>
+          <line x1="40" x2="290" y1="128" y2="52" class="t-curve"/>
+          <circle cx="70" cy="122" r="5" class="t-bar"/><circle cx="110" cy="100" r="5" class="t-bar"/><circle cx="130" cy="118" r="5" class="t-bar"/><circle cx="160" cy="92" r="5" class="t-bar"/><circle cx="190" cy="96" r="5" class="t-bar"/><circle cx="210" cy="70" r="5" class="t-bar"/><circle cx="250" cy="72" r="5" class="t-bar"/>
+          <circle cx="250" cy="64" r="8" class="t-strong"/>
+          <line x1="30" x2="290" y1="150" y2="150" class="t-axis" stroke-width="2"/>
+        </svg>
+      </div>
+      <div class="card-body">
+        <h3>Regression zur Mitte</h3>
+        <p>Warum Schmerzen nach dem Termin oft von selbst nachlassen, simuliert mit Warteliste. Dazu Galtons Originaldaten: große Eltern, etwas kleinere Kinder.</p>
+        <div class="tags"><span class="tag">Kontrollgruppe</span><span class="tag">Galton</span><span class="tag">Korrelation</span></div>
+      </div>
+    </a>
+    <a class="card" href="inferenzzyklus/">
+      <div class="card-thumb"><span class="path-no">13</span>
         <svg viewBox="0 0 320 180" aria-hidden="true">
           <rect x="0" y="0" width="320" height="80" class="t-band"/>
           <rect x="70" y="22" width="180" height="40" rx="10" class="t-hyp"/>

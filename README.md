@@ -17,6 +17,7 @@ Interaktive Visualisierungen für die Statistiklehre in den Gesundheits- und The
 | [`multiples-testen/`](multiples-testen/) | Multiples Testen in fünf Stufen: 20er-Würfel als Bild für α, simulierte t-Tests ohne Effekt mit FWER-Kurve 1 − 0,95^k und p-Histogramm, Bonferroni, Power-Verlust durch Korrektur, Holm und Benjamini-Hochberg mit sortierten p-Werten und Vergleich von FWER, FDR und Power |
 | [`fallzahl/`](fallzahl/) | Fallzahl und Power: Rechner für n, Power, kleinsten entdeckbaren Effekt oder α (t-Test zwei Gruppen, gepaart, zwei Anteile), Drop-out, Methodensatz, Power-Kurve, Sensitivitätstabelle |
 | [`chi-quadrat/`](chi-quadrat/) | Der Chi-Quadrat-Test auf Unabhängigkeit: editierbare Kreuztabelle, Mosaik, erwartete Häufigkeiten, Zellbeiträge, χ²-Verteilung mit p-Wert, Cramérs V, Simulation unter H0 |
+| [`regression-mitte/`](regression-mitte/) | Regression zur Mitte: Schmerzverlauf einer Person mit Termin an einem schlechten Tag, Praxis-Simulation mit Warteliste und einstellbarem Therapieeffekt, Galtons Originaldaten (HistData::GaltonFamilies, in cm) mit Auswahlband in beide Richtungen |
 | [`inferenzzyklus/`](inferenzzyklus/) | Induktion, Deduktion und der Signifikanztest: Poppers Perspektive in fünf Schritten, Schwan-Experiment, Modus tollens und die Frage, ob Induktion und Inferenz dasselbe sind |
 
 ## Aufbau
