@@ -6,7 +6,7 @@
 <title>Stats Lab</title>
 <meta name="description" content="Interaktive Visualisierungen für die Statistiklehre in Gesundheits- und Therapiewissenschaften.">
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="assets/css/base.css?v=202611200657">
+<link rel="stylesheet" href="assets/css/base.css?v=202611200721">
 <style>
   .hero { padding-block: 56px 40px; display: flex; flex-direction: column; gap: 16px; }
   .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; }
@@ -61,6 +61,23 @@
 
   <h2 class="section-title">Visualisierungen</h2>
   <div class="grid">
+    <a class="card" href="skalenniveaus/">
+      <div class="card-thumb">
+        <svg viewBox="0 0 320 180" aria-hidden="true">
+          <circle cx="56" cy="70" r="12" class="t-bar"/><rect x="46" y="100" width="20" height="20" rx="2" class="t-bar"/>
+          <circle cx="118" cy="120" r="11" class="t-soft"/><circle cx="148" cy="96" r="11" class="t-soft"/><circle cx="178" cy="72" r="11" class="t-strong"/>
+          <line x1="210" x2="290" y1="134" y2="134" class="t-axis" stroke-width="2"/>
+          <rect x="210" y="56" width="5" height="78" class="t-strong"/>
+          <rect x="215" y="76" width="34" height="14" rx="2" class="t-soft"/><rect x="215" y="100" width="68" height="14" rx="2" class="t-strong"/>
+          <line x1="30" x2="290" y1="150" y2="150" class="t-axis" stroke-width="2"/>
+        </svg>
+      </div>
+      <div class="card-body">
+        <h3>Skalenniveaus: Was darf ich rechnen?</h3>
+        <p>Nominal bis Verhältnis zum Durchklicken, dann das Knie nach der Neutral-Null-Methode und Hop-Tests nach Kreuzbandplastik. Teilen darf man nur, wenn die Null „nichts“ bedeutet.</p>
+        <div class="tags"><span class="tag">Skalenniveau</span><span class="tag">ROM</span><span class="tag">LSI</span></div>
+      </div>
+    </a>
     <a class="card" href="wahrscheinlichkeit/">
       <div class="card-thumb">
         <svg viewBox="0 0 320 180" aria-hidden="true">
