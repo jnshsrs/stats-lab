@@ -198,6 +198,42 @@ function drawT(c) {
     readout(`Entscheidung bei α = ${fmt(S.alpha, 2)}`, sig ? "H0 verwerfen" : "H0 beibehalten", "r-decision" + (sig ? " sig" : ""));
 }
 
+// ---------- 3b Verteilungsfunktion: kritischer Wert und p-Wert ----------
+function drawCdf(c) {
+  const top = 18, base = 280, PL = 70, PR = R;
+  const m = Math.min(20, Math.max(6, Math.abs(c.t) + 1.5, c.tc + 1.5)), a = -m, b = m;
+  const sx = v => PL + (v - a) / (b - a) * (PR - PL), sy = p => base - p * (base - top);
+  const F = v => tcdf(v, c.df), lo = S.alpha / 2, hi = 1 - S.alpha / 2;
+  let s = "";
+  s += `<rect x="${sx(-c.tc)}" y="${top}" width="${sx(c.tc) - sx(-c.tc)}" height="${base - top}" fill="var(--highlight)"/>`;
+  s += `<rect x="${PL}" y="${top}" width="${sx(-c.tc) - PL}" height="${base - top}" fill="var(--alpha-fill)" fill-opacity=".25"/><rect x="${sx(c.tc)}" y="${top}" width="${PR - sx(c.tc)}" height="${base - top}" fill="var(--alpha-fill)" fill-opacity=".25"/>`;
+  [0, 0.25, 0.5, 0.75, 1].forEach(p => s += `<line x1="${PL}" x2="${PR}" y1="${sy(p)}" y2="${sy(p)}" stroke="var(--grid)"/><text x="${PL - 8}" y="${sy(p) + 4}" text-anchor="end">${fmt(p, 2)}</text>`);
+  for (const v of ticks(a, b, 14)) s += `<text x="${sx(v)}" y="${base + 18}" text-anchor="middle">${v}</text>`;
+  const pts = []; for (let i = 0; i <= 400; i++) { const v = a + (b - a) * i / 400; pts.push([sx(v), sy(F(v))]); }
+  s += `<path d="${path(pts)}" fill="none" stroke="var(--fg)" stroke-width="2.5"/>`;
+  // kritische Werte: von der y-Achse zur Kurve und hinunter
+  [[hi, c.tc], [lo, -c.tc]].forEach(([p, v]) => {
+    s += `<path d="M${PL} ${sy(p)} H${sx(v)} V${base}" fill="none" stroke="var(--alpha-ink)" stroke-width="2" stroke-dasharray="6 4"/><circle cx="${sx(v)}" cy="${sy(p)}" r="4.5" fill="var(--alpha-ink)"/>`;
+    s += `<text x="${PL + 6}" y="${sy(p) - 7}" style="fill:var(--alpha-ink)">${p > 0.5 ? "1 − α/2" : "α/2"} = ${fmt(p, 3)}</text>`;
+  });
+  s += `<text class="strong" x="${sx(c.tc)}" y="${base + 36}" text-anchor="middle" style="fill:var(--alpha-ink)">+${fmt(c.tc, 2)}</text><text class="strong" x="${sx(-c.tc)}" y="${base + 36}" text-anchor="middle" style="fill:var(--alpha-ink)">−${fmt(c.tc, 2)}</text>`;
+  // beobachtetes t: hinauf zur Kurve und hinüber
+  const at = Math.abs(c.t), tx = Math.min(b, at), Ft = F(at);
+  s += `<path d="M${sx(tx)} ${base} V${sy(Ft)} H${PL}" fill="none" stroke="var(--pval)" stroke-width="2.5"/><circle cx="${sx(tx)}" cy="${sy(Ft)}" r="5" fill="var(--pval)"/>`;
+  s += `<text class="strong" x="${sx(tx) + 8}" y="${sy(Ft) + 18}">|t| = ${fmt(at, 2)}, F = ${fmt(Ft, 4)}</text>`;
+  s += `<text x="${PL + (PR - PL) / 2}" y="${top + 14}" text-anchor="middle">Annahmebereich</text>`;
+  s += `<text x="${PR}" y="${base + 52}" text-anchor="end">t-Wert · df = ${c.df}</text><text x="18" y="${(top + base) / 2}" transform="rotate(-90 18 ${(top + base) / 2})" text-anchor="middle">F(t)</text>`;
+  $("tcdf").innerHTML = s;
+  $("tcdf").setAttribute("aria-label", `Verteilungsfunktion der t-Verteilung, kritische Werte ±${fmt(c.tc, 2)}, p ${fmtP(c.p)}`);
+  const sig = c.p < S.alpha, inRej = at > c.tc, pe = c.p < 0.001 ? "< 0,001" : "= " + fmt(c.p, 3);
+  $("calc-steps").innerHTML =
+    `<li><b>Annahmebereich festlegen.</b> Er soll die mittleren ${fmt((1 - S.alpha) * 100, 0)} % der t-Verteilung enthalten, links und rechts bleiben je α/2 = ${fmt(lo, 3)} übrig.<span class="eq">F(t) zwischen ${fmt(lo, 3)} und ${fmt(hi, 3)}</span></li>` +
+    `<li><b>Kritischen Wert rückwärts ablesen.</b> Gesucht ist das t, bei dem die Verteilungsfunktion ${fmt(hi, 3)} erreicht (Quantil, steht auch in jeder t-Tabelle).<span class="eq">t<sub>krit</sub> = F⁻¹(${fmt(hi, 3)}; df = ${c.df}) = ${fmt(c.tc, 3)}</span></li>` +
+    `<li><b>Bereiche benennen.</b><span class="eq">Annahmebereich: −${fmt(c.tc, 2)} ≤ t ≤ ${fmt(c.tc, 2)} · Ablehnungsbereich: |t| > ${fmt(c.tc, 2)}</span></li>` +
+    `<li><b>p-Wert vorwärts ablesen.</b> Vom beobachteten |t| hinauf zur Kurve: F(|t|) ist der Anteil links davon. Was rechts übrig bleibt, gibt es auf beiden Seiten.<span class="eq">p = 2 · (1 − F(${fmt(at, 2)})) = 2 · (1 − ${fmt(Ft, 4)}) ${pe}</span></li>` +
+    `<li><b>Entscheiden.</b> Beide Wege führen zum selben Ergebnis.<span class="eq">|t| = ${fmt(at, 2)} ${inRej ? ">" : "≤"} ${fmt(c.tc, 2)} und p ${pe} ${sig ? "<" : "≥"} α = ${fmt(S.alpha, 2)} → ${sig ? "H0 verwerfen" : "H0 beibehalten"}</span></li>`;
+}
+
 // ---------- 4 Power ----------
 function drawPower(c) {
   const top = 16, base = 236;
@@ -250,7 +286,7 @@ function simulate() {
 // ---------- Verdrahtung ----------
 function render() {
   $("delta-v").textContent = S.delta + " mm"; $("sigma-v").textContent = S.sigma + " mm"; $("n-v").textContent = `${S.n} (df ${2 * S.n - 2})`;
-  const c = compute(); drawRaw(c); drawRuler(c); drawT(c); drawPower(c);
+  const c = compute(); drawRaw(c); drawRuler(c); drawT(c); drawCdf(c); drawPower(c);
 }
 function paramsChanged() { render(); if (simRan) clearSim("Parameter geändert. Simulieren Sie erneut, um die neue Power zu prüfen."); }
 [["delta", "delta"], ["sigma", "sigma"], ["n", "n"]].forEach(([id, k]) => $(id).addEventListener("input", e => { S[k] = +e.target.value; paramsChanged(); }));
@@ -265,4 +301,5 @@ document.querySelectorAll("[data-preset]").forEach(b => b.addEventListener("clic
 }));
 clearSim("Noch keine Simulation. Drücken Sie den Knopf.");
 render();
+if (location.hash === "#calc") { $("calc").open = true; $("calc").scrollIntoView(); }
 })();

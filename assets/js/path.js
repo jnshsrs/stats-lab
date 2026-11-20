@@ -11,6 +11,7 @@ const PATH = [
   ["verteilungen", "Diskret und stetig", 0],
   ["grosse-zahlen", "Große und kleine Zahlen", 1],
   ["zgws", "Grenzwertsatz, Standardfehler, Konfidenzintervall", 1],
+  ["binomialtest", "Binomialtest: Annahme- und Ablehnungsbereich", 2],
   ["t-test", "Die t-Test-Kaskade", 2],
   ["entscheidung", "Entscheidungstheorie", 2],
   ["fallzahl", "Fallzahl und Power", 2],
