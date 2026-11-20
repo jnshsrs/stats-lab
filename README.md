@@ -12,6 +12,7 @@ Interaktive Visualisierungen für die Statistiklehre in den Gesundheits- und The
 | [`zgws/`](zgws/) | Grenzwertsatz, Standardfehler, Konfidenzintervall: vier Populationen, gemeinsame Regler, drei aufklappbare Abschnitte |
 | [`t-test/`](t-test/) | Die t-Test-Kaskade: Rohdaten, Signal und Rauschen, t-Verteilung, p-Wert, α, β, Power und ein Simulator für 100 Studien |
 | [`entscheidung/`](entscheidung/) | Entscheidungstheorie: H0/H1 mit α, β und Power, Entscheidungsmatrix, Power-Kurve mit Fallzahl für 80 %, Gedankenexperiment zu den Kosten von α- und β-Fehlern (QALY, Euro) mit günstigstem α, Verständnis-Check |
+| [`multiples-testen/`](multiples-testen/) | Multiples Testen in fünf Stufen: 20er-Würfel als Bild für α, simulierte t-Tests ohne Effekt mit FWER-Kurve 1 − 0,95^k und p-Histogramm, Bonferroni, Power-Verlust durch Korrektur, Holm und Benjamini-Hochberg mit sortierten p-Werten und Vergleich von FWER, FDR und Power |
 | [`fallzahl/`](fallzahl/) | Fallzahl und Power: Rechner für n, Power, kleinsten entdeckbaren Effekt oder α (t-Test zwei Gruppen, gepaart, zwei Anteile), Drop-out, Methodensatz, Power-Kurve, Sensitivitätstabelle |
 | [`chi-quadrat/`](chi-quadrat/) | Der Chi-Quadrat-Test auf Unabhängigkeit: editierbare Kreuztabelle, Mosaik, erwartete Häufigkeiten, Zellbeiträge, χ²-Verteilung mit p-Wert, Cramérs V, Simulation unter H0 |
 | [`inferenzzyklus/`](inferenzzyklus/) | Induktion, Deduktion und der Signifikanztest: Poppers Perspektive in fünf Schritten, Schwan-Experiment, Modus tollens und die Frage, ob Induktion und Inferenz dasselbe sind |
