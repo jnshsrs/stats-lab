@@ -65,3 +65,7 @@ Settings → Pages → Source: „Deploy from a branch“, Branch `main`, Ordner
 ## Lernpfad
 
 Reihenfolge und Blöcke stehen zentral in `assets/js/path.js`. Daraus entsteht unten auf jeder Seite die Leiste „Zurück / Weiter“. Wer eine Seite ergänzt, trägt sie dort ein und legt auf der Startseite die Karte im passenden Block an.
+
+## Glossar
+
+`glossar/` erklärt die Fachbegriffe kapitelweise in der Reihenfolge des Lernpfads, mit Suche und einem Anker je Begriff (z. B. `glossar/#binomialtest-p-wert`). Jede Seite verlinkt in der Lernpfad-Leiste auf ihr Kapitel (`glossar/#k-<seite>`), der Link „Glossar“ steht in der Kopfzeile aller Seiten.

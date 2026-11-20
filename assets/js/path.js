@@ -32,6 +32,6 @@ const prev = PATH[i - 1], next = PATH[i + 1], cur = PATH[i];
 const link = (p, dir) => p ? `<a class="pn-${dir}" href="../${p[0]}/"><span class="pn-dir">${dir === "prev" ? "← Zurück" : "Weiter →"}</span><span class="pn-title">${p[1]}</span></a>` : `<a class="pn-${dir}" href="../"><span class="pn-dir">${dir === "prev" ? "← Start" : "Geschafft →"}</span><span class="pn-title">Alle Visualisierungen</span></a>`;
 const nav = document.createElement("nav");
 nav.className = "path-nav column"; nav.setAttribute("aria-label", "Lernpfad");
-nav.innerHTML = `<p class="pn-where">Lernpfad · Block ${cur[2] + 1}: ${BLOCKS[cur[2]]} · Station ${i + 1} von ${PATH.length}</p><div class="pn-row">${link(prev, "prev")}${link(next, "next")}</div>`;
+nav.innerHTML = `<p class="pn-where">Lernpfad · Block ${cur[2] + 1}: ${BLOCKS[cur[2]]} · Station ${i + 1} von ${PATH.length} · <a href="../glossar/#k-${cur[0]}">Begriffe dieses Kapitels im Glossar</a></p><div class="pn-row">${link(prev, "prev")}${link(next, "next")}</div>`;
 footer.before(nav);
 })();
