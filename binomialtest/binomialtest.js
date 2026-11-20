@@ -9,19 +9,19 @@ const pct = (x, d = 1) => fmt(x * 100, d) + " %";
 const readout = (l, v, cls = "") => `<div class="readout ${cls}"><div class="val">${v}</div><div class="lbl">${l}</div></div>`;
 const S = { n: 20, p0: 0.5, alpha: 0.05, side: "two", k: 15, anim: null };
 
-function dist() {
+function dist(side = S.side) {
   const { n, p0 } = S, pm = [];
   let c = 1; for (let k = 0; k <= n; k++) { pm.push(c * Math.pow(p0, k) * Math.pow(1 - p0, n - k)); c = c * (n - k) / (k + 1); }
   const F = [], G = []; let s = 0; for (let k = 0; k <= n; k++) { s += pm[k]; F.push(Math.min(1, s)); }
   s = 0; for (let k = n; k >= 0; k--) { s += pm[k]; G[k] = Math.min(1, s); }
-  const lim = S.side === "two" ? S.alpha / 2 : S.alpha;
-  let kL = -1; if (S.side === "two") for (let k = 0; k <= n; k++) if (F[k] <= lim + 1e-12) kL = k; else break;
-  let kU = n + 1; for (let k = n; k >= 0; k--) if (G[k] <= lim + 1e-12) kU = k; else break;
+  const lim = side === "two" ? S.alpha / 2 : S.alpha;
+  let kL = -1; if (side !== "right") for (let k = 0; k <= n; k++) if (F[k] <= lim + 1e-12) kL = k; else break;
+  let kU = n + 1; if (side !== "left") for (let k = n; k >= 0; k--) if (G[k] <= lim + 1e-12) kU = k; else break;
   const aL = kL >= 0 ? F[kL] : 0, aU = kU <= n ? G[kU] : 0;
-  return { n, pm, F, G, lim, kL, kU, aL, aU, act: aL + aU };
+  return { n, pm, F, G, lim, kL, kU, aL, aU, act: aL + aU, side };
 }
 const rej = (d, k) => k <= d.kL || k >= d.kU;
-const pval = (d, k) => S.side === "two" ? Math.min(1, 2 * Math.min(d.F[k], d.G[k])) : d.G[k];
+const pval = (d, k) => d.side === "two" ? Math.min(1, 2 * Math.min(d.F[k], d.G[k])) : d.side === "right" ? d.G[k] : d.F[k];
 
 /* ---------- 1 Balkendiagramm ---------- */
 function drawPmf(d) {
@@ -31,10 +31,10 @@ function drawPmf(d) {
   [0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.4].filter(v => v <= ymax).forEach(v => s += `<line x1="${L}" x2="${R}" y1="${y(v)}" y2="${y(v)}" stroke="var(--grid)"/><text x="${L - 8}" y="${y(v) + 4}" text-anchor="end">${fmt(v, 2)}</text>`);
   // Animation: wie viele Balken je Seite schon geprüft sind
   const A = S.anim, step = A ? A.step : Infinity;
-  const pSide = k0 >= S.n * S.p0 || S.side === "right" ? "up" : "down";
+  const pSide = S.side === "right" ? "up" : S.side === "left" ? "down" : (k0 >= S.n * S.p0 ? "up" : "down");
   for (let k = 0; k <= n; k++) {
     const fromL = k, fromR = n - k;
-    const checked = S.side === "two" ? Math.min(fromL, fromR) < step : fromR < step;
+    const checked = S.side === "two" ? Math.min(fromL, fromR) < step : S.side === "right" ? fromR < step : fromL < step;
     const col = A && !checked ? "none" : rej(d, k) ? "var(--kontrolle)" : "var(--line)";
     s += `<rect x="${x(k) + 1.5}" y="${y(d.pm[k])}" width="${bw - 3}" height="${B - y(d.pm[k])}" fill="${col}" stroke="${col === "none" ? "var(--line)" : "none"}" stroke-dasharray="3 3" rx="2"/>`;
     if (!A || checked) s += `<rect x="${x(k) + 1.5}" y="${B + 2}" width="${bw - 3}" height="7" fill="${rej(d, k) ? "var(--kontrolle)" : "var(--line)"}"/>`;
@@ -59,11 +59,11 @@ function build() {
   const d = dist(); let step = 0;
   const run = () => {
     let sumL = 0, sumR = 0; const lim = d.lim; let msg;
-    for (let i = 0; i < step; i++) { if (S.side === "two" && i <= d.kL) sumL += d.pm[i]; if (d.n - i >= d.kU) sumR += d.pm[d.n - i]; }
+    for (let i = 0; i < step; i++) { if (i <= d.kL) sumL += d.pm[i]; if (d.n - i >= d.kU) sumR += d.pm[d.n - i]; }
     const nextR = d.n - step, nextL = step;
-    const sumTxt = S.side === "two" ? `links ${fmt(sumL, 4)} · rechts ${fmt(sumR, 4)} · Grenze je Seite α/2 = ${fmt(lim, 3)}` : `rechts ${fmt(sumR, 4)} · Grenze α = ${fmt(lim, 3)}`;
-    const stopR = nextR < d.kU, stopL = S.side !== "two" || nextL > d.kL;
-    msg = stopR && stopL ? `Nächster Balken würde die Grenze überschreiten. Fertig: ${sumTxt}` : `Prüfe Balken ${S.side === "two" ? nextL + " und " : ""}${nextR}: ${sumTxt}`;
+    const sumTxt = S.side === "two" ? `links ${fmt(sumL, 4)} · rechts ${fmt(sumR, 4)} · Grenze je Seite α/2 = ${fmt(lim, 3)}` : S.side === "right" ? `rechts ${fmt(sumR, 4)} · Grenze α = ${fmt(lim, 3)}` : `links ${fmt(sumL, 4)} · Grenze α = ${fmt(lim, 3)}`;
+    const stopR = S.side === "left" || nextR < d.kU, stopL = S.side === "right" || nextL > d.kL;
+    msg = stopR && stopL ? `Nächster Balken würde die Grenze überschreiten. Fertig: ${sumTxt}` : `Prüfe Balken ${S.side === "two" ? nextL + " und " + nextR : S.side === "right" ? nextR : nextL}: ${sumTxt}`;
     S.anim = { step, msg }; drawPmf(d);
     if (stopR && stopL) { setTimeout(() => { S.anim = null; render(); }, 1400); return; }
     step++; setTimeout(run, 650);
@@ -83,8 +83,8 @@ function drawCdf(d) {
     if (k > 0) s += `<line x1="${x(k)}" x2="${x(k)}" y1="${y(d.F[k - 1])}" y2="${y(d.F[k])}" stroke="var(--line)" stroke-dasharray="2 3"/>`;
     if (n <= 30 || k % 5 === 0) s += `<text x="${x(k) + bw / 2}" y="${B + 16}" text-anchor="middle">${k}</text>`;
   }
-  if (S.side === "two") s += `<line x1="${L}" x2="${R}" y1="${y(lo)}" y2="${y(lo)}" stroke="var(--alpha-ink)" stroke-dasharray="6 4"/><text x="${R}" y="${y(lo) - 6}" text-anchor="end" style="fill:var(--alpha-ink)">α/2 = ${fmt(lo, 3)}</text>`;
-  s += `<line x1="${L}" x2="${R}" y1="${y(hi)}" y2="${y(hi)}" stroke="var(--alpha-ink)" stroke-dasharray="6 4"/><text x="${L + 6}" y="${y(hi) - 6}" style="fill:var(--alpha-ink)">${S.side === "two" ? "1 − α/2" : "1 − α"} = ${fmt(hi, 3)}</text>`;
+  if (S.side !== "right") s += `<line x1="${L}" x2="${R}" y1="${y(lo)}" y2="${y(lo)}" stroke="var(--alpha-ink)" stroke-dasharray="6 4"/><text x="${R}" y="${y(lo) - 6}" text-anchor="end" style="fill:var(--alpha-ink)">${S.side === "two" ? "α/2" : "α"} = ${fmt(lo, 3)}</text>`;
+  if (S.side !== "left") s += `<line x1="${L}" x2="${R}" y1="${y(hi)}" y2="${y(hi)}" stroke="var(--alpha-ink)" stroke-dasharray="6 4"/><text x="${L + 6}" y="${y(hi) - 6}" style="fill:var(--alpha-ink)">${S.side === "two" ? "1 − α/2" : "1 − α"} = ${fmt(hi, 3)}</text>`;
   if (d.kL >= 0) s += `<circle cx="${x(d.kL) + bw / 2}" cy="${y(d.F[d.kL])}" r="5" fill="var(--alpha-ink)"/><text class="strong" x="${x(d.kL) + bw / 2}" y="${y(d.F[d.kL]) - 10}" text-anchor="middle" style="fill:var(--alpha-ink)">F(${d.kL}) = ${fmt(d.F[d.kL], 3)}</text>`;
   if (d.kU <= n && d.kU > 0) s += `<circle cx="${x(d.kU - 1) + bw / 2}" cy="${y(d.F[d.kU - 1])}" r="5" fill="var(--alpha-ink)"/><text class="strong" x="${x(d.kU - 1) + bw / 2}" y="${y(d.F[d.kU - 1]) + 22}" text-anchor="middle" style="fill:var(--alpha-ink)">F(${d.kU - 1}) = ${fmt(d.F[d.kU - 1], 3)}</text>`;
   s += `<text x="${R}" y="${B + 40}" text-anchor="end">k · Trefferzahl</text><text x="18" y="${(T + B) / 2}" transform="rotate(-90 18 ${(T + B) / 2})" text-anchor="middle">F(k) = P(X ≤ k)</text>`;
@@ -100,25 +100,52 @@ function drawSteps(d) {
   const tail = up ? `P(X ≥ ${k}) = ${fmt(d.G[k], 4)}` : `P(X ≤ ${k}) = ${fmt(d.F[k], 4)}`;
   const pLine = S.side === "two"
     ? `p = 2 · min(P(X ≤ ${k}), P(X ≥ ${k})) = 2 · ${fmt(Math.min(d.F[k], d.G[k]), 4)} = ${fmt(p, 4)}${p >= 1 ? " (höchstens 1)" : ""}`
-    : `p = P(X ≥ ${k}) = ${fmt(p, 4)}`;
+    : S.side === "right" ? `p = P(X ≥ ${k}) = ${fmt(p, 4)}` : `p = P(X ≤ ${k}) = ${fmt(p, 4)}`;
   const region = (d.kL >= 0 ? `k ≤ ${d.kL}` : "") + (d.kL >= 0 && d.kU <= n ? " oder " : "") + (d.kU <= n ? `k ≥ ${d.kU}` : "") || "leer";
   $("steps").innerHTML =
     `<li><b>Erwartung unter H0.</b> Bei reinem Raten wären im Mittel n · p<sub>0</sub> Treffer zu erwarten.<span class="eq">${n} · ${fmt(S.p0, 2)} = ${fmt(e, 1)}</span></li>` +
     `<li><b>Ergebnis einordnen.</b> Beobachtet sind ${k} Treffer.<span class="eq">Ablehnungsbereich: ${region} → k = ${k} liegt im ${inR ? "Ablehnungsbereich" : "Annahmebereich"}</span></li>` +
-    `<li><b>p-Wert berechnen.</b> Wie wahrscheinlich ist unter H0 ein Ergebnis, das mindestens so extrem ist wie ${k}? ${S.side === "two" ? "Zweiseitig zählt auch die Gegenrichtung, daher mal 2." : "Rechtsseitig zählt nur die obere Richtung."}<span class="eq">${S.side === "two" ? tail + "<br>" : ""}${pLine}</span></li>` +
+    `<li><b>p-Wert berechnen.</b> Wie wahrscheinlich ist unter H0 ein Ergebnis, das mindestens so extrem ist wie ${k}? ${S.side === "two" ? "Zweiseitig zählt auch die Gegenrichtung, daher mal 2." : S.side === "right" ? "Rechtsseitig zählt nur die obere Richtung." : "Linksseitig zählt nur die untere Richtung."}<span class="eq">${S.side === "two" ? tail + "<br>" : ""}${pLine}</span></li>` +
     `<li><b>Entscheiden.</b> Beide Wege führen zum selben Ergebnis.<span class="eq">p = ${fmt(p, 4)} ${p <= S.alpha ? "≤" : ">"} α = ${fmt(S.alpha, 2)} → ${p <= S.alpha ? "H0 verwerfen: mehr als Raten" : "H0 beibehalten: mit Raten vereinbar"}</span></li>`;
+}
+
+/* ---------- 4 Gerichtet oder ungerichtet ---------- */
+const HYP = { two: ["ungerichtet (zweiseitig)", "p ≠ p0", "Der Therapeut unterscheidet sich vom Raten, in welche Richtung auch immer."],
+              right: ["gerichtet (rechtsseitig)", "p > p0", "Der Therapeut ist besser als Raten."],
+              left: ["gerichtet (linksseitig)", "p < p0", "Der Therapeut ist schlechter als Raten."] };
+function mini(side) {
+  const d = dist(side), W = 920, L = 50, R = 900, T = 10, B = 120, n = d.n, k0 = S.k, bw = (R - L) / (n + 1), x = k => L + k * bw;
+  const ymax = Math.max(...d.pm) * 1.12, y = v => B - v / ymax * (B - T);
+  let s = "";
+  for (let k = 0; k <= n; k++) {
+    s += `<rect x="${x(k) + 1.5}" y="${y(d.pm[k])}" width="${bw - 3}" height="${B - y(d.pm[k])}" fill="${rej(d, k) ? "var(--kontrolle)" : "var(--line)"}" rx="2"/>`;
+    s += `<rect x="${x(k) + 1.5}" y="${B + 2}" width="${bw - 3}" height="6" fill="${rej(d, k) ? "var(--kontrolle)" : "var(--line)"}"/>`;
+    if (n <= 30 || k % 5 === 0) s += `<text x="${x(k) + bw / 2}" y="${B + 22}" text-anchor="middle">${k}</text>`;
+  }
+  s += `<line x1="${x(k0) + bw / 2}" x2="${x(k0) + bw / 2}" y1="${T}" y2="${B + 8}" stroke="var(--pval)" stroke-width="2.5"/><text class="strong" x="${x(k0) + bw / 2 + (k0 > n / 2 ? -8 : 8)}" y="${T + 12}" text-anchor="${k0 > n / 2 ? "end" : "start"}">k = ${k0}</text>`;
+  const p = pval(d, k0), sig = p <= S.alpha;
+  const region = (d.kL >= 0 ? `k ≤ ${d.kL}` : "") + (d.kL >= 0 && d.kU <= n ? " oder " : "") + (d.kU <= n ? `k ≥ ${d.kU}` : "") || "leer";
+  return `<div class="hcard ${S.side === side ? "on" : ""}"><div class="hhead"><b>${HYP[side][0]}</b><span class="num">H0: p = ${fmt(S.p0, 2)} · H1: ${HYP[side][1]}</span></div><p class="hsay">${HYP[side][2]}</p>
+    <svg class="chart" viewBox="0 0 920 150" role="img" aria-label="Ablehnungsbereich ${HYP[side][0]}">${s}</svg>
+    <div class="hres"><span>Ablehnungsbereich: <b>${region}</b></span><span>p = <b>${fmt(p, 4)}</b></span><span class="${sig ? "sig" : ""}">${sig ? "H0 verwerfen" : "H0 beibehalten"}</span></div></div>`;
+}
+function drawCompare() {
+  $("compare").innerHTML = ["two", "right", "left"].map(mini).join("");
+  const d2 = dist("two"), dr = dist("right"), dl = dist("left"), k = S.k, p2 = pval(d2, k), pr = pval(dr, k), pl = pval(dl, k);
+  const up = k >= S.n * S.p0, pd = up ? pr : pl;
+  $("c4").innerHTML = `Für k = ${k} liefert der gerichtete Test in Richtung des Ergebnisses p = <b>${fmt(pd, 4)}</b>, der ungerichtete p = <b>${fmt(p2, 4)}</b>, also ungefähr das Doppelte. Der gerichtete Test in die <b>andere</b> Richtung kommt auf p = <b>${fmt(up ? pl : pr, 4)}</b> und kann das Ergebnis nie entdecken, egal wie extrem es ist. Deshalb wird die Richtung vor der Datenerhebung festgelegt und begründet. Wer erst die Daten ansieht und dann einseitig testet, halbiert sich den p-Wert unberechtigt.`;
 }
 
 function render() {
   $("n-v").textContent = S.n; $("p0-v").textContent = fmt(S.p0, 2); $("k-v").textContent = S.k;
   $("k").max = S.n; if (S.k > S.n) { S.k = S.n; $("k").value = S.n; }
   const d = dist();
-  drawPmf(d); drawCdf(d); drawSteps(d);
+  drawPmf(d); drawCdf(d); drawSteps(d); drawCompare();
   const region = (d.kL >= 0 ? `k ≤ ${d.kL}` : "") + (d.kL >= 0 && d.kU <= d.n ? " oder " : "") + (d.kU <= d.n ? `k ≥ ${d.kU}` : "") || "leer";
   const acc = `${d.kL + 1} bis ${Math.min(d.n, d.kU - 1)}`;
   $("r1").innerHTML = readout("Ablehnungsbereich", region, "r-alpha") + readout("Annahmebereich", acc) + readout("tatsächliches α", pct(d.act, 1), "r-alpha") + readout("erwartete Treffer unter H0", fmt(d.n * S.p0, 1));
   // Was wäre mit einem Balken mehr?
-  const extra = S.side === "two" ? Math.min(d.kL + 1 <= d.n ? d.pm[d.kL + 1] : 1, d.kU - 1 >= 0 ? d.pm[d.kU - 1] : 1) : (d.kU - 1 >= 0 ? d.pm[d.kU - 1] : 1);
+  const extra = S.side === "two" ? Math.min(d.kL + 1 <= d.n ? d.pm[d.kL + 1] : 1, d.kU - 1 >= 0 ? d.pm[d.kU - 1] : 1) : S.side === "right" ? (d.kU - 1 >= 0 ? d.pm[d.kU - 1] : 1) : (d.kL + 1 <= d.n ? d.pm[d.kL + 1] : 1);
   $("c1").innerHTML = `Der Ablehnungsbereich schöpft α nicht ganz aus: Das tatsächliche α liegt bei <b>${pct(d.act, 1)}</b> statt ${pct(S.alpha, 0)}. Nähme man noch einen Balken dazu, käme mindestens ${pct(d.act + extra, 1)} heraus${S.side === "two" ? " (auf einer Seite schon mehr als α/2)" : ""}. Bei diskreten Verteilungen ist der Test deshalb etwas konservativ.`;
   $("build-note").textContent = "";
 }

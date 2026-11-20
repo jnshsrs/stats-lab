@@ -95,3 +95,14 @@ input[type=range] { width: 100%; accent-color: var(--accent); margin: 4px 0 0; }
 .block { padding-top: 40px; }
 .block .text { color: var(--muted); max-width: 72ch; }
 .readouts .readout .val { font-size: 24px; }
+.hcards { display: flex; flex-direction: column; gap: 12px; }
+.hcard { border: 1px solid var(--line); border-radius: 12px; padding: 12px 16px; display: flex; flex-direction: column; gap: 4px; }
+.hcard.on { border-color: var(--accent); box-shadow: inset 4px 0 0 var(--accent); }
+.hhead { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 16px; font-size: 16px; }
+.hhead .num { font-family: var(--font-mono); font-size: 14px; color: var(--muted); }
+.hsay { font-size: 14.5px; color: var(--muted); }
+.hres { display: flex; flex-wrap: wrap; gap: 6px 22px; font-size: 15px; }
+.hres b { font-variant-numeric: tabular-nums; }
+.hres .sig { color: var(--therapie-ink); font-weight: 700; }
+#side { flex-wrap: wrap; }
+#side button { font-size: 12.5px; padding: 6px 6px; white-space: nowrap; }

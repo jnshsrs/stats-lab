@@ -80,3 +80,4 @@ input[type=range] { width: 100%; accent-color: var(--accent); margin: 4px 0 0; }
 .calc-steps { margin: 0; padding-left: 22px; display: flex; flex-direction: column; gap: 10px; font-size: 15.5px; }
 .calc-steps li::marker { font-weight: 700; color: var(--accent); }
 .calc-steps .eq { display: block; font-family: var(--font-mono); font-size: 15px; background: var(--highlight); border-radius: 6px; padding: 6px 10px; margin-top: 4px; overflow-x: auto; white-space: nowrap; font-variant-numeric: tabular-nums; }
+#calcside button { white-space: nowrap; }

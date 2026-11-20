@@ -6,8 +6,8 @@
 <title>Binomialtest · Stats Lab</title>
 <meta name="description" content="Annahme- und Ablehnungsbereich am Binomialtest: Balken von außen nach innen sammeln, kritische Werte aus der Verteilungsfunktion, p-Wert als Summe extremer Ergebnisse.">
 <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="../assets/css/base.css?v=202611202249">
-<link rel="stylesheet" href="binomialtest.css?v=202611202249">
+<link rel="stylesheet" href="../assets/css/base.css?v=202611202302">
+<link rel="stylesheet" href="binomialtest.css?v=202611202302">
 </head>
 <body>
 <header class="site-header">
@@ -36,7 +36,7 @@
       <div class="ctrl"><div class="ctrl-head"><label for="n">n · Anzahl Versuche</label><output id="n-v" class="num"></output></div><input id="n" type="range" min="5" max="50" step="1" value="20"></div>
       <div class="ctrl"><div class="ctrl-head"><label for="p0">p<sub>0</sub> · Trefferwahrscheinlichkeit unter H0</label><output id="p0-v" class="num"></output></div><input id="p0" type="range" min="0.1" max="0.9" step="0.05" value="0.5"></div>
       <div class="ctrl"><span class="lbl" id="a-lbl">Signifikanzniveau α</span><div class="seg" role="group" aria-labelledby="a-lbl" id="alpha"><button type="button" data-a="0.01" aria-pressed="false">0,01</button><button type="button" data-a="0.05" aria-pressed="true">0,05</button><button type="button" data-a="0.1" aria-pressed="false">0,10</button></div></div>
-      <div class="ctrl"><span class="lbl" id="s-lbl">Hypothese</span><div class="seg" role="group" aria-labelledby="s-lbl" id="side"><button type="button" data-s="two" aria-pressed="true">zweiseitig</button><button type="button" data-s="right" aria-pressed="false">rechtsseitig</button></div></div>
+      <div class="ctrl"><span class="lbl" id="s-lbl">Hypothese</span><div class="seg" role="group" aria-labelledby="s-lbl" id="side"><button type="button" data-s="two" aria-pressed="true">zweiseitig</button><button type="button" data-s="right" aria-pressed="false">rechtsseitig</button><button type="button" data-s="left" aria-pressed="false">linksseitig</button></div></div>
     </div>
   </section>
 
@@ -67,6 +67,14 @@
     <p class="note">Zweiseitiger p-Wert hier: zweimal die kleinere der beiden Randwahrscheinlichkeiten (höchstens 1). So passt er genau zum Ablehnungsbereich aus Schritt 1. Statistikprogramme wie R rechnen bei p<sub>0</sub> ≠ 0,5 teils etwas anders und kommen dann auf leicht abweichende Werte.</p>
   </section>
 
+  <section class="step" aria-labelledby="s4">
+    <span class="eyebrow">Vertiefung · Hypothesen</span>
+    <h2 id="s4">Gerichtet oder ungerichtet?</h2>
+    <p class="text">Eine <b>ungerichtete</b> Hypothese sagt nur, dass sich etwas unterscheidet. Der Ablehnungsbereich liegt dann auf beiden Seiten, je mit α/2. Eine <b>gerichtete</b> Hypothese sagt voraus, in welche Richtung. Dann liegt das ganze α auf einer Seite, der Ablehnungsbereich rückt dort näher an die Mitte, und auf der anderen Seite gibt es keinen. Dieselben Daten, drei Hypothesen: Verschieben Sie k mit dem Regler in Schritt 3, zum Beispiel auf 15 und auf 4.</p>
+    <div class="hcards" id="compare"></div>
+    <p class="callout" id="c4"></p>
+  </section>
+
   <section class="block" aria-label="Weiter">
     <p class="text">Beim <a href="../t-test/#calc">t-Test</a> funktioniert es genauso, nur mit einer stetigen Verteilung: Dort trifft man α exakt, und die kritischen Werte liest man von einer glatten Kurve ab.</p>
   </section>
@@ -78,7 +86,7 @@
     <span class="footer-links"><a href="https://github.com/jnshsrs/stats-lab">Quellcode auf GitHub</a><span>Ohne Cookies und Tracking</span></span>
   </div>
 </footer>
-<script src="binomialtest.js?v=202611202249"></script>
-<script src="../assets/js/path.js?v=202611202249"></script>
+<script src="binomialtest.js?v=202611202302"></script>
+<script src="../assets/js/path.js?v=202611202302"></script>
 </body>
 </html>

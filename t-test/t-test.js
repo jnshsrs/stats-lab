@@ -203,29 +203,40 @@ function drawCdf(c) {
   const top = 18, base = 280, PL = 70, PR = R;
   const m = Math.min(20, Math.max(6, Math.abs(c.t) + 1.5, c.tc + 1.5)), a = -m, b = m;
   const sx = v => PL + (v - a) / (b - a) * (PR - PL), sy = p => base - p * (base - top);
-  const F = v => tcdf(v, c.df), lo = S.alpha / 2, hi = 1 - S.alpha / 2;
+  const one = S.calcSide === "one", F = v => tcdf(v, c.df), lo = S.alpha / 2, hi = one ? 1 - S.alpha : 1 - S.alpha / 2;
+  const tcrit = one ? tinv(1 - S.alpha, c.df) : c.tc, pOne = 1 - F(c.t), pUse = one ? pOne : c.p;
   let s = "";
-  s += `<rect x="${sx(-c.tc)}" y="${top}" width="${sx(c.tc) - sx(-c.tc)}" height="${base - top}" fill="var(--highlight)"/>`;
-  s += `<rect x="${PL}" y="${top}" width="${sx(-c.tc) - PL}" height="${base - top}" fill="var(--alpha-fill)" fill-opacity=".25"/><rect x="${sx(c.tc)}" y="${top}" width="${PR - sx(c.tc)}" height="${base - top}" fill="var(--alpha-fill)" fill-opacity=".25"/>`;
+  const accL = one ? PL : sx(-tcrit);
+  s += `<rect x="${accL}" y="${top}" width="${sx(tcrit) - accL}" height="${base - top}" fill="var(--highlight)"/>`;
+  if (!one) s += `<rect x="${PL}" y="${top}" width="${sx(-tcrit) - PL}" height="${base - top}" fill="var(--alpha-fill)" fill-opacity=".25"/>`;
+  s += `<rect x="${sx(tcrit)}" y="${top}" width="${PR - sx(tcrit)}" height="${base - top}" fill="var(--alpha-fill)" fill-opacity=".25"/>`;
   [0, 0.25, 0.5, 0.75, 1].forEach(p => s += `<line x1="${PL}" x2="${PR}" y1="${sy(p)}" y2="${sy(p)}" stroke="var(--grid)"/><text x="${PL - 8}" y="${sy(p) + 4}" text-anchor="end">${fmt(p, 2)}</text>`);
   for (const v of ticks(a, b, 14)) s += `<text x="${sx(v)}" y="${base + 18}" text-anchor="middle">${v}</text>`;
   const pts = []; for (let i = 0; i <= 400; i++) { const v = a + (b - a) * i / 400; pts.push([sx(v), sy(F(v))]); }
   s += `<path d="${path(pts)}" fill="none" stroke="var(--fg)" stroke-width="2.5"/>`;
   // kritische Werte: von der y-Achse zur Kurve und hinunter
-  [[hi, c.tc], [lo, -c.tc]].forEach(([p, v]) => {
+  (one ? [[hi, tcrit]] : [[hi, tcrit], [lo, -tcrit]]).forEach(([p, v]) => {
     s += `<path d="M${PL} ${sy(p)} H${sx(v)} V${base}" fill="none" stroke="var(--alpha-ink)" stroke-width="2" stroke-dasharray="6 4"/><circle cx="${sx(v)}" cy="${sy(p)}" r="4.5" fill="var(--alpha-ink)"/>`;
-    s += `<text x="${PL + 6}" y="${sy(p) - 7}" style="fill:var(--alpha-ink)">${p > 0.5 ? "1 − α/2" : "α/2"} = ${fmt(p, 3)}</text>`;
+    s += `<text x="${PL + 6}" y="${sy(p) - 7}" style="fill:var(--alpha-ink)">${p > 0.5 ? (one ? "1 − α" : "1 − α/2") : "α/2"} = ${fmt(p, 3)}</text>`;
   });
-  s += `<text class="strong" x="${sx(c.tc)}" y="${base + 36}" text-anchor="middle" style="fill:var(--alpha-ink)">+${fmt(c.tc, 2)}</text><text class="strong" x="${sx(-c.tc)}" y="${base + 36}" text-anchor="middle" style="fill:var(--alpha-ink)">−${fmt(c.tc, 2)}</text>`;
+  s += `<text class="strong" x="${sx(tcrit)}" y="${base + 36}" text-anchor="middle" style="fill:var(--alpha-ink)">+${fmt(tcrit, 2)}</text>` + (one ? "" : `<text class="strong" x="${sx(-tcrit)}" y="${base + 36}" text-anchor="middle" style="fill:var(--alpha-ink)">−${fmt(tcrit, 2)}</text>`);
   // beobachtetes t: hinauf zur Kurve und hinüber
-  const at = Math.abs(c.t), tx = Math.min(b, at), Ft = F(at);
+  const at = one ? c.t : Math.abs(c.t), tx = Math.max(a, Math.min(b, at)), Ft = F(at);
   s += `<path d="M${sx(tx)} ${base} V${sy(Ft)} H${PL}" fill="none" stroke="var(--pval)" stroke-width="2.5"/><circle cx="${sx(tx)}" cy="${sy(Ft)}" r="5" fill="var(--pval)"/>`;
-  s += `<text class="strong" x="${sx(tx) + 8}" y="${sy(Ft) + 18}">|t| = ${fmt(at, 2)}, F = ${fmt(Ft, 4)}</text>`;
+  s += `<text class="strong" x="${sx(tx) + 8}" y="${sy(Ft) + 18}">${one ? "t" : "|t|"} = ${fmt(at, 2)}, F = ${fmt(Ft, 4)}</text>`;
   s += `<text x="${PL + (PR - PL) / 2}" y="${top + 14}" text-anchor="middle">Annahmebereich</text>`;
   s += `<text x="${PR}" y="${base + 52}" text-anchor="end">t-Wert · df = ${c.df}</text><text x="18" y="${(top + base) / 2}" transform="rotate(-90 18 ${(top + base) / 2})" text-anchor="middle">F(t)</text>`;
   $("tcdf").innerHTML = s;
   $("tcdf").setAttribute("aria-label", `Verteilungsfunktion der t-Verteilung, kritische Werte ±${fmt(c.tc, 2)}, p ${fmtP(c.p)}`);
-  const sig = c.p < S.alpha, inRej = at > c.tc, pe = c.p < 0.001 ? "< 0,001" : "= " + fmt(c.p, 3);
+  const sig = pUse < S.alpha, inRej = at > tcrit, pe = pUse < 0.001 ? "< 0,001" : "= " + fmt(pUse, 3);
+  $("calcside-note").textContent = one ? `Zum Vergleich ungerichtet: t krit = ±${fmt(c.tc, 2)}, p ${c.p < 0.001 ? "< 0,001" : "= " + fmt(c.p, 3)}. Die übrigen Schritte der Kaskade rechnen ungerichtet.` : "";
+  if (one) { $("calc-steps").innerHTML =
+    `<li><b>Annahmebereich festlegen.</b> Gerichtet sagt H1 voraus, dass die Therapiegruppe höher liegt. Das ganze α kommt deshalb auf die rechte Seite, links gibt es keinen Ablehnungsbereich.<span class="eq">F(t) bis ${fmt(hi, 3)}</span></li>` +
+    `<li><b>Kritischen Wert rückwärts ablesen.</b> Gesucht ist das t, bei dem F(t) den Wert ${fmt(hi, 3)} erreicht. Er liegt näher an der Mitte als im ungerichteten Fall.<span class="eq">t<sub>krit</sub> = F⁻¹(${fmt(hi, 3)}; df = ${c.df}) = ${fmt(tcrit, 3)}</span></li>` +
+    `<li><b>Bereiche benennen.</b><span class="eq">Annahmebereich: t ≤ ${fmt(tcrit, 2)} · Ablehnungsbereich: t > ${fmt(tcrit, 2)}</span></li>` +
+    `<li><b>p-Wert vorwärts ablesen.</b> Nur die Fläche rechts vom beobachteten t zählt, ohne Faktor 2. Ein negatives t führt deshalb nie zur Ablehnung.<span class="eq">p = 1 − F(${fmt(c.t, 2)}) = 1 − ${fmt(Ft, 4)} ${pe}</span></li>` +
+    `<li><b>Entscheiden.</b><span class="eq">t = ${fmt(c.t, 2)} ${inRej ? ">" : "≤"} ${fmt(tcrit, 2)} und p ${pe} ${sig ? "<" : "≥"} α = ${fmt(S.alpha, 2)} → ${sig ? "H0 verwerfen" : "H0 beibehalten"}</span></li>`;
+    return; }
   $("calc-steps").innerHTML =
     `<li><b>Annahmebereich festlegen.</b> Er soll die mittleren ${fmt((1 - S.alpha) * 100, 0)} % der t-Verteilung enthalten, links und rechts bleiben je α/2 = ${fmt(lo, 3)} übrig.<span class="eq">F(t) zwischen ${fmt(lo, 3)} und ${fmt(hi, 3)}</span></li>` +
     `<li><b>Kritischen Wert rückwärts ablesen.</b> Gesucht ist das t, bei dem die Verteilungsfunktion ${fmt(hi, 3)} erreicht (Quantil, steht auch in jeder t-Tabelle).<span class="eq">t<sub>krit</sub> = F⁻¹(${fmt(hi, 3)}; df = ${c.df}) = ${fmt(c.tc, 3)}</span></li>` +
@@ -293,6 +304,8 @@ function paramsChanged() { render(); if (simRan) clearSim("Parameter geändert. 
 document.querySelectorAll("[data-alpha]").forEach(b => b.addEventListener("click", () => { S.alpha = +b.dataset.alpha; document.querySelectorAll("[data-alpha]").forEach(x => x.setAttribute("aria-pressed", x === b)); paramsChanged(); }));
 document.querySelectorAll("[data-view]").forEach(b => b.addEventListener("click", () => { S.view = b.dataset.view; document.querySelectorAll("[data-view]").forEach(x => x.setAttribute("aria-pressed", x === b)); render(); }));
 $("shownormal").addEventListener("change", e => { S.showNormal = e.target.checked; render(); });
+S.calcSide = "two";
+$("calcside").addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; S.calcSide = b.dataset.cs; $("calcside").querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", x === b)); render(); });
 $("resample").addEventListener("click", () => { rand = mulberry32((Math.random() * 2 ** 31) | 0); draw(); render(); });
 $("simulate").addEventListener("click", simulate);
 const PRESETS = { h0: { delta: 0 }, pilot: { n: 8, delta: 10, sigma: 20 }, big: { n: 100, delta: 10, sigma: 20 }, clean: { sigma: 8, n: 20 } };
