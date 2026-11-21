@@ -6,8 +6,8 @@
 <title>Glossar · Stats Lab</title>
 <meta name="description" content="Fachbegriffe aus Statistik und Forschungsmethodik kurz erklärt, geordnet nach den Kapiteln des Stats Lab.">
 <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="../assets/css/base.css?v=202611202330">
-<link rel="stylesheet" href="glossar.css?v=202611202330">
+<link rel="stylesheet" href="../assets/css/base.css?v=202611210656">
+<link rel="stylesheet" href="glossar.css?v=202611210656">
 </head>
 <body>
 <header class="site-header">
@@ -30,7 +30,7 @@
     <h1>Glossar</h1>
     <p class="byline">Dr. Jens Hüsers · Forschungsmethodik</p>
     <p class="lede">Die wichtigsten Fachbegriffe kurz erklärt, in der Reihenfolge des Lernpfads. Jeder Begriff hat einen eigenen Link: Klicken Sie auf das # davor, um ihn zu kopieren oder zu teilen.</p>
-    <div class="g-search"><label for="q" class="lbl">Begriff suchen</label><input id="q" type="search" placeholder="z. B. p-Wert, Standardfehler, Sensitivität" autocomplete="off"><span class="num" id="g-count">107 Begriffe</span></div>
+    <div class="g-search"><label for="q" class="lbl">Begriff suchen</label><input id="q" type="search" placeholder="z. B. p-Wert, Standardfehler, Sensitivität" autocomplete="off"><span class="num" id="g-count">109 Begriffe</span></div>
   </section>
   <nav class="g-toc" aria-label="Kapitel"><div class="toc-block"><span class="toc-b">1 · Grundlagen</span><a href="#k-skalenniveaus"><span class="num">1</span>Skalenniveaus</a><a href="#k-lage-streuung"><span class="num">2</span>Lage und Streuung</a><a href="#k-wahrscheinlichkeit"><span class="num">3</span>Wahrscheinlichkeit als Fläche</a><a href="#k-binomial"><span class="num">4</span>Pascal und die Binomialverteilung</a><a href="#k-verteilungen"><span class="num">5</span>Diskret und stetig</a></div><div class="toc-block"><span class="toc-b">2 · Schätzen</span><a href="#k-grosse-zahlen"><span class="num">6</span>Große und kleine Zahlen</a><a href="#k-zgws"><span class="num">7</span>Grenzwertsatz, Standardfehler, Konfidenzintervall</a></div><div class="toc-block"><span class="toc-b">3 · Testen</span><a href="#k-binomialtest"><span class="num">8</span>Binomialtest</a><a href="#k-t-test"><span class="num">9</span>Die t-Test-Kaskade</a><a href="#k-t-test-varianten"><span class="num">10</span>Welcher t-Test?</a><a href="#k-entscheidung"><span class="num">11</span>Entscheidungstheorie</a><a href="#k-fallzahl"><span class="num">12</span>Fallzahl und Power</a><a href="#k-multiples-testen"><span class="num">13</span>Multiples Testen</a><a href="#k-chi-quadrat"><span class="num">14</span>Der Chi-Quadrat-Test</a></div><div class="toc-block"><span class="toc-b">4 · Hintergrund</span><a href="#k-regression-mitte"><span class="num">15</span>Regression zur Mitte</a><a href="#k-mammografie"><span class="num">16</span>Positiver Befund</a><a href="#k-inferenzzyklus"><span class="num">17</span>Induktion und Deduktion</a></div></nav>
   <p class="g-empty" id="g-empty" hidden>Kein Begriff gefunden.</p>
@@ -114,6 +114,8 @@
 <div class="g-term" id="binomialtest-kritischer-wert"><dt><a class="anchor" href="#binomialtest-kritischer-wert" aria-label="Link zu kritischer Wert">#</a>kritischer Wert</dt><dd>Grenze zwischen Annahme- und Ablehnungsbereich. Man liest ihn als Quantil der Verteilung unter H0 ab.</dd></div>
 <div class="g-term" id="binomialtest-p-wert"><dt><a class="anchor" href="#binomialtest-p-wert" aria-label="Link zu p-Wert">#</a>p-Wert</dt><dd>Wahrscheinlichkeit, unter H0 ein Ergebnis zu erhalten, das mindestens so extrem ist wie das beobachtete. Er ist nicht die Wahrscheinlichkeit, dass H0 stimmt.<span class="g-f">p ≤ α ⇔ Ergebnis im Ablehnungsbereich</span></dd></div>
 <div class="g-term" id="binomialtest-konservativer-test"><dt><a class="anchor" href="#binomialtest-konservativer-test" aria-label="Link zu konservativer Test">#</a>konservativer Test</dt><dd>Ein Test, dessen tatsächliche Fehlerrate unter α liegt. Bei diskreten Verteilungen wie der Binomialverteilung der Normalfall.</dd></div>
+<div class="g-term" id="binomialtest-binomialtest"><dt><a class="anchor" href="#binomialtest-binomialtest" aria-label="Link zu Binomialtest">#</a>Binomialtest</dt><dd>Prüft, ob ein beobachteter Anteil, etwa die Heilungsrate einer neuen Therapie, mit einem festen Wert p<sub>0</sub> vereinbar ist. Voraussetzungen: zwei Ausgänge, feste Anzahl n, unabhängige Beobachtungen, gleiches p für alle.</dd></div>
+<div class="g-term" id="binomialtest-vorzeichentest"><dt><a class="anchor" href="#binomialtest-vorzeichentest" aria-label="Link zu Vorzeichentest">#</a>Vorzeichentest</dt><dd>Binomialtest mit p<sub>0</sub> = 0,5 für Paarvergleiche, bei denen nur zählt, ob es besser oder schlechter wurde.</dd></div>
 </dl></section>
 <section class="g-ch" id="k-t-test"><div class="g-chh"><h3><span class="num">9</span>Die t-Test-Kaskade</h3><a class="g-link" href="../t-test/">Zur Seite →</a></div><dl>
 <div class="g-term" id="t-test-signal-und-rauschen"><dt><a class="anchor" href="#t-test-signal-und-rauschen" aria-label="Link zu Signal und Rauschen">#</a>Signal und Rauschen</dt><dd>Signal ist der Unterschied, der interessiert, etwa eine Mittelwertdifferenz. Rauschen ist dessen zufällige Schwankung, gemessen als Standardfehler.</dd></div>
@@ -191,6 +193,6 @@
     <span class="footer-links"><a href="https://github.com/jnshsrs/stats-lab">Quellcode auf GitHub</a><span>Ohne Cookies und Tracking</span></span>
   </div>
 </footer>
-<script src="glossar.js?v=202611202330"></script>
+<script src="glossar.js?v=202611210656"></script>
 </body>
 </html>
