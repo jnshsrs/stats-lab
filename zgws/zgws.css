@@ -58,3 +58,14 @@ input[type=range] { width: 100%; accent-color: var(--accent); margin: 6px 0 0; }
 #pop-seg { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
 #pop-seg button + button { border-left: 1px solid var(--line); }
 @media (max-width: 560px) { #pop-seg { grid-template-columns: repeat(2, minmax(0, 1fr)); } #pop-seg button:nth-child(3) { border-left: 0; } #pop-seg button:nth-child(n+3) { border-top: 1px solid var(--line); } }
+
+/* Würfel */
+.dice-ctrl { display: flex; flex-direction: column; gap: 12px; }
+.dice-row { border-top: 0; padding-top: 0; }
+#k-seg button { min-width: 44px; }
+.dice-last { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; min-height: 52px; }
+.dice-last svg { flex: none; }
+.dice-last .sum { margin-left: 10px; font: 600 18px var(--font-mono); white-space: nowrap; }
+.dice-last .hint { color: var(--muted); font-size: 14.5px; }
+.die-sm { display: inline-grid; place-items: center; width: 22px; height: 22px; border: 1px solid var(--line); border-radius: 4px; font: 600 12px var(--font-mono); background: var(--surface); }
+.sw.tick { height: 0; border-top: 2px solid var(--fg); border-radius: 0; }

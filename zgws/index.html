@@ -6,8 +6,8 @@
 <title>Zentraler Grenzwertsatz · Stats Lab</title>
 <meta name="description" content="Vom Zentralen Grenzwertsatz über den Standardfehler zum Konfidenzintervall, interaktiv mit vier Populationen.">
 <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="../assets/css/base.css?v=202611210748">
-<link rel="stylesheet" href="zgws.css?v=202611210748">
+<link rel="stylesheet" href="../assets/css/base.css?v=202611210804">
+<link rel="stylesheet" href="zgws.css?v=202611210804">
 </head>
 <body>
 <header class="site-header">
@@ -31,6 +31,30 @@
     <p class="byline">Dr. Jens Hüsers · Forschungsmethodik</p>
     <p class="lede">Wir ziehen immer wieder Stichproben derselben Größe aus einer Population und schauen auf ihre Mittelwerte. Daraus folgen drei Ideen, die aufeinander aufbauen: Die Mittelwerte werden normalverteilt, ihre Streuung ist der Standardfehler, und daraus entsteht das Konfidenzintervall.</p>
   </section>
+
+  <details class="acc" id="wuerfel" open>
+    <summary><span class="acc-no">1</span><span class="acc-title">Einstieg: Würfeln<span class="acc-teaser">Die Summe vieler Würfel wird glockenförmig, obwohl jeder einzelne Würfel gleichverteilt ist.</span></span></summary>
+    <div class="acc-body">
+      <p class="text">Ein einzelner Würfel zeigt jede Augenzahl gleich oft, seine Verteilung ist flach. Werfen wir mehrere Würfel und addieren die Augen, sieht das anders aus: Extreme Summen brauchen lauter hohe oder lauter niedrige Würfe, mittlere Summen entstehen auf sehr viele Arten. Wählen Sie die Zahl der Würfel und werfen Sie.</p>
+      <div class="dice-ctrl">
+        <div class="ctrl"><span class="lbl" id="k-lbl">Würfel pro Wurf</span><div class="seg" role="group" aria-labelledby="k-lbl" id="k-seg"></div></div>
+        <div class="ctrl-row dice-row">
+          <button class="btn" type="button" id="d1">1 Wurf</button>
+          <button class="btn" type="button" id="d100">100 Würfe</button>
+          <button class="btn ghost" type="button" id="d1000">1.000</button>
+          <button class="btn ghost" type="button" id="d10000">10.000</button>
+          <button class="btn ghost" type="button" id="dreset">Zurücksetzen</button>
+          <span class="count num" id="dcount" aria-live="polite"></span>
+        </div>
+      </div>
+      <div class="dice-last" id="dice-last" aria-live="polite"></div>
+      <svg class="chart" id="dice-hist" viewBox="0 0 920 340" role="img" aria-label="Häufigkeit der Augensummen"></svg>
+      <div class="legend"><span><i class="sw" style="background:var(--area-b)"></i>Ihre Würfe</span><span><i class="sw tick"></i>exakte Wahrscheinlichkeit</span><span><i class="sw line"></i>Normalverteilung mit μ und σ</span></div>
+      <div class="readouts" id="dice-stats"></div>
+      <p class="callout" id="dice-callout"></p>
+      <p class="text">Der Bezug zur Statistik: Ein Stichprobenmittelwert ist eine Summe von n unabhängigen Messwerten, geteilt durch n. Genau deshalb werden Mittelwerte normalverteilt, egal wie die einzelnen Werte verteilt sind. Unten passiert dasselbe mit Patientendaten statt Würfeln.</p>
+    </div>
+  </details>
 
   <section class="controls" aria-label="Gemeinsame Parameter">
     <div class="ctrl-grid">
@@ -61,7 +85,7 @@
   </section>
 
   <details class="acc" id="acc-1" open>
-    <summary><span class="acc-no">1</span><span class="acc-title">Zentraler Grenzwertsatz<span class="acc-teaser">Egal wie die Population aussieht: Mittelwerte werden normalverteilt.</span></span></summary>
+    <summary><span class="acc-no">2</span><span class="acc-title">Zentraler Grenzwertsatz<span class="acc-teaser">Egal wie die Population aussieht: Mittelwerte werden normalverteilt.</span></span></summary>
     <div class="acc-body">
       <p class="text">Oben die Population, in der Mitte die zuletzt gezogene Stichprobe mit ihrem Mittelwert, unten die Mittelwerte aller bisherigen Stichproben. Alle drei teilen dieselbe Achse. Wählen Sie eine schiefe oder zweigipflige Population und erhöhen Sie n.</p>
       <svg class="chart" id="clt" viewBox="0 0 920 470" role="img"></svg>
@@ -71,9 +95,9 @@
   </details>
 
   <details class="acc" id="acc-2" open>
-    <summary><span class="acc-no">2</span><span class="acc-title">Standardfehler<span class="acc-teaser">Die Streuung der Mittelwerte schrumpft mit der Wurzel aus n.</span></span></summary>
+    <summary><span class="acc-no">3</span><span class="acc-title">Standardfehler<span class="acc-teaser">Die Streuung der Mittelwerte schrumpft mit der Wurzel aus n.</span></span></summary>
     <div class="acc-body">
-      <p class="text">Der Standardfehler ist die Standardabweichung der Mittelwerte aus Schritt 1. Er lässt sich vorhersagen: SE = σ / √n. Die Kurve zeigt ihn für alle n, der Punkt die aktuelle Wahl, die Raute die Streuung Ihrer simulierten Mittelwerte. Viermal so viele Personen halbieren den Standardfehler.</p>
+      <p class="text">Der Standardfehler ist die Standardabweichung der Mittelwerte aus Schritt 2. Er lässt sich vorhersagen: SE = σ / √n. Die Kurve zeigt ihn für alle n, der Punkt die aktuelle Wahl, die Raute die Streuung Ihrer simulierten Mittelwerte. Viermal so viele Personen halbieren den Standardfehler.</p>
       <svg class="chart" id="se" viewBox="0 0 920 300" role="img"></svg>
       <div class="formula" id="se-formula"></div>
       <div class="readouts" id="se-stats"></div>
@@ -81,7 +105,7 @@
   </details>
 
   <details class="acc" id="acc-3" open>
-    <summary><span class="acc-no">3</span><span class="acc-title">Konfidenzintervall<span class="acc-teaser">Ein Intervall pro Stichprobe: Wie oft fängt es den wahren Mittelwert ein?</span></span></summary>
+    <summary><span class="acc-no">4</span><span class="acc-title">Konfidenzintervall<span class="acc-teaser">Ein Intervall pro Stichprobe: Wie oft fängt es den wahren Mittelwert ein?</span></span></summary>
     <div class="acc-body">
       <p class="text">Jede Stichprobe liefert ein Intervall x̄ ± t · s / √n. Da σ in der Praxis unbekannt ist, wird es durch s geschätzt, deshalb steht hier der t-Wert. Die senkrechte Linie ist der wahre Mittelwert μ. Gezeigt sind die letzten 60 Intervalle, verfehlte sind hervorgehoben.</p>
       <svg class="chart" id="ci" viewBox="0 0 920 430" role="img"></svg>
@@ -100,7 +124,8 @@
     <span class="footer-links"><a href="https://github.com/jnshsrs/stats-lab">Quellcode auf GitHub</a><span>Ohne Cookies und Tracking</span></span>
   </div>
 </footer>
-<script src="zgws.js?v=202611210748"></script>
-<script src="../assets/js/path.js?v=202611210748"></script>
+<script src="wuerfel.js?v=202611210804"></script>
+<script src="zgws.js?v=202611210804"></script>
+<script src="../assets/js/path.js?v=202611210804"></script>
 </body>
 </html>
