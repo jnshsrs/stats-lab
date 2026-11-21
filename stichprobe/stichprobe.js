@@ -188,3 +188,9 @@ $("reset").addEventListener("click", () => { reset(); render(); });
 
 draw(1);
 })();
+
+/* Anker auf ein geschlossenes Akkordeon öffnet es */
+(() => {
+  const openHash = () => { const el = location.hash && document.getElementById(location.hash.slice(1)); if (el && el.tagName === "DETAILS") { el.open = true; el.scrollIntoView(); } };
+  window.addEventListener("hashchange", openHash); openHash();
+})();

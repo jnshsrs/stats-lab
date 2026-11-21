@@ -67,3 +67,8 @@ input[type=range] { width: 100%; accent-color: var(--accent); margin: 6px 0 0; }
 .downloads li { display: flex; flex-direction: column; border: 1px solid var(--line); border-radius: 8px; padding: 10px 14px; }
 .downloads a { font-family: var(--font-mono); font-weight: 600; font-size: 15px; }
 .downloads span { color: var(--muted); font-size: 14.5px; }
+
+.dl-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px; margin-top: 6px; }
+.dl-bar .lbl { width: 100%; font-size: 13px; color: var(--muted); }
+.dl-bar .btn { text-decoration: none; }
+.dl-more { font-size: 14.5px; }
