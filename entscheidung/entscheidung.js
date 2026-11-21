@@ -186,6 +186,28 @@ function buildQuiz() {
   });
 }
 
+
+/* ---------- 2 Simulation: 100 Studien ---------- */
+const randn = () => { let u = 0, v = 0; while (!u) u = Math.random(); while (!v) v = Math.random(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); };
+let simRan = false;
+function clearSim(msg) { simRan = false; $("tiles").innerHTML = Array.from({ length: 100 }, () => '<div class="tile"></div>').join(""); $("sim-text").textContent = msg; }
+function simulate(eff) {
+  const n = S.n, r = design(S.alpha, S.d, n, S.sides), d = eff ? S.d : 0, res = [];
+  for (let k = 0; k < 100; k++) {
+    let s1 = 0, q1 = 0, s2 = 0, q2 = 0;
+    for (let i = 0; i < n; i++) { const a = randn(), b = d + randn(); s1 += a; q1 += a * a; s2 += b; q2 += b * b; }
+    const m1 = s1 / n, m2 = s2 / n, v1 = (q1 - n * m1 * m1) / (n - 1), v2 = (q2 - n * m2 * m2) / (n - 1);
+    const t = (m2 - m1) / Math.sqrt((v1 + v2) / n);
+    res.push(S.sides === "two" ? Math.abs(t) > r.tc : t > r.tc);
+  }
+  const sig = res.filter(Boolean).length;
+  $("tiles").innerHTML = res.map(s => `<div class="tile ${s ? (eff ? "sig" : "sig h0") : ""}"></div>`).join("");
+  $("sim-text").innerHTML = eff
+    ? `<b>${sig} von 100</b> Studien finden den Effekt. Theoretische Power: <b>${pct(r.power, 0)}</b>. Die übrigen ${100 - sig} sind β-Fehler: Die Therapie wirkt, die Studie hat es übersehen.`
+    : `<b>${sig} von 100</b> Studien sind signifikant, obwohl die Therapie nichts bewirkt. Jede davon ist ein α-Fehler. Erwartet: etwa ${apct(S.alpha)}.`;
+  simRan = true;
+}
+
 /* ---------- Verdrahtung ---------- */
 function render() {
   $("alpha-v").textContent = apct(S.alpha); $("d-v").textContent = fmt(S.d, 2); $("n-v").textContent = S.n;
@@ -195,7 +217,7 @@ function render() {
   drawDist(r); drawCurve(r); drawEcon();
 }
 let raf = 0;
-const schedule = () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(render); };
+const schedule = () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(render); if (simRan) clearSim("Design geändert. Simulieren Sie erneut."); };
 
 $("alpha").value = toSlider(S.alpha);
 $("alpha").addEventListener("input", e => { S.alpha = toAlpha(+e.target.value); schedule(); });
@@ -210,6 +232,9 @@ document.querySelectorAll("[data-p]").forEach(b => b.addEventListener("click", (
   document.querySelectorAll("[data-p]").forEach(x => x.setAttribute("aria-pressed", x === b)); schedule();
 }));
 
+$("sim-h1").addEventListener("click", () => simulate(true));
+$("sim-h0").addEventListener("click", () => simulate(false));
+clearSim("Noch keine Simulation. Wählen Sie oben das Design und drücken Sie einen der Knöpfe.");
 buildQuiz();
 render();
 })();

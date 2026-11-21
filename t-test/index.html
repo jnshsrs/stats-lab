@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Die t-Test-Kaskade · Stats Lab</title>
-<meta name="description" content="Interaktiv: vom Rohwert über Signal und Rauschen zur t-Verteilung, zum p-Wert, zu Alpha, Beta und Power.">
+<meta name="description" content="Der Einstichproben-t-Test Schritt für Schritt: Hypothesen, Signal und Rauschen, t-Verteilung, kritischer Wert und p-Wert, zweiseitig und einseitig.">
 <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="../assets/css/base.css?v=202611211213">
-<link rel="stylesheet" href="t-test.css?v=202611211213">
+<link rel="stylesheet" href="../assets/css/base.css?v=202611211226">
+<link rel="stylesheet" href="t-test.css?v=202611211226">
 </head>
 <body>
 <header class="site-header">
@@ -29,22 +29,31 @@
     <a class="back" href="../">← Alle Visualisierungen</a>
     <h1>Die t-Test-Kaskade</h1>
     <p class="byline">Dr. Jens Hüsers · Forschungsmethodik</p>
-    <p class="lede">Beispiel: Schmerzreduktion in mm auf der VAS nach sechs Wochen, Therapie gegen Kontrolle. Die Daten sind simuliert. Verschieben Sie Signal, Rauschen und Stichprobengröße und verfolgen Sie, wie sich jede Stufe des t-Tests verändert.</p>
+    <p class="lede">Erfüllt eine Klinik das Kriterium? Nach Knie-TEP sollen Patientinnen und Patienten am dritten Tag im Mittel 90° Flexion erreichen. Am einfachsten t-Test, dem Einstichproben-t-Test, verfolgen wir in vier Schritten, wie aus Messwerten eine Entscheidung wird. Mit dem Schalter oben wechseln Sie jederzeit zwischen zweiseitiger und einseitiger Hypothese.</p>
+    <p class="fict">Das Kriterium ist fiktiv und dient nur als Beispiel. Die Daten sind simuliert.</p>
   </section>
 
   <section class="controls" aria-label="Parameter">
+    <div class="ctrl ctrl-dir">
+      <span class="lbl" id="dir-lbl">Hypothese</span>
+      <div class="seg seg-dir" role="group" aria-labelledby="dir-lbl" id="dir">
+        <button type="button" data-dir="two" aria-pressed="true"><b>zweiseitig</b><small>H1: μ ≠ 90°</small></button>
+        <button type="button" data-dir="right" aria-pressed="false"><b>rechtsseitig</b><small>H1: μ &gt; 90°</small></button>
+        <button type="button" data-dir="left" aria-pressed="false"><b>linksseitig</b><small>H1: μ &lt; 90°</small></button>
+      </div>
+    </div>
     <div class="ctrl-grid">
       <div class="ctrl">
-        <div class="ctrl-head"><label for="delta"><span class="ink-therapie">Signal</span> Δ = μ<sub>T</sub> − μ<sub>K</sub></label><output id="delta-v" for="delta" class="num"></output></div>
-        <input id="delta" type="range" min="0" max="30" step="1" value="10">
+        <div class="ctrl-head"><label for="mu">μ · Populationswert (eigentlich unbekannt)</label><output id="mu-v" class="num"></output></div>
+        <input id="mu" type="range" min="80" max="100" step="1" value="94">
       </div>
       <div class="ctrl">
-        <div class="ctrl-head"><label for="sigma"><span class="ink-kontrolle">Rauschen</span> σ</label><output id="sigma-v" for="sigma" class="num"></output></div>
-        <input id="sigma" type="range" min="5" max="40" step="1" value="20">
+        <div class="ctrl-head"><label for="sigma">σ · Streuung in der Population</label><output id="sigma-v" class="num"></output></div>
+        <input id="sigma" type="range" min="4" max="20" step="1" value="10">
       </div>
       <div class="ctrl">
-        <div class="ctrl-head"><label for="n">n pro Gruppe</label><output id="n-v" for="n" class="num"></output></div>
-        <input id="n" type="range" min="3" max="100" step="1" value="20">
+        <div class="ctrl-head"><label for="n">n Patientinnen und Patienten</label><output id="n-v" class="num"></output></div>
+        <input id="n" type="range" min="4" max="60" step="1" value="20">
       </div>
       <div class="ctrl">
         <div class="ctrl-head"><span id="alpha-lbl" class="lbl">Signifikanzniveau α</span></div>
@@ -55,84 +64,65 @@
         </div>
       </div>
     </div>
-    <p class="pop-note">Δ und σ sind Populationswerte (eigentlich unbekannt). Die Grafiken zeigen eine Stichprobe daraus mit den empirischen Werten x̄ und s.</p>
     <div class="ctrl-row">
       <button class="btn" type="button" id="resample">Neue Stichprobe ziehen</button>
       <span class="presets-lbl">Szenarien:</span>
-      <button class="chip" type="button" data-preset="h0">H0 ist wahr</button>
-      <button class="chip" type="button" data-preset="pilot">Pilotstudie, n = 8</button>
-      <button class="chip" type="button" data-preset="big">Große Studie, n = 100</button>
-      <button class="chip" type="button" data-preset="clean">Präzise Messung, σ = 8</button>
+      <button class="chip" type="button" data-preset="h0">H0 stimmt: μ = 90°</button>
+      <button class="chip" type="button" data-preset="edge">Grenzfall</button>
+      <button class="chip" type="button" data-preset="bad">Klinik verfehlt: μ = 86°</button>
     </div>
   </section>
 
   <section class="step" aria-labelledby="s1">
-    <span class="eyebrow">Schritt 1 von 5 · Rohdaten</span>
-    <h2 id="s1">Zwei Gruppen, zwei Mittelwerte, viel Streuung</h2>
-    <p class="text">Jeder Punkt ist eine Person. Die Kurven sind Normalverteilungen mit Mittelwert und Standardabweichung der Stichprobe, die gestrichelten Linien die Gruppenmittelwerte, die Balken darunter ± eine Standardabweichung.</p>
-    <div class="chart-tools">
-      <div class="seg seg-small" role="group" aria-label="Darstellung der Rohdaten">
-        <button type="button" data-view="dots" aria-pressed="true">Punkte</button>
-        <button type="button" data-view="box" aria-pressed="false">Boxplot</button>
-        <button type="button" data-view="both" aria-pressed="false">Beides</button>
-      </div>
-      <div class="legend"><span><i class="sw" style="background:var(--kontrolle)"></i>Kontrolle</span><span><i class="sw" style="background:var(--therapie)"></i>Therapie</span></div>
-    </div>
-    <svg class="chart" id="raw" viewBox="0 0 920 330" role="img"></svg>
+    <span class="eyebrow">Schritt 1 von 4 · Rohdaten</span>
+    <h2 id="s1">Eine Stichprobe, ein Sollwert</h2>
+    <p class="text">Jeder Punkt ist eine Person. Die gestrichelte Linie ist der Sollwert μ₀ = 90°. Darunter der Mittelwert der Stichprobe mit ± einer Standardabweichung. Die Regler stellen die Population ein, die man in echten Studien nicht kennt. Sichtbar ist nur die Stichprobe.</p>
+    <svg class="chart" id="raw" viewBox="0 0 920 250" role="img"></svg>
     <div class="readouts" id="raw-stats"></div>
   </section>
 
   <section class="step" aria-labelledby="s2">
-    <span class="eyebrow">Schritt 2 von 5 · Verdichten</span>
+    <span class="eyebrow">Schritt 2 von 4 · Hypothesen und Prüfgröße</span>
     <h2 id="s2">Signal geteilt durch Rauschen ergibt t</h2>
-    <p class="text">Das Signal ist die Mittelwertdifferenz. Das Rauschen ist ihr Standardfehler: die gepoolte Streuung, verkleinert durch die Wurzel aus n. t zählt, wie oft der Standardfehler in die Differenz passt. Darum macht ein größeres n denselben Unterschied „lauter“.</p>
+    <p class="text">Die Hypothesen werden vor der Datenerhebung festgelegt. H0 enthält immer das Gleichheitszeichen. Welche Richtung H1 hat, hängt davon ab, wer was zeigen will.</p>
+    <div class="hyp" id="hyp"></div>
+    <p class="text">Das Signal ist der Abstand des Mittelwerts zum Sollwert. Das Rauschen ist der Standardfehler: die Streuung, verkleinert durch die Wurzel aus n. t zählt, wie oft der Standardfehler in das Signal passt. Die Richtung der Hypothese spielt für t noch keine Rolle.</p>
     <div class="formula" id="formula"></div>
     <svg class="chart" id="ruler" viewBox="0 0 920 124" role="img"></svg>
   </section>
 
   <section class="step" aria-labelledby="s3">
-    <span class="eyebrow">Schritt 3 von 5 · Einordnen</span>
+    <span class="eyebrow">Schritt 3 von 4 · Einordnen</span>
     <h2 id="s3">Wo liegt dieses t, wenn H0 stimmt?</h2>
-    <p class="text">Die t-Verteilung zeigt, welche t-Werte allein durch Zufall entstehen, wenn die Therapie nichts bewirkt. Ihre Form hängt nur von den Freiheitsgraden ab. Der p-Wert ist die dunkle Fläche jenseits des beobachteten t, auf beiden Seiten.</p>
+    <p class="text">Die t-Verteilung zeigt, welche t-Werte allein durch Zufall entstehen, wenn die Klinik genau 90° erreicht. Der Ablehnungsbereich enthält α der Fläche: zweiseitig je α/2 an beiden Rändern, einseitig das ganze α an einem Rand. Der p-Wert ist die Fläche ab dem beobachteten t in Richtung von H1.</p>
     <div class="chart-tools">
       <label class="check"><input type="checkbox" id="shownormal"> Standardnormalverteilung zum Vergleich</label>
       <div class="legend"><span><i class="sw" style="background:var(--alpha-fill)"></i>Ablehnungsbereich α</span><span><i class="sw" style="background:var(--pval)"></i>p-Wert</span></div>
     </div>
     <svg class="chart" id="tdist" viewBox="0 0 920 280" role="img"></svg>
     <div class="readouts" id="t-stats"></div>
-    <details class="calc" id="calc">
-      <summary>Nachgerechnet: kritischer Wert und p-Wert aus der Verteilungsfunktion</summary>
-      <div class="calc-body">
-        <p class="text">Die Verteilungsfunktion F(t) gibt an, welcher Anteil der t-Verteilung links von t liegt. Mit ihr lassen sich beide Grenzen und der p-Wert direkt ablesen: für den kritischen Wert von der y-Achse zur Kurve und hinunter, für den p-Wert vom beobachteten t hinauf und hinüber.</p>
-        <div class="chart-tools"><div class="seg seg-small" role="group" aria-label="Hypothese" id="calcside"><button type="button" data-cs="two" aria-pressed="true">ungerichtet: μT ≠ μK</button><button type="button" data-cs="one" aria-pressed="false">gerichtet: μT &gt; μK</button></div><span class="presets-lbl" id="calcside-note"></span></div>
-        <svg class="chart" id="tcdf" viewBox="0 0 920 330" role="img"></svg>
-        <div class="legend"><span><i class="sw" style="background:var(--highlight);outline:1px solid var(--line)"></i>Annahmebereich (1 − α)</span><span><i class="sw" style="background:var(--alpha-fill)"></i>Ablehnungsbereich (α, ungerichtet je α / 2)</span><span><i class="sw" style="background:var(--pval)"></i>beobachtetes t und p-Wert</span></div>
-        <ol class="calc-steps" id="calc-steps"></ol>
-      </div>
-    </details>
+    <h3 class="sub-h">Dasselbe t, drei Hypothesen</h3>
+    <div class="table-wrap"><table class="dir-tab" id="dir-tab"></table></div>
+    <p class="callout" id="dir-callout"></p>
   </section>
 
-  <section class="step" aria-labelledby="s4">
-    <span class="eyebrow">Schritt 4 von 5 · Vorausdenken</span>
-    <h2 id="s4">Alpha, Beta und Power</h2>
-    <p class="text">Hell die Verteilung von t, wenn H0 stimmt. Dunkel die Verteilung, wenn der wahre Effekt Δ existiert (nichtzentrale t-Verteilung). Die Schwellen kommen aus α. Dieser Schritt nutzt die wahren Parameter, nicht die Stichprobe: Er beschreibt das Studiendesign, bevor die erste Person gemessen wird.</p>
-    <div class="chart-tools">
-      <div class="legend"><span><i class="sw" style="background:var(--alpha-fill)"></i>α: Fehlalarm, falls H0 stimmt</span><span><i class="sw" style="background:var(--beta-fill)"></i>β: Effekt übersehen</span><span><i class="sw" style="background:var(--power-fill);opacity:.7"></i>Power: Effekt entdeckt</span></div>
-    </div>
-    <svg class="chart" id="power" viewBox="0 0 920 280" role="img"></svg>
-    <div class="readouts" id="p-stats"></div>
+  <section class="step" aria-labelledby="s4" id="calc">
+    <span class="eyebrow">Schritt 4 von 4 · Nachrechnen</span>
+    <h2 id="s4">Kritischer Wert und p-Wert aus der Verteilungsfunktion</h2>
+    <p class="text">Die Verteilungsfunktion F(t) gibt an, welcher Anteil der t-Verteilung links von t liegt. Mit ihr liest man beide Größen direkt ab: den kritischen Wert rückwärts, von der y-Achse zur Kurve und hinunter, den p-Wert vorwärts, vom beobachteten t hinauf und hinüber. So steht es auch in jeder t-Tabelle.</p>
+    <svg class="chart" id="tcdf" viewBox="0 0 920 330" role="img"></svg>
+    <div class="legend"><span><i class="sw" style="background:var(--highlight);outline:1px solid var(--line)"></i>Annahmebereich (1 − α)</span><span><i class="sw" style="background:var(--alpha-fill)"></i>Ablehnungsbereich</span><span><i class="sw" style="background:var(--pval)"></i>beobachtetes t</span></div>
+    <ol class="calc-steps" id="calc-steps"></ol>
   </section>
 
-  <section class="step" aria-labelledby="s5">
-    <span class="eyebrow">Schritt 5 von 5 · Wiederholen</span>
-    <h2 id="s5">100 Studien mit demselben Design</h2>
-    <p class="text">Eine einzelne Studie ist ein Zufallszug. Simulieren Sie 100 Studien mit den aktuellen Parametern: Der Anteil signifikanter Ergebnisse nähert sich der Power. Bei Δ = 0 nähert er sich α.</p>
-    <div class="sim-row">
-      <button class="btn" type="button" id="simulate">100 Studien simulieren</button>
-      <p class="sim-text" id="sim-text" aria-live="polite"></p>
+  <section class="step next-block" aria-labelledby="s5">
+    <span class="eyebrow">Wie geht es weiter?</span>
+    <h2 id="s5">Dieselbe Logik, andere Fragen</h2>
+    <div class="next-grid">
+      <a class="next-card" href="../t-test-varianten/"><b>Welcher t-Test?</b><span>Gepaart und ungepaart: Was sich ändert, ist nur der Standardfehler. Bizeps vorher und nachher, Rhythmus gegen Krankengymnastik.</span></a>
+      <a class="next-card" href="../entscheidung/"><b>Entscheidungstheorie</b><span>α, β und Power: Wie oft findet eine Studie einen echten Effekt? Mit 100 simulierten Studien.</span></a>
+      <a class="next-card" href="../fallzahl/"><b>Fallzahl und Power</b><span>Wie viele Personen braucht eine Studie, um einen Effekt zuverlässig zu finden?</span></a>
     </div>
-    <div class="tiles" id="tiles" aria-hidden="true"></div>
-    <div class="legend"><span><i class="sw" style="background:var(--therapie)"></i>signifikant, Effekt existiert</span><span><i class="sw" style="background:var(--kontrolle)"></i>signifikant, obwohl Δ = 0</span><span><i class="sw sw-empty"></i>nicht signifikant</span></div>
   </section>
 </main>
 
@@ -142,7 +132,7 @@
     <span class="footer-links"><a href="https://github.com/jnshsrs/stats-lab">Quellcode auf GitHub</a><span>Ohne Cookies und Tracking</span></span>
   </div>
 </footer>
-<script src="t-test.js?v=202611211213"></script>
-<script src="../assets/js/path.js?v=202611211213"></script>
+<script src="t-test.js?v=202611211226"></script>
+<script src="../assets/js/path.js?v=202611211226"></script>
 </body>
 </html>

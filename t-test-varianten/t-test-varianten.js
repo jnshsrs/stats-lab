@@ -1,5 +1,5 @@
 /* Welcher t-Test? · Stats Lab
-   Einstichproben (Knie-TEP, fiktives Kriterium), gepaart (Bizeps), ungepaart (Parkinson). Alle Daten simuliert, reproduzierbar über Startwerte. */
+   Gepaart (Bizeps) und ungepaart (Parkinson), jeweils zweiseitig oder einseitig. Der Einstichproben-Test steht ausführlich in der Kaskade. Alle Daten simuliert, reproduzierbar über Startwerte. */
 (() => {
 "use strict";
 const LG = [676.5203681218851, -1259.1392167224028, 771.32342877765313, -176.61502916214059, 12.507343278686905, -0.13857109526572012, 9.9843695780195716e-6, 1.5056327351493116e-7];
@@ -70,54 +70,30 @@ function dots(vals, lo, hi, L, R, y0, step, col, res) {
   return s;
 }
 
-/* ================= 1 Einstichproben ================= */
-const S1 = { m: 94, s: 10, n: 20, view: "klinik", seed: 11, ref: 90 };
-// einseitige p-Werte (Klinik, Prüfstelle) für einen Startwert
-function p1For(seed) {
-  const x = zs(seed, 60).slice(0, S1.n).map(v => Math.round(S1.m + S1.s * v)), n = x.length, m = mean(x), se = sd(x, m) / Math.sqrt(n), F = tcdf((m - S1.ref) / se, n - 1);
-  return [1 - F, F, m];
+/* Richtung: kritische Werte, p-Wert, Ablehnung */
+function testFor(dir, t, df, a) {
+  if (dir === "two") { const c = tinv(1 - a / 2, df); return { tc: c, p: 2 * (1 - tcdf(Math.abs(t), df)), rej: Math.abs(t) > c, ct: "±" + fmt(c, 3), pf: "2 · (1 − F(|t|))", rule: `|t| > ${fmt(c, 2)}` }; }
+  if (dir === "right") { const c = tinv(1 - a, df); return { tc: c, p: 1 - tcdf(t, df), rej: t > c, ct: fmt(c, 3), pf: "1 − F(t)", rule: `t > ${fmt(c, 2)}` }; }
+  const c = tinv(a, df); return { tc: c, p: tcdf(t, df), rej: t < c, ct: fmt(c, 3), pf: "F(t)", rule: `t < ${fmt(c, 2)}` };
 }
-function findSeed(ok) { for (let s = 1; s < 5000; s++) if (ok(p1For(s))) return s; return 11; }
-function render1() {
-  $("m1-v").textContent = S1.m + "°"; $("s1-v").textContent = S1.s + "°"; $("n1-v").textContent = S1.n;
-  const z = zs(S1.seed, 60), x = z.slice(0, S1.n).map(v => Math.round(S1.m + S1.s * v));
-  const n = x.length, m = mean(x), s = sd(x, m), se = s / Math.sqrt(n), df = n - 1, t = (m - S1.ref) / se, a = G.alpha;
-  const kl = S1.view === "klinik", tc = kl ? tinv(1 - a, df) : -tinv(1 - a, df), F = tcdf(t, df), p = kl ? 1 - F : F, pOther = kl ? F : 1 - F, rej = kl ? t > tc : t < tc;
-  $("hyp1").innerHTML = kl
-    ? `<div><span class="k">H0</span><div class="v">μ ≤ 90°</div><span class="s">Die Klinik erfüllt das Kriterium nicht.</span></div><div><span class="k">H1, soll gezeigt werden</span><div class="v">μ > 90°</div><span class="s">Die Klinik erfüllt das Kriterium.</span></div>`
-    : `<div><span class="k">H0</span><div class="v">μ ≥ 90°</div><span class="s">Die Klinik erfüllt das Kriterium.</span></div><div><span class="k">H1, soll gezeigt werden</span><div class="v">μ < 90°</div><span class="s">Die Klinik verfehlt das Kriterium.</span></div>`;
-  // Daten
-  const svg = $("d1"), L = 20, R = 500, lo = 50, hi = 130, sx = v => L + (v - lo) / (hi - lo) * (R - L), y0 = 150;
-  let g = "";
-  for (let v = 50; v <= 130; v += 10) g += `<line x1="${sx(v)}" x2="${sx(v)}" y1="20" y2="${y0 + 8}" stroke="var(--grid)"/><text x="${sx(v)}" y="${y0 + 26}" text-anchor="middle">${v}</text>`;
-  g += `<line x1="${sx(90)}" x2="${sx(90)}" y1="14" y2="${y0 + 8}" stroke="var(--alpha-ink)" stroke-width="2" stroke-dasharray="6 4"/><text x="${sx(90) - 6}" y="16" text-anchor="end" style="fill:var(--alpha-ink)">Sollwert 90°</text>`;
-  g += dots(x, lo, hi, L, R, y0, 9, "var(--pal-4)", 1);
-  g += `<line x1="${sx(m - 1.96 * se)}" x2="${sx(m + 1.96 * se)}" y1="${y0 + 50}" y2="${y0 + 50}" stroke="var(--therapie)" stroke-width="3"/><circle cx="${sx(m)}" cy="${y0 + 50}" r="6" fill="var(--therapie)"/><text class="strong" x="${sx(m + 1.96 * se) + 8}" y="${y0 + 54}">x̄ = ${fmt(m, 1)}° (± 1,96 SE)</text>`;
-  svg.setAttribute("viewBox", `0 0 520 ${y0 + 64}`); svg.innerHTML = g;
-  tMini($("t1"), df, t, kl ? "right" : "left", tc);
-  $("c1").innerHTML =
-    li("Kennwerte.", "", `x̄ = ${fmt(m, 1)}° · s = ${fmt(s, 1)}° · n = ${n}`) +
-    li("Standardfehler.", "Wie stark schwankt der Mittelwert von Stichprobe zu Stichprobe?", `SE = s / √n = ${fmt(s, 1)} / √${n} = ${fmt(se, 2)}°`) +
-    li("Prüfgröße.", "Abstand des Mittelwerts zum Sollwert in Standardfehlern.", `t = (x̄ − 90) / SE = (${fmt(m, 1)} − 90) / ${fmt(se, 2)} = ${fmt(t, 2)} · df = n − 1 = ${df}`) +
-    li("Kritischer Wert, gerichtet.", `Das ganze α liegt auf der ${kl ? "rechten" : "linken"} Seite.`, `t krit = ${kl ? "" : "−"}t(${fmt(1 - a, 2)}; ${df}) = ${fmt(tc, 3)} · Ablehnung, wenn t ${kl ? ">" : "<"} ${fmt(tc, 2)}`) +
-    li("p-Wert.", `Nur die Fläche ${kl ? "rechts" : "links"} vom beobachteten t zählt.`, `p = ${kl ? "1 − F(t)" : "F(t)"} ${pTxt(p)}`);
-  const other = kl ? "Aus Sicht der Prüfstelle (H1: μ < 90°)" : "Aus Sicht der Klinik (H1: μ > 90°)";
-  $("v1").innerHTML = (rej
-    ? (kl ? "H0 verworfen: Die Klinik erfüllt das Kriterium nachweislich." : "H0 verworfen: Die Klinik verfehlt das Kriterium nachweislich.")
-    : (kl ? "H0 beibehalten: Nicht belegt, dass die Klinik das Kriterium erfüllt. Das heißt aber nicht, dass sie es verfehlt." : "H0 beibehalten: Nicht belegt, dass die Klinik das Kriterium verfehlt. Das heißt aber nicht, dass sie es erfüllt.")) +
-    `<small>${other} wäre p ${pTxt(pOther)}. ${!rej && pOther >= a ? "Hier ist also keine der beiden Behauptungen belegt: Für eine Entscheidung reichen die Daten nicht." : ""}</small>`;
-}
+const DN = { two: "zweiseitig", right: "rechtsseitig", left: "linksseitig" };
+const kasLi = (dir, T, t) => li(`Einordnen, ${DN[dir]}.`, `Kritischer Wert und p-Wert genau wie beim Einstichproben-Test, <a href="../t-test/#calc">ausführlich in der Kaskade</a>.`, `t krit = ${T.ct} · p = ${T.pf} ${pTxt(T.p)} · Ablehnung, wenn ${T.rule}`);
+const ciTxt = (est, se, df, unit, d) => { const c = tinv(1 - G.alpha / 2, df); return `${fmt((1 - G.alpha) * 100, 0)}-%-KI ${fmt(est - c * se, d)} bis ${fmt(est + c * se, d)} ${unit}`; };
+const segBind = (id, obj, f) => $(id).addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; obj.dir = b.dataset.d; $(id).querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", x === b)); f(); });
 
-/* ================= 2 Gepaart ================= */
-const S2 = { m: 0.6, s: 0.4, n: 10, seed: 21 };
+/* ================= 1 Gepaart ================= */
+const S2 = { m: 0.6, s: 0.4, n: 10, seed: 21, dir: "two" };
 function render2() {
   $("m2-v").textContent = fmt(S2.m, 1) + " cm"; $("s2-v").textContent = fmt(S2.s, 2) + " cm"; $("n2-v").textContent = S2.n;
   const za = zs(S2.seed, 30), zb = zs(S2.seed + 1, 30), zc = zs(S2.seed + 2, 30), r1 = v => Math.round(v * 10) / 10;
   const pre = [], post = [];
   for (let i = 0; i < S2.n; i++) { const base = 31 + 3 * za[i]; pre.push(r1(base + S2.s * zb[i])); post.push(r1(base + S2.m + S2.s * zc[i])); }
   const n = S2.n, d = post.map((v, i) => r1(v - pre[i])), md = mean(d), sdd = sd(d, md), se = sdd / Math.sqrt(n), df = n - 1, t = md / se, a = G.alpha;
-  const tc = tinv(1 - a / 2, df), p = 2 * (1 - tcdf(Math.abs(t), df)), rej = Math.abs(t) > tc;
-  $("hyp2").innerHTML = `<div><span class="k">H0</span><div class="v">μ<sub>d</sub> = 0</div><span class="s">Im Mittel ändert sich der Umfang nicht.</span></div><div><span class="k">H1</span><div class="v">μ<sub>d</sub> ≠ 0</div><span class="s">Der Umfang ändert sich durch das Training.</span></div>`;
+  const T2 = testFor(S2.dir, t, df, a), p = T2.p, rej = T2.rej;
+  const H2 = { two: ["μ<sub>d</sub> = 0", "Im Mittel ändert sich der Umfang nicht.", "μ<sub>d</sub> ≠ 0", "Der Umfang ändert sich, in welche Richtung auch immer."],
+    right: ["μ<sub>d</sub> ≤ 0", "Der Umfang nimmt nicht zu.", "μ<sub>d</sub> > 0", "Der Umfang nimmt durch das Training zu (Pump)."],
+    left: ["μ<sub>d</sub> ≥ 0", "Der Umfang nimmt nicht ab.", "μ<sub>d</sub> < 0", "Der Umfang nimmt ab."] }[S2.dir];
+  $("hyp2").innerHTML = `<div><span class="k">H0</span><div class="v">${H2[0]}</div><span class="s">${H2[1]}</span></div><div><span class="k">H1</span><div class="v">${H2[2]}</div><span class="s">${H2[3]}</span></div>`;
   // Linien je Person
   const all = pre.concat(post), lo = Math.floor(Math.min(...all) - 1), hi = Math.ceil(Math.max(...all) + 1), T = 16, B = 210, y = v => B - (v - lo) / (hi - lo) * (B - T), xa = 150, xb = 370;
   let g = "";
@@ -138,8 +114,10 @@ function render2() {
     li("Kennwerte der Differenzen.", "", `d̄ = ${fmt(md, 2)} cm · s<sub>d</sub> = ${fmt(sdd, 2)} cm · n = ${n}`) +
     li("Standardfehler.", "Wie beim Einstichproben-Test, nur mit den Differenzen.", `SE = s<sub>d</sub> / √n = ${fmt(sdd, 2)} / √${n} = ${fmt(se, 3)} cm`) +
     li("Prüfgröße.", "Einstichproben-t-Test der Differenzen gegen 0.", `t = (d̄ − 0) / SE = ${fmt(md, 2)} / ${fmt(se, 3)} = ${fmt(t, 2)} · df = n − 1 = ${df}`) +
-    li("Kritischer Wert und p-Wert, ungerichtet.", "", `t krit = ±${fmt(tc, 3)} · p = 2 · (1 − F(|t|)) ${pTxt(p)}`);
-  $("v2").innerHTML = (rej ? "H0 verworfen: Der Armumfang hat sich verändert." : "H0 beibehalten: Eine Veränderung ist nicht belegt.") + `<small>Mittlere Zunahme ${fmt(md, 2)} cm, 95-%-KI ${fmt(md - tc * se, 2)} bis ${fmt(md + tc * se, 2)} cm.</small>`;
+    kasLi(S2.dir, T2, t);
+  tMini($("t2"), df, t, S2.dir, T2.tc);
+  const v2 = { two: ["H0 verworfen: Der Armumfang hat sich verändert.", "H0 beibehalten: Eine Veränderung ist nicht belegt."], right: ["H0 verworfen: Der Armumfang hat zugenommen.", "H0 beibehalten: Eine Zunahme ist nicht belegt."], left: ["H0 verworfen: Der Armumfang hat abgenommen.", "H0 beibehalten: Eine Abnahme ist nicht belegt."] }[S2.dir];
+  $("v2").innerHTML = (rej ? v2[0] : v2[1]) + `<small>Mittlere Änderung ${fmt(md, 2)} cm, ${ciTxt(md, se, df, "cm", 2)}.</small>`;
   // Kontrast: ungepaart
   const m1 = mean(pre), m2 = mean(post), s1 = sd(pre, m1), s2 = sd(post, m2), dfu = 2 * n - 2, sp = Math.sqrt(((n - 1) * s1 * s1 + (n - 1) * s2 * s2) / dfu), seu = sp * Math.sqrt(2 / n), tu = (m2 - m1) / seu, pu = 2 * (1 - tcdf(Math.abs(tu), dfu));
   $("cmp2").innerHTML = `<thead><tr><th></th><th>gepaart</th><th>ungepaart (falsch)</th></tr></thead><tbody>` +
@@ -150,17 +128,18 @@ function render2() {
   $("cmpn2").innerHTML = `Die Differenz ist identisch, aber der Standardfehler ist ungepaart rund ${fmt(seu / se, 1)}-mal so groß. Der Grund: Die Arme sind unterschiedlich dick (SD vorher ${fmt(s1, 1)} cm). Ungepaart steckt dieser Unterschied zwischen den Personen im Rauschen, gepaart fällt er durch die Differenzbildung heraus. Ungepaart wäre hier ohnehin falsch, weil die Messungen nicht unabhängig sind.`;
 }
 
-/* ================= 3 Ungepaart ================= */
-const S3 = { m: 0.06, s: 0.1, n: 25, seed: 31 };
+/* ================= 2 Ungepaart ================= */
+const S3 = { m: 0.06, s: 0.1, n: 25, seed: 31, dir: "two" };
 function render3() {
   $("m3-v").textContent = fmt(S3.m, 2) + " m"; $("s3-v").textContent = fmt(S3.s, 2) + " m"; $("n3-v").textContent = S3.n;
   const za = zs(S3.seed, 60), zb = zs(S3.seed + 1, 60), r2 = v => Math.round(v * 100) / 100;
   const kg = za.slice(0, S3.n).map(v => r2(0.45 + S3.s * v)), ra = zb.slice(0, S3.n).map(v => r2(0.45 + S3.m + S3.s * v));
   const n1 = ra.length, n2 = kg.length, m1 = mean(ra), m2 = mean(kg), s1 = sd(ra, m1), s2 = sd(kg, m2), df = n1 + n2 - 2;
   const sp = Math.sqrt(((n1 - 1) * s1 * s1 + (n2 - 1) * s2 * s2) / df), se = sp * Math.sqrt(1 / n1 + 1 / n2), t = (m1 - m2) / se, a = G.alpha;
-  const tc = tinv(1 - a / 2, df), p = 2 * (1 - tcdf(Math.abs(t), df)), rej = Math.abs(t) > tc;
+  const T3 = testFor(S3.dir, t, df, a), p = T3.p, rej = T3.rej;
   const sew = Math.sqrt(s1 * s1 / n1 + s2 * s2 / n2), tw = (m1 - m2) / sew, dfw = (s1 * s1 / n1 + s2 * s2 / n2) ** 2 / ((s1 * s1 / n1) ** 2 / (n1 - 1) + (s2 * s2 / n2) ** 2 / (n2 - 1)), pw = 2 * (1 - tcdf(Math.abs(tw), dfw));
-  $("hyp3").innerHTML = `<div><span class="k">H0</span><div class="v">μ<sub>Rhythmus</sub> = μ<sub>KG</sub></div><span class="s">Beide Therapien führen im Mittel zur gleichen Schrittlänge.</span></div><div><span class="k">H1</span><div class="v">μ<sub>Rhythmus</sub> ≠ μ<sub>KG</sub></div><span class="s">Die Schrittlänge unterscheidet sich.</span></div>`;
+  const H3 = { two: ["=", "Beide Therapien führen im Mittel zur gleichen Schrittlänge.", "≠", "Die Schrittlänge unterscheidet sich."], right: ["≤", "Rhythmus ist nicht besser als KG.", ">", "Rhythmus führt zu längeren Schritten."], left: ["≥", "Rhythmus ist nicht schlechter als KG.", "<", "Rhythmus führt zu kürzeren Schritten."] }[S3.dir];
+  $("hyp3").innerHTML = `<div><span class="k">H0</span><div class="v">μ<sub>Rhythmus</sub> ${H3[0]} μ<sub>KG</sub></div><span class="s">${H3[1]}</span></div><div><span class="k">H1</span><div class="v">μ<sub>Rhythmus</sub> ${H3[2]} μ<sub>KG</sub></div><span class="s">${H3[3]}</span></div>`;
   const all = kg.concat(ra), lo = Math.min(0.1, Math.floor(Math.min(...all) * 10) / 10), hi = Math.max(0.8, Math.ceil(Math.max(...all) * 10) / 10), L = 90, R = 500, sx = v => L + (v - lo) / (hi - lo) * (R - L);
   let g = "";
   for (let v = Math.round(lo * 10); v <= Math.round(hi * 10); v++) g += `<line x1="${sx(v / 10)}" x2="${sx(v / 10)}" y1="10" y2="180" stroke="var(--grid)"/><text x="${sx(v / 10)}" y="198" text-anchor="middle">${fmt(v / 10, 1)}</text>`;
@@ -170,29 +149,25 @@ function render3() {
   });
   g += `<text x="${R}" y="214" text-anchor="end">Linie: Mittelwert · Balken: ± 1 SD</text>`;
   $("d3").innerHTML = g;
-  tMini($("t3"), df, t, "two", tc);
+  tMini($("t3"), df, t, S3.dir, T3.tc);
   $("c3").innerHTML =
     li("Kennwerte je Gruppe.", "", `Rhythmus: x̄₁ = ${fmt(m1, 3)} m, s₁ = ${fmt(s1, 3)}, n₁ = ${n1} · KG: x̄₂ = ${fmt(m2, 3)} m, s₂ = ${fmt(s2, 3)}, n₂ = ${n2}`) +
     li("Gepoolte Streuung.", "Beide Gruppen schätzen dieselbe Streuung, deshalb wird gemittelt, gewichtet mit den Freiheitsgraden.", `s<sub>p</sub> = √[((n₁ − 1)s₁² + (n₂ − 1)s₂²) / (n₁ + n₂ − 2)] = ${fmt(sp, 3)} m`) +
     li("Standardfehler der Differenz.", "Zwei Mittelwerte schwanken, deshalb zwei Summanden.", `SE = s<sub>p</sub> · √(1/n₁ + 1/n₂) = ${fmt(sp, 3)} · √(1/${n1} + 1/${n2}) = ${fmt(se, 4)} m`) +
     li("Prüfgröße.", "", `t = (x̄₁ − x̄₂) / SE = ${fmt(m1 - m2, 3)} / ${fmt(se, 4)} = ${fmt(t, 2)} · df = n₁ + n₂ − 2 = ${df}`) +
-    li("Kritischer Wert und p-Wert, ungerichtet.", "", `t krit = ±${fmt(tc, 3)} · p = 2 · (1 − F(|t|)) ${pTxt(p)}`);
-  $("v3").innerHTML = (rej ? "H0 verworfen: Die Schrittlänge unterscheidet sich zwischen den Gruppen." : "H0 beibehalten: Ein Unterschied ist nicht belegt.") + `<small>Differenz ${fmt(m1 - m2, 3)} m, 95-%-KI ${fmt(m1 - m2 - tc * se, 3)} bis ${fmt(m1 - m2 + tc * se, 3)} m.</small>`;
-  $("welch3").innerHTML = `Welch-Variante (ohne Annahme gleicher Streuungen): SE = √(s₁²/n₁ + s₂²/n₂) = ${fmt(sew, 4)} m, t = ${fmt(tw, 2)}, df = ${fmt(dfw, 1)}, p ${pTxt(pw)}. Bei gleich großen Gruppen und ähnlichen Streuungen liegen beide Varianten nah beieinander.`;
+    kasLi(S3.dir, T3, t);
+  const v3 = { two: ["H0 verworfen: Die Schrittlänge unterscheidet sich zwischen den Gruppen.", "H0 beibehalten: Ein Unterschied ist nicht belegt."], right: ["H0 verworfen: Mit Rhythmus sind die Schritte länger.", "H0 beibehalten: Längere Schritte mit Rhythmus sind nicht belegt."], left: ["H0 verworfen: Mit Rhythmus sind die Schritte kürzer.", "H0 beibehalten: Kürzere Schritte mit Rhythmus sind nicht belegt."] }[S3.dir];
+  $("v3").innerHTML = (rej ? v3[0] : v3[1]) + `<small>Differenz ${fmt(m1 - m2, 3)} m, ${ciTxt(m1 - m2, se, df, "m", 3)}.</small>`;
+  $("welch3").innerHTML = `Welch-Variante (ohne Annahme gleicher Streuungen), ${DN[S3.dir]}: SE = √(s₁²/n₁ + s₂²/n₂) = ${fmt(sew, 4)} m, t = ${fmt(tw, 2)}, df = ${fmt(dfw, 1)}, p ${pTxt(testFor(S3.dir, tw, dfw, a).p)}. Bei gleich großen Gruppen und ähnlichen Streuungen liegen beide Varianten nah beieinander.`;
 }
 
-function renderAll() { render1(); render2(); render3(); }
+function renderAll() { render2(); render3(); }
 const bind = (id, obj, key, f) => $(id).addEventListener("input", e => { obj[key] = +e.target.value; f(); });
-bind("m1", S1, "m", render1); bind("s1", S1, "s", render1); bind("n1", S1, "n", render1);
 bind("m2", S2, "m", render2); bind("s2", S2, "s", render2); bind("n2", S2, "n", render2);
 bind("m3", S3, "m", render3); bind("s3", S3, "s", render3); bind("n3", S3, "n", render3);
-$("new1").onclick = () => { S1.seed = newSeed(); render1(); };
 $("new2").onclick = () => { S2.seed = newSeed(); render2(); };
 $("new3").onclick = () => { S3.seed = newSeed(); render3(); };
-$("edge1").onclick = () => { S1.m = 91; S1.n = 12; S1.s = 10; $("m1").value = 91; $("n1").value = 12; $("s1").value = 10;
-  S1.seed = findSeed(([pk, pp, m]) => pk >= G.alpha && pp >= G.alpha && m > 90 && m < 92.5); render1(); };
-$("view1").addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; S1.view = b.dataset.v; $("view1").querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", x === b)); render1(); });
+segBind("dir2", S2, render2); segBind("dir3", S3, render3);
 $("alpha").addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; G.alpha = +b.dataset.a; $("alpha").querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", x === b)); renderAll(); });
-S1.seed = findSeed(([pk, , m]) => pk < 0.03 && Math.abs(m - S1.m) < 1.5);
 renderAll();
 })();

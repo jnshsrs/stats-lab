@@ -84,3 +84,16 @@ input[type=range] { width: 100%; accent-color: var(--accent); margin: 4px 0 0; }
 .answers button.right { border-color: var(--therapie); background: var(--highlight); font-weight: 600; }
 .answers button.wrong { border-color: var(--alpha-fill); text-decoration: line-through; color: var(--muted); }
 .feedback { font-size: 14.5px; margin-top: 8px; min-height: 1.4em; }
+
+/* 100 Studien */
+.btn { border: 1px solid var(--accent); background: var(--accent); color: var(--on-accent); border-radius: 8px; padding: 8px 14px; font: 600 14px var(--font-sans); cursor: pointer; }
+.btn:hover { filter: brightness(1.08); }
+.btn.ghost { background: transparent; color: var(--fg); border-color: var(--line); }
+.sim-row { display: flex; flex-wrap: wrap; gap: 10px; }
+.sim-text { font-size: 16px; max-width: 70ch; margin: 0; }
+.tiles { display: grid; grid-template-columns: repeat(20, minmax(0, 1fr)); gap: 5px; width: 100%; max-width: 640px; }
+.tile { aspect-ratio: 1; border-radius: 3px; border: 1px solid var(--line); background: transparent; }
+.tile.sig { background: var(--therapie); border-color: var(--therapie); }
+.tile.sig.h0 { background: var(--alpha-fill); border-color: var(--alpha-ink); }
+@media (max-width: 480px) { .tiles { grid-template-columns: repeat(10, minmax(0, 1fr)); } }
+.sw-empty { border: 1px solid var(--muted); background: transparent !important; }

@@ -119,3 +119,17 @@ figcaption { font-size: 14px; font-weight: 600; }
 .table-wrap { overflow-x: auto; }
 .fict { font-size: 13px; color: var(--muted); font-style: italic; }
 .block { padding-top: 48px; display: flex; flex-direction: column; gap: 14px; }
+
+/* Umbau 11/2026 */
+.base-box { border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px; margin-bottom: 18px; display: flex; flex-direction: column; gap: 10px; }
+.base-box h2 { font-size: 21px; margin: 0; }
+.base-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr); gap: 16px; align-items: center; }
+@media (max-width: 720px) { .base-grid { grid-template-columns: minmax(0, 1fr); } }
+.base-grid .text { margin: 0; }
+.seg-dir button { display: flex; flex-direction: column; align-items: center; gap: 1px; padding: 6px 8px; }
+.seg-dir button b { font-size: 13.5px; font-weight: 600; }
+.seg-dir button small { font: 500 12px var(--font-mono); opacity: .8; }
+.t-solo { max-width: 440px; margin: 0; }
+.t-solo figcaption { font-size: 13.5px; color: var(--muted); }
+.base-box .formula { display: flex; flex-direction: column; gap: 6px; }
+.base-box .formula .big { font-size: 18px; font-weight: 600; }

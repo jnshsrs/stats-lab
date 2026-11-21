@@ -82,3 +82,37 @@ input[type=range] { width: 100%; accent-color: var(--accent); margin: 4px 0 0; }
 .calc-steps .eq { display: block; font-family: var(--font-mono); font-size: 15px; background: var(--highlight); border-radius: 6px; padding: 6px 10px; margin-top: 4px; overflow-x: auto; white-space: nowrap; font-variant-numeric: tabular-nums; }
 #calcside button { white-space: nowrap; }
 .pop-note { font-size: 13px; color: var(--muted); margin: -4px 0 0; }
+
+/* Umbau 11/2026: Richtungsschalter, Hypothesen, Vergleichstabelle, Weiter-Karten */
+.fict { font-size: 13.5px; color: var(--muted); margin: -4px 0 0; }
+.ctrl-dir { margin-bottom: 2px; }
+.seg-dir button { display: flex; flex-direction: column; align-items: center; gap: 1px; padding: 7px 8px; font-family: var(--font-sans); }
+.seg-dir button b { font-size: 14px; font-weight: 600; }
+.seg-dir button small { font: 500 12.5px var(--font-mono); opacity: .8; }
+.hyp { display: flex; flex-direction: column; gap: 8px; }
+.hyp .who { margin: 0; font-weight: 500; }
+.hyp-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+@media (max-width: 560px) { .hyp-grid { grid-template-columns: minmax(0, 1fr); } }
+.hyp-grid > div { border: 1px solid var(--line); border-radius: 10px; padding: 10px 14px; display: flex; flex-direction: column; gap: 2px; }
+.hyp-grid > div + div { border-color: var(--accent); background: var(--highlight); }
+.hyp-grid .k { font: 600 12.5px var(--font-mono); color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+.hyp-grid .v { font: 600 22px var(--font-mono); }
+.hyp-grid .s { font-size: 14px; color: var(--muted); }
+.sub-h { font-size: 18px; margin: 18px 0 0; }
+.table-wrap { overflow-x: auto; }
+.dir-tab { border-collapse: collapse; width: 100%; font-size: 14.5px; font-variant-numeric: tabular-nums; }
+.dir-tab th, .dir-tab td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.dir-tab th { font-size: 13px; color: var(--muted); font-weight: 500; }
+.dir-tab td:nth-child(3) { font-family: var(--font-mono); font-size: 13.5px; color: var(--muted); }
+.dir-tab tr.cur td { background: var(--highlight); }
+.dir-tab tr.cur td:first-child { box-shadow: inset 4px 0 0 var(--accent); }
+.dir-tab .muted { font: 500 12.5px var(--font-mono); color: var(--muted); }
+.callout { font-size: 15.5px; border-left: 3px solid var(--alpha-fill); padding-left: 12px; max-width: 78ch; }
+#calc { scroll-margin-top: 200px; }
+.next-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+@media (max-width: 760px) { .next-grid { grid-template-columns: minmax(0, 1fr); } }
+.next-card { border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; text-decoration: none; color: var(--fg); display: flex; flex-direction: column; gap: 6px; }
+.next-card:hover { border-color: var(--accent); }
+.next-card b { color: var(--accent); }
+.next-card span { font-size: 14.5px; color: var(--muted); }
+.formula .df-line { font-size: .85em; color: var(--muted); }
