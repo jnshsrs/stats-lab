@@ -116,3 +116,28 @@ input[type=range] { width: 100%; accent-color: var(--accent); }
 
 .mammo { margin-top: 8px; }
 .kicker-x { font-family: var(--font-mono); font-size: 12.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+
+/* SnNout und SpPin */
+.snsp { margin-top: 56px; display: flex; flex-direction: column; gap: 14px; border-top: 1px solid var(--line); padding-top: 32px; }
+.snsp h2 { font-size: 24px; }
+.lede-s { color: var(--muted); max-width: 78ch; }
+.sn-ctrl { max-width: 460px; background: var(--highlight); border-radius: 10px; padding: 12px 14px; }
+.sn-tests { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+@media (max-width: 760px) { .sn-tests { grid-template-columns: minmax(0, 1fr); } }
+.sn-card { border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; display: flex; flex-direction: column; gap: 10px; }
+.sn-card h3 { font-size: 17px; margin: 0; }
+.sn-card .sub { font: 500 13px var(--font-mono); color: var(--muted); }
+.sn-halves { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.sn-half { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.sn-half .hh { font-size: 13.5px; font-weight: 600; }
+.sn-half svg { width: 100%; height: auto; display: block; }
+.sn-half .res { font-size: 13.5px; color: var(--muted); }
+.sn-half .res b { color: var(--fg); font-variant-numeric: tabular-nums; }
+.sn-badge { align-self: flex-start; font: 600 12.5px var(--font-sans); border-radius: 999px; padding: 3px 10px; }
+.sn-badge.ok { background: var(--accent); color: var(--on-accent); }
+.sn-badge.no { background: var(--highlight); color: var(--muted); border: 1px solid var(--line); }
+.sw.dotlg { width: 11px; height: 11px; border-radius: 50%; }
+.sn-rules { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+@media (max-width: 640px) { .sn-rules { grid-template-columns: minmax(0, 1fr); } }
+.sn-rules > div { background: var(--highlight); border-left: 4px solid var(--accent); border-radius: 0 10px 10px 0; padding: 10px 14px; display: flex; flex-direction: column; gap: 4px; font-size: 15px; }
+.sn-rules > div > b { font: 700 16px var(--font-mono); color: var(--accent); }
