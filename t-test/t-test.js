@@ -231,10 +231,91 @@ function drawCdf(c) {
   $("calc-steps").innerHTML = st.map(([b, t, e]) => `<li><b>${b}</b> ${t}<span class="eq">${e}</span></li>`).join("");
 }
 
+
+// ---------- 3 Kritischer Wert: Simulation unter H0, verschiebbare Grenze, t-Tabelle ----------
+const H = { ts: [], df: null, last: null };
+const randn = () => { let u = 0, v = 0; while (!u) u = Math.random(); while (!v) v = Math.random(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); };
+S.crit = 1.2;
+function simH0(k) {
+  const n = S.n;
+  for (let j = 0; j < k; j++) { let sm = 0, q = 0; for (let i = 0; i < n; i++) { const x = MU0 + S.sigma * randn(); sm += x; q += x * x; } const m = sm / n, sd = Math.sqrt((q - n * m * m) / (n - 1)); H.last = (m - MU0) / (sd / Math.sqrt(n)); H.ts.push(H.last); }
+  drawH0();
+}
+const tailArea = (c, df) => S.dir === "two" ? 2 * (1 - tcdf(c, df)) : 1 - tcdf(c, df);
+const critFor = (df, a = S.alpha) => S.dir === "two" ? tinv(1 - a / 2, df) : tinv(1 - a, df);
+const beyond = (t, c) => S.dir === "two" ? Math.abs(t) > c : S.dir === "right" ? t > c : t < -c;
+const H0X = { a: -5, b: 5, L: 24, R: 896, T: 30, B: 250 };
+function drawH0() {
+  const df = S.n - 1, { a, b, L: l, R: r, T: top, B: base } = H0X, c = S.crit;
+  if (H.df !== df) { H.ts = []; H.df = df; H.last = null; }
+  const sx = v => l + (v - a) / (b - a) * (r - l), bw = 0.25, nb = Math.round((b - a) / bw), cnt = new Array(nb).fill(0);
+  H.ts.forEach(t => { const i = Math.min(nb - 1, Math.max(0, Math.floor((t - a) / bw))); cnt[i]++; });
+  const N = H.ts.length, dens = cnt.map(k => N ? k / (N * bw) : 0);
+  const peak = Math.max(tpdf(0, df), ...dens) * 1.12, sy = d => base - d / peak * (base - top);
+  let g = "";
+  for (let v = -5; v <= 5; v++) g += `<line x1="${sx(v)}" x2="${sx(v)}" y1="${top}" y2="${base}" stroke="var(--grid)"/><text x="${sx(v)}" y="${base + 18}" text-anchor="middle">${fmt(v, 0)}</text>`;
+  // Fläche jenseits der Grenze unter der Kurve
+  const seg = (lo, hi) => { const o = []; for (let i = 0; i <= 80; i++) { const v = lo + (hi - lo) * i / 80; o.push([sx(v), sy(tpdf(v, df))]); } return o; };
+  if (S.dir !== "left") g += `<path d="${area(seg(Math.min(c, b), b), base)}" fill="var(--alpha-fill)" fill-opacity=".35"/>`;
+  if (S.dir !== "right") g += `<path d="${area(seg(a, Math.max(-c, a)), base)}" fill="var(--alpha-fill)" fill-opacity=".35"/>`;
+  cnt.forEach((k, i) => { if (!k) return; const lo = a + i * bw, mid = lo + bw / 2, out = beyond(mid, c); g += `<rect x="${sx(lo) + 1}" y="${sy(dens[i])}" width="${sx(lo + bw) - sx(lo) - 2}" height="${base - sy(dens[i])}" fill="${out ? "var(--alpha-ink)" : "var(--pal-3)"}" fill-opacity="${out ? .85 : .55}"/>`; });
+  g += `<path d="${path(seg(a, b))}" fill="none" stroke="var(--fg)" stroke-width="2"/>`;
+  g += `<line x1="${l}" x2="${r}" y1="${base}" y2="${base}" stroke="var(--line)"/>`;
+  if (H.last != null) { const x = sx(Math.max(a, Math.min(b, H.last))); g += `<path d="M${x} ${base + 2} l-6 10 h12 z" fill="var(--therapie)"/>`; }
+  const lines = S.dir === "two" ? [-c, c] : S.dir === "right" ? [c] : [-c];
+  const tail = tailArea(c, df), each = S.dir === "two" ? tail / 2 : tail;
+  lines.forEach(v => {
+    const x = sx(v);
+    g += `<g class="crit-line" data-side="${v < 0 ? -1 : 1}"><line x1="${x}" x2="${x}" y1="${top - 14}" y2="${base}" stroke="var(--alpha-ink)" stroke-width="2.5" stroke-dasharray="6 4"/><line x1="${x}" x2="${x}" y1="${top - 14}" y2="${base}" stroke="transparent" stroke-width="22"/><circle cx="${x}" cy="${top - 14}" r="8" fill="var(--alpha-ink)"/><path d="M${x - 4} ${top - 14} h8 M${x - 2} ${top - 17} l-3 3 3 3 M${x + 2} ${top - 17} l3 3 -3 3" stroke="var(--on-accent)" stroke-width="1.4" fill="none"/></g>`;
+    g += `<text x="${x + (v > 0 ? 12 : -12)}" y="${top + 4}" text-anchor="${v > 0 ? "start" : "end"}" style="fill:var(--alpha-ink)" class="strong">${fmt(v, 2)}</text>`;
+    g += `<text x="${x + (v > 0 ? 12 : -12)}" y="${top + 22}" text-anchor="${v > 0 ? "start" : "end"}" style="fill:var(--alpha-ink)">Fläche ${fmt(each * 100, 1)} %</text>`;
+  });
+  g += `<text x="${r}" y="${base + 40}" text-anchor="end">t-Werte der Kliniken mit μ = 90° · df = ${df}</text>`;
+  if (!N) g += `<text x="${sx(0)}" y="${top + 60}" text-anchor="middle">Noch keine Klinik simuliert. Die Kurve zeigt, was herauskommen wird.</text>`;
+  $("h0sim").innerHTML = g;
+  // Kennzahlen
+  const k = H.ts.filter(t => beyond(t, c)).length, target = critFor(df), hit = Math.abs(c - target) < 0.015;
+  $("crit-v").textContent = (S.dir === "two" ? "±" : S.dir === "left" ? "−" : "") + fmt(c, 2);
+  $("crit").value = c;
+  $("h0-count").textContent = N ? `${N.toLocaleString("de-DE")} Kliniken, letzte: t = ${fmt(H.last, 2)}` : "";
+  $("crit-stats").innerHTML = readout("Fläche jenseits der Grenze", fmt(tail * 100, 1) + " %", "r-alpha") +
+    readout("simuliert jenseits", N ? `${fmt(100 * k / N, 1)} %` : "–") + readout(`Ziel: α = ${fmt(S.alpha, 2)}`, fmt(S.alpha * 100, 0) + " %") +
+    readout("richtiger kritischer Wert", (S.dir === "two" ? "±" : S.dir === "left" ? "−" : "") + fmt(target, 2), "r-decision" + (hit ? " sig" : ""));
+  const side = S.dir === "two" ? `an beiden Rändern je ${fmt(S.alpha / 2 * 100, 1)} %` : `am ${S.dir === "right" ? "rechten" : "linken"} Rand die ganzen ${fmt(S.alpha * 100, 0)} %`;
+  $("crit-callout").innerHTML = hit
+    ? `<b>Getroffen.</b> Jenseits von ${$("crit-v").textContent} liegen ${side}. Das ist der kritische Wert: Nur so viele Kliniken, die das Kriterium genau erfüllen, landen trotzdem im Ablehnungsbereich. α ist also die Fehlalarm-Rate, die wir uns bei wahrer H0 erlauben.`
+    : `Verschieben Sie die Grenze, bis ${side} übrig bleiben. ${tail > S.alpha ? "Im Moment liegt zu viel Fläche jenseits: Die Grenze muss weiter nach außen." : "Im Moment liegt zu wenig Fläche jenseits: Die Grenze darf weiter nach innen."}`;
+}
+// Ziehen mit Maus oder Finger
+(() => {
+  const svg = $("h0sim"); let drag = false;
+  const toT = e => { const pt = svg.createSVGPoint(); pt.x = e.clientX; pt.y = e.clientY; const q = pt.matrixTransform(svg.getScreenCTM().inverse()); return H0X.a + (q.x - H0X.L) / (H0X.R - H0X.L) * (H0X.b - H0X.a); };
+  const set = e => { S.crit = Math.max(0.3, Math.min(4.5, Math.round(Math.abs(toT(e)) * 100) / 100)); drawH0(); };
+  svg.addEventListener("pointerdown", e => { if (!e.target.closest(".crit-line")) return; drag = true; svg.setPointerCapture(e.pointerId); e.preventDefault(); });
+  svg.addEventListener("pointermove", e => { if (drag) set(e); });
+  ["pointerup", "pointercancel"].forEach(ev => svg.addEventListener(ev, () => { drag = false; }));
+})();
+
+// t-Tabelle
+const TAB_A2 = [0.20, 0.10, 0.05, 0.02, 0.01];
+function drawTable(c) {
+  const df = c.df, rows = [...Array(30).keys()].map(i => i + 1).concat([40, 50, 60, 100]);
+  if (!rows.includes(df)) { rows.push(df); rows.sort((x, y) => x - y); }
+  const colA2 = S.dir === "two" ? S.alpha : 2 * S.alpha, col = TAB_A2.findIndex(v => Math.abs(v - colA2) < 1e-9);
+  let h = `<thead><tr><th>α zweiseitig</th>${TAB_A2.map((v, i) => `<th class="${i === col ? "hc" : ""}">${fmt(v, 2)}</th>`).join("")}</tr><tr><th>α einseitig</th>${TAB_A2.map((v, i) => `<th class="${i === col ? "hc" : ""}">${fmt(v / 2, v / 2 < 0.01 ? 3 : 3)}</th>`).join("")}</tr></thead><tbody>`;
+  rows.forEach(d => { h += `<tr class="${d === df ? "hr" : ""}"><th>${d}</th>${TAB_A2.map((v, i) => `<td class="${i === col ? "hc" : ""}${d === df && i === col ? " hit" : ""}">${fmt(tinv(1 - v / 2, d), 3)}</td>`).join("")}</tr>`; });
+  h += `<tr class="inf"><th>∞</th>${TAB_A2.map((v, i) => { const z = tinv(1 - v / 2, 100000); return `<td class="${i === col ? "hc" : ""}">${fmt(z, 3)}</td>`; }).join("")}</tr></tbody>`;
+  $("ttab").innerHTML = h;
+  const val = tinv(1 - colA2 / 2, df);
+  $("ttab-note").innerHTML = `Ihr Fall: df = ${df}, α = ${fmt(S.alpha, 2)} ${DIRS[S.dir].name} → Spalte „${S.dir === "two" ? "zweiseitig" : "einseitig"} ${fmt(S.alpha, 2)}“ → <b>${S.dir === "two" ? "±" : S.dir === "left" ? "−" : ""}${fmt(val, 3)}</b>.${S.dir === "left" ? " Die Tabelle listet nur positive Werte, linksseitig nimmt man das Minus dazu." : ""}${df > 30 && ![40, 50, 60, 100].includes(df) ? " In gedruckten Tabellen fehlt diese Zeile oft, dann nimmt man die nächstkleinere (strenger)." : ""}`;
+  const wrap = $("ttab-wrap"), row = wrap.querySelector("tr.hr");
+  if (row && wrap.offsetParent) wrap.scrollTop = row.offsetTop - wrap.clientHeight / 2;
+}
+
 // ---------- Verdrahtung ----------
 function render() {
   $("mu-v").textContent = S.mu + "°"; $("sigma-v").textContent = S.sigma + "°"; $("n-v").textContent = `${S.n} (df ${S.n - 1})`;
-  const c = compute(); drawRaw(c); drawHyp(); drawRuler(c); drawT(c); drawCdf(c);
+  const c = compute(); drawRaw(c); drawHyp(); drawRuler(c); drawH0(); drawTable(c); drawT(c); drawCdf(c);
 }
 const syncInputs = () => { $("mu").value = S.mu; $("sigma").value = S.sigma; $("n").value = S.n; };
 [["mu", "mu"], ["sigma", "sigma"], ["n", "n"]].forEach(([id, k]) => $(id).addEventListener("input", e => { S[k] = +e.target.value; render(); }));
@@ -253,5 +334,10 @@ document.querySelectorAll("[data-preset]").forEach(b => b.addEventListener("clic
 }));
 S.seed = findSeed(edgeOk);
 render();
-if (location.hash === "#calc") $("calc").scrollIntoView();
+$("h0-1").onclick = () => simH0(1); $("h0-100").onclick = () => simH0(100); $("h0-1000").onclick = () => simH0(1000);
+$("h0-reset").onclick = () => { H.ts = []; H.last = null; drawH0(); };
+$("crit").addEventListener("input", e => { S.crit = +e.target.value; drawH0(); });
+$("crit-snap").onclick = () => { S.crit = Math.round(critFor(S.n - 1) * 100) / 100; drawH0(); };
+$("calc").addEventListener("toggle", () => { if ($("calc").open) drawTable(compute()); });
+if (location.hash === "#calc") { $("calc").open = true; $("calc").scrollIntoView(); }
 })();

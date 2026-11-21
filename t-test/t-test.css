@@ -116,3 +116,22 @@ input[type=range] { width: 100%; accent-color: var(--accent); margin: 4px 0 0; }
 .next-card b { color: var(--accent); }
 .next-card span { font-size: 14.5px; color: var(--muted); }
 .formula .df-line { font-size: .85em; color: var(--muted); }
+
+/* Schritt 3: kritischer Wert */
+.crit-chart { touch-action: none; }
+.crit-chart .crit-line { cursor: ew-resize; }
+.crit-ctrl { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: flex-end; }
+.crit-ctrl .ctrl { flex: 1 1 320px; }
+.sim-row .presets-lbl { margin-left: 4px; font-family: var(--font-mono); }
+.ttab-wrap { max-height: 360px; overflow: auto; border: 1px solid var(--line); border-radius: 10px; }
+.ttab { border-collapse: collapse; width: 100%; font: 500 14px var(--font-mono); font-variant-numeric: tabular-nums; }
+.ttab th, .ttab td { padding: 5px 10px; text-align: right; border-bottom: 1px solid var(--grid); white-space: nowrap; }
+.ttab thead th { position: sticky; background: var(--surface); z-index: 1; font-weight: 600; color: var(--muted); }
+.ttab thead tr:first-child th { top: 0; }
+.ttab thead tr:nth-child(2) th { top: 29px; border-bottom: 1px solid var(--line); }
+.ttab tbody th { text-align: left; color: var(--muted); font-weight: 600; }
+.ttab .hc { background: var(--highlight); }
+.ttab tr.hr td, .ttab tr.hr th { background: var(--highlight); color: var(--fg); }
+.ttab tr.hr td.hit, .ttab td.hit { background: var(--accent); color: var(--on-accent); font-weight: 700; }
+.ttab thead th.hc { color: var(--accent); }
+.ttab tr.inf th, .ttab tr.inf td { border-top: 2px solid var(--line); }
