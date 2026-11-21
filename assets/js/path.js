@@ -36,3 +36,24 @@ nav.className = "path-nav column"; nav.setAttribute("aria-label", "Lernpfad");
 nav.innerHTML = `<p class="pn-where">Lernpfad · Block ${cur[2] + 1}: ${BLOCKS[cur[2]]} · Station ${i + 1} von ${PATH.length} · <a href="../glossar/#k-${cur[0]}">Begriffe dieses Kapitels im Glossar</a></p><div class="pn-row">${link(prev, "prev")}${link(next, "next")}</div>`;
 footer.before(nav);
 })();
+
+/* Akkordeons: zunächst eingeklappt für die Übersicht.
+   Grafiken werden geöffnet gezeichnet und erst danach zugeklappt, damit Größen stimmen.
+   Ein Anker in der Adresse öffnet den passenden Abschnitt. */
+(() => {
+"use strict";
+const accs = [...document.querySelectorAll("details.acc")];
+if (!accs.length) return;
+const target = () => { const id = decodeURIComponent(location.hash.slice(1)); const el = id && document.getElementById(id); return el ? (el.matches("details.acc") ? el : el.closest("details.acc")) : null; };
+const bar = document.createElement("div");
+bar.className = "acc-all";
+bar.innerHTML = `<button type="button">Alle aufklappen</button>`;
+const btn = bar.firstChild;
+const sync = () => { btn.textContent = accs.every(d => d.open) ? "Alle zuklappen" : "Alle aufklappen"; };
+btn.addEventListener("click", () => { const open = !accs.every(d => d.open); accs.forEach(d => { d.open = open; }); });
+accs[0].before(bar);
+accs.forEach(d => d.addEventListener("toggle", () => { if (d.open) window.dispatchEvent(new Event("resize")); sync(); }));
+const closeAll = () => { const t = target(); accs.forEach(d => { d.open = d === t; }); if (t) t.scrollIntoView(); sync(); };
+if (document.readyState === "complete") closeAll(); else window.addEventListener("load", closeAll);
+window.addEventListener("hashchange", () => { const t = target(); if (t) { t.open = true; t.scrollIntoView(); } });
+})();

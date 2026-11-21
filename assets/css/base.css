@@ -1,7 +1,7 @@
 /* Stats Lab · gemeinsame Basis für alle Visualisierungen
    Layout: eine zentrierte Lesespalte, schmale Kopfzeile, ruhiger Footer.
    Farben und Schriften kommen ausschließlich aus theme.css. Hier stehen keine festen Farbwerte. */
-@import url("theme.css?v=202611210816");
+@import url("theme.css?v=202611211213");
 
 :root { --column: 960px; }
 
@@ -60,3 +60,8 @@ p { margin: 0; }
 .pn-title { font-weight: 600; }
 .path-nav + .site-footer { margin-top: 40px; }
 .pn-where a { color: var(--accent); }
+
+/* Akkordeon: Alle auf- oder zuklappen */
+.acc-all { display: flex; justify-content: flex-end; margin: 0 0 8px; }
+.acc-all button { background: transparent; border: 1px solid var(--line); border-radius: 8px; padding: 6px 12px; font: 500 13.5px var(--font-sans); color: var(--fg); cursor: pointer; }
+.acc-all button:hover { border-color: var(--accent); }
