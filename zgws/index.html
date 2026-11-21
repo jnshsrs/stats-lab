@@ -6,8 +6,8 @@
 <title>Zentraler Grenzwertsatz · Stats Lab</title>
 <meta name="description" content="Vom Zentralen Grenzwertsatz über den Standardfehler zum Konfidenzintervall, interaktiv mit vier Populationen.">
 <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="../assets/css/base.css?v=202611210804">
-<link rel="stylesheet" href="zgws.css?v=202611210804">
+<link rel="stylesheet" href="../assets/css/base.css?v=202611210816">
+<link rel="stylesheet" href="zgws.css?v=202611210816">
 </head>
 <body>
 <header class="site-header">
@@ -53,6 +53,23 @@
       <div class="readouts" id="dice-stats"></div>
       <p class="callout" id="dice-callout"></p>
       <p class="text">Der Bezug zur Statistik: Ein Stichprobenmittelwert ist eine Summe von n unabhängigen Messwerten, geteilt durch n. Genau deshalb werden Mittelwerte normalverteilt, egal wie die einzelnen Werte verteilt sind. Unten passiert dasselbe mit Patientendaten statt Würfeln.</p>
+      <aside class="real" aria-labelledby="real-h">
+        <span class="real-kicker">Im echten Leben</span>
+        <h3 id="real-h">Wo uns die Würfelsumme begegnet</h3>
+        <p class="real-rule">Eine Größe ist annähernd normalverteilt, wenn sie aus <b>vielen kleinen</b>, <b>unabhängigen</b> und <b>additiven</b> Einflüssen entsteht. Fehlt eine dieser Bedingungen, wird sie schief oder mehrgipflig.</p>
+        <div class="real-grid">
+          <div><b>Körpergröße</b><span>Über 12.000 Genvarianten mit jeweils winzigem Effekt, dazu Ernährung und Krankheiten in der Kindheit. Jeder Einfluss ist ein Würfel, die Größe ist die Summe. Fisher hat dieses Modell 1918 beschrieben.</span></div>
+          <div><b>Messfehler</b><span>Ablesen, Lagerung, Hautspannung, Zug am Maßband: Viele kleine Störungen addieren sich. Die Differenzen zweier Messungen derselben Person streuen glockenförmig um null. Gauß hat die Normalverteilung für Messfehler entwickelt.</span></div>
+          <div><b>Mittelwerte in Studien</b><span>Ein Mittelwert ist eine Summe von n Messwerten, geteilt durch n. Darum ist er annähernd normalverteilt, auch wenn die einzelnen Werte schief sind. Darauf beruhen t&#8209;Test und Konfidenzintervall.</span></div>
+          <div><b>Umfragen</b><span>Ein Anteil ist der Mittelwert aus Nullen und Einsen. Bei 1.000 Befragten ergibt das die bekannte Fehlermarge von etwa ±3 Prozentpunkten.</span></div>
+        </div>
+        <p class="real-sub">Wann es nicht klappt</p>
+        <ul class="real-no">
+          <li><b>Gemischte Gruppen:</b> Körpergröße ist je Geschlecht normalverteilt. Männer und Frauen zusammen ergeben zwei überlagerte Glocken, breiter und flacher als eine Normalverteilung.</li>
+          <li><b>Multiplikative Einflüsse:</b> Wirken Einflüsse prozentual, ist erst der Logarithmus normalverteilt. Deshalb sind Körpergewicht, viele Laborwerte und Reaktionszeiten rechtsschief.</li>
+          <li><b>Einzelne große Effekte:</b> Eine seltene Mutation mit starker Wirkung, etwa bei Kleinwuchs, ist kein kleiner Würfel. Sie erzeugt Ausreißer, die die Glocke nicht vorhersagt.</li>
+        </ul>
+      </aside>
     </div>
   </details>
 
@@ -124,8 +141,8 @@
     <span class="footer-links"><a href="https://github.com/jnshsrs/stats-lab">Quellcode auf GitHub</a><span>Ohne Cookies und Tracking</span></span>
   </div>
 </footer>
-<script src="wuerfel.js?v=202611210804"></script>
-<script src="zgws.js?v=202611210804"></script>
-<script src="../assets/js/path.js?v=202611210804"></script>
+<script src="wuerfel.js?v=202611210816"></script>
+<script src="zgws.js?v=202611210816"></script>
+<script src="../assets/js/path.js?v=202611210816"></script>
 </body>
 </html>
