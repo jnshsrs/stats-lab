@@ -99,10 +99,28 @@ function syncCtrls() {
   $("m-sens-v").textContent = pc(M.sens / 100); $("m-fpr-v").textContent = pc(M.fpr / 100);
   $("m-scen").innerHTML = SCEN.map(s => `<button type="button" data-s="${s.id}" aria-pressed="${s.id === M.scen}">${s.label}</button>`).join("");
 }
+
+/* Likelihood-Ratios: zweiter Rechenweg und Fagan-Nomogramm */
+function drawLR() {
+  const q = probs(), spec = 1 - q.f, lrp = q.se / q.f, lrn = (1 - q.se) / spec;
+  const odds = q.p / (1 - q.p), oP = odds * lrp, oN = odds * lrn, pP = oP / (1 + oP), pN = oN / (1 + oN);
+  const f2 = x => x >= 100 ? intf(x) : x >= 10 ? dec(x, 1) : x >= 0.1 ? dec(x, 2) : dec(x, 4);
+  $("lr-cards").innerHTML =
+    `<div class="lr-card pos"><span class="k">LR+ · positiver Befund</span><span class="v">${f2(lrp)}</span><span class="f">Sensitivität ÷ (1 − Spezifität) = ${pc(q.se)} ÷ ${pc(q.f)}</span><span class="s">Ein positiver Befund kommt bei Erkrankten ${f2(lrp)}-mal so häufig vor wie bei Gesunden.</span></div>` +
+    `<div class="lr-card neg"><span class="k">LR− · negativer Befund</span><span class="v">${f2(lrn)}</span><span class="f">(1 − Sensitivität) ÷ Spezifität = ${pc(1 - q.se)} ÷ ${pc(spec)}</span><span class="s">Ein negativer Befund kommt bei Erkrankten nur ${f2(lrn)}-mal so häufig vor wie bei Gesunden.</span></div>`;
+  const step = (n, t, f) => `<div class="lr-step"><span class="no">${n}</span><b>${t}</b><span class="eq">${f}</span></div>`;
+  $("lr-steps").innerHTML =
+    step(1, "Wahrscheinlichkeit in Odds", `Odds = p ÷ (1 − p) = ${pc(q.p)} ÷ ${pc(1 - q.p)} = ${f2(odds)}`) +
+    step(2, "Mit der Likelihood-Ratio multiplizieren", `positiv: ${f2(odds)} × ${f2(lrp)} = ${f2(oP)} · negativ: ${f2(odds)} × ${f2(lrn)} = ${f2(oN)}`) +
+    step(3, "Odds zurück in Wahrscheinlichkeit", `p = Odds ÷ (1 + Odds) → positiv: <b>${pc(pP)}</b> · negativ: <b>${pc(pN)}</b>`);
+  $("lr-check").innerHTML = `Abgleich mit dem Baum: Von allen Positiven sind ${pc(q.ppv)} wirklich erkrankt, über die Likelihood-Ratio kommen ebenfalls <b>${pc(pP)}</b> heraus. Nach einem negativen Befund bleibt ein Risiko von ${pc(1 - q.npv)}, über LR− ebenfalls <b>${pc(pN)}</b>. Zwei Wege, ein Ergebnis: Beides ist der Satz von Bayes.`;
+  window.drawFagan($("lr-fagan"), q.p, lrp, lrn);
+}
+
 function render() {
   syncCtrls(); drawText();
   if (!M.revealed) return;
-  drawTree(); drawIcons();
+  drawTree(); drawIcons(); drawLR();
 }
 window.renderMammo = render;
 
