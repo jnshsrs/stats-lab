@@ -6,8 +6,8 @@
 <title>Positiver Befund · Stats Lab</title>
 <meta name="description" content="Gigerenzers Mammografie-Aufgabe: Häufigkeitsbaum mit 1.000 Frauen, Sensitivität gegen positiven Vorhersagewert, Szenarien und Regler.">
 <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="../assets/css/base.css?v=202611210708">
-<link rel="stylesheet" href="mammografie.css?v=202611210708">
+<link rel="stylesheet" href="../assets/css/base.css?v=202611210714">
+<link rel="stylesheet" href="mammografie.css?v=202611210714">
 </head>
 <body>
 <header class="site-header">
@@ -76,10 +76,10 @@
   <section class="snsp" id="snnout-sppin" aria-labelledby="snsp-h">
     <span class="kicker-x">Faustregeln für klinische Tests</span>
     <h2 id="snsp-h">SnNout und SpPin: Wann schließt ein Test aus, wann bestätigt er?</h2>
-    <p class="lede-s">Zwei Tests an denselben 1.000 Patientinnen und Patienten mit Verdacht auf eine Erkrankung. Test A ist sehr sensitiv, Test B sehr spezifisch. Jeder Punkt ist eine Person: dunkel erkrankt, hell gesund. Links stehen alle mit negativem, rechts alle mit positivem Ergebnis.</p>
+    <p class="lede-s">Zwei Tests an denselben 1.000 Patientinnen und Patienten mit Verdacht auf eine Erkrankung. Test A ist sehr sensitiv, Test B sehr spezifisch. Jeder Punkt ist eine Person.</p>
+    <div class="sn-key"><b>So lesen Sie die Abbildung</b><span><b>Links oder rechts</b> = was der Test sagt (negativ oder positiv).</span><span><b>Farbe</b> = was wirklich vorliegt: <i class="d sick"></i> krank, <i class="d well"></i> gesund.</span><span><b>Ring</b> <i class="d well ring"></i> = hier liegt der Test falsch.</span></div>
     <div class="ctrl sn-ctrl"><div class="ctrl-head"><label for="sn-prev">Prävalenz in der untersuchten Gruppe</label><output id="sn-prev-v"></output></div><input id="sn-prev" type="range" min="0" max="8" step="1" value="4"></div>
     <div class="sn-tests" id="sn-tests"></div>
-    <div class="legend"><span><i class="sw dotlg" style="background:var(--therapie)"></i>erkrankt</span><span><i class="sw dotlg" style="background:var(--pal-2);outline:1px solid var(--pal-3)"></i>gesund</span></div>
     <div class="sn-rules">
       <div><b>SnNout</b><span><b>S</b>ensitivität hoch, <b>N</b>egatives Ergebnis, rule <b>out</b>: Ein sensitiver Test übersieht kaum Kranke. Unter seinen negativen Ergebnissen ist deshalb fast niemand krank.</span></div>
       <div><b>SpPin</b><span><b>Sp</b>ezifität hoch, <b>P</b>ositives Ergebnis, rule <b>in</b>: Ein spezifischer Test schlägt bei Gesunden kaum an. Unter seinen positiven Ergebnissen ist deshalb fast jeder krank.</span></div>
@@ -94,8 +94,8 @@
     <span class="footer-links"><a href="https://github.com/jnshsrs/stats-lab">Quellcode auf GitHub</a><span>Ohne Cookies und Tracking</span></span>
   </div>
 </footer>
-<script src="snsp.js?v=202611210708"></script>
-<script src="mammografie.js?v=202611210708"></script>
-<script src="../assets/js/path.js?v=202611210708"></script>
+<script src="snsp.js?v=202611210714"></script>
+<script src="mammografie.js?v=202611210714"></script>
+<script src="../assets/js/path.js?v=202611210714"></script>
 </body>
 </html>

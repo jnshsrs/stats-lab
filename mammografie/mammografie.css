@@ -141,3 +141,15 @@ input[type=range] { width: 100%; accent-color: var(--accent); }
 @media (max-width: 640px) { .sn-rules { grid-template-columns: minmax(0, 1fr); } }
 .sn-rules > div { background: var(--highlight); border-left: 4px solid var(--accent); border-radius: 0 10px 10px 0; padding: 10px 14px; display: flex; flex-direction: column; gap: 4px; font-size: 15px; }
 .sn-rules > div > b { font: 700 16px var(--font-mono); color: var(--accent); }
+
+.sn-key { display: flex; flex-wrap: wrap; gap: 6px 22px; align-items: center; border: 1px dashed var(--line); border-radius: 10px; padding: 10px 14px; font-size: 14.5px; }
+.sn-key > b { width: 100%; font-size: 13px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); }
+.d { display: inline-block; width: 10px; height: 10px; border-radius: 50%; vertical-align: -1px; margin: 0 5px 0 2px; flex: none; }
+.d.sick { background: var(--therapie); }
+.d.well { background: var(--pal-2); }
+.d.ring { box-shadow: 0 0 0 2px var(--surface), 0 0 0 3.2px var(--fg); }
+.sn-half .hh { align-self: flex-start; border-radius: 6px; padding: 3px 9px; font-weight: 500; margin-bottom: 4px; }
+.sn-half .hh.neg { background: var(--highlight); border: 1px solid var(--line); }
+.sn-half .hh.pos { background: var(--accent-soft); border: 1px solid var(--line); }
+.sn-half .res { display: block; font-size: 13px; line-height: 1.4; padding-left: 18px; text-indent: -18px; }
+.sn-half .res.sum { margin-top: 4px; font-size: 13.5px; color: var(--fg); border-top: 1px solid var(--line); padding: 5px 0 0; text-indent: 0; }

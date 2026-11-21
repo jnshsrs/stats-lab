@@ -12,11 +12,18 @@ const TESTS = [
   { name: "Test B · sehr spezifisch", se: 0.70, sp: 0.99 }
 ];
 let prev = 0.2;
-function field(sick, healthy) {
-  const cols = 25, gap = 8.4, r = 3.2, n = sick + healthy, rows = Math.max(1, Math.ceil(n / cols));
+function field(err, ok, errSick) {
+  // Fehler zuerst, mit Ring markiert. Farbe = wahrer Zustand.
+  const cols = 25, gap = 8.6, r = 3, n = err + ok, rows = Math.max(1, Math.ceil(n / cols));
+  const SICK = "var(--therapie)", WELL = "var(--pal-2)";
   let s = "";
-  for (let i = 0; i < n; i++) { const cx = 5 + (i % cols) * gap, cy = 5 + Math.floor(i / cols) * gap; s += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="${i < sick ? "var(--therapie)" : "var(--pal-2)"}"/>`; }
-  return `<svg viewBox="0 0 ${cols * gap + 2} ${rows * gap + 4}" role="img" aria-label="${sick} erkrankt, ${healthy} gesund">${s || '<text x="4" y="12" font-size="10">keine</text>'}</svg>`;
+  for (let i = 0; i < n; i++) {
+    const cx = 5.5 + (i % cols) * gap, cy = 5.5 + Math.floor(i / cols) * gap, isErr = i < err;
+    const sickDot = isErr ? errSick : !errSick;
+    if (isErr) s += `<circle cx="${cx}" cy="${cy}" r="${r + 1.5}" fill="none" stroke="var(--fg)" stroke-width="1.1"/>`;
+    s += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="${sickDot ? SICK : WELL}"/>`;
+  }
+  return `<svg viewBox="0 0 ${cols * gap + 2} ${rows * gap + 3}" role="img" aria-label="${err} Fehler, ${ok} richtig">${s}</svg>`;
 }
 function render() {
   $("sn-prev-v").textContent = `${pc(prev)} (${Math.round(N * prev)} von ${N} erkrankt)`;
@@ -28,8 +35,14 @@ function render() {
     const out = sickNeg <= 0.02, inn = sickPos >= 0.9;
     html += `<div class="sn-card"><h3>${t.name}</h3><span class="sub">Sensitivität ${pc(t.se)} · Spezifität ${pc(t.sp)}</span>
       <div class="sn-halves">
-        <div class="sn-half"><span class="hh">Negativ: ${neg} Personen</span>${field(fn, tn)}<span class="res">davon erkrankt: <b>${fn}</b> (${pc(sickNeg)})</span></div>
-        <div class="sn-half"><span class="hh">Positiv: ${pos} Personen</span>${field(tp, fp)}<span class="res">davon erkrankt: <b>${tp}</b> (${pc(sickPos)})</span></div>
+        <div class="sn-half"><span class="hh neg">Test sagt <b>negativ</b> · ${neg}</span>${field(fn, tn, true)}
+          <span class="res"><i class="d well"></i>richtig negativ (gesund): <b>${tn}</b></span>
+          <span class="res"><i class="d sick ring"></i>falsch negativ (krank, übersehen): <b>${fn}</b></span>
+          <span class="res sum">Risiko trotz negativem Test: <b>${pc(sickNeg)}</b></span></div>
+        <div class="sn-half"><span class="hh pos">Test sagt <b>positiv</b> · ${pos}</span>${field(fp, tp, false)}
+          <span class="res"><i class="d sick"></i>richtig positiv (krank): <b>${tp}</b></span>
+          <span class="res"><i class="d well ring"></i>falsch positiv (gesund, Fehlalarm): <b>${fp}</b></span>
+          <span class="res sum">Wirklich krank bei positivem Test: <b>${pc(sickPos)}</b></span></div>
       </div>
       <span class="sn-badge ${out ? "ok" : "no"}">${out ? "✓ negatives Ergebnis schließt aus" : "negatives Ergebnis schließt nicht sicher aus"}</span>
       <span class="sn-badge ${inn ? "ok" : "no"}">${inn ? "✓ positives Ergebnis bestätigt" : "positives Ergebnis bestätigt nicht sicher"}</span></div>`;
