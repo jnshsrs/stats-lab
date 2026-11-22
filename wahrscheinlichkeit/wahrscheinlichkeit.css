@@ -79,3 +79,8 @@ input[type=range] { width: 100%; accent-color: var(--accent); }
 .excursion:hover { background: var(--highlight); }
 .ex-k { font: 600 12px var(--font-mono); letter-spacing: .06em; text-transform: uppercase; color: var(--accent); }
 .ex-t { font-weight: 600; font-size: 15px; }
+
+/* LaTeX */
+.formula .katex-display { margin: 2px 0; text-align: left; overflow-x: auto; overflow-y: hidden; }
+.formula .katex-display > .katex { text-align: left; }
+.detail .formula .katex { font-size: 1.02em; }

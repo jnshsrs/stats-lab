@@ -10,6 +10,8 @@ const MZ = { ehe0: 9401, ehe1: 7873, lg0: 2198, lg1: 1143 };
 const S = { pA: 0.3, pB: 0.5, generic: false, dir5: "KgV", prev: 0.05, noSymZ: 0.40, noSymH: 0.85, dir6: "SgZ" };
 
 const $ = id => document.getElementById(id);
+const tz = x => String(x).replace(/\./g, "{.}").replace(/,/g, "{,}").replace(/−/g, "-").replace(/ %/g, "\\,\\%");
+const TB = (t, fb) => window.katex ? texBlock(t) : fb;
 const pct = (x, d = 1) => (x * 100).toLocaleString("de-DE", { minimumFractionDigits: d, maximumFractionDigits: d }) + " %";
 const num = (x, d = 3) => x.toLocaleString("de-DE", { minimumFractionDigits: d, maximumFractionDigits: d });
 const int = x => Math.round(x).toLocaleString("de-DE");
@@ -67,14 +69,14 @@ const STEPS = [
     kicker: "Schritt 1 · Möglichkeitsraum", title: "Alles, was passieren kann",
     panel: () => `
       <p>Das Quadrat steht für alle möglichen Ergebnisse eines Zufallsexperiments. Seine Fläche ist 1, also 100 %. Eine Wahrscheinlichkeit ist nichts anderes als der Anteil dieser Fläche, den ein Ereignis einnimmt.</p>
-      <div class="formula"><span class="big">P(Ω) = 1</span><span>Ω (Omega) ist der Ergebnisraum.</span></div>`,
+      <div class="formula">${TB(String.raw`P(\Omega) = 1`, `<span class="big">P(Ω) = 1</span>`)}<span>Ω (Omega) ist der Ergebnisraum.</span></div>`,
     model: () => ({ cols: [{ w: 1 }], bFrac: null, role: () => "none", cellLabel: () => ["Alle möglichen Ergebnisse", "Fläche = 1"], caption: "Ω", aria: "Leeres Quadrat, Fläche 1" })
   },
   {
     kicker: "Schritt 2 · Ein Ereignis", title: "Ein Würfel teilt die Fläche in sechs Streifen",
     panel: () => `
       <p>Ein fairer sechsseitiger Würfel: Jede Augenzahl bekommt einen gleich breiten senkrechten Streifen. Das Ereignis „Sechs“ ist der markierte Streifen.</p>
-      <div class="formula"><span class="big">P(6) = 1/6 ≈ 16,7 %</span></div>
+      <div class="formula">${TB(String.raw`P(6) = \dfrac{1}{6} \approx 16{,}7\,\%`, `<span class="big">P(6) = 1/6 ≈ 16,7 %</span>`)}</div>
       <div class="legend"><span><i class="sw" style="background:var(--area-a)"></i>Ereignis A: Sechs</span></div>`,
     model: () => ({ cols: DICE, bFrac: null, role: ci => ci === 5 ? "soft" : "none", cellLabel: ci => ci === 5 ? ["Sechs", "1/6"] : null, caption: "6 Streifen", aria: "Quadrat in sechs Streifen, der sechste markiert" })
   },
@@ -82,7 +84,7 @@ const STEPS = [
     kicker: "Schritt 3 · Ein zweites Ereignis", title: "Eine Münze teilt die Fläche quer",
     panel: () => `
       <p>Jetzt eine Münze, unabhängig vom Würfel. Sie teilt das Quadrat waagerecht: unten Kopf, oben Zahl, jeweils die halbe Fläche.</p>
-      <div class="formula"><span class="big">P(Kopf) = 1/2 = 50 %</span></div>
+      <div class="formula">${TB(String.raw`P(\text{Kopf}) = \dfrac{1}{2} = 50\,\%`, `<span class="big">P(Kopf) = 1/2 = 50 %</span>`)}</div>
       <div class="legend"><span><i class="sw" style="background:var(--area-b)"></i>Ereignis B: Kopf</span></div>`,
     model: () => ({ cols: [{ w: 1 }], bFrac: [0.5], role: (ci, b) => b ? "b" : "none", cellLabel: (ci, b) => b ? ["Kopf", "1/2"] : ["Zahl", "1/2"], caption: "2 Hälften", aria: "Quadrat waagerecht geteilt in Kopf und Zahl" })
   },
@@ -111,8 +113,8 @@ const STEPS = [
       $("pA-v").textContent = pct(S.pA, 0); $("pB-v").textContent = pct(S.pB, 0);
       $("back-dice").hidden = !S.generic;
       $("f4").innerHTML = S.generic
-        ? `<span>P(A ∩ B) = P(A) · P(B)</span><span class="big">= ${num(S.pA, 2)} · ${num(S.pB, 2)} = ${num(S.pA * S.pB, 3)} ≈ ${pct(S.pA * S.pB)}</span>`
-        : `<span>P(6 ∩ Kopf) = P(6) · P(Kopf)</span><span class="big">= 1/6 · 1/2 = 1/12 ≈ 8,3 %</span>`;
+        ? TB(String.raw`\begin{aligned}P(A \cap B) &= P(A) \cdot P(B) \\ &= ${tz(num(S.pA, 2))} \cdot ${tz(num(S.pB, 2))} = ${tz(num(S.pA * S.pB, 3))} \approx ${tz(pct(S.pA * S.pB))}\end{aligned}`, `<span>P(A ∩ B) = P(A) · P(B)</span><span class="big">= ${num(S.pA * S.pB, 3)} ≈ ${pct(S.pA * S.pB)}</span>`)
+        : TB(String.raw`\begin{aligned}P(6 \cap \text{Kopf}) &= P(6) \cdot P(\text{Kopf}) \\ &= \dfrac{1}{6} \cdot \dfrac{1}{2} = \dfrac{1}{12} \approx 8{,}3\,\%\end{aligned}`, `<span>P(6 ∩ Kopf) = P(6) · P(Kopf)</span><span class="big">= 1/12 ≈ 8,3 %</span>`);
     },
     model: () => S.generic ? {
       cols: [{ w: S.pA, label: "A", sub: pct(S.pA, 0) }, { w: 1 - S.pA, label: "nicht A", sub: pct(1 - S.pA, 0) }], bFrac: [S.pB, S.pB],
@@ -223,8 +225,8 @@ function renderBedingt() {
     aria: `Venn-Diagramm: verheiratet ${pct(pV)}, mit Kindern ${pct(pK)}, beides ${pct(pVK)}`
   });
   const formula = S.dir5 === "KgV"
-    ? `<span>P(Kinder | verheiratet) = P(verh. ∩ Kinder) / P(verh.)</span><span class="big">= ${num(pVK)} / ${num(pV)} = ${pct(pKgV)}</span><span>Bezugsfläche: der Kreis „verheiratet“</span>`
-    : `<span>P(verheiratet | Kinder) = P(verh. ∩ Kinder) / P(Kinder)</span><span class="big">= ${num(pVK)} / ${num(pK)} = ${pct(pVgK)}</span><span>Bezugsfläche: der Kreis „mit Kindern“</span>`;
+    ? TB(String.raw`\begin{aligned}P(\text{Kinder} \mid \text{verh.}) &= \dfrac{P(\text{verh.} \cap \text{Kinder})}{P(\text{verh.})} \\ &= \dfrac{${tz(num(pVK))}}{${tz(num(pV))}} = ${tz(pct(pKgV))}\end{aligned}`, `<span class="big">P(Kinder | verheiratet) = ${pct(pKgV)}</span>`) + `<span>Bezugsfläche: der Kreis „verheiratet“</span>`
+    : TB(String.raw`\begin{aligned}P(\text{verh.} \mid \text{Kinder}) &= \dfrac{P(\text{verh.} \cap \text{Kinder})}{P(\text{Kinder})} \\ &= \dfrac{${tz(num(pVK))}}{${tz(num(pK))}} = ${tz(pct(pVgK))}\end{aligned}`, `<span class="big">P(verheiratet | Kinder) = ${pct(pVgK)}</span>`) + `<span>Bezugsfläche: der Kreis „mit Kindern“</span>`;
   $("detail-bedingt").innerHTML = `
     <span class="kicker">Reiter 2 · Bedingte Wahrscheinlichkeit</span>
     <h2>Verheiratet und Kinder</h2>
@@ -233,7 +235,7 @@ function renderBedingt() {
     <div class="formula">${formula}</div>
     <div class="legend"><span><i class="sw" style="background:var(--therapie)"></i>verheiratet und Kinder</span><span><i class="sw outline"></i>Bezugsfläche (das, was gegeben ist)</span></div>
     <p><b>Abhängig:</b> Unter Ehepaaren haben ${pct(pKgV)} Kinder im Haushalt, unter unverheirateten Paaren ${pct(pKgN)}, insgesamt ${pct(pK)}. Wären Ehe und Kinder unabhängig, läge die Schnittfläche bei P(verh.) · P(Kinder) = ${pct(pV * pK)} statt ${pct(pVK)}.</p>
-    <div class="formula"><span>Allgemeiner Multiplikationssatz</span><span class="big">P(A ∩ B) = P(A) · P(B | A)</span><span>${num(pV)} · ${num(pKgV)} = ${num(pVK)}</span></div>
+    <div class="formula"><span>Allgemeiner Multiplikationssatz</span>${TB(String.raw`\begin{aligned}P(A \cap B) &= P(A) \cdot P(B \mid A) \\ &= ${tz(num(pV))} \cdot ${tz(num(pKgV))} = ${tz(num(pVK))}\end{aligned}`, `<span class="big">P(A ∩ B) = P(A) · P(B | A)</span><span>${num(pV)} · ${num(pKgV)} = ${num(pVK)}</span>`)}</div>
     ${regionTable([
       ["var(--area-a)", "nur verheiratet (ohne Kinder)", pct(pV - pVK)],
       ["var(--therapie)", "verheiratet und Kinder", pct(pVK)],
@@ -278,8 +280,8 @@ function updateBayes() {
     aria: `Venn-Diagramm: Zirrhose ${pct(p)}, keine Symptome ${pct(pS)}, beides ${pct(joint)}`
   });
   $("f6").innerHTML = S.dir6 === "SgZ"
-    ? `<span>P(keine Sympt. | Zirrhose) = Schnittfläche / Kreis „Zirrhose“</span><span class="big">= ${num(joint, 4)} / ${num(p, 4)} = ${pct(a)}</span>`
-    : `<span>P(Zirrhose | keine Sympt.) = P(Z) · P(kS | Z) / P(kS)</span><span>= ${num(p, 3)} · ${num(a, 2)} / (${num(p, 3)} · ${num(a, 2)} + ${num(1 - p, 3)} · ${num(b, 2)})</span><span class="big">= ${num(joint, 4)} / ${num(pS, 4)} = ${pct(post)}</span>`;
+    ? TB(String.raw`\begin{aligned}P(kS \mid Z) &= \dfrac{\text{Schnittfläche}}{\text{Kreis Zirrhose}} \\ &= \dfrac{${tz(num(joint, 4))}}{${tz(num(p, 4))}} = ${tz(pct(a))}\end{aligned}`, `<span class="big">P(keine Sympt. | Zirrhose) = ${pct(a)}</span>`) + `<span class="dim">Z: Zirrhose · kS: keine Symptome</span>`
+    : TB(String.raw`\begin{aligned}P(Z \mid kS) &= \dfrac{P(Z) \cdot P(kS \mid Z)}{P(Z) \cdot P(kS \mid Z) + P(\neg Z) \cdot P(kS \mid \neg Z)} \\ &= \dfrac{${tz(num(p, 3))} \cdot ${tz(num(a, 2))}}{${tz(num(p, 3))} \cdot ${tz(num(a, 2))} + ${tz(num(1 - p, 3))} \cdot ${tz(num(b, 2))}} \\ &= ${tz(pct(post))}\end{aligned}`, `<span class="big">P(Zirrhose | keine Sympt.) = ${pct(post)}</span>`) + `<span class="dim">Z: Zirrhose · kS: keine Symptome</span>`;
   const n = 1000, nz = n * p, nzs = nz * a, nh = n - nz, nhs = nh * b;
   $("freq6").innerHTML = `Von ${int(n)} Personen haben ${int(nz)} eine Zirrhose, davon sind ${int(nzs)} symptomfrei. Von den ${int(nh)} ohne Zirrhose sind ${int(nhs)} symptomfrei. <b>Unter ${int(nzs + nhs)} Symptomfreien haben nur ${int(nzs)} eine Zirrhose.</b>`;
 }
