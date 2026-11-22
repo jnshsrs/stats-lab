@@ -105,7 +105,7 @@ function draw3() {
   $("pred-f").innerHTML = TB(String.raw`\hat{y} = ${tz(fmt(B0, 2))} + ${tz(fmt(B1, 4))} \cdot ${x} = ${tz(fmt(yh, 2))}\ \text{l} \qquad \text{gemessen: } \dfrac{${tz(fmt(y, 2))}}{${tz(fmt(yh, 2))}} = ${yh > 0 ? tz(fmt(pct, 0)) + "\\,\\%" : "\\text{nicht sinnvoll}"}\ \text{vom Soll}`, `<span>Sollwert ${fmt(yh)} l</span>`);
   $("pred-c").innerHTML = !inside
     ? `<b>Vorsicht, Extrapolation.</b> ${x} cm liegt außerhalb der Daten (117 bis 189 cm). Die Gerade rechnet stur weiter${yh < 0.5 ? " und landet sogar bei einer unmöglich kleinen oder negativen FEV" : ""}. Ob der Zusammenhang dort noch linear ist, wissen wir nicht.`
-    : yh <= 0 ? "" : `Sollwert für ${x} cm: ${fmt(yh)} l. Gemessen sind ${fmt(y)} l, also ${fmt(pct, 0)} % vom Soll. ${pct < 80 ? "Klassisch gelten Werte unter 80 % des Solls als auffällig. Heute nutzt man dafür eher die untere Normgrenze aus der Streuung um die Gerade, mehr dazu in <a href=\"../normbereich/#acc-4\">Wie sicher ist der Sollwert?</a>." : "Das liegt im üblichen Bereich."} Das Residuum ist ${fmt(y - yh)} l.`;
+    : yh <= 0 ? "" : `Sollwert für ${x} cm: ${fmt(yh)} l. Gemessen sind ${fmt(y)} l, also ${fmt(pct, 0)} % vom Soll. ${pct < 80 ? "Klassisch gelten Werte unter 80 % des Solls als auffällig. Heute nutzt man dafür eher die untere Normgrenze aus der Streuung um die Gerade, mehr dazu in <a href=\"../../regression/normbereich/#acc-4\">Wie sicher ist der Sollwert?</a>." : "Das liegt im üblichen Bereich."} Das Residuum ist ${fmt(y - yh)} l.`;
 }
 ["px", "py"].forEach(id => $(id).addEventListener("input", draw3));
 

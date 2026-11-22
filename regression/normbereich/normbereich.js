@@ -101,7 +101,7 @@ function draw2() {
   $("t-c").innerHTML = dmode === "real"
     ? (sig ? `<b>Die Steigung ist signifikant.</b> Das Konfidenzintervall schließt die Null aus: Größere Kinder haben im Mittel eine höhere FEV, und zwar um ${fmt(lo, d)} bis ${fmt(hi, d)} l pro 10 cm. Das Intervall ist die nützlichere Aussage, denn es sagt auch, wie groß der Effekt ist.${share} Bei diesem starken Zusammenhang ist das die Power des Tests.`
       : `<b>Nicht signifikant.</b> Das Intervall enthält die Null. Bei so wenigen Kindern ist das selten, kommt aber vor: ein Fehler 2. Art.${share}`)
-    : `Hier ist H₀ wahr. ${sig ? "<b>Diese Stichprobe ist trotzdem signifikant:</b> ein Fehler 1. Art." : "Diese Stichprobe ist korrekt nicht signifikant."}${share} Auf lange Sicht sind es etwa 5 %, genau das Signifikanzniveau α. Mehr dazu in der <a href="../entscheidung/">Entscheidungstheorie</a>.`;
+    : `Hier ist H₀ wahr. ${sig ? "<b>Diese Stichprobe ist trotzdem signifikant:</b> ein Fehler 1. Art." : "Diese Stichprobe ist korrekt nicht signifikant."}${share} Auf lange Sicht sind es etwa 5 %, genau das Signifikanzniveau α. Mehr dazu in der <a href="../../testen/entscheidung/">Entscheidungstheorie</a>.`;
 }
 
 /* ---------- 3 Bänder ---------- */

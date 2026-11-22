@@ -78,7 +78,7 @@ function testFor(dir, t, df, a) {
   const c = tinv(a, df); return { tc: c, p: tcdf(t, df), rej: t < c, ct: fmt(c, 3), cT: dz(c, 3), pf: "F(t)", rule: `t < ${dz(c, 2)}` };
 }
 const DN = { two: "zweiseitig", right: "rechtsseitig", left: "linksseitig" };
-const kasLi = (dir, T, t) => li(`Einordnen, ${DN[dir]}.`, `Kritischer Wert und p-Wert genau wie beim Einstichproben-Test, <a href="../t-test/#calc">ausführlich in der Kaskade</a>.`, String.raw`t_{\text{krit}} = ${T.cT} \qquad p = ${T.pf} ${pT(T.p)} \qquad \text{Ablehnung, wenn } ${T.rule}`);
+const kasLi = (dir, T, t) => li(`Einordnen, ${DN[dir]}.`, `Kritischer Wert und p-Wert genau wie beim Einstichproben-Test, <a href="../../testen/t-test/#calc">ausführlich in der Kaskade</a>.`, String.raw`t_{\text{krit}} = ${T.cT} \qquad p = ${T.pf} ${pT(T.p)} \qquad \text{Ablehnung, wenn } ${T.rule}`);
 const ciTxt = (est, se, df, unit, d) => { const c = tinv(1 - G.alpha / 2, df); return `${fmt((1 - G.alpha) * 100, 0)}-%-KI ${fmt(est - c * se, d)} bis ${fmt(est + c * se, d)} ${unit}`; };
 const segBind = (id, obj, f) => $(id).addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; obj.dir = b.dataset.d; $(id).querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", x === b)); f(); });
 

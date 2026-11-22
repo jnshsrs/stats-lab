@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Die beste Gerade · Stats Lab</title>
+<meta name="description" content="Warum eine Gerade? Vom Mittelwert über Gruppenmittel zur Regressionsgeraden, Methode der kleinsten Quadrate zum Anfassen und Sollwerte für die Lungenfunktion.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../assets/css/base.css?v=202611221953">
+<link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
+<link rel="stylesheet" href="gerade.css?v=202611221953">
+</head>
+<body>
+<header class="site-header">
+  <div class="column">
+    <a class="brand" href="../../">
+      <svg class="brand-mark" viewBox="0 0 22 22" aria-hidden="true"><path d="M1 19 C5 19 6 4 9 4 S13 19 17 19" fill="none" class="bm-a" stroke-width="2.2" stroke-linecap="round"/><path d="M5 19 C9 19 10 7 13 7 S17 19 21 19" fill="none" class="bm-b" stroke-width="2.2" stroke-linecap="round"/></svg>
+      Stats Lab
+    </a>
+    <nav class="site-nav" aria-label="Hauptnavigation">
+      <a href="../../">Visualisierungen</a>
+      <a href="../../glossar/">Glossar</a>
+      <a href="https://github.com/jnshsrs/stats-lab">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main class="column">
+  <section class="intro">
+    <a class="back" href="../../">← Alle Visualisierungen</a>
+    <h1>Die beste Gerade</h1>
+    <p class="byline">Dr. Jens Hüsers · Forschungsmethodik</p>
+    <p class="lede">Eine Kinderärztin misst bei einem 150 cm großen Mädchen eine <abbr title="Forciertes exspiratorisches Volumen in der ersten Sekunde">FEV</abbr> (forciertes exspiratorisches Volumen in der ersten Sekunde, auch Einsekundenkapazität: die Luftmenge in Litern, die man nach tiefem Einatmen in einer Sekunde kräftig ausatmen kann) von 2,0 Litern. Ist das in Ordnung oder zu wenig? Um das zu beurteilen, braucht sie einen <b>Sollwert</b>: Was ist für ein Kind dieser Größe zu erwarten? Genau dafür braucht man eine Regressionsgerade. Auch echte Lungenfunktions-Sollwerte entstehen so, aus Regressionsmodellen mit Größe, Alter und Geschlecht.</p>
+  </section>
+
+  <details class="acc" id="acc-1" open>
+    <summary><span class="acc-no">1</span><span class="acc-title">Wozu eine Gerade?<span class="acc-teaser">Drei Arten, einen Sollwert anzugeben, von grob bis elegant.</span></span></summary>
+    <div class="acc-body">
+      <div class="seg wide" role="group" aria-label="Modell" id="mode"><button type="button" data-m="mean" aria-pressed="true"><b>1</b> ein Mittelwert für alle</button><button type="button" data-m="bins" aria-pressed="false"><b>2</b> Mittelwert je Größengruppe</button><button type="button" data-m="line" aria-pressed="false"><b>3</b> eine Gerade</button></div>
+      <svg class="chart" id="m1" viewBox="0 0 900 420" role="img"></svg>
+      <div class="legend"><span><i class="sw" style="background:var(--pal-3)"></i>654 Kinder</span><span><i class="sw line" style="border-color:var(--therapie)"></i>Sollwert-Modell</span><span><i class="sw" style="background:var(--alpha-ink)"></i>das Mädchen: 150 cm, 2,0 l</span></div>
+      <div class="readouts" id="m1-r"></div>
+      <p class="callout" id="m1-c"></p>
+    </div>
+  </details>
+
+  <details class="acc" id="acc-2" open>
+    <summary><span class="acc-no">2</span><span class="acc-title">Welche Gerade ist die beste?<span class="acc-teaser">Die Methode der kleinsten Quadrate zum Anfassen.</span></span></summary>
+    <div class="acc-body">
+      <p class="text">25 zufällig ausgewählte Kinder. Stellen Sie die Gerade selbst ein. Jeder senkrechte Abstand zwischen Punkt und Gerade ist ein <b>Residuum</b> (lateinisch für „das Übriggebliebene“, Plural Residuen): So weit liegt die Vorhersage daneben. Die beste Gerade ist die, bei der die Summe der quadrierten Residuen am kleinsten wird.</p>
+      <div class="panel-grid">
+        <div class="ctrl"><div class="ctrl-head"><label for="h150">Höhe der Geraden bei 150 cm</label><output id="h150-v"></output></div><input id="h150" type="range" min="1.2" max="3.6" step="0.01" value="3.2"></div>
+        <div class="ctrl"><div class="ctrl-head"><label for="slope">Anstieg pro 10 cm Größe</label><output id="slope-v"></output></div><input id="slope" type="range" min="-0.2" max="1.2" step="0.01" value="0.15"></div>
+      </div>
+      <div class="ctrl-row"><button class="btn" type="button" id="best">Beste Gerade zeigen</button><button class="btn ghost" type="button" id="new25">Andere 25 Kinder</button><span class="lbl" id="v-lbl">Anzeigen</span><div class="seg" role="group" aria-labelledby="v-lbl" id="view"><button type="button" data-v="sq" aria-pressed="true">Quadrate</button><button type="button" data-v="res" aria-pressed="false">nur Abstände</button></div></div>
+      <svg class="chart" id="ls" viewBox="0 0 900 420" role="img" aria-label="Gerade mit Residuenquadraten"></svg>
+      <div class="meter" id="meter"></div>
+      <div class="formula" id="ls-f"></div>
+      <p class="callout" id="ls-c"></p>
+    </div>
+  </details>
+
+  <details class="acc" id="acc-3" open>
+    <summary><span class="acc-no">3</span><span class="acc-title">Die Gerade lesen und nutzen<span class="acc-teaser">Achsenabschnitt, Steigung, Sollwert und die Grenzen der Vorhersage.</span></span></summary>
+    <div class="acc-body">
+      <div class="formula big-eq" id="eq"></div>
+      <div class="two-col">
+        <div class="explain-box"><b>Steigung b₁</b><span id="b1-txt"></span></div>
+        <div class="explain-box"><b>Achsenabschnitt b₀</b><span id="b0-txt"></span></div>
+      </div>
+      <div class="panel-grid">
+        <div class="ctrl"><div class="ctrl-head"><label for="px">Größe des Kindes</label><output id="px-v"></output></div><input id="px" type="range" min="90" max="200" step="1" value="150"></div>
+        <div class="ctrl"><div class="ctrl-head"><label for="py">gemessene FEV</label><output id="py-v"></output></div><input id="py" type="range" min="0.5" max="5.5" step="0.05" value="2"></div>
+      </div>
+      <svg class="chart" id="pred" viewBox="0 0 900 360" role="img" aria-label="Vorhersage an der Geraden"></svg>
+      <div class="formula" id="pred-f"></div>
+      <p class="callout" id="pred-c"></p>
+      <p class="text">Warum heißt das Verfahren überhaupt Regression? Die Antwort steckt in Galtons Körpergrößen: <a href="../../hintergrund/regression-mitte/">Regression zur Mitte</a>.</p>
+    </div>
+  </details>
+
+  <details class="acc" id="acc-4" open>
+    <summary><span class="acc-no">4</span><span class="acc-title">Den Achsenabschnitt sinnvoll machen<span class="acc-teaser">Zentrieren und Skalieren: gleiche Gerade, lesbare Zahlen.</span></span></summary>
+    <div class="acc-body">
+      <p class="text">Der Achsenabschnitt b₀ ist immer der Wert bei x = 0. Bei 0 cm Körpergröße ist das sinnlos. Wir können aber selbst festlegen, wo „null“ liegt und in welcher Einheit wir messen. Dazu bauen wir eine neue Variable:</p>
+      <div class="formula" id="cs-def"></div>
+      <div class="panel-grid">
+        <div class="ctrl"><div class="ctrl-head"><label for="cc">Bezugspunkt c (hier ist x* = 0)</label><output id="cc-v"></output></div><input id="cc" type="range" min="0" max="190" step="1" value="0">
+          <div class="seg small" role="group" aria-label="Bezugspunkt wählen" id="cc-pre"><button type="button" data-c="0" aria-pressed="true">0 cm (roh)</button><button type="button" data-c="120" aria-pressed="false">120 cm</button><button type="button" data-c="150" aria-pressed="false">150 cm</button><button type="button" data-c="mean" aria-pressed="false">Mittelwert</button></div></div>
+        <div class="ctrl"><div class="ctrl-head"><span class="lbl-plain" id="kk-l">Einheit k (eine Einheit von x*)</span><output id="kk-v"></output></div>
+          <div class="seg small" role="group" aria-labelledby="kk-l" id="kk"><button type="button" data-k="1" aria-pressed="true">1 cm</button><button type="button" data-k="5" aria-pressed="false">5 cm</button><button type="button" data-k="10" aria-pressed="false">10 cm</button><button type="button" data-k="sd" aria-pressed="false">1 SD</button></div></div>
+      </div>
+      <svg class="chart" id="cs" viewBox="0 0 900 440" role="img" aria-label="Gerade mit verschobener und skalierter x-Achse"></svg>
+      <div class="formula" id="cs-eq"></div>
+      <div class="readouts" id="cs-r"></div>
+      <div class="two-col">
+        <div class="explain-box"><b>Achsenabschnitt b₀*</b><span id="cs-b0"></span></div>
+        <div class="explain-box"><b>Steigung b₁*</b><span id="cs-b1"></span></div>
+      </div>
+      <p class="callout" id="cs-c"></p>
+      <details class="deep">
+        <summary>Vertiefung: Was sich ändert und was nicht</summary>
+        <div class="deep-body">
+          <p>Zentrieren und Skalieren ist eine lineare Umrechnung der x-Achse, wie von Celsius nach Fahrenheit. Die Gerade selbst bleibt dieselbe. Deshalb bleiben gleich: alle Vorhersagen ŷ, alle Residuen, die Quadratsumme, R² und der t-Test für die Steigung (t und p ändern sich nicht, nur die Einheit von b₁ und SE(b₁)).</p>
+          <p>Es ändern sich: der Achsenabschnitt, sein Standardfehler und sein Test. Roh liegt x = 0 weit außerhalb der Daten, b₀ ist dort sehr unsicher (SE = <span id="se0"></span> l). Zentriert auf 150 cm wird b₀* zum Sollwert eines 150 cm großen Kindes und ist präzise geschätzt (SE = <span id="se150"></span> l). Am kleinsten ist der Standardfehler beim Mittelwert der Größe, dort ist er genau s/√n.</p>
+          <p>Werden x und y beide standardisiert (z-Werte), ist b₀* = 0 und die Steigung gleich dem Korrelationskoeffizienten r = <span id="r-std"></span>. So hängen Regression und <a href="../../regression/korrelation/">Korrelation</a> zusammen.</p>
+          <p>Richtig wichtig wird Zentrieren in der multiplen Regression mit Wechselwirkungen: Dort sind die Haupteffekte nur dann interpretierbar, wenn die anderen Variablen an einem sinnvollen Wert „null“ sind. Das kommt später im Block.</p>
+        </div>
+      </details>
+    </div>
+  </details>
+
+  <section class="block refs" aria-labelledby="refs-h">
+    <h2 id="refs-h">Daten</h2>
+    <ul><li>FEV-Daten von 654 Kindern aus East Boston (Tager et al., 1979; Kahn, 2005), siehe <a href="../../regression/korrelation/">Zusammenhang und Korrelation</a>. Download: <a href="../../regression-daten/fev.csv">fev.csv</a>.</li>
+    <li>Echte Lungenfunktions-Sollwerte werden heute meist mit den Referenzgleichungen der Global Lung Function Initiative (GLI) berechnet, ebenfalls Regressionsmodelle, aber mit Alter, Größe, Geschlecht und nichtlinearen Termen.</li></ul>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="column">
+    <span>© 2026 Dr. Jens Hüsers · Lehrmaterial für Forschungsmethodik und Statistik</span>
+    <span class="footer-links"><a href="https://github.com/jnshsrs/stats-lab">Quellcode auf GitHub</a><span>Ohne Cookies und Tracking</span></span>
+  </div>
+</footer>
+<script src="../../assets/vendor/katex/katex.min.js"></script>
+<script src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
+<script src="../../assets/js/tex.js?v=202611221953"></script>
+<script src="../../regression-daten/fev.js?v=202611221953"></script>
+<script src="../../assets/js/reg.js?v=202611221953"></script>
+<script src="gerade.js?v=202611221953"></script>
+<script src="../../assets/js/path.js?v=202611221953"></script>
+</body>
+</html>

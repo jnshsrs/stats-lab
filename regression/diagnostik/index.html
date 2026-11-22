@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Passt das Modell? · Stats Lab</title>
+<meta name="description" content="Regressionsdiagnostik: Anscombe-Quartett, Residuenplot und Q-Q-Plot, Trichter und Krümmung in den FEV-Daten, Logarithmus als Lösung, Hebelwert und Cook-Distanz zum Ziehen.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../assets/css/base.css?v=202611221953">
+<link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
+<link rel="stylesheet" href="diagnostik.css?v=202611221953">
+</head>
+<body>
+<header class="site-header">
+  <div class="column">
+    <a class="brand" href="../../">
+      <svg class="brand-mark" viewBox="0 0 22 22" aria-hidden="true"><path d="M1 19 C5 19 6 4 9 4 S13 19 17 19" fill="none" class="bm-a" stroke-width="2.2" stroke-linecap="round"/><path d="M5 19 C9 19 10 7 13 7 S17 19 21 19" fill="none" class="bm-b" stroke-width="2.2" stroke-linecap="round"/></svg>
+      Stats Lab
+    </a>
+    <nav class="site-nav" aria-label="Hauptnavigation">
+      <a href="../../">Visualisierungen</a>
+      <a href="../../glossar/">Glossar</a>
+      <a href="https://github.com/jnshsrs/stats-lab">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main class="column">
+  <section class="intro">
+    <a class="back" href="../../">← Alle Visualisierungen</a>
+    <h1>Passt das Modell?</h1>
+    <p class="byline">Dr. Jens Hüsers · Forschungsmethodik</p>
+    <p class="lede">Unsere Sollwerte für die <abbr title="Forciertes exspiratorisches Volumen in der ersten Sekunde">FEV</abbr> (forciertes exspiratorisches Volumen in der ersten Sekunde, auch Einsekundenkapazität: die Luftmenge in Litern, die man nach tiefem Einatmen in einer Sekunde kräftig ausatmen kann) beruhen auf einer Geraden. Standardfehler, Konfidenzintervalle und Normgrenzen stimmen aber nur, wenn das Modell zu den Daten passt. Ob es das tut, verraten die Residuen, also die Abstände der Punkte von der Geraden. Diese Prüfung heißt Diagnostik.</p>
+  </section>
+
+  <details class="acc" id="acc-1" open>
+    <summary><span class="acc-no">1</span><span class="acc-title">Erst zeichnen, dann rechnen<span class="acc-teaser">Vier Datensätze, identische Kennzahlen, völlig verschiedene Bilder.</span></span></summary>
+    <div class="acc-body">
+      <p class="text">Der Statistiker Francis Anscombe hat 1973 vier kleine Datensätze konstruiert. Mittelwerte, Varianzen, Korrelation und Regressionsgerade sind bei allen vier praktisch gleich. Die Tabelle der Kennzahlen allein würde sie nicht unterscheiden.</p>
+      <div class="seg wide" role="group" aria-label="Datensatz" id="ans"><button type="button" data-a="0" aria-pressed="true">Datensatz 1</button><button type="button" data-a="1" aria-pressed="false">Datensatz 2</button><button type="button" data-a="2" aria-pressed="false">Datensatz 3</button><button type="button" data-a="3" aria-pressed="false">Datensatz 4</button></div>
+      <div class="two-charts">
+        <svg class="chart" id="a1" viewBox="0 0 520 380" role="img" aria-label="Streudiagramm mit Gerade"></svg>
+        <svg class="chart" id="a2" viewBox="0 0 520 380" role="img" aria-label="Residuenplot"></svg>
+      </div>
+      <div class="readouts" id="a-r"></div>
+      <p class="callout" id="a-c"></p>
+    </div>
+  </details>
+
+  <details class="acc" id="acc-2" open>
+    <summary><span class="acc-no">2</span><span class="acc-title">Residuen der FEV-Daten<span class="acc-teaser">Ein Trichter, ein Bogen und eine einfache Lösung.</span></span></summary>
+    <div class="acc-body">
+      <p class="text">Der wichtigste Diagnoseplot: Residuen gegen Vorhersage. Passt das Modell, liegen die Punkte als gleichmäßig breites Band ohne Muster um die Nulllinie. Die blaue Kurve zeigt das mittlere Residuum, die graue Fläche die Streuung, beides für Gruppen ähnlicher Vorhersagen.</p>
+      <div class="seg wide" role="group" aria-label="Modell" id="mod"><button type="button" data-m="lin" aria-pressed="true"><b>1</b> FEV = b₀ + b₁ · Größe</button><button type="button" data-m="log" aria-pressed="false"><b>2</b> ln(FEV) = b₀ + b₁ · Größe</button></div>
+      <div class="two-charts">
+        <svg class="chart" id="r1" viewBox="0 0 520 380" role="img" aria-label="Residuen gegen Vorhersage"></svg>
+        <svg class="chart" id="r2" viewBox="0 0 520 380" role="img" aria-label="Q-Q-Plot der Residuen"></svg>
+      </div>
+      <div class="readouts" id="r-r"></div>
+      <p class="callout" id="r-c"></p>
+      <details class="deep">
+        <summary>Vertiefung: Wie liest man den Q-Q-Plot?</summary>
+        <div class="deep-body">
+          <p>Der Q-Q-Plot vergleicht die sortierten Residuen mit den Werten, die man bei einer Normalverteilung erwarten würde. Liegen die Punkte auf der Diagonalen, sind die Residuen normalverteilt. Ein Bogen zeigt Schiefe, ein S zeigt zu dicke oder zu dünne Ränder.</p>
+          <p>Die Normalverteilung der Residuen ist die am wenigsten wichtige Annahme. Bei großem n sorgt der <a href="../../schaetzen/zgws/">zentrale Grenzwertsatz</a> dafür, dass b₁ trotzdem annähernd normalverteilt ist und Test und Konfidenzintervall stimmen. Wichtig wird sie bei kleinen Stichproben und bei Vorhersageintervallen für einzelne Personen, denn die beschreiben die Residuen selbst.</p>
+          <p>Die logarithmierte FEV ist leicht linksschief. Das ist der Preis für die gleichmäßige Streuung, und bei 654 Kindern unproblematisch.</p>
+        </div>
+      </details>
+    </div>
+  </details>
+
+  <details class="acc" id="acc-3" open>
+    <summary><span class="acc-no">3</span><span class="acc-title">Ein Punkt, der die Gerade kippt<span class="acc-teaser">Hebelwert, Residuum und Cook-Distanz zum Ziehen.</span></span></summary>
+    <div class="acc-body">
+      <p class="text">Nicht jeder auffällige Punkt ist gefährlich. Ziehen Sie den violetten Punkt herum: 20 Kinder bleiben fest, eines kommt dazu. Die gestrichelte Gerade zeigt die Lösung ohne den Punkt.</p>
+      <div class="ctrl-row" id="presets"><button class="btn ghost" type="button" data-p="185,4.05">groß, passt zur Geraden</button><button class="btn ghost" type="button" data-p="152,4.6">mittelgroß, weit daneben</button><button class="btn ghost" type="button" data-p="188,1.7">groß, weit daneben</button></div>
+      <svg class="chart" id="inf" viewBox="0 0 900 420" role="img" aria-label="Einflussreicher Punkt" style="touch-action:none"></svg>
+      <div class="readouts" id="inf-r"></div>
+      <div class="formula" id="inf-f"></div>
+      <p class="callout" id="inf-c"></p>
+    </div>
+  </details>
+
+  <details class="acc" id="acc-4" open>
+    <summary><span class="acc-no">4</span><span class="acc-title">Checkliste für jede Regression<span class="acc-teaser">Fünf Fragen, bevor Sie einem Ergebnis trauen.</span></span></summary>
+    <div class="acc-body">
+      <ol class="check">
+        <li><b>Linearität.</b> Zeigt der Residuenplot einen Bogen? Dann passt die Gerade nicht. Lösungen: Transformation (Logarithmus), quadratischer Term, anderes Modell.</li>
+        <li><b>Gleiche Streuung (Homoskedastizität).</b> Öffnet sich ein Trichter? Dann sind Vorhersageband und Normgrenze in einem Teil der Daten zu eng, im anderen zu weit. Lösungen: Logarithmus, robuste Standardfehler.</li>
+        <li><b>Unabhängigkeit.</b> Stammt jeder Punkt von einer anderen Person? Mehrere Messungen pro Person, Geschwister oder Kinder aus derselben Klasse verletzen die Annahme. Das zeigt kein Plot, das folgt aus dem Studiendesign. Lösung: gemischte Modelle.</li>
+        <li><b>Einflussreiche Punkte.</b> Hängt das Ergebnis an einzelnen Fällen? Cook-Distanz prüfen, Analyse ohne diese Fälle wiederholen und beide Ergebnisse berichten. Nie einfach löschen.</li>
+        <li><b>Normalverteilte Residuen.</b> Q-Q-Plot ansehen. Bei großem n wenig kritisch, bei kleinem n und für Vorhersageintervalle wichtig.</li>
+      </ol>
+      <p class="note">In SPSS: Analysieren → Regression → Linear → Diagramme: *ZRESID auf die y-Achse, *ZPRED auf die x-Achse, Normalverteilungsdiagramm anhaken. Unter „Speichern“ lassen sich Cook-Distanz und Hebelwerte als neue Variablen ablegen.</p>
+    </div>
+  </details>
+
+  <section class="block refs" aria-labelledby="refs-h">
+    <h2 id="refs-h">Quellen und Daten</h2>
+    <ul><li>Anscombe, F. J. (1973). Graphs in statistical analysis. The American Statistician, 27(1), 17–21.</li>
+    <li>FEV-Daten von 654 Kindern aus East Boston (Tager et al., 1979; Kahn, 2005), siehe <a href="../../regression/korrelation/">Zusammenhang und Korrelation</a>. Download: <a href="../../regression-daten/fev.csv">fev.csv</a>.</li>
+    <li>Cook, R. D. (1977). Detection of influential observation in linear regression. Technometrics, 19(1), 15–18.</li></ul>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="column">
+    <span>© 2026 Dr. Jens Hüsers · Lehrmaterial für Forschungsmethodik und Statistik</span>
+    <span class="footer-links"><a href="https://github.com/jnshsrs/stats-lab">Quellcode auf GitHub</a><span>Ohne Cookies und Tracking</span></span>
+  </div>
+</footer>
+<script src="../../assets/vendor/katex/katex.min.js"></script>
+<script src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
+<script src="../../assets/js/tex.js?v=202611221953"></script>
+<script src="../../regression-daten/fev.js?v=202611221953"></script>
+<script src="../../assets/js/reg.js?v=202611221953"></script>
+<script src="diagnostik.js?v=202611221953"></script>
+<script src="../../assets/js/path.js?v=202611221953"></script>
+</body>
+</html>

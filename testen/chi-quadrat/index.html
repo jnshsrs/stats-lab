@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chi-Quadrat-Test · Stats Lab</title>
+<meta name="description" content="Der Chi-Quadrat-Test auf Unabhängigkeit Schritt für Schritt: beobachtete und erwartete Häufigkeiten, Abweichungen, Verteilung, p-Wert und Effektstärke.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../assets/css/base.css?v=202611221953">
+<link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
+<link rel="stylesheet" href="chi.css?v=202611221953">
+</head>
+<body>
+<header class="site-header">
+  <div class="column">
+    <a class="brand" href="../../">
+      <svg class="brand-mark" viewBox="0 0 22 22" aria-hidden="true"><path d="M1 19 C5 19 6 4 9 4 S13 19 17 19" fill="none" class="bm-a" stroke-width="2.2" stroke-linecap="round"/><path d="M5 19 C9 19 10 7 13 7 S17 19 21 19" fill="none" class="bm-b" stroke-width="2.2" stroke-linecap="round"/></svg>
+      Stats Lab
+    </a>
+    <nav class="site-nav" aria-label="Hauptnavigation">
+      <a href="../../">Visualisierungen</a>
+      <a href="../../glossar/">Glossar</a>
+      <a href="https://github.com/jnshsrs/stats-lab">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main class="column">
+  <section class="intro">
+    <a class="back" href="../../">← Alle Visualisierungen</a>
+    <h1>Der Chi-Quadrat-Test</h1>
+    <p class="byline">Dr. Jens Hüsers · Forschungsmethodik</p>
+    <p class="lede">Hängen zwei kategoriale Merkmale zusammen, etwa Gruppe und Behandlungserfolg? Der Test vergleicht, was beobachtet wurde, mit dem, was zu erwarten wäre, wenn es keinen Zusammenhang gäbe. Tragen Sie eigene Zahlen ein oder wählen Sie ein Beispiel.</p>
+  </section>
+
+  <div class="layout">
+    <aside class="data" aria-label="Kreuztabelle">
+      <span class="kicker">Ihre Daten · beobachtete Häufigkeiten</span>
+      <div class="presets" role="group" aria-label="Beispiele">
+        <button class="chip" type="button" data-preset="rtw">Rückkehr zur Arbeit</button>
+        <button class="chip" type="button" data-preset="verlauf">Schmerzverlauf</button>
+        <button class="chip" type="button" data-preset="null">Kein Zusammenhang</button>
+      </div>
+      <p class="question" id="question"></p>
+      <div class="table-wrap"><table class="obs" id="obs"></table></div>
+      <div class="tbl-actions">
+        <button class="btn ghost small" type="button" id="addRow">+ Zeile</button>
+        <button class="btn ghost small" type="button" id="delRow">− Zeile</button>
+        <button class="btn ghost small" type="button" id="addCol">+ Spalte</button>
+        <button class="btn ghost small" type="button" id="delCol">− Spalte</button>
+        <button class="btn ghost small" type="button" id="double">Alle Zellen × 2</button>
+      </div>
+      <div class="ctrl">
+        <span class="lbl" id="a-lbl">Signifikanzniveau α</span>
+        <div class="seg" role="group" aria-labelledby="a-lbl">
+          <button type="button" data-alpha="0.05" aria-pressed="true">5 %</button>
+          <button type="button" data-alpha="0.01" aria-pressed="false">1 %</button>
+        </div>
+      </div>
+      <div class="verdict" id="verdict" aria-live="polite"></div>
+    </aside>
+
+    <div class="steps">
+      <section class="step" aria-labelledby="h1">
+        <span class="eyebrow">Schritt 1 · Hinschauen</span>
+        <h2 id="h1">Beobachtet: Unterscheiden sich die Gruppen?</h2>
+        <p class="text">Jede Spalte des Mosaiks ist eine Gruppe, ihre Breite entspricht der Gruppengröße. Die Farbanteile zeigen die Verteilung der Kategorien in dieser Gruppe. Gestrichelt: die Anteile über alle Gruppen. Gäbe es keinen Zusammenhang, lägen die Grenzen in jeder Gruppe auf dieser Linie.</p>
+        <svg class="chart" id="mosaic" viewBox="0 0 620 330" role="img"></svg>
+        <div class="legend" id="mosaic-legend"></div>
+      </section>
+
+      <section class="step" aria-labelledby="h2">
+        <span class="eyebrow">Schritt 2 · Erwarten</span>
+        <h2 id="h2">Erwartet, wenn es keinen Zusammenhang gibt</h2>
+        <p class="text">Unter H0 verteilt sich jede Gruppe wie die Gesamtheit. Die erwartete Häufigkeit einer Zelle ist deshalb Zeilensumme mal Spaltensumme geteilt durch N. Das ist der Multiplikationssatz für unabhängige Ereignisse, angewendet auf Häufigkeiten.</p>
+        <div class="formula" id="e-formula"></div>
+        <div class="table-wrap"><table class="calc" id="exp"></table></div>
+        <p class="warn" id="e-warn"></p>
+      </section>
+
+      <section class="step" aria-labelledby="h3">
+        <span class="eyebrow">Schritt 3 · Abweichungen summieren</span>
+        <h2 id="h3">Wie weit liegen Beobachtung und Erwartung auseinander?</h2>
+        <p class="text">Für jede Zelle wird die Abweichung quadriert und durch die Erwartung geteilt: (O − E)² / E. Je dunkler die Zelle, desto mehr trägt sie bei. Die Summe aller Beiträge ist die Prüfgröße χ².</p>
+        <div class="table-wrap"><table class="calc" id="contrib"></table></div>
+        <div class="formula" id="chi-formula"></div>
+      </section>
+
+      <section class="step" aria-labelledby="h4">
+        <span class="eyebrow">Schritt 4 · Einordnen</span>
+        <h2 id="h4">Wie ungewöhnlich ist dieses χ² unter H0?</h2>
+        <p class="text">Wenn H0 stimmt, folgt χ² näherungsweise einer χ²-Verteilung mit df = (Zeilen − 1) · (Spalten − 1) Freiheitsgraden. Der p-Wert ist die Fläche rechts vom beobachteten Wert. Der Test ist immer einseitig: Nur große Abweichungen sprechen gegen H0.</p>
+        <svg class="chart" id="dist" viewBox="0 0 620 270" role="img"></svg>
+        <div class="legend"><span><i class="sw" style="background:var(--alpha-fill)"></i>Ablehnungsbereich α</span><span><i class="sw" style="background:var(--therapie)"></i>p-Wert</span></div>
+        <div class="readouts" id="dist-stats"></div>
+      </section>
+
+      <section class="step" aria-labelledby="h5">
+        <span class="eyebrow">Schritt 5 · Wie stark?</span>
+        <h2 id="h5">Signifikanz ist nicht gleich Stärke</h2>
+        <p class="text">χ² wächst mit N. Drücken Sie links „Alle Zellen × 2“: Die Anteile bleiben gleich, χ² verdoppelt sich, der p-Wert sinkt. Die Effektstärke Cramérs V berücksichtigt N und bleibt gleich.</p>
+        <div class="readouts" id="eff-stats"></div>
+        <p class="note">Orientierung nach Cohen für Tabellen mit min(Zeilen, Spalten) = 2: 0,1 klein, 0,3 mittel, 0,5 groß. Für 2 × 2-Tabellen heißt V auch φ (Phi).</p>
+      </section>
+
+      <section class="step" aria-labelledby="h6">
+        <span class="eyebrow">Schritt 6 · Nachprüfen</span>
+        <h2 id="h6">Woher kommt die χ²-Verteilung?</h2>
+        <p class="text">Simulieren Sie Tabellen mit gleichem N, in denen Gruppe und Kategorie wirklich unabhängig sind. Das Histogramm ihrer χ²-Werte nähert sich der theoretischen Kurve. Der Anteil simulierter Werte mindestens so groß wie Ihrer ist ein simulierter p-Wert.</p>
+        <div class="sim-row"><button class="btn" type="button" id="sim">1.000 Tabellen unter H0 simulieren</button><span class="sim-text" id="sim-text" aria-live="polite"></span></div>
+        <svg class="chart" id="simchart" viewBox="0 0 620 250" role="img"></svg>
+      </section>
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="column">
+    <span>© 2026 Dr. Jens Hüsers · Lehrmaterial für Forschungsmethodik und Statistik</span>
+    <span class="footer-links"><a href="https://github.com/jnshsrs/stats-lab">Quellcode auf GitHub</a><span>Ohne Cookies und Tracking</span></span>
+  </div>
+</footer>
+<script src="../../assets/vendor/katex/katex.min.js"></script>
+<script src="../../assets/js/tex.js?v=202611221953"></script>
+<script src="chi.js?v=202611221953"></script>
+<script src="../../assets/js/path.js?v=202611221953"></script>
+</body>
+</html>

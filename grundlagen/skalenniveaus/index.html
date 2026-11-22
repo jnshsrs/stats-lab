@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Skalenniveaus · Stats Lab</title>
+<meta name="description" content="Nominal, ordinal, Intervall, Verhältnis: was jede Stufe erlaubt, am Kniegelenk nach der Neutral-Null-Methode und an Hop-Tests nach Kreuzbandplastik.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../assets/css/base.css?v=202611221953">
+<link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
+<link rel="stylesheet" href="skalenniveaus.css?v=202611221953">
+</head>
+<body>
+<header class="site-header">
+  <div class="column">
+    <a class="brand" href="../../">
+      <svg class="brand-mark" viewBox="0 0 22 22" aria-hidden="true"><path d="M1 19 C5 19 6 4 9 4 S13 19 17 19" fill="none" class="bm-a" stroke-width="2.2" stroke-linecap="round"/><path d="M5 19 C9 19 10 7 13 7 S17 19 21 19" fill="none" class="bm-b" stroke-width="2.2" stroke-linecap="round"/></svg>
+      Stats Lab
+    </a>
+    <nav class="site-nav" aria-label="Hauptnavigation">
+      <a href="../../">Visualisierungen</a>
+      <a href="../../glossar/">Glossar</a>
+      <a href="https://github.com/jnshsrs/stats-lab">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main class="column">
+  <section class="intro">
+    <a class="back" href="../../">← Alle Visualisierungen</a>
+    <h1>Skalenniveaus: Was darf ich rechnen?</h1>
+    <p class="byline">Dr. Jens Hüsers · Forschungsmethodik</p>
+    <p class="lede">Vier Stufen, jede baut auf der vorigen auf und erlaubt eine Rechenoperation mehr. Erst allgemein, dann am Kniegelenk und an Hop-Tests nach Kreuzbandplastik.</p>
+    <p class="motto">Teilen darf man nur, wenn die Null „nichts“ bedeutet.</p>
+  </section>
+
+  <div class="tabs" role="tablist" aria-label="Themen">
+    <button class="tab" type="button" role="tab" id="tab-grundlagen" aria-controls="panel-grundlagen" data-tab="grundlagen"><span class="tab-no">1</span>Grundlagen</button>
+    <button class="tab" type="button" role="tab" id="tab-knie" aria-controls="panel-knie" data-tab="knie"><span class="tab-no">2</span>Knie: Neutral-Null-Methode</button>
+    <button class="tab" type="button" role="tab" id="tab-hop" aria-controls="panel-hop" data-tab="hop"><span class="tab-no">3</span>Hop-Tests</button>
+  </div>
+
+  <!-- ===================== 1 Grundlagen ===================== -->
+  <section class="panel" id="panel-grundlagen" role="tabpanel" aria-labelledby="tab-grundlagen">
+    <div class="levels" role="group" aria-label="Skalenniveau wählen" id="levels">
+      <button type="button" data-l="0"><span class="lv-no">1</span>Nominal</button>
+      <button type="button" data-l="1"><span class="lv-no">2</span>Ordinal</button>
+      <button type="button" data-l="2"><span class="lv-no">3</span>Intervall</button>
+      <button type="button" data-l="3"><span class="lv-no">4</span>Verhältnis</button>
+    </div>
+    <div class="scene-wrap">
+      <svg class="scene" id="scene" viewBox="0 0 900 330" role="img" aria-label="Animierte Darstellung des gewählten Skalenniveaus"></svg>
+      <div class="scene-ctrl" id="scene-ctrl"></div>
+    </div>
+    <div class="level-text" id="level-text" aria-live="polite"></div>
+    <div class="stepper">
+      <button class="btn ghost" type="button" id="lv-prev">← Zurück</button>
+      <button class="btn" type="button" id="lv-next">Nächste Stufe →</button>
+    </div>
+    <h2 class="h2-small">Was ist erlaubt?</h2>
+    <div class="table-wrap"><table class="ops" id="ops"></table></div>
+    <p class="note">Jede Stufe erbt alles von der vorigen. Höhere Stufen lassen sich immer herunterstufen (Alter in Jahren → Altersgruppen), aber nie umgekehrt.</p>
+  </section>
+
+  <!-- ===================== 2 Knie ===================== -->
+  <section class="panel" id="panel-knie" role="tabpanel" aria-labelledby="tab-knie" hidden>
+    <div class="split">
+      <div class="figure">
+        <svg class="scene" id="knee" viewBox="0 0 520 420" role="img" aria-label="Seitenansicht eines Beins mit Kniewinkel"></svg>
+        <div class="legend"><span><i class="sw" style="background:var(--kontrolle)"></i>maximale Streckung</span><span><i class="sw" style="background:var(--therapie)"></i>maximale Beugung</span><span><i class="sw" style="background:var(--area-b)"></i>Bewegungsumfang</span><span><i class="sw line"></i>Nulllinie</span></div>
+      </div>
+      <div class="detail">
+        <span class="kicker">Gelenkstellung</span>
+        <div class="ctrl"><div class="ctrl-head"><label for="ext">Maximale Streckung (− = Überstreckung)</label><output id="ext-v"></output></div><input id="ext" type="range" min="-15" max="30" step="1" value="5"></div>
+        <div class="ctrl"><div class="ctrl-head"><label for="flex">Maximale Beugung</label><output id="flex-v"></output></div><input id="flex" type="range" min="40" max="150" step="1" value="125"></div>
+        <div class="ctrl shift"><div class="ctrl-head"><label for="zero">Nulllinie verschieben (Gedankenexperiment)</label><output id="zero-v"></output></div><input id="zero" type="range" min="-30" max="30" step="1" value="0"></div>
+        <div class="compare-2" id="knee-out"></div>
+      </div>
+    </div>
+    <div class="two">
+      <div class="card">
+        <span class="badge">Gelenkstellung · Intervallskala</span>
+        <p>0° ist die gestreckte Neutralstellung. Das ist eine Vereinbarung, kein „nichts“: Die Werte laufen über die Null hinaus ins Negative, in die Überstreckung. Eine Stellung von −5° ist nicht „weniger als keine Beugung“, sondern einfach eine andere Stellung. Deshalb sind Differenzen sinnvoll, Verhältnisse nicht: „120° ist 24-mal so viel Beugung wie 5°“ ergibt keinen Sinn.</p>
+      </div>
+      <div class="card ok">
+        <span class="badge">Bewegungsumfang · Verhältnisskala</span>
+        <p>Der Bewegungsumfang ist eine Differenz zweier Stellungen. Er kann nicht negativ werden, und 0° heißt tatsächlich „keine Bewegung“. Damit hat er eine echte Null, und Prozente sind erlaubt. Dasselbe gilt für die Seitendifferenz zwischen linkem und rechtem Knie.</p>
+      </div>
+    </div>
+    <div class="clinic">
+      <h2 class="h2-small">Klinik A gegen Klinik B</h2>
+      <p class="text">Mittlerer Bewegungsumfang sechs Wochen nach Knie-TEP. Hier ist ein Prozentvergleich zulässig, weil es um den Bewegungsumfang geht und nicht um eine Gelenkstellung.</p>
+      <div class="panel-grid">
+        <div class="ctrl"><div class="ctrl-head"><label for="romA">Klinik A · Bewegungsumfang</label><output id="romA-v"></output></div><input id="romA" type="range" min="60" max="140" step="1" value="108"></div>
+        <div class="ctrl"><div class="ctrl-head"><label for="romB">Klinik B · Bewegungsumfang</label><output id="romB-v"></output></div><input id="romB" type="range" min="60" max="140" step="1" value="90"></div>
+      </div>
+      <svg class="scene" id="clinic" viewBox="0 0 900 130" role="img" aria-label="Balken für den Bewegungsumfang beider Kliniken"></svg>
+      <p class="statement" id="clinic-text"></p>
+    </div>
+  </section>
+
+  <!-- ===================== 3 Hop-Tests ===================== -->
+  <section class="panel" id="panel-hop" role="tabpanel" aria-labelledby="tab-hop" hidden>
+    <span class="eyebrow">Single Hop for Distance</span>
+    <h2>Limb Symmetry Index: Teilen mit echter Null</h2>
+    <p class="text">Nach einer Kreuzbandplastik springen Patientinnen und Patienten einbeinig so weit wie möglich. Der Limb Symmetry Index setzt das betroffene Bein ins Verhältnis zum gesunden: LSI = betroffen / gesund × 100. Das funktioniert, weil eine Sprungweite von 0 cm wirklich „kein Sprung“ bedeutet. Verschieben Sie die Null und beobachten Sie, was mit dem LSI passiert.</p>
+    <div class="panel-grid three">
+      <div class="ctrl"><div class="ctrl-head"><label for="hg">Gesundes Bein</label><output id="hg-v"></output></div><input id="hg" type="range" min="100" max="240" step="5" value="200"></div>
+      <div class="ctrl"><div class="ctrl-head"><label for="hb">Betroffenes Bein</label><output id="hb-v"></output></div><input id="hb" type="range" min="60" max="240" step="5" value="150"></div>
+      <div class="ctrl shift"><div class="ctrl-head"><label for="hz">Gemessen ab Linie bei</label><output id="hz-v"></output></div><input id="hz" type="range" min="0" max="120" step="5" value="0"></div>
+    </div>
+    <svg class="scene" id="hop" viewBox="0 0 900 250" role="img" aria-label="Zwei Sprungbahnen mit Maßband"></svg>
+    <div class="formula" id="lsi-f"></div>
+    <div class="readouts" id="lsi-r"></div>
+
+    <span class="eyebrow mt">6-Meter Timed Hop</span>
+    <h2>„21 Prozent schneller“? Eine kleine Falle</h2>
+    <p class="text">Beim Timed Hop wird die Zeit für 6 Meter auf einem Bein gemessen. Zeiten haben eine echte Null, Prozentaussagen sind also erlaubt. Aber welche?</p>
+    <div class="panel-grid">
+      <div class="ctrl"><div class="ctrl-head"><label for="tg">Gesundes Bein</label><output id="tg-v"></output></div><input id="tg" type="range" min="1.6" max="3.0" step="0.1" value="2.2"></div>
+      <div class="ctrl"><div class="ctrl-head"><label for="tb">Betroffenes Bein</label><output id="tb-v"></output></div><input id="tb" type="range" min="1.6" max="4.0" step="0.1" value="2.8"></div>
+    </div>
+    <div class="race-wrap">
+      <svg class="scene" id="race" viewBox="0 0 900 150" role="img" aria-label="Rennen über 6 Meter"></svg>
+      <button class="btn" type="button" id="race-go">Start: beide Beine hüpfen</button>
+    </div>
+    <div class="quiz" id="quiz">
+      <p class="question">Um wie viel Prozent ist das gesunde Bein schneller?</p>
+      <div class="answers" id="answers"></div>
+      <p class="feedback" id="feedback" aria-live="polite"></p>
+    </div>
+    <div class="readouts" id="time-r"></div>
+    <p class="callout">Sauber formuliert: „Das gesunde Bein braucht rund <b id="t-short">21 %</b> weniger Zeit.“ Oder: „Die Geschwindigkeit ist <b id="t-fast">27 %</b> höher.“ Beides stimmt, gemeint ist aber nicht dasselbe. „Schneller“ allein ist mehrdeutig.</p>
+
+    <details class="infobox">
+      <summary>Exkurs: Darf man Zeiten logarithmieren?</summary>
+      <div>
+        <p>Ja, sinnvoll ist das aber nur bei Verhältnisskalen und nur für Werte größer null. Der Grund: Eine Differenz von Logarithmen ist ein Verhältnis, log(a) − log(b) = log(a / b). Ohne echte Null hätte dieses Verhältnis keine Bedeutung.</p>
+        <p>Dass Zeiten oft rechtsschief verteilt sind, ist nur der <i>Anlass</i>, sie zu logarithmieren, nicht die <i>Begründung</i>. Nebenbei löst der Logarithmus die Falle oben: <span class="num" id="log-text"></span></p>
+      </div>
+    </details>
+  </section>
+
+  <section class="block takeaway" aria-label="Merksatz">
+    <p class="big">Teilen darf man nur, wenn die Null „nichts“ bedeutet.</p>
+    <p class="text">Prüffrage für jede Variable: Kann der Wert negativ werden oder ist die Null nur vereinbart? Dann höchstens Differenzen. Bedeutet 0 „nichts davon“? Dann auch Verhältnisse und Prozente.</p>
+    <p><a href="../../grundlagen/lage-streuung/">Weiter zu Lage und Streuung →</a></p>
+  </section>
+
+  <section class="block refs" aria-labelledby="refs-h">
+    <h2 id="refs-h">Zum Weiterlesen</h2>
+    <ul>
+      <li>Stevens, S. S. (1946). On the theory of scales of measurement. <i>Science, 103</i>, 677–680.</li>
+      <li>Ryf, C., &amp; Weymann, A. (1995). The neutral zero method: A principle of measuring joint function. <i>Injury, 26</i>(Suppl. 1), 1–11.</li>
+      <li>Noyes, F. R., Barber, S. D., &amp; Mangine, R. E. (1991). Abnormal lower limb symmetry determined by function hop tests after anterior cruciate ligament rupture. <i>American Journal of Sports Medicine, 19</i>, 513–518.</li>
+    </ul>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="column">
+    <span>© 2026 Dr. Jens Hüsers · Lehrmaterial für Forschungsmethodik und Statistik</span>
+    <span class="footer-links"><a href="https://github.com/jnshsrs/stats-lab">Quellcode auf GitHub</a><span>Ohne Cookies und Tracking</span></span>
+  </div>
+</footer>
+<script src="../../assets/vendor/katex/katex.min.js"></script>
+<script src="../../assets/js/tex.js?v=202611221953"></script>
+<script src="skalenniveaus.js?v=202611221953"></script>
+<script src="../../assets/js/path.js?v=202611221953"></script>
+</body>
+</html>

@@ -104,7 +104,7 @@ function render() {
     <div class="props"><span class="prop plus">+ ${st.plus}</span><span class="prop minus">− ${st.minus}</span></div>
     <div class="example">${st.example}</div>
     ${st.note ? `<p class="note">${st.note}</p>` : ""}
-    ${st.link ? `<p class="note"><a href="../t-test/">Diesen Schritt in der t-Test-Kaskade ansehen →</a></p>` : ""}`;
+    ${st.link ? `<p class="note"><a href="../../testen/t-test/">Diesen Schritt in der t-Test-Kaskade ansehen →</a></p>` : ""}`;
   $("step-count").textContent = `${cur + 1} von ${STEPS.length}`;
   document.querySelectorAll("#dots button").forEach((b, i) => b.setAttribute("aria-selected", i === cur));
   $("prev").disabled = cur === 0; $("next").disabled = cur === STEPS.length - 1;

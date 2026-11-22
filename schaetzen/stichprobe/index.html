@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stichprobe und Population · Stats Lab</title>
+<meta name="description" content="Warum Inferenzstatistik: Stichproben aus einer bekannten Population ziehen und die Streuung der Personen von der Streuung der Schätzung unterscheiden.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../assets/css/base.css?v=202611221953">
+<link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
+<link rel="stylesheet" href="stichprobe.css?v=202611221953">
+</head>
+<body>
+<header class="site-header">
+  <div class="column">
+    <a class="brand" href="../../">
+      <svg class="brand-mark" viewBox="0 0 22 22" aria-hidden="true"><path d="M1 19 C5 19 6 4 9 4 S13 19 17 19" fill="none" class="bm-a" stroke-width="2.2" stroke-linecap="round"/><path d="M5 19 C9 19 10 7 13 7 S17 19 21 19" fill="none" class="bm-b" stroke-width="2.2" stroke-linecap="round"/></svg>
+      Stats Lab
+    </a>
+    <nav class="site-nav" aria-label="Hauptnavigation">
+      <a href="../../">Visualisierungen</a>
+      <a href="../../glossar/">Glossar</a>
+      <a href="https://github.com/jnshsrs/stats-lab">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main class="column">
+  <section class="intro">
+    <a class="back" href="../../">← Alle Visualisierungen</a>
+    <h1>Stichprobe und Population</h1>
+    <p class="byline">Dr. Jens Hüsers · Forschungsmethodik</p>
+    <p class="lede">Hier kennen wir ausnahmsweise die ganze Population: 2.000 Personen, bei allen ist der Bizepsumfang gemessen. In der Praxis sehen wir nur eine Stichprobe. Was bedeutet das für unser Schließen? Darum geht es in der Inferenzstatistik.</p>
+    <div class="dl-bar"><span class="lbl">Daten für die Übung</span><a class="btn ghost" href="daten/Population_Bizeps.xlsx" download>Excel (.xlsx)</a><a class="btn ghost" href="daten/Population_Bizeps.sav" download>SPSS-Daten (.sav)</a><a class="btn ghost" href="daten/Stichprobe_ziehen.sps" download>SPSS-Syntax (.sps)</a><a class="dl-more" href="#selbst">Anleitung</a></div>
+  </section>
+
+  <section class="controls" aria-label="Stichproben ziehen">
+    <div class="ctrl-grid">
+      <div class="ctrl">
+        <div class="ctrl-head"><label for="n">Stichprobengröße n</label><output id="n-v" class="num"></output></div>
+        <input id="n" type="range" min="2" max="100" step="1" value="10">
+      </div>
+      <div class="ctrl-row">
+        <button class="btn" type="button" id="s1">1 Stichprobe ziehen</button>
+        <button class="btn ghost" type="button" id="s10">10</button>
+        <button class="btn ghost" type="button" id="s100">100</button>
+        <button class="btn ghost" type="button" id="s1000">1.000</button>
+        <button class="btn ghost" type="button" id="reset">Zurücksetzen</button>
+      </div>
+    </div>
+    <p class="count num" id="count" aria-live="polite"></p>
+  </section>
+
+  <details class="acc" id="population" open>
+    <summary><span class="acc-no">1</span><span class="acc-title">Die Population<span class="acc-teaser">2.000 Personen, jede anders: Die Personen streuen mit σ.</span></span></summary>
+    <div class="acc-body">
+      <p class="text">Jeder Punkt ist eine Person, waagerecht steht ihr Bizepsumfang. Die Höhe ist nur verteilt, damit sich die Punkte nicht verdecken. Der wahre Mittelwert μ und die wahre Standardabweichung σ sind hier bekannt. In einer echten Studie wüssten wir beides nicht, genau das wollen wir schätzen.</p>
+      <svg class="chart" id="pop" viewBox="0 0 920 300" role="img"></svg>
+      <div class="legend"><span><i class="sw" style="background:var(--area-a)"></i>Person der Population</span><span><i class="sw dot"></i>in der letzten Stichprobe gezogen</span><span><i class="sw band"></i>μ ± σ</span></div>
+      <div class="readouts" id="pop-stats"></div>
+    </div>
+  </details>
+
+  <details class="acc" id="stichprobe" open>
+    <summary><span class="acc-no">2</span><span class="acc-title">Eine Stichprobe<span class="acc-teaser">Wir sehen nur n Personen, und ihr Mittelwert trifft μ nie genau.</span></span></summary>
+    <div class="acc-body">
+      <p class="text">Jede Zeile ist eine Stichprobe, die neueste steht unten. Der senkrechte Strich ist ihr Mittelwert x̄, die gestrichelte Linie der wahre Mittelwert μ. Welche Personen zufällig gezogen werden, bestimmt x̄. Eine andere Stichprobe hätte ein anderes Ergebnis geliefert.</p>
+      <svg class="chart" id="rows" viewBox="0 0 920 330" role="img"></svg>
+      <div class="readouts" id="sample-stats"></div>
+      <p class="callout">Die Abweichung x̄ − μ ist kein Fehler beim Messen oder Rechnen. Sie entsteht allein dadurch, dass wir nicht alle Personen sehen. Man nennt sie <b>Stichprobenfehler</b>.</p>
+    </div>
+  </details>
+
+  <details class="acc" id="streuung" open>
+    <summary><span class="acc-no">3</span><span class="acc-title">Zwei Arten von Streuung<span class="acc-teaser">Personen streuen mit σ, Mittelwerte nur mit σ / √n.</span></span></summary>
+    <div class="acc-body">
+      <p class="text">Oben die Bizepsumfänge der 2.000 Personen, unten die Mittelwerte aller bisher gezogenen Stichproben, auf derselben Achse. Ziehen Sie 100 oder 1.000 Stichproben: Die Mittelwerte drängen sich viel enger um μ als die Personen. Ihre Streuung heißt <b>Standardfehler</b>.</p>
+      <svg class="chart" id="two" viewBox="0 0 920 360" role="img"></svg>
+      <div class="legend"><span><i class="sw" style="background:var(--area-a)"></i>Personen (Population)</span><span><i class="sw" style="background:var(--therapie)"></i>Mittelwerte der Stichproben</span><span><i class="sw bracket"></i>± 1 Standardabweichung</span></div>
+      <div class="readouts" id="two-stats"></div>
+
+      <h3 class="sub">Was ändert sich, wenn n wächst?</h3>
+      <p class="text">Bewegen Sie den Regler für n. Die Streuung zwischen den Personen bleibt gleich, denn die Menschen werden nicht ähnlicher, nur weil wir mehr von ihnen messen. Kleiner wird nur die Streuung der Mittelwerte, und zwar mit der Wurzel aus n.</p>
+      <svg class="chart" id="vsn" viewBox="0 0 920 300" role="img"></svg>
+      <div class="legend"><span><i class="sw line soft"></i>Streuung der Personen σ</span><span><i class="sw line"></i>Streuung der Mittelwerte σ / √n</span><span><i class="sw dia"></i>simuliert</span></div>
+      <div class="formula" id="se-formula"></div>
+      <p class="callout"><b>Merksatz:</b> Die Standardabweichung beschreibt, wie verschieden die Personen sind. Der Standardfehler beschreibt, wie unsicher unsere Schätzung von μ ist. Mehr Personen machen nur die Schätzung genauer. Vierfaches n halbiert den Standardfehler.</p>
+      <p class="text small">Streng genommen ist die Streuung der Mittelwerte hier minimal kleiner als σ / √n, weil ohne Zurücklegen aus einer endlichen Population gezogen wird. Bei 2.000 Personen und n ≤ 100 macht das höchstens 2,5 % aus.</p>
+    </div>
+  </details>
+
+  <details class="acc" id="selbst">
+    <summary><span class="acc-no">4</span><span class="acc-title">Selbst ziehen in Excel und SPSS<span class="acc-teaser">Dieselbe Population zum Herunterladen, für die Übung im Kurs.</span></span></summary>
+    <div class="acc-body">
+      <p class="text">Die Dateien enthalten genau die 2.000 Personen dieser Seite, mit Geschlecht und Trainingsstatus. Jede Gruppe zieht eine Stichprobe mit n = 10 und eine mit n = 40, berechnet den Mittelwert und trägt ihn ein. Am Ende vergleichen wir die Streuung der Mittelwerte mit σ / √n.</p>
+      <ul class="downloads">
+        <li><a href="daten/Population_Bizeps.xlsx" download>Population_Bizeps.xlsx</a><span>Excel: Blatt „Stichprobe“ zieht mit F9 eine neue Stichprobe, Blatt „Tafel“ sammelt die Mittelwerte der Gruppen.</span></li>
+        <li><a href="daten/Population_Bizeps.sav" download>Population_Bizeps.sav</a><span>SPSS: Daten › Fälle auswählen › Zufallsstichprobe, dabei „Filtern“ wählen, nicht „Löschen“.</span></li>
+        <li><a href="daten/Stichprobe_ziehen.sps" download>Stichprobe_ziehen.sps</a><span>SPSS-Syntax: zieht mit TEMPORARY und SAMPLE jedes Mal eine neue Stichprobe, ohne die Population zu verändern.</span></li>
+      </ul>
+      <p class="text">Wie es weitergeht: Auf der nächsten Station sehen Sie, dass die Mittelwerte normalverteilt werden, egal wie die Population aussieht, und wie aus dem Standardfehler das Konfidenzintervall entsteht. <a href="../../schaetzen/zgws/">Weiter zu Grenzwertsatz, Standardfehler, Konfidenzintervall →</a></p>
+    </div>
+  </details>
+</main>
+
+<footer class="site-footer">
+  <div class="column">
+    <span>© 2026 Dr. Jens Hüsers · Lehrmaterial für Forschungsmethodik und Statistik</span>
+    <span class="footer-links"><a href="https://github.com/jnshsrs/stats-lab">Quellcode auf GitHub</a><span>Ohne Cookies und Tracking</span></span>
+  </div>
+</footer>
+<script src="population.js?v=202611221953"></script>
+<script src="../../assets/vendor/katex/katex.min.js"></script>
+<script src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
+<script src="../../assets/js/tex.js?v=202611221953"></script>
+<script src="stichprobe.js?v=202611221953"></script>
+<script src="../../assets/js/path.js?v=202611221953"></script>
+</body>
+</html>

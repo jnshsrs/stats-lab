@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fallzahl und Power · Stats Lab</title>
+<meta name="description" content="Rechner für Fallzahl, Power, kleinsten entdeckbaren Effekt und α bei t-Tests und dem Vergleich zweier Anteile.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../assets/css/base.css?v=202611221953">
+<link rel="stylesheet" href="fallzahl.css?v=202611221953">
+</head>
+<body>
+<header class="site-header">
+  <div class="column">
+    <a class="brand" href="../../">
+      <svg class="brand-mark" viewBox="0 0 22 22" aria-hidden="true"><path d="M1 19 C5 19 6 4 9 4 S13 19 17 19" fill="none" class="bm-a" stroke-width="2.2" stroke-linecap="round"/><path d="M5 19 C9 19 10 7 13 7 S17 19 21 19" fill="none" class="bm-b" stroke-width="2.2" stroke-linecap="round"/></svg>
+      Stats Lab
+    </a>
+    <nav class="site-nav" aria-label="Hauptnavigation">
+      <a href="../../">Visualisierungen</a>
+      <a href="../../glossar/">Glossar</a>
+      <a href="https://github.com/jnshsrs/stats-lab">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main class="column">
+  <section class="intro">
+    <a class="back" href="../../">← Alle Visualisierungen</a>
+    <h1>Fallzahl und Power</h1>
+    <p class="byline">Dr. Jens Hüsers · Forschungsmethodik</p>
+    <p class="lede">Vier Größen hängen zusammen: Signifikanzniveau α, Power 1 − β, Effektstärke und Stichprobengröße n. Kennt man drei, folgt die vierte. Wählen Sie, was berechnet werden soll.</p>
+  </section>
+
+  <div class="calc-layout">
+    <section class="form" aria-label="Eingaben">
+      <div class="field">
+        <span class="lbl" id="test-lbl">Studiendesign und Test</span>
+        <div class="seg seg-col" role="group" aria-labelledby="test-lbl" id="test-seg"></div>
+      </div>
+      <div class="field">
+        <span class="lbl" id="target-lbl">Was soll berechnet werden?</span>
+        <div class="seg" role="group" aria-labelledby="target-lbl" id="target-seg"></div>
+      </div>
+      <div class="inputs" id="inputs"></div>
+    </section>
+
+    <section class="out" aria-live="polite">
+      <div class="result" id="result"></div>
+      <div class="report">
+        <div class="report-head"><span class="lbl">Formulierung für den Methodenteil</span><button class="btn ghost small" type="button" id="copy">Kopieren</button></div>
+        <p id="report"></p>
+      </div>
+      <h2 class="chart-title">Power in Abhängigkeit von n</h2>
+      <svg class="chart" id="curve" viewBox="0 0 620 300" role="img"></svg>
+      <div class="legend" id="curve-legend"></div>
+      <h2 class="chart-title">Fallzahl pro Gruppe für typische Annahmen</h2>
+      <div class="table-wrap"><table class="sens" id="sens"></table></div>
+      <p class="note" id="method-note"></p>
+    </section>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="column">
+    <span>© 2026 Dr. Jens Hüsers · Lehrmaterial für Forschungsmethodik und Statistik</span>
+    <span class="footer-links"><a href="https://github.com/jnshsrs/stats-lab">Quellcode auf GitHub</a><span>Ohne Cookies und Tracking</span></span>
+  </div>
+</footer>
+<script src="fallzahl.js?v=202611221953"></script>
+<script src="../../assets/js/path.js?v=202611221953"></script>
+</body>
+</html>

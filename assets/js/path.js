@@ -3,6 +3,7 @@
 (() => {
 "use strict";
 const BLOCKS = ["Grundlagen", "Schätzen", "Testen", "Hintergrund", "Zusammenhänge und Regression"];
+const BLOCK_SLUGS = ["grundlagen", "schaetzen", "testen", "hintergrund", "regression"];
 const PATH = [
   ["skalenniveaus", "Skalenniveaus", 0],
   ["lage-streuung", "Lage und Streuung", 0],
@@ -30,17 +31,18 @@ const PATH = [
   ["diagnostik", "Passt das Modell? Residuen und Einfluss", 4],
   ["multiple-regression", "Mehrere Einflüsse zugleich: multiple Regression", 4]
 ];
-window.STATS_LAB_PATH = { BLOCKS, PATH };
+window.STATS_LAB_PATH = { BLOCKS, BLOCK_SLUGS, PATH };
+const url = p => `../../${BLOCK_SLUGS[p[2]]}/${p[0]}/`;
 const parts = location.pathname.split("/").filter(Boolean);
 const slug = parts[parts.length - 1] === "index.html" ? parts[parts.length - 2] : parts[parts.length - 1];
 const i = PATH.findIndex(p => p[0] === slug);
 const footer = document.querySelector(".site-footer");
 if (i < 0 || !footer) return;
 const prev = PATH[i - 1], next = PATH[i + 1], cur = PATH[i];
-const link = (p, dir) => p ? `<a class="pn-${dir}" href="../${p[0]}/"><span class="pn-dir">${dir === "prev" ? "← Zurück" : "Weiter →"}</span><span class="pn-title">${p[1]}</span></a>` : `<a class="pn-${dir}" href="../"><span class="pn-dir">${dir === "prev" ? "← Start" : "Geschafft →"}</span><span class="pn-title">Alle Visualisierungen</span></a>`;
+const link = (p, dir) => p ? `<a class="pn-${dir}" href="${url(p)}"><span class="pn-dir">${dir === "prev" ? "← Zurück" : "Weiter →"}</span><span class="pn-title">${p[1]}</span></a>` : `<a class="pn-${dir}" href="../../"><span class="pn-dir">${dir === "prev" ? "← Start" : "Geschafft →"}</span><span class="pn-title">Alle Visualisierungen</span></a>`;
 const nav = document.createElement("nav");
 nav.className = "path-nav column"; nav.setAttribute("aria-label", "Lernpfad");
-nav.innerHTML = `<p class="pn-where">Lernpfad · Block ${cur[2] + 1}: ${BLOCKS[cur[2]]} · Station ${i + 1} von ${PATH.length} · <a href="../glossar/#k-${cur[0]}">Begriffe dieses Kapitels im Glossar</a></p><div class="pn-row">${link(prev, "prev")}${link(next, "next")}</div>`;
+nav.innerHTML = `<p class="pn-where">Lernpfad · Block ${cur[2] + 1}: ${BLOCKS[cur[2]]} · Station ${i + 1} von ${PATH.length} · <a href="../../glossar/#k-${cur[0]}">Begriffe dieses Kapitels im Glossar</a></p><div class="pn-row">${link(prev, "prev")}${link(next, "next")}</div>`;
 footer.before(nav);
 })();
 

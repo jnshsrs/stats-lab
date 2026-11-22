@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Multiples Testen · Stats Lab</title>
+<meta name="description" content="Warum viele Tests viele Fehlalarme erzeugen und wie Bonferroni, Holm und Benjamini-Hochberg gegensteuern. In fünf Stufen zum Simulieren.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../assets/css/base.css?v=202611221953">
+<link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
+<link rel="stylesheet" href="multiples-testen.css?v=202611221953">
+</head>
+<body>
+<header class="site-header">
+  <div class="column">
+    <a class="brand" href="../../">
+      <svg class="brand-mark" viewBox="0 0 22 22" aria-hidden="true"><path d="M1 19 C5 19 6 4 9 4 S13 19 17 19" fill="none" class="bm-a" stroke-width="2.2" stroke-linecap="round"/><path d="M5 19 C9 19 10 7 13 7 S17 19 21 19" fill="none" class="bm-b" stroke-width="2.2" stroke-linecap="round"/></svg>
+      Stats Lab
+    </a>
+    <nav class="site-nav" aria-label="Hauptnavigation">
+      <a href="../../">Visualisierungen</a>
+      <a href="../../glossar/">Glossar</a>
+      <a href="https://github.com/jnshsrs/stats-lab">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main class="column">
+  <section class="intro">
+    <a class="back" href="../../">← Alle Visualisierungen</a>
+    <h1>Multiples Testen und α-Korrektur</h1>
+    <p class="byline">Dr. Jens Hüsers · Forschungsmethodik</p>
+    <p class="lede">Eine Studie findet keinen Effekt. Dann wird nach Alter, Geschlecht, Schmerzdauer und Beruf getrennt ausgewertet, und plötzlich ist eine Subgruppe signifikant. Diese Seite zeigt in fünf Stufen, warum das passiert und was man dagegen tun kann. Die ersten drei Stufen genügen für den Einstieg.</p>
+  </section>
+
+  <details class="acc" id="acc-1" open>
+    <summary><span class="acc-no">1</span><span class="acc-title">Ein Test ist ein Würfelwurf<span class="acc-teaser">Wenn H0 stimmt, ist ein Fehlalarm so wahrscheinlich wie eine Eins auf einem Würfel mit 20 Seiten.</span></span></summary>
+    <div class="acc-body">
+      <p class="text">Stellen Sie sich vor, die Therapie wirkt nicht: H0 stimmt. Dann ist der p-Wert gleichverteilt zwischen 0 und 1. Jeder Wert ist gleich wahrscheinlich, also landet er in 5 % der Fälle unter 0,05. Ein Test bei α = 5 % ist damit wie ein Wurf mit einem 20er-Würfel: Eine Eins bedeutet „signifikant“, obwohl nichts dahinter steckt.</p>
+      <div class="die-row">
+        <div class="die" id="die" aria-live="polite">?</div>
+        <div class="die-side">
+          <div class="actions">
+            <button class="btn" type="button" id="d1">1× würfeln</button>
+            <button class="btn" type="button" id="d100">100× würfeln</button>
+            <button class="btn ghost" type="button" id="d-reset">Zurücksetzen</button>
+          </div>
+          <div class="strip" id="die-strip" aria-hidden="true"></div>
+        </div>
+      </div>
+      <div class="legend"><span><i class="sw" style="background:var(--therapie)"></i>Eins: Fehlalarm</span><span><i class="sw" style="background:var(--beta-fill)"></i>2 bis 20: kein Befund</span></div>
+      <div class="readouts" id="die-stats"></div>
+    </div>
+  </details>
+
+  <details class="acc" id="acc-2" open>
+    <summary><span class="acc-no">2</span><span class="acc-title">Viele Tests, viele Würfe<span class="acc-teaser">Wer 20 Subgruppen testet, findet in zwei von drei Studien einen „Effekt“, den es nicht gibt.</span></span></summary>
+    <div class="acc-body">
+      <p class="text">Jetzt wird nicht mehr gewürfelt. Jede Kachel ist ein echter t-Test mit zwei Gruppen zu je 20 Personen, ohne jeden Effekt. Eine Studie besteht aus k solchen Subgruppen-Tests. Die Frage ist: Wie oft ist in einer Studie <b>mindestens ein</b> Test signifikant?</p>
+      <div class="panel">
+        <div class="ctrl"><div class="ctrl-head"><label for="k2">k · Anzahl Tests je Studie</label><output id="k2-v" class="num"></output></div><input id="k2" type="range" min="1" max="40" step="1" value="20"></div>
+        <div class="actions">
+          <button class="btn" type="button" id="s2-1">1 Studie</button>
+          <button class="btn" type="button" id="s2-100">100 Studien</button>
+          <button class="btn ghost" type="button" id="s2-reset">Zurücksetzen</button>
+          <span class="count num" id="s2-count"></span>
+        </div>
+      </div>
+      <h3 class="sub">Letzte Studie</h3>
+      <div class="tiles" id="tiles2" aria-live="polite"></div>
+      <div class="legend"><span><i class="sw" style="background:var(--therapie)"></i>p &lt; α: Fehlalarm</span><span><i class="sw" style="background:var(--highlight);outline:1px solid var(--line)"></i>nicht signifikant</span></div>
+      <div class="two-charts">
+        <figure><figcaption>Wahrscheinlichkeit für mindestens einen Fehlalarm</figcaption><svg class="chart" id="fwer2" viewBox="0 0 440 280" role="img" aria-label="Kurve 1 minus 0,95 hoch k"></svg></figure>
+        <figure><figcaption>Alle bisher simulierten p-Werte</figcaption><svg class="chart" id="hist2" viewBox="0 0 440 280" role="img" aria-label="Histogramm der p-Werte"></svg></figure>
+      </div>
+      <div class="legend"><span><i class="sw line"></i>Theorie 1 − 0,95<sup>k</sup></span><span><i class="sw" style="background:var(--kontrolle);border-radius:50%;width:12px"></i>Ihre Simulation</span><span><i class="sw" style="background:var(--therapie)"></i>p-Werte unter 0,05</span></div>
+      <div class="formula" id="f2"></div>
+      <div class="readouts" id="r2"></div>
+      <p class="callout">Das Histogramm ist flach: Unter H0 sind alle p-Werte gleich wahrscheinlich. Der einzelne Test hält sein α von 5 % ein. Die Studie als Ganzes nicht, weil sie k Chancen auf einen Fehlalarm hat. Diese Gesamtrate heißt <b>familienweise Fehlerrate (FWER)</b>. Das ist Fehler 6 im Review von D’Arrigo et al. (2024).</p>
+    </div>
+  </details>
+
+  <details class="acc" id="acc-3" open>
+    <summary><span class="acc-no">3</span><span class="acc-title">Bonferroni: α durch k teilen<span class="acc-teaser">Die einfachste Korrektur. Jeder Test wird strenger, die Studie hält wieder 5 %.</span></span></summary>
+    <div class="acc-body">
+      <p class="text">Wenn k Tests zusammen höchstens 5 % Fehlalarme haben sollen, bekommt jeder einzelne nur α / k. Bei 20 Tests heißt das: Signifikant ist erst p &lt; 0,0025. Schalten Sie die Korrektur ein und simulieren Sie erneut.</p>
+      <div class="panel">
+        <div class="panel-grid">
+          <div class="ctrl"><div class="ctrl-head"><label for="k3">k · Anzahl Tests je Studie</label><output id="k3-v" class="num"></output></div><input id="k3" type="range" min="1" max="40" step="1" value="20"></div>
+          <div class="ctrl"><span class="lbl" id="m3-lbl">Schwelle je Test</span><div class="seg" role="group" aria-labelledby="m3-lbl" id="m3"><button type="button" data-m="none" aria-pressed="false">α = 0,05</button><button type="button" data-m="bonf" aria-pressed="true">Bonferroni α / k</button></div></div>
+        </div>
+        <div class="actions">
+          <button class="btn" type="button" id="s3-1">1 Studie</button>
+          <button class="btn" type="button" id="s3-100">100 Studien</button>
+          <button class="btn ghost" type="button" id="s3-reset">Zurücksetzen</button>
+          <span class="count num" id="s3-count"></span>
+        </div>
+      </div>
+      <h3 class="sub">Letzte Studie</h3>
+      <div class="tiles" id="tiles3" aria-live="polite"></div>
+      <div class="legend"><span><i class="sw" style="background:var(--therapie)"></i>unter der Schwelle: Fehlalarm</span><span><i class="sw" style="background:var(--highlight);outline:2px dashed var(--accent-soft)"></i>p &lt; 0,05, aber nicht unter α / k</span></div>
+      <svg class="chart" id="fwer3" viewBox="0 0 900 280" role="img" aria-label="FWER ohne und mit Bonferroni"></svg>
+      <div class="legend"><span><i class="sw line" style="border-color:var(--accent-soft)"></i>ohne Korrektur</span><span><i class="sw line"></i>mit Bonferroni</span><span><i class="sw" style="background:var(--kontrolle);border-radius:50%;width:12px"></i>Ihre Simulation</span></div>
+      <div class="formula" id="f3"></div>
+      <div class="readouts" id="r3"></div>
+    </div>
+  </details>
+
+  <details class="acc" id="acc-4">
+    <summary><span class="acc-no">4</span><span class="acc-title">Der Preis der Korrektur<span class="acc-teaser">Bonferroni verhindert Fehlalarme. Dafür übersieht es mehr echte Effekte: β steigt, die Power sinkt.</span></span></summary>
+    <div class="acc-body">
+      <p class="text">Bisher wirkte die Therapie in keiner Subgruppe. Jetzt hat ein Teil der Tests einen echten Effekt. Eine strengere Schwelle macht nicht nur Fehlalarme seltener, sondern auch Treffer. Das ist derselbe Zielkonflikt zwischen α und β wie in der <a href="../../testen/entscheidung/">Entscheidungstheorie</a>.</p>
+      <div class="panel">
+        <div class="panel-grid four">
+          <div class="ctrl"><div class="ctrl-head"><label for="k4">k · Tests je Studie</label><output id="k4-v" class="num"></output></div><input id="k4" type="range" min="2" max="40" step="1" value="20"></div>
+          <div class="ctrl"><div class="ctrl-head"><label for="t4">davon mit Effekt in der Population</label><output id="t4-v" class="num"></output></div><input id="t4" type="range" min="0" max="20" step="1" value="5"></div>
+          <div class="ctrl"><div class="ctrl-head"><label for="d4">d · Effektstärke</label><output id="d4-v" class="num"></output></div><input id="d4" type="range" min="0.2" max="1.2" step="0.1" value="0.5"></div>
+          <div class="ctrl"><div class="ctrl-head"><label for="n4">n je Gruppe</label><output id="n4-v" class="num"></output></div><input id="n4" type="range" min="10" max="150" step="5" value="50"></div>
+        </div>
+        <div class="actions">
+          <div class="seg compact" role="group" aria-label="Schwelle in den Kacheln" id="m4"><button type="button" data-m="none" aria-pressed="false">ohne Korrektur</button><button type="button" data-m="bonf" aria-pressed="true">Bonferroni</button></div>
+          <button class="btn" type="button" id="s4-1">1 Studie</button>
+          <button class="btn ghost" type="button" id="s4-500">500 Studien neu</button>
+        </div>
+      </div>
+      <h3 class="sub">Letzte Studie</h3>
+      <div class="tiles" id="tiles4" aria-live="polite"></div>
+      <div class="legend"><span><i class="sw" style="background:var(--therapie)"></i>Treffer: echter Effekt erkannt</span><span><i class="sw" style="background:var(--highlight);outline:2px solid var(--therapie)"></i>echter Effekt übersehen (β-Fehler)</span><span><i class="sw" style="background:var(--alpha-fill)"></i>Fehlalarm (α-Fehler)</span><span><i class="sw" style="background:var(--highlight);outline:1px solid var(--line)"></i>richtig nicht signifikant</span></div>
+      <h3 class="sub">Über <span id="n4-studies">500</span> simulierte Studien</h3>
+      <div class="compare" id="cmp4"></div>
+      <p class="callout" id="c4"></p>
+    </div>
+  </details>
+
+  <details class="acc" id="acc-5">
+    <summary><span class="acc-no">5</span><span class="acc-title">Klügere Verfahren: Holm und Benjamini-Hochberg<span class="acc-teaser">Für Fortgeschrittene. Die p-Werte sortieren und Schwellen stufenweise vergeben.</span></span></summary>
+    <div class="acc-body">
+      <p class="text">Beide Verfahren sortieren die p-Werte vom kleinsten zum größten und vergleichen jeden mit einer eigenen Schwelle. <b>Holm</b> beginnt beim kleinsten mit α / k, beim zweiten mit α / (k − 1) und so weiter, und hört beim ersten Nicht-Treffer auf. Es schützt wie Bonferroni die FWER, verliert aber weniger Power. <b>Benjamini-Hochberg</b> geht einen anderen Weg: Es kontrolliert nicht die Chance auf irgendeinen Fehlalarm, sondern den <b>Anteil der Fehlalarme unter allen Befunden</b> (False Discovery Rate, FDR). Das passt, wenn viele Tests explorativ sind und einzelne Fehlalarme verkraftbar.</p>
+      <div class="panel">
+        <div class="panel-grid">
+          <div class="ctrl"><div class="ctrl-head"><label for="k5">k · Tests je Studie</label><output id="k5-v" class="num"></output></div><input id="k5" type="range" min="5" max="40" step="1" value="20"></div>
+          <div class="ctrl"><div class="ctrl-head"><label for="t5">davon mit Effekt in der Population (d = 0,5, n = 50 je Gruppe)</label><output id="t5-v" class="num"></output></div><input id="t5" type="range" min="0" max="20" step="1" value="6"></div>
+        </div>
+        <div class="actions">
+          <div class="seg compact" role="group" aria-label="Verfahren hervorheben" id="m5"><button type="button" data-m="none" aria-pressed="false">ohne</button><button type="button" data-m="bonf" aria-pressed="false">Bonferroni</button><button type="button" data-m="holm" aria-pressed="true">Holm</button><button type="button" data-m="bh" aria-pressed="false">BH</button></div>
+          <button class="btn" type="button" id="s5-1">Neue Studie</button>
+        </div>
+      </div>
+      <svg class="chart" id="pplot" viewBox="0 0 900 380" role="img" aria-label="Sortierte p-Werte mit den Schwellen der Verfahren"></svg>
+      <div class="legend"><span><i class="sw" style="background:var(--therapie);border-radius:50%;width:12px"></i>Test mit echtem Effekt</span><span><i class="sw" style="background:var(--surface);border:2px solid var(--kontrolle);border-radius:50%;width:12px"></i>Test ohne Effekt</span><span><i class="sw" style="background:var(--alpha-fill);opacity:.5"></i>vom gewählten Verfahren verworfen</span><span><i class="sw line" style="border-color:var(--fg)"></i>Schwelle des gewählten Verfahrens</span></div>
+      <p class="text" id="t5-text"></p>
+      <h3 class="sub">Über 1.000 simulierte Studien</h3>
+      <div class="table-wrap"><table class="mtable" id="tab5"></table></div>
+      <p class="note">FWER: Anteil der Studien mit mindestens einem Fehlalarm. FDR: mittlerer Anteil der Fehlalarme unter den signifikanten Befunden einer Studie (0, wenn nichts signifikant ist). Power: Anteil der echten Effekte, die gefunden werden.</p>
+      <p class="callout">Faustregel: In einer konfirmatorischen Studie mit wenigen, vorab festgelegten Hypothesen schützt Holm die FWER und ist Bonferroni immer mindestens ebenbürtig. Bei vielen explorativen Tests ist Benjamini-Hochberg üblich. Am besten ist es, gar nicht erst viele Tests zu brauchen: eine primäre Hypothese, vorab registriert, Subgruppen nur als Hypothesen für die nächste Studie.</p>
+    </div>
+  </details>
+
+  <section class="block takeaway" aria-label="Merksatz">
+    <p class="big">Ein signifikantes Ergebnis unter vielen ist kein Befund, sondern erwartbar. Die Frage ist nicht, ob ein Test anschlägt, sondern wie viele Chancen er hatte.</p>
+    <p><a href="../../testen/entscheidung/">Zur Entscheidungstheorie →</a> · <a href="../../testen/fallzahl/">Zur Fallzahlplanung →</a></p>
+  </section>
+
+  <section class="block refs" aria-labelledby="refs-h">
+    <h2 id="refs-h">Zum Weiterlesen</h2>
+    <ul>
+      <li>Holm, S. (1979). A simple sequentially rejective multiple test procedure. <i>Scandinavian Journal of Statistics, 6</i>, 65–70.</li>
+      <li>Benjamini, Y., &amp; Hochberg, Y. (1995). Controlling the false discovery rate: A practical and powerful approach to multiple testing. <i>Journal of the Royal Statistical Society B, 57</i>, 289–300.</li>
+      <li>Wang, R., Lagakos, S. W., Ware, J. H., Hunter, D. J., &amp; Drazen, J. M. (2007). Statistics in medicine: Reporting of subgroup analyses in clinical trials. <i>New England Journal of Medicine, 357</i>, 2189–2194.</li>
+      <li>D’Arrigo, G. et al. (2024). Common mistakes in biostatistics. <i>Clinical Kidney Journal, 17</i>(7), sfae197. <a href="https://doi.org/10.1093/ckj/sfae197">doi.org/10.1093/ckj/sfae197</a></li>
+      <li>Munroe, R. <a href="https://xkcd.com/882/">Significant</a>. xkcd 882: zwanzig Farben Gummibärchen, eine davon „verursacht“ Akne.</li>
+    </ul>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="column">
+    <span>© 2026 Dr. Jens Hüsers · Lehrmaterial für Forschungsmethodik und Statistik</span>
+    <span class="footer-links"><a href="https://github.com/jnshsrs/stats-lab">Quellcode auf GitHub</a><span>Ohne Cookies und Tracking</span></span>
+  </div>
+</footer>
+<script src="../../assets/vendor/katex/katex.min.js"></script>
+<script src="../../assets/js/tex.js?v=202611221953"></script>
+<script src="multiples-testen.js?v=202611221953"></script>
+<script src="../../assets/js/path.js?v=202611221953"></script>
+</body>
+</html>
