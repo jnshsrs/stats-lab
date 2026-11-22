@@ -94,23 +94,50 @@ function build() {
 }
 
 /* ---------- 2 Verteilungsfunktion und Tabelle ---------- */
-function drawCdf(d) {
-  const L = 70, R = 900, T = 16, B = 240, n = d.n, bw = (R - L) / (n + 1), x = k => L + k * bw, y = p => B - p * (B - T);
+/* Treppe der Verteilungsfunktion. mode "crit": kritische Werte; mode "p": p-Wert für beobachtetes k.
+   Jeder Sprung ist so hoch wie das Stäbchen P(X = k) aus Schritt 1 und hat dessen Farbe. */
+function stairs(d, mode, zoom) {
+  const L = 70, R = 900, T = 16, B = 240, n = d.n, bw = (R - L) / (n + 1), x = k => L + k * bw + bw / 2;
+  const [y0, y1] = zoom === "low" ? [0, 0.15] : zoom === "high" ? [0.85, 1] : [0, 1];
+  const y = p => B - (p - y0) / (y1 - y0) * (B - T);
+  const tick = zoom === "all" ? [0, 0.25, 0.5, 0.75, 1] : zoom === "low" ? [0, 0.025, 0.05, 0.075, 0.1, 0.125, 0.15] : [0.85, 0.875, 0.9, 0.925, 0.95, 0.975, 1];
   let s = "";
-  [0, 0.25, 0.5, 0.75, 1].forEach(p => s += `<line x1="${L}" x2="${R}" y1="${y(p)}" y2="${y(p)}" stroke="var(--grid)"/><text x="${L - 8}" y="${y(p) + 4}" text-anchor="end">${fmt(p, 2)}</text>`);
-  const hi = 1 - d.lim, lo = d.lim;
-  for (let k = 0; k <= n; k++) {
-    const col = rej(d, k) ? REJ : "var(--fg)";
-    s += `<line x1="${x(k)}" x2="${x(k + 1)}" y1="${y(d.F[k])}" y2="${y(d.F[k])}" stroke="${col}" stroke-width="3"/>`;
-    if (k > 0) s += `<line x1="${x(k)}" x2="${x(k)}" y1="${y(d.F[k - 1])}" y2="${y(d.F[k])}" stroke="var(--line)" stroke-dasharray="2 3"/>`;
-    if (n <= 30 || k % 5 === 0) s += `<text x="${x(k) + bw / 2}" y="${B + 16}" text-anchor="middle">${k}</text>`;
+  tick.forEach(p => s += `<line x1="${L}" x2="${R}" y1="${y(p)}" y2="${y(p)}" stroke="var(--grid)"/><text x="${L - 8}" y="${y(p) + 4}" text-anchor="end">${fmt(p, zoom === "all" ? 2 : 3)}</text>`);
+  s += `<defs><clipPath id="clip-${mode}"><rect x="${L - 8}" y="${T - 6}" width="${R - L + 16}" height="${B - T + 12}"/></clipPath></defs><g clip-path="url(#clip-${mode})">`;
+  let xl = "";
+  const lo = d.lim, hi = 1 - d.lim, k0 = S.k, vis = p => p >= y0 - 1e-9 && p <= y1 + 1e-9;
+  // p-Wert-Klammer zuerst (liegt unter der Treppe)
+  if (mode === "p") {
+    const up = S.side === "right" || (S.side === "two" && d.G[k0] < d.F[k0]);
+    const a1 = up ? (k0 > 0 ? d.F[k0 - 1] : 0) : 0, a2 = up ? 1 : d.F[k0], kx = up ? k0 - 0.5 : k0 + 0.5;
+    const X = L + (kx + 0.5) * bw;
+    s += `<rect x="${up ? X : L}" y="${y(a2)}" width="${up ? R - X : X - L}" height="${Math.max(1, y(a1) - y(a2))}" fill="var(--pval)" fill-opacity=".35"/>`;
+    s += `<line x1="${X}" x2="${X}" y1="${y(a1)}" y2="${y(a2)}" stroke="var(--pval)" stroke-width="4"/>`;
   }
-  if (S.side !== "right") s += `<line x1="${L}" x2="${R}" y1="${y(lo)}" y2="${y(lo)}" stroke="var(--alpha-ink)" stroke-dasharray="6 4"/><text x="${R}" y="${y(lo) - 6}" text-anchor="end" style="fill:var(--alpha-ink)">${S.side === "two" ? "α/2" : "α"} = ${fmt(lo, 3)}</text>`;
-  if (S.side !== "left") s += `<line x1="${L}" x2="${R}" y1="${y(hi)}" y2="${y(hi)}" stroke="var(--alpha-ink)" stroke-dasharray="6 4"/><text x="${L + 6}" y="${y(hi) - 6}" style="fill:var(--alpha-ink)">${S.side === "two" ? "1 − α/2" : "1 − α"} = ${fmt(hi, 3)}</text>`;
-  if (d.kL >= 0) s += `<circle cx="${x(d.kL) + bw / 2}" cy="${y(d.F[d.kL])}" r="5" fill="var(--alpha-ink)"/><text class="strong" x="${x(d.kL) + bw / 2}" y="${y(d.F[d.kL]) - 10}" text-anchor="middle" style="fill:var(--alpha-ink)">F(${d.kL}) = ${fmt(d.F[d.kL], 3)}</text>`;
-  if (d.kU <= n && d.kU > 0) s += `<circle cx="${x(d.kU - 1) + bw / 2}" cy="${y(d.F[d.kU - 1])}" r="5" fill="var(--alpha-ink)"/><text class="strong" x="${x(d.kU - 1) + bw / 2}" y="${y(d.F[d.kU - 1]) + 22}" text-anchor="middle" style="fill:var(--alpha-ink)">F(${d.kU - 1}) = ${fmt(d.F[d.kU - 1], 3)}</text>`;
+  // Sprünge (Stäbchen) und Stufen
+  for (let k = 0; k <= n; k++) {
+    const prev = k ? d.F[k - 1] : 0, col = rej(d, k) ? REJ : ACC;
+    s += `<line x1="${x(k)}" x2="${x(k)}" y1="${y(prev)}" y2="${y(d.F[k])}" stroke="${col}" stroke-width="${Math.min(10, bw * 0.28)}" stroke-opacity=".9"/>`;
+    s += `<line x1="${x(k)}" x2="${k < n ? x(k + 1) : R}" y1="${y(d.F[k])}" y2="${y(d.F[k])}" stroke="var(--fg)" stroke-width="2"/>`;
+    s += `<circle cx="${x(k)}" cy="${y(d.F[k])}" r="3.4" fill="var(--fg)"/>`;
+    if (k < n) s += `<circle cx="${x(k + 1)}" cy="${y(d.F[k])}" r="3.2" fill="var(--surface)" stroke="var(--fg)" stroke-width="1.4"/>`;
+    if (n <= 30 || k % 5 === 0) xl += `<text x="${x(k)}" y="${B + 16}" text-anchor="middle" class="${mode === "p" && k === k0 ? "strong" : ""}">${k}</text>`;
+  }
+  s += `</g>${xl}<line x1="${L}" x2="${L}" y1="${T}" y2="${B}" stroke="var(--line)"/>`;
+  if (mode === "crit") {
+    if (S.side !== "right" && vis(lo)) s += `<line x1="${L}" x2="${R}" y1="${y(lo)}" y2="${y(lo)}" stroke="var(--alpha-ink)" stroke-width="1.6" stroke-dasharray="6 4"/><text x="${R}" y="${y(lo) - 6}" text-anchor="end" style="fill:var(--alpha-ink)">${S.side === "two" ? "α/2" : "α"} = ${fmt(lo, 3)}</text>`;
+    if (S.side !== "left" && vis(hi)) s += `<line x1="${L}" x2="${R}" y1="${y(hi)}" y2="${y(hi)}" stroke="var(--alpha-ink)" stroke-width="1.6" stroke-dasharray="6 4"/><text x="${L + 6}" y="${y(hi) - 6}" style="fill:var(--alpha-ink)">${S.side === "two" ? "1 − α/2" : "1 − α"} = ${fmt(hi, 3)}</text>`;
+    if (d.kL >= 0 && vis(d.F[d.kL])) s += `<text class="strong" x="${x(d.kL) + 8}" y="${Math.max(T + 30, y(d.F[d.kL]) - 26)}" style="fill:var(--alpha-ink)">F(${d.kL}) = ${fmt(d.F[d.kL], 3)} ≤ ${fmt(lo, 3)}</text>`;
+    if (d.kU <= n && d.kU > 0 && vis(d.F[d.kU - 1])) s += `<text class="strong" x="${x(d.kU - 1) - 8}" y="${Math.min(B - 8, y(d.F[d.kU - 1]) + 34)}" text-anchor="end" style="fill:var(--alpha-ink)">F(${d.kU - 1}) = ${fmt(d.F[d.kU - 1], 3)} ≥ ${fmt(hi, 3)}</text>`;
+  }
   s += `<text x="${R}" y="${B + 40}" text-anchor="end">k · ${SCN().what}</text><text x="18" y="${(T + B) / 2}" transform="rotate(-90 18 ${(T + B) / 2})" text-anchor="middle">F(k) = P(X ≤ k)</text>`;
-  $("cdf").innerHTML = s;
+  return s;
+}
+function drawCdf(d) {
+  $("cdf").innerHTML = stairs(d, "crit", S.zoom || "all");
+  const gapL = d.kL >= 0 ? d.lim - d.F[d.kL] : null, gapU = d.kU <= d.n ? d.lim - d.G[d.kU] : null;
+  const nxt = S.side === "left" ? (d.kL + 1 <= d.n ? d.F[d.kL + 1] : null) : (d.kU - 1 >= 0 ? d.G[d.kU - 1] : null);
+  $("c2").innerHTML = `Die Treppe springt über die α-Linie hinweg und trifft sie nicht genau. ${S.side === "left" || (S.side === "two" && d.kL >= 0) ? `Links bleibt F(${d.kL}) = ${fmt(d.F[d.kL], 4)} unter ${fmt(d.lim, 3)}` : `Rechts bleibt P(X ≥ ${d.kU}) = ${fmt(d.G[d.kU], 4)} unter ${fmt(d.lim, 3)}`}, die nächste Stufe läge schon bei ${nxt == null ? "–" : fmt(nxt, 4)}. Deshalb schöpft der Test α nicht aus: tatsächliches α = <b>${pct(d.act, 1)}</b>. Mit der Lupe sieht man die Lücke zwischen Stufe und Linie.`;
   let t = `<thead><tr><th>k</th><th>P(X = k)</th><th>F(k) = P(X ≤ k)</th><th>P(X ≥ k)</th><th>Bereich</th></tr></thead><tbody>`;
   for (let k = 0; k <= n; k++) t += `<tr class="${rej(d, k) ? "rej" : ""} ${k === S.k ? "obs" : ""}"><td>${k}</td><td>${fmt(d.pm[k], 4)}</td><td>${fmt(d.F[k], 4)}</td><td>${fmt(d.G[k], 4)}</td><td>${rej(d, k) ? "Ablehnung" : "Annahme"}</td></tr>`;
   $("tab").innerHTML = t + "</tbody>";
@@ -118,17 +145,30 @@ function drawCdf(d) {
 
 /* ---------- 3 Ergebnis ---------- */
 function drawSteps(d) {
+  { const k0 = S.k, up = S.side === "right" || (S.side === "two" && d.G[k0] < d.F[k0]);
+    const pv = up ? d.G[k0] : d.F[k0], zoom = pv > 0.06 ? "all" : up ? "high" : "low";
+    $("cdf-p").innerHTML = stairs(d, "p", zoom);
+    const lab = up ? `P(X ≥ ${k0}) = 1 − F(${k0 - 1}) = ${fmt(pv, 4)}` : `P(X ≤ ${k0}) = F(${k0}) = ${fmt(pv, 4)}`;
+    $("cdf-p-note").innerHTML = `<b>Blaue Fläche:</b> ${lab}${S.side === "two" ? `, zweiseitig mal 2 = ${fmt(pval(d, k0), 4)}` : ""}.${zoom === "all" ? "" : ` Die Fläche ist klein, deshalb zeigt die Grafik eine Lupe auf den ${up ? "oberen" : "unteren"} Rand (F zwischen ${up ? "0,85 und 1" : "0 und 0,15"}).`}`; }
   const k = S.k, n = d.n, e = n * S.p0, p = pval(d, k), inR = rej(d, k), up = k >= e;
   const tail = up ? `P(X ≥ ${k}) = ${fmt(d.G[k], 4)}` : `P(X ≤ ${k}) = ${fmt(d.F[k], 4)}`;
   const pLine = S.side === "two"
     ? `p = 2 · min(P(X ≤ ${k}), P(X ≥ ${k})) = 2 · ${fmt(Math.min(d.F[k], d.G[k]), 4)} = ${fmt(p, 4)}${p >= 1 ? " (höchstens 1)" : ""}`
     : S.side === "right" ? `p = P(X ≥ ${k}) = ${fmt(p, 4)}` : `p = P(X ≤ ${k}) = ${fmt(p, 4)}`;
   const region = (d.kL >= 0 ? `k ≤ ${d.kL}` : "") + (d.kL >= 0 && d.kU <= n ? " oder " : "") + (d.kU <= n ? `k ≥ ${d.kU}` : "") || "leer";
+  const tx = (x, dd = 4) => fmt(x, dd).replace(",", "{,}");
+  const K = t => window.katex ? katex.renderToString(t, { throwOnError: false, displayMode: false }) : t;
+  const regionTex = (d.kL >= 0 ? `k \\le ${d.kL}` : "") + (d.kL >= 0 && d.kU <= n ? `\\ \\text{oder}\\ ` : "") + (d.kU <= n ? `k \\ge ${d.kU}` : "") || `\\text{leer}`;
+  const sumTex = up ? String.raw`P(X \ge ${k}) = \sum_{i=${k}}^{${n}} \binom{${n}}{i}\, p_0^{\,i} (1-p_0)^{${n}-i} = 1 - F(${k - 1}) = ${tx(d.G[k])}`
+                    : String.raw`P(X \le ${k}) = \sum_{i=0}^{${k}} \binom{${n}}{i}\, p_0^{\,i} (1-p_0)^{${n}-i} = F(${k}) = ${tx(d.F[k])}`;
+  const pTex = S.side === "two" ? String.raw`p = 2 \cdot \min\{P(X \le ${k}),\, P(X \ge ${k})\} = 2 \cdot ${tx(Math.min(d.F[k], d.G[k]))} = ${tx(p)}${p >= 1 ? String.raw`\ (\text{höchstens } 1)` : ""}`
+    : S.side === "right" ? String.raw`p = P(X \ge ${k}) = 1 - F(${k - 1}) = ${tx(p)}` : String.raw`p = P(X \le ${k}) = F(${k}) = ${tx(p)}`;
+  const dec = p <= S.alpha;
   $("steps").innerHTML =
-    `<li><b>Erwartung unter H0.</b> ${SCN().expect}<span class="eq">${n} · ${fmt(S.p0, 2)} = ${fmt(e, 1)}</span></li>` +
-    `<li><b>Ergebnis einordnen.</b> Beobachtet sind ${k} ${SCN().unit}.<span class="eq">Ablehnungsbereich: ${region} → k = ${k} liegt im ${inR ? "Ablehnungsbereich" : "Annahmebereich"}</span></li>` +
-    `<li><b>p-Wert berechnen.</b> Wie wahrscheinlich ist unter H0 ein Ergebnis, das mindestens so extrem ist wie ${k}? ${S.side === "two" ? "Zweiseitig zählt auch die Gegenrichtung, daher mal 2." : S.side === "right" ? "Rechtsseitig zählt nur die obere Richtung." : "Linksseitig zählt nur die untere Richtung."}<span class="eq">${S.side === "two" ? tail + "<br>" : ""}${pLine}</span></li>` +
-    `<li><b>Entscheiden.</b> Beide Wege führen zum selben Ergebnis.<span class="eq">p = ${fmt(p, 4)} ${p <= S.alpha ? "≤" : ">"} α = ${fmt(S.alpha, 2)} → ${p <= S.alpha ? SCN().yes[S.side] : SCN().no}</span></li>`;
+    `<li><b>Erwartung unter H0.</b> ${SCN().expect}<span class="eq">${K(String.raw`E(X) = n \cdot p_0 = ${n} \cdot ${tx(S.p0, 2)} = ${tx(e, 1)}`)}</span></li>` +
+    `<li><b>Ergebnis einordnen.</b> Beobachtet sind ${k} ${SCN().unit}.<span class="eq">${K(String.raw`\text{Ablehnungsbereich: } ${regionTex} \;\Rightarrow\; k = ${k} \text{ liegt im ${inR ? "Ablehnungsbereich" : "Annahmebereich"}}`)}</span></li>` +
+    `<li><b>p-Wert berechnen.</b> Wie wahrscheinlich ist unter H0 ein Ergebnis, das mindestens so extrem ist wie ${k}? ${S.side === "two" ? "Zweiseitig zählt auch die Gegenrichtung, daher mal 2." : S.side === "right" ? "Rechtsseitig zählt nur die obere Richtung. An der Treppe ist das alles oberhalb der Stufe k − 1." : "Linksseitig zählt nur die untere Richtung. An der Treppe ist das die Höhe der Stufe k."}<span class="eq">${K(sumTex)}</span><span class="eq">${K(pTex)}</span></li>` +
+    `<li><b>Entscheiden.</b> Beide Wege führen zum selben Ergebnis.<span class="eq">${K(String.raw`p = ${tx(p)} ${dec ? "\\le" : ">"} \alpha = ${tx(S.alpha, 2)} \;\Rightarrow\; \text{${dec ? SCN().yes[S.side] : SCN().no}}`)}</span></li>`;
 }
 
 /* ---------- 4 Gerichtet oder ungerichtet ---------- */
@@ -190,6 +230,7 @@ $("n").addEventListener("input", e => { S.n = +e.target.value; S.anim = null; re
 $("p0").addEventListener("input", e => { S.p0 = +e.target.value; S.anim = null; render(); });
 $("k").addEventListener("input", e => { S.k = +e.target.value; render(); });
 $("build").onclick = build;
+$("zoom").addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; S.zoom = b.dataset.z; $("zoom").querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", x === b)); drawCdf(dist()); });
 document.querySelectorAll(".tab").forEach(b => b.addEventListener("click", () => setScenario(b.dataset.sc)));
 setScenario(location.hash.slice(1) || "medikament", true);
 })();

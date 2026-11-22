@@ -119,3 +119,11 @@ input[type=range] { width: 100%; accent-color: var(--accent); margin: 4px 0 0; }
 .h3 { font-size: 18px; margin-top: 10px; }
 .reqs { margin: 0; padding-left: 22px; display: flex; flex-direction: column; gap: 6px; max-width: 80ch; }
 .reqs li::marker { font-weight: 700; color: var(--accent); }
+
+/* Treppe, Lupe, LaTeX */
+.zoom-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.sw.dash { height: 0; border-top: 2px dashed var(--alpha-ink); border-radius: 0; background: none; }
+.tab-details > summary { cursor: pointer; font-weight: 600; color: var(--accent); padding: 6px 0; }
+.calc-steps .eq .katex { font-size: 1.08em; }
+.calc-steps .eq { font-family: inherit; }
+.pnote { font-size: 15px; margin: 0; }

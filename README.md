@@ -72,4 +72,4 @@ Reihenfolge und Blöcke stehen zentral in `assets/js/path.js`. Daraus entsteht u
 
 `glossar/` erklärt die Fachbegriffe kapitelweise in der Reihenfolge des Lernpfads, mit Suche und einem Anker je Begriff (z. B. `glossar/#binomialtest-p-wert`). Jede Seite verlinkt in der Lernpfad-Leiste auf ihr Kapitel (`glossar/#k-<seite>`), der Link „Glossar“ steht in der Kopfzeile aller Seiten.
 
-`assets/vendor/katex/` enthält KaTeX 0.16.11 (MIT-Lizenz, lokal eingebunden, ohne externe Abrufe) für LaTeX-Formeln, derzeit auf `binomial/`.
+`assets/vendor/katex/` enthält KaTeX 0.16.11 (MIT-Lizenz, lokal eingebunden, ohne externe Abrufe) für LaTeX-Formeln, derzeit auf `binomial/` und `binomialtest/` (Rechenweg Schritt 3).
