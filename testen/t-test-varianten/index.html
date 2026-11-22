@@ -6,9 +6,9 @@
 <title>Welcher t-Test? · Stats Lab</title>
 <meta name="description" content="Einstichproben-, gepaarter und ungepaarter t-Test an drei Beispielen aus der Physiotherapie, jeweils mit Hypothesen, Rechenweg, kritischem Wert und p-Wert.">
 <link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="../../assets/css/base.css?v=202611230003">
+<link rel="stylesheet" href="../../assets/css/base.css?v=202611230019">
 <link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
-<link rel="stylesheet" href="t-test-varianten.css?v=202611230003">
+<link rel="stylesheet" href="t-test-varianten.css?v=202611230019">
 </head>
 <body>
 <header class="site-header">
@@ -49,7 +49,7 @@
     <summary><span class="acc-no">1</span><span class="acc-title">Gepaarter t-Test: Wird der Bizeps durch Training dicker?<span class="acc-teaser">Dieselben Personen zweimal gemessen.</span></span></summary>
     <div class="acc-body">
       <p class="text">Aus dem Messpraktikum: Der Oberarmumfang am Trainingsarm wird vor und direkt nach Kettlebell-Curls gemessen. Jede Person liefert ein Paar. Der gepaarte t-Test bildet zuerst für jede Person die Differenz und prüft dann, ob deren Mittelwert von null abweicht. Er ist also ein Einstichproben-t-Test auf die Differenzen mit Sollwert 0.</p>
-      <p class="fict">Simulierte Daten. Den Kontrollarm aus dem Praktikum lassen wir hier weg, um den Test selbst zu zeigen.</p>
+      <p class="fict">Simulierte Daten. Den Kontrollarm aus dem Praktikum lassen wir hier weg, um den Test selbst zu zeigen; er kommt in der <a href="#acc-3">Übung in Abschnitt 3</a> dazu.</p>
       <div class="ctrl"><span class="lbl" id="dir2-lbl">Hypothese</span><div class="seg seg-dir" role="group" aria-labelledby="dir2-lbl" id="dir2"><button type="button" data-d="two" aria-pressed="true"><b>zweiseitig</b><small>μd ≠ 0</small></button><button type="button" data-d="right" aria-pressed="false"><b>rechtsseitig</b><small>μd &gt; 0</small></button><button type="button" data-d="left" aria-pressed="false"><b>linksseitig</b><small>μd &lt; 0</small></button></div></div>
       <div class="hyp" id="hyp2"></div>
       <div class="panel-grid">
@@ -97,6 +97,53 @@
     </div>
   </details>
 
+  <!-- ================= 3 Übung Differenz der Differenzen ================= -->
+  <details class="acc" id="acc-3" open>
+    <summary><span class="acc-no">3</span><span class="acc-title">Übung: Vorher-nachher mit Kontrolle<span class="acc-teaser">Differenz der Differenzen am Bizeps-Beispiel, Schritt für Schritt.</span></span></summary>
+    <div class="acc-body">
+      <p class="text">Im Messpraktikum wird nicht nur der Trainingsarm gemessen, sondern auch der andere Arm, der nicht trainiert. Warum? Zwischen den beiden Messungen kann sich vieles ändern, das nichts mit dem Training zu tun hat: Die Messperson legt den Bindfaden beim zweiten Mal anders an, die Arme sind durch Bewegung wärmer und besser durchblutet, und extreme Erstmessungen nähern sich beim zweiten Mal der Mitte an (<a href="../../hintergrund/regression-mitte/">Regression zur Mitte</a>). Der Kontrollarm erlebt all das auch, nur nicht das Training. Die <b>Differenz der Differenzen</b> rechnet diese Einflüsse heraus:</p>
+      <div class="formula" id="did-f"></div>
+      <p class="fict">Fiktiver Übungsdatensatz mit 12 Personen. Mit den echten Daten aus dem Messpraktikum rechnen Sie anschließend dieselben Schritte.</p>
+      <div class="dl-bar"><span>Daten herunterladen:</span><a class="btn ghost" href="daten/bizeps-uebung.csv" download>CSV</a><a class="btn ghost" href="daten/bizeps-uebung.sav" download>SPSS (.sav)</a></div>
+
+      <h3 class="ex-h"><span class="ex-no">1</span>Daten ansehen</h3>
+      <p class="text">Oberarmumfang in cm, je Person Trainingsarm und Kontrollarm, jeweils vor und direkt nach den Kettlebell-Curls. Die letzten drei Spalten berechnen Sie selbst; zum Prüfen lassen sie sich einblenden.</p>
+      <div class="ctrl-row"><button class="btn ghost" type="button" id="show-diff">Berechnete Spalten einblenden</button></div>
+      <div class="table-wrap"><table class="cmp-tab did-tab" id="did-tab"></table></div>
+
+      <h3 class="ex-h"><span class="ex-no">2</span>Gepaarter t-Test am Trainingsarm</h3>
+      <p class="text">Prüfen Sie wie in Abschnitt 1, ob sich der Umfang des Trainingsarms verändert hat (zweiseitig, α = 5 %). Notieren Sie mittlere Differenz, t, df, p und das 95-%-Konfidenzintervall.</p>
+      <p class="note">SPSS: Analysieren → Mittelwerte vergleichen → t-Test bei gepaarten Stichproben, Paar train_nach und train_vor.</p>
+      <details class="sol"><summary>Lösung anzeigen</summary><div class="sol-body" id="sol-t"></div></details>
+
+      <h3 class="ex-h"><span class="ex-no">3</span>Gepaarter t-Test am Kontrollarm</h3>
+      <p class="text">Dasselbe für den Kontrollarm, der nicht trainiert wurde. Was erwarten Sie, was finden Sie?</p>
+      <p class="note">SPSS: wie oben mit dem Paar kontr_nach und kontr_vor.</p>
+      <details class="sol"><summary>Lösung anzeigen</summary><div class="sol-body" id="sol-k"></div></details>
+
+      <h3 class="ex-h"><span class="ex-no">4</span>Differenz der Differenzen</h3>
+      <p class="text">Berechnen Sie für jede Person die Veränderung beider Arme und daraus die Differenz der Differenzen. Prüfen Sie mit einem Einstichproben-t-Test, ob deren Mittelwert von 0 verschieden ist.</p>
+      <p class="note">SPSS: Transformieren → Variable berechnen: diff_train = train_nach − train_vor, diff_kontr = kontr_nach − kontr_vor, did = diff_train − diff_kontr. Dann Analysieren → Mittelwerte vergleichen → t-Test bei einer Stichprobe mit did, Testwert 0. Gleichwertig: gepaarter t-Test mit dem Paar diff_train und diff_kontr.</p>
+      <details class="sol"><summary>Lösung anzeigen</summary><div class="sol-body" id="sol-d"></div></details>
+
+      <h3 class="ex-h"><span class="ex-no">5</span>Interpretieren</h3>
+      <p class="text">Vergleichen Sie die Ergebnisse aus Schritt 2 und 4. Welche Zahl beschreibt den Pump? Was wäre passiert, wenn es keinen Kontrollarm gegeben hätte?</p>
+      <details class="sol"><summary>Lösung anzeigen</summary><div class="sol-body" id="sol-i">
+        <svg class="chart" id="did-plot" viewBox="0 0 640 320" role="img" aria-label="Mittelwerte beider Arme vorher und nachher"></svg>
+        <div id="sol-i-text"></div>
+      </div></details>
+
+      <details class="deep">
+        <summary>Erklärung: Warum die Kontrolle funktioniert und wann nicht</summary>
+        <div class="deep-body">
+          <p>Die Differenz der Differenzen beruht auf einer Annahme: <b>Ohne Training hätte sich der Trainingsarm genauso verändert wie der Kontrollarm</b> (Annahme paralleler Verläufe). Dann ist die Veränderung des Kontrollarms eine gute Schätzung für alles, was nicht das Training ist, und die Differenz der Differenzen bleibt als Trainingseffekt übrig.</p>
+          <p>Die Annahme kann verletzt sein: Wird der Kontrollarm beim Curl mitbewegt oder zum Abstützen genutzt, bekommt auch er etwas Pump, und der Effekt wird unterschätzt. Misst die Messperson den Trainingsarm bewusst „großzügiger“, weil sie einen Effekt erwartet, wird er überschätzt. Verblindete Messpersonen helfen dagegen.</p>
+          <p>Dasselbe Prinzip steckt in jeder kontrollierten Studie. Statt eines Kontrollarms gibt es dann eine Kontrollgruppe, und die Veränderungswerte beider Gruppen werden mit dem <a href="#acc-2">ungepaarten t-Test</a> verglichen. Ohne Kontrolle ist ein Vorher-nachher-Vergleich nie ein Beleg für die Wirkung einer Behandlung.</p>
+        </div>
+      </details>
+    </div>
+  </details>
+
   <section class="block" aria-labelledby="dec-h">
     <span class="eyebrow">Entscheidungshilfe</span>
     <h2 id="dec-h">Welcher t-Test passt?</h2>
@@ -120,8 +167,10 @@
 </footer>
 <script src="../../assets/vendor/katex/katex.min.js"></script>
 <script src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
-<script src="../../assets/js/tex.js?v=202611230003"></script>
-<script src="t-test-varianten.js?v=202611230003"></script>
-<script src="../../assets/js/path.js?v=202611230003"></script>
+<script src="../../assets/js/tex.js?v=202611230019"></script>
+<script src="daten/bizeps-uebung.js?v=202611230019"></script>
+<script src="bizeps-did.js?v=202611230019"></script>
+<script src="t-test-varianten.js?v=202611230019"></script>
+<script src="../../assets/js/path.js?v=202611230019"></script>
 </body>
 </html>
