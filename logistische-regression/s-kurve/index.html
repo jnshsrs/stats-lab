@@ -6,9 +6,9 @@
 <title>Von der Geraden zur S-Kurve · Stats Lab</title>
 <meta name="description" content="Einstieg in die logistische Regression mit echten Daten: Warum eine Gerade bei ja/nein versagt, vom Risiko über Odds zum Logit, Odds Ratio pro Einheit und Maximum-Likelihood-Schätzung.">
 <link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="../../assets/css/base.css?v=202611222303">
+<link rel="stylesheet" href="../../assets/css/base.css?v=202611222316">
 <link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
-<link rel="stylesheet" href="s-kurve.css?v=202611222303">
+<link rel="stylesheet" href="s-kurve.css?v=202611222316">
 </head>
 <body>
 <header class="site-header">
@@ -47,13 +47,21 @@
   <details class="acc" id="acc-2" open>
     <summary><span class="acc-no">2</span><span class="acc-title">Wie kommen wir zur S-Kurve?<span class="acc-teaser">Ein lineares Modell für die Log-Odds, zurückgerechnet in Wahrscheinlichkeiten.</span></span></summary>
     <div class="acc-body">
-      <p class="text">Die Wahrscheinlichkeit p selbst können wir nicht linear modellieren, sie ist zwischen 0 und 1 eingesperrt. Die Odds p ÷ (1 − p) reichen von 0 bis unendlich, ihr Logarithmus, der <b>Logit</b>, von minus bis plus unendlich. Für den Logit nehmen wir deshalb das lineare Modell, das wir kennen. Danach rechnen wir Schritt für Schritt zurück.</p>
+      <p class="text">Eine Gerade kennt keine Grenzen: Nach links fällt sie ins Minus, nach rechts steigt sie beliebig. Für p ist das ein Problem, denn p liegt zwischen 0 und 1; genau daran ist die Gerade in Abschnitt 1 gescheitert. Diese Grenzen beseitigen wir in zwei Schritten. Erstens: Die <b>Odds</b> p ÷ (1 − p) beseitigen die obere Grenze, sie reichen von 0 bis unendlich. Zweitens: Der Logarithmus der Odds, der <b>Logit</b>, beseitigt auch die untere, er reicht von minus bis plus unendlich. Für den Logit können wir also das gewohnte lineare Modell verwenden. Danach rechnen wir zurück in Wahrscheinlichkeiten.</p>
+      <div class="tab-wrap"><table class="anova steps">
+        <thead><tr><th></th><th>Wertebereich</th><th>sehr selten</th><th>selten</th><th>halbe-halbe</th><th>häufig</th><th>sehr häufig</th></tr></thead>
+        <tbody>
+          <tr><td>Wahrscheinlichkeit p</td><td>0 bis 1</td><td>0,01</td><td>0,10</td><td>0,50</td><td>0,90</td><td>0,99</td></tr>
+          <tr><td>Schritt 1: Odds = p ÷ (1 − p)</td><td>0 bis ∞</td><td>0,0101</td><td>0,111</td><td>1</td><td>9</td><td>99</td></tr>
+          <tr class="hl"><td>Schritt 2: Logit = ln(Odds)</td><td>−∞ bis +∞</td><td>−4,60</td><td>−2,20</td><td>0</td><td>+2,20</td><td>+4,60</td></tr>
+        </tbody></table></div>
+      <p class="note">Beim Logit liegt „halbe-halbe“ genau bei 0, seltene Ereignisse werden negativ, häufige positiv, und zwar symmetrisch.</p>
       <div class="formula" id="f2"></div>
       <div class="controls"><div class="ctrl"><div class="ctrl-head"><label for="a2">Alter</label><output id="a2-v"></output></div><input id="a2" type="range" min="3" max="19" step="1" value="14"></div></div>
       <div class="three-charts">
-        <figure><figcaption><b>1</b> Lineares Modell: Logit</figcaption><svg class="chart" id="c2a" viewBox="0 0 340 300" role="img" aria-label="Logit als Gerade"></svg></figure>
-        <figure><figcaption><b>2</b> e hoch: Odds</figcaption><svg class="chart" id="c2b" viewBox="0 0 340 300" role="img" aria-label="Odds als Exponentialkurve"></svg></figure>
-        <figure><figcaption><b>3</b> Odds ÷ (1 + Odds): p</figcaption><svg class="chart" id="c2c" viewBox="0 0 340 300" role="img" aria-label="Wahrscheinlichkeit als S-Kurve"></svg></figure>
+        <figure><figcaption><b>1</b> Lineares Modell: Alter → η</figcaption><svg class="chart" id="c2a" viewBox="0 0 340 300" role="img" aria-label="Logit als Gerade"></svg></figure>
+        <figure><figcaption><b>2</b> Logistische Funktion: η → p</figcaption><svg class="chart" id="c2b" viewBox="0 0 340 300" role="img" aria-label="Logistische Funktion"></svg></figure>
+        <figure><figcaption><b>3</b> Ergebnis: p nach Alter</figcaption><svg class="chart" id="c2c" viewBox="0 0 340 300" role="img" aria-label="Wahrscheinlichkeit als S-Kurve"></svg></figure>
       </div>
       <div class="formula" id="f2b"></div>
       <p class="callout" id="k2"></p>
@@ -118,10 +126,10 @@
 </footer>
 <script src="../../assets/vendor/katex/katex.min.js"></script>
 <script src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
-<script src="../../assets/js/tex.js?v=202611222303"></script>
-<script src="../../regression-daten/fev.js?v=202611222303"></script>
-<script src="../../assets/js/reg.js?v=202611222303"></script>
-<script src="s-kurve.js?v=202611222303"></script>
-<script src="../../assets/js/path.js?v=202611222303"></script>
+<script src="../../assets/js/tex.js?v=202611222316"></script>
+<script src="../../regression-daten/fev.js?v=202611222316"></script>
+<script src="../../assets/js/reg.js?v=202611222316"></script>
+<script src="s-kurve.js?v=202611222316"></script>
+<script src="../../assets/js/path.js?v=202611222316"></script>
 </body>
 </html>

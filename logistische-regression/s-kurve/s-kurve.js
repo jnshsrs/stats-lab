@@ -84,11 +84,18 @@ function draw2() {
     $(id).innerHTML = s;
   };
   mini("c2a", ETA, -7, 3, "Logit η", v => fmt(v, 2), "var(--fg)");
-  mini("c2b", OD, 0, 4, "Odds", v => fmt(v, 3), "var(--beta-ink)");
+  (() => {
+    const e = ETA(a), L = z => 1 / (1 + Math.exp(-z));
+    const f = frame(340, 300, -7, 4, 0, 1, { P: { L: 60, R: 8, T: 10, B: 40 }, xl: "η", yl: "p", nx: 4, ny: 4, fx: v => fmt(v, 0) });
+    let s = f.s + `<path ${f.clip} d="${curve(f, L, -7, 4, 0.05)}" fill="none" stroke="var(--beta-ink)" stroke-width="3"/>`;
+    s += `<line x1="${f.sx(e)}" x2="${f.sx(e)}" y1="${f.sy(0)}" y2="${f.sy(L(e))}" stroke="var(--fg)" stroke-dasharray="3 3"/><line x1="${f.sx(-7)}" x2="${f.sx(e)}" y1="${f.sy(L(e))}" y2="${f.sy(L(e))}" stroke="var(--fg)" stroke-dasharray="3 3"/>`;
+    s += `<circle cx="${f.sx(e)}" cy="${f.sy(L(e))}" r="6" fill="var(--fg)"/><text x="${f.sx(e) + (e > 0 ? -8 : 8)}" y="${f.sy(L(e)) - 10}" text-anchor="${e > 0 ? "end" : "start"}" class="strong halo">η ${fmt(e, 2)} → p ${fmt(L(e), 3)}</text>`;
+    $("c2b").innerHTML = s;
+  })();
   mini("c2c", P, 0, 1, "p", v => fmt(v, 3), "var(--therapie)");
   const e = ETA(a), o = Math.exp(e), p = o / (1 + o);
   $("f2b").innerHTML = TB(String.raw`\begin{aligned} \eta &= ${tz(fmt(B0, 3))} + ${tz(fmt(B1, 3))} \cdot ${a} = ${tz(fmt(e, 2))} \\ \text{Odds} &= e^{${tz(fmt(e, 2))}} = ${tz(fmt(o, 3))} \\ p &= \dfrac{1}{1 + e^{${tz(fmt(-e, 2))}}} = ${tz(fmt(p, 3))} \end{aligned}`, "");
-  $("k2").innerHTML = `Links das lineare Modell, wie Sie es aus Block 5 kennen: eine Gerade, hier für den Logit. In der Mitte dieselbe Gerade mit e potenziert: die Odds, die exponentiell wachsen. Rechts die Odds in Wahrscheinlichkeiten zurückgerechnet: die S-Kurve aus Abschnitt 1. Für ein ${a}-jähriges Kind: Logit ${fmt(e, 2)}, Odds ${fmt(o, 3)}, Wahrscheinlichkeit ${pc(p)}. Alles, was die lineare Regression kann (mehrere Prädiktoren, Adjustierung, Wechselwirkung), steckt im linearen Teil η.`;
+  $("k2").innerHTML = `Links das lineare Modell, wie Sie es aus Block 5 kennen: eine Gerade, hier für η, den Logit. In der Mitte die <b>logistische Funktion</b> p = 1 / (1 + e<sup>−η</sup>): Sie nimmt jeden beliebigen Wert von η und zwängt ihn zwischen 0 und 1. Diese Kurve ist immer dieselbe, sie hängt nicht von den Daten ab. Rechts das Ergebnis: die S-Kurve aus Abschnitt 1. Die S-Form kommt also aus der Umrechnung, die Daten bestimmen nur, wo die Kurve liegt und wie steil sie ist. Für ein ${a}-jähriges Kind: η = ${fmt(e, 2)}, Odds ${fmt(o, 3)}, Wahrscheinlichkeit ${pc(p)}. Alles, was die lineare Regression kann (mehrere Prädiktoren, Adjustierung, Wechselwirkung), steckt im linearen Teil η.`;
 }
 $("a2").addEventListener("input", draw2);
 
