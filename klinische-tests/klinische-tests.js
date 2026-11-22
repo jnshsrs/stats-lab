@@ -1,6 +1,8 @@
 /* Klinische Tests · Stats Lab
    Gütekriterien (Zielscheiben, Kappa, ICC/SEM/MDC), Vierfeldertafel mit Likelihood-Ratios und Fagan-Nomogramm, Testtabelle. */
 (() => {
+const tz = x => String(x).replace(/\./g, "{.}").replace(/,/g, "{,}").replace(/−/g, "-").replace(/ %/g, "\\,\\%");
+const TB = (t, fb) => window.katex ? texBlock(t) : fb;
 "use strict";
 const $ = id => document.getElementById(id);
 const fmt = (x, d = 2) => x.toLocaleString("de-DE", { minimumFractionDigits: d, maximumFractionDigits: d });
@@ -36,7 +38,7 @@ function drawKappa() {
     <tr><th>negativ</th><td>${inp(2, c)}</td><td class="agree">${inp(3, d)}</td><td>${c + d}</td></tr>
     <tr><th>Summe</th><td>${a + c}</td><td>${b + d}</td><td>${n}</td></tr></tbody>`;
   $("ktab").querySelectorAll("input").forEach(el => el.addEventListener("change", e => { K[+e.target.dataset.i] = Math.max(0, Math.round(+e.target.value || 0)); document.querySelectorAll("#k-pre button").forEach(x => x.setAttribute("aria-pressed", "false")); drawKappa(); }));
-  $("k-form").innerHTML = `<span>beobachtete Übereinstimmung p<sub>o</sub> = (${a} + ${d}) ÷ ${n} = ${fmt(po)}</span><span>Zufallsübereinstimmung p<sub>e</sub> = ${fmt(p1)} · ${fmt(p2)} + ${fmt(1 - p1)} · ${fmt(1 - p2)} = ${fmt(pe)}</span><span class="big">κ = (p<sub>o</sub> − p<sub>e</sub>) ÷ (1 − p<sub>e</sub>) = ${fmt(k)}</span>`;
+  $("k-form").innerHTML = TB(String.raw`p_o = \dfrac{${a} + ${d}}{${n}} = ${tz(fmt(po))} \qquad p_e = ${tz(fmt(p1))} \cdot ${tz(fmt(p2))} + ${tz(fmt(1 - p1))} \cdot ${tz(fmt(1 - p2))} = ${tz(fmt(pe))}`, `<span>p<sub>o</sub> = ${fmt(po)} · p<sub>e</sub> = ${fmt(pe)}</span>`) + TB(String.raw`\kappa = \dfrac{p_o - p_e}{1 - p_e} = \dfrac{${tz(fmt(po))} - ${tz(fmt(pe))}}{1 - ${tz(fmt(pe))}} = \mathbf{${tz(fmt(k))}}`, `<span class="big">κ = ${fmt(k)}</span>`) + `<span class="dim">p<sub>o</sub>: beobachtete Übereinstimmung · p<sub>e</sub>: zufällig erwartete Übereinstimmung</span>`;
   const band = k < 0 ? "schlecht" : k <= 0.2 ? "gering" : k <= 0.4 ? "ausreichend" : k <= 0.6 ? "mittelmäßig" : k <= 0.8 ? "beachtlich" : "fast vollkommen";
   $("k-out").innerHTML = readout("Übereinstimmung", pc(po)) + readout("davon zufällig erwartet", pc(pe)) + readout("Kappa", fmt(k), "r-decision") + readout("Einordnung", band);
   $("k-call").innerHTML = po >= 0.85 && k < 0.6
@@ -51,7 +53,7 @@ drawKappa();
 function drawIcc() {
   const icc = +$("icc").value, sd = +$("icc-sd").value, sem = sd * Math.sqrt(1 - icc), mdc = 1.96 * Math.SQRT2 * sem;
   $("icc-v").textContent = fmt(icc); $("icc-sd-v").textContent = fmt(sd, 1) + " cm";
-  $("icc-form").innerHTML = `<span>SEM = SD · √(1 − ICC) = ${fmt(sd, 1)} · √(1 − ${fmt(icc)}) = <b>${fmt(sem)} cm</b></span><span>MDC<sub>95</sub> = 1,96 · √2 · SEM = <b>${fmt(mdc)} cm</b></span>`;
+  $("icc-form").innerHTML = TB(String.raw`SEM = SD \cdot \sqrt{1 - ICC} = ${tz(fmt(sd, 1))} \cdot \sqrt{1 - ${tz(fmt(icc))}} = \mathbf{${tz(fmt(sem))}\ \text{cm}}`, `<span>SEM = ${fmt(sem)} cm</span>`) + TB(String.raw`MDC_{95} = 1{,}96 \cdot \sqrt{2} \cdot SEM = \mathbf{${tz(fmt(mdc))}\ \text{cm}}`, `<span>MDC95 = ${fmt(mdc)} cm</span>`);
   $("icc-call").innerHTML = `Bei ICC = ${fmt(icc)} muss sich der Armumfang einer Person um mehr als <b>${fmt(mdc, 1)} cm</b> ändern, bevor man sicher sein kann, dass es keine Messschwankung war. Ist die erwartete Zunahme durch den Pump kleiner, lässt sie sich bei einzelnen Personen nicht von Messfehlern unterscheiden. Beim Gruppenmittelwert kann sie trotzdem nachweisbar sein, weil sich Messfehler über viele Personen ausmitteln.`;
 }
 ["icc", "icc-sd"].forEach(id => $(id).addEventListener("input", drawIcc));

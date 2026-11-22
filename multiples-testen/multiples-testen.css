@@ -116,3 +116,7 @@ figcaption { font-size: 14px; font-weight: 600; }
 .takeaway { align-items: flex-start; }
 .takeaway .big { font-size: clamp(24px, 3.2vw, 32px); font-weight: 600; line-height: 1.25; max-width: 34ch; letter-spacing: -0.01em; }
 .refs ul { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 6px; font-size: 15px; color: var(--muted); }
+
+/* LaTeX */
+.formula .katex-display { margin: 2px 0; text-align: left; overflow-x: auto; overflow-y: hidden; }
+.formula .katex-display > .katex { text-align: left; }

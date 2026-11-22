@@ -2,6 +2,8 @@
    Jeder Test ist ein echter Zwei-Gruppen-t-Test (gleiche Varianzen) auf simulierten Normaldaten.
    Stufe 1 Würfel, Stufe 2 FWER ohne Korrektur, Stufe 3 Bonferroni, Stufe 4 Power-Verlust, Stufe 5 Holm und BH. */
 (() => {
+const tz = x => String(x).replace(/\./g, "{.}").replace(/,/g, "{,}").replace(/−/g, "-").replace(/ %/g, "\\,\\%");
+const TB = (t, fb) => window.katex ? texBlock(t) : fb;
 "use strict";
 
 /* ---------- Mathematik ---------- */
@@ -108,7 +110,7 @@ function draw2() {
   s += `<text x="${(L + W - R) / 2}" y="${H - 4}" text-anchor="middle">p-Wert</text>`;
   if (!tot) s += `<text x="${(L + W - R) / 2}" y="${(T + H - B) / 2}" text-anchor="middle">noch keine Tests</text>`;
   svg.innerHTML = s;
-  $("f2").innerHTML = `<span>P(kein Fehlalarm in einem Test) = 1 − α = 0,95</span><span>P(kein Fehlalarm in k Tests) = 0,95<sup>k</sup> (Multiplikationssatz, Tests unabhängig)</span><span class="big">P(mindestens ein Fehlalarm) = 1 − 0,95<sup>${k}</sup> = ${pct(th)}</span>`;
+  $("f2").innerHTML = TB(String.raw`P(\text{kein Fehlalarm in einem Test}) = 1 - \alpha = 0{,}95`, "") + TB(String.raw`P(\text{kein Fehlalarm in } k \text{ Tests}) = 0{,}95^{k}`, "") + `<span class="dim">Multiplikationssatz, Tests unabhängig</span>` + TB(String.raw`P(\text{mindestens ein Fehlalarm}) = 1 - 0{,}95^{${k}} = \mathbf{${tz(pct(th))}}`, `<span class="big">P(mindestens ein Fehlalarm) = 1 − 0,95<sup>${k}</sup> = ${pct(th)}</span>`);
   const sig = S2.last ? S2.last.filter(p => p < ALPHA).length : null;
   $("r2").innerHTML = readout("signifikant in der letzten Studie", sig === null ? "–" : `${sig} von ${k}`) + readout("Studien mit mindestens einem Fehlalarm", S2.N ? `${pct(S2.fa / S2.N)}` : "–") + readout("Theorie: 1 − 0,95ᵏ", pct(th)) + readout("erwartete Fehlalarme je Studie: k · α", dec(k * ALPHA, 2));
 }
@@ -131,7 +133,7 @@ function draw3() {
     { f: v => 1 - Math.pow(1 - ALPHA, v), col: "var(--accent-soft)", w: m === "none" ? 3.5 : 2, label: m === "none" },
     { f: v => 1 - Math.pow(1 - ALPHA / v, v), col: "var(--therapie)", w: m === "bonf" ? 3.5 : 2, label: m === "bonf" }
   ], [{ v: S3.N ? S3.faN / S3.N : null, strong: m === "none" }, { v: S3.N ? S3.faB / S3.N : null, strong: m === "bonf" }]);
-  $("f3").innerHTML = `<span>Schwelle je Test: α / k = 0,05 / ${k} = ${thr(bt)}</span><span class="big">P(mindestens ein Fehlalarm) = 1 − (1 − ${thr(bt)})<sup>${k}</sup> = ${pct(thB)} ≤ 5 %</span>`;
+  $("f3").innerHTML = TB(String.raw`\alpha_{\text{je Test}} = \dfrac{\alpha}{k} = \dfrac{0{,}05}{${k}} = ${tz(thr(bt))}`, `<span>Schwelle je Test: α / k = ${thr(bt)}</span>`) + TB(String.raw`P(\text{mindestens ein Fehlalarm}) = 1 - (1 - ${tz(thr(bt))})^{${k}} = \mathbf{${tz(pct(thB))}} \le 5\,\%`, `<span class="big">P(mindestens ein Fehlalarm) = ${pct(thB)} ≤ 5 %</span>`);
   $("r3").innerHTML = readout("Schwelle je Test", m === "bonf" ? thr(bt) : "0,05") +
     readout("Studien mit Fehlalarm, ohne Korrektur", S3.N ? pct(S3.faN / S3.N) : pct(thN) + " (Theorie)") +
     readout("Studien mit Fehlalarm, Bonferroni", S3.N ? pct(S3.faB / S3.N) : pct(thB) + " (Theorie)");

@@ -69,3 +69,7 @@ table.calc td .dir { font-size: 12px; display: block; }
 table.obs input[data-col] { width: 68px; text-align: center; font-size: 12.5px; }
 table.obs input[type=number] { width: 50px; }
 table.obs input.lab[data-row] { width: 74px; }
+
+/* LaTeX */
+.formula .katex-display { margin: 2px 0; text-align: left; overflow-x: auto; overflow-y: hidden; }
+.formula .katex-display > .katex { text-align: left; }
