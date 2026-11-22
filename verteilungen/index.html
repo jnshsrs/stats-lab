@@ -6,9 +6,9 @@
 <title>Diskret und stetig · Stats Lab</title>
 <meta name="description" content="Wahrscheinlichkeits- bzw. Dichtefunktion und Verteilungsfunktion für diskrete und stetige Verteilungen, mit Reglern und Wahrscheinlichkeitsrechner.">
 <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="../assets/css/base.css?v=202611221020">
+<link rel="stylesheet" href="../assets/css/base.css?v=202611221023">
 <link rel="stylesheet" href="../assets/vendor/katex/katex.min.css">
-<link rel="stylesheet" href="verteilungen.css?v=202611221020">
+<link rel="stylesheet" href="verteilungen.css?v=202611221023">
 </head>
 <body>
 <header class="site-header">
@@ -30,16 +30,23 @@
     <a class="back" href="../">← Alle Visualisierungen</a>
     <h1>Diskret und stetig</h1>
     <p class="byline">Dr. Jens Hüsers · Forschungsmethodik</p>
-    <p class="lede">Links eine diskrete Verteilung, rechts eine stetige. Oben jeweils, wie sich die Wahrscheinlichkeit verteilt, unten die Verteilungsfunktion F(x) = P(X ≤ x). Wählen Sie einen Bereich: Er erscheint oben als Balken oder Fläche und unten als Höhenunterschied.</p>
+    <p class="lede">Eine diskrete und eine stetige Verteilung, einzeln oder nebeneinander. Oben jeweils, wie sich die Wahrscheinlichkeit verteilt, unten die Verteilungsfunktion F(x) = P(X ≤ x). Wählen Sie einen Bereich: Er erscheint oben als Balken oder Fläche und unten als Höhenunterschied.</p>
   </section>
 
-  <div class="duo">
-    <section class="panel" aria-labelledby="d-h">
+  <div class="view-switch" role="tablist" aria-label="Ansicht">
+    <button type="button" role="tab" data-view="diskret" aria-selected="true"><span class="vk">Diskret</span>Binomialverteilung</button>
+    <button type="button" role="tab" data-view="stetig" aria-selected="false"><span class="vk">Stetig</span>Normal- und andere Verteilungen</button>
+    <button type="button" role="tab" data-view="vergleich" aria-selected="false"><span class="vk">Vergleich</span>beide nebeneinander</button>
+  </div>
+
+  <div class="duo" id="duo" data-view="diskret">
+    <section class="panel" id="p-diskret" aria-labelledby="d-h">
+    <div class="p-side">
       <span class="kicker">Diskret</span>
       <h2 id="d-h">Binomialverteilung</h2>
       <p class="text">Anzahl Therapieerfolge X bei n Personen mit Erfolgswahrscheinlichkeit p. X kann nur ganze Zahlen annehmen.</p>
       <div class="ctrl"><div class="ctrl-head"><label for="bn">n · Personen</label><output id="bn-v"></output></div><input id="bn" type="range" min="1" max="40" step="1" value="10"></div>
-      <div class="ctrl"><div class="ctrl-head"><label for="bp">p · Erfolgswahrscheinlichkeit</label><output id="bp-v"></output></div><input id="bp" type="range" min="0.05" max="0.95" step="0.05" value="0.6"></div>
+      <div class="ctrl"><div class="ctrl-head"><label for="bp">p · Erfolgswahrscheinlichkeit</label><output id="bp-v"></output></div><input id="bp" type="range" min="0.05" max="0.95" step="0.05" value="0.5"></div>
       <div class="calc">
         <span class="lbl" id="dm-lbl">Wahrscheinlichkeit berechnen</span>
         <div class="seg" role="group" aria-labelledby="dm-lbl" id="dmode"></div>
@@ -47,15 +54,19 @@
         <div class="ctrl" id="db-wrap"><div class="ctrl-head"><label for="db" id="db-l">b</label><output id="db-v"></output></div><input id="db" type="range" min="0" max="10" step="1" value="7"></div>
       </div>
       <div class="result" id="d-result"></div>
+      <div class="formula" id="d-formula"></div>
+      <div class="readouts" id="d-stats"></div>
+    </div>
+    <div class="p-charts">
       <h3 class="chart-title">Wahrscheinlichkeitsfunktion P(X = k)</h3>
       <svg class="chart" id="d-pmf" viewBox="0 0 470 230" role="img"></svg>
       <h3 class="chart-title">Verteilungsfunktion F(k) = P(X ≤ k)</h3>
       <svg class="chart" id="d-cdf" viewBox="0 0 470 230" role="img"></svg>
-      <div class="formula" id="d-formula"></div>
-      <div class="readouts" id="d-stats"></div>
+    </div>
     </section>
 
-    <section class="panel" aria-labelledby="c-h">
+    <section class="panel" id="p-stetig" aria-labelledby="c-h">
+    <div class="p-side">
       <span class="kicker">Stetig</span>
       <h2 id="c-h">Stetige Verteilung</h2>
       <div class="seg" role="group" aria-label="Verteilung wählen" id="cdist"></div>
@@ -68,12 +79,15 @@
         <div class="ctrl" id="cb-wrap"><div class="ctrl-head"><label for="cb" id="cb-l">b</label><output id="cb-v"></output></div><input id="cb" type="range"></div>
       </div>
       <div class="result" id="c-result"></div>
+      <div class="formula" id="c-formula"></div>
+      <div class="readouts" id="c-stats"></div>
+    </div>
+    <div class="p-charts">
       <h3 class="chart-title" id="c-pdf-title">Dichtefunktion f(x)</h3>
       <svg class="chart" id="c-pdf" viewBox="0 0 470 230" role="img"></svg>
       <h3 class="chart-title">Verteilungsfunktion F(x) = P(X ≤ x)</h3>
       <svg class="chart" id="c-cdf" viewBox="0 0 470 230" role="img"></svg>
-      <div class="formula" id="c-formula"></div>
-      <div class="readouts" id="c-stats"></div>
+    </div>
     </section>
   </div>
 
@@ -101,8 +115,8 @@
   </div>
 </footer>
 <script src="../assets/vendor/katex/katex.min.js"></script>
-<script src="../assets/js/tex.js?v=202611221020"></script>
-<script src="verteilungen.js?v=202611221020"></script>
-<script src="../assets/js/path.js?v=202611221020"></script>
+<script src="../assets/js/tex.js?v=202611221023"></script>
+<script src="verteilungen.js?v=202611221023"></script>
+<script src="../assets/js/path.js?v=202611221023"></script>
 </body>
 </html>

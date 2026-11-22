@@ -42,7 +42,7 @@ function segButtons(el, items, current, attr) {
 /* =====================================================================
    Diskret: Binomial
    ===================================================================== */
-const D = { n: 10, p: 0.6, mode: "btw", a: 4, b: 7 };
+const D = { n: 10, p: 0.5, mode: "btw", a: 4, b: 7 };
 const DMODES = [["eq", "X = k"], ["le", "X ≤ b"], ["ge", "X ≥ a"], ["btw", "a ≤ X ≤ b"]];
 
 function dRange() {
@@ -248,4 +248,15 @@ $("cb").addEventListener("input", e => { C.b = +e.target.value; renderC(); });
 
 renderD();
 setupDist();
+
+/* Ansicht: diskret, stetig oder Vergleich (über Anker teilbar) */
+function setView(v, push) {
+  if (!["diskret", "stetig", "vergleich"].includes(v)) v = "diskret";
+  $("duo").dataset.view = v;
+  document.querySelectorAll("[data-view]").forEach(b => { if (b.tagName === "BUTTON") b.setAttribute("aria-selected", b.dataset.view === v); });
+  if (push) history.replaceState(null, "", "#" + v);
+  window.dispatchEvent(new Event("resize"));
+}
+document.querySelectorAll(".view-switch button").forEach(b => b.addEventListener("click", () => setView(b.dataset.view, true)));
+setView(location.hash.slice(1), false);
 })();
