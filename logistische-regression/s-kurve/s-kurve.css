@@ -181,3 +181,8 @@ table.rr th.grp { text-align: center; border-bottom: 2px solid var(--line); }
 .step-l { font-size: 14px; font-weight: 600; color: var(--accent); margin-top: 6px; }
 table.steps { min-width: 560px; } table.steps td:first-child { white-space: nowrap; }
 table.steps tr.hl td { background: var(--highlight); font-weight: 600; }
+/* Rechenweg zentriert */
+#f2, #f2b { align-items: center; text-align: center; }
+#f2 .katex-display, #f2b .katex-display, #f2 .katex-display > .katex, #f2b .katex-display > .katex { text-align: center; }
+#f2 .katex-display, #f2b .katex-display { align-self: stretch; }
+#f2 .dim { text-align: center; }
