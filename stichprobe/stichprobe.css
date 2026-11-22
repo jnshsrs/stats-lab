@@ -72,3 +72,7 @@ input[type=range] { width: 100%; accent-color: var(--accent); margin: 6px 0 0; }
 .dl-bar .lbl { width: 100%; font-size: 13px; color: var(--muted); }
 .dl-bar .btn { text-decoration: none; }
 .dl-more { font-size: 14.5px; }
+
+/* LaTeX */
+.formula .katex-display { margin: 2px 0; text-align: left; overflow-x: auto; overflow-y: hidden; }
+.formula .katex-display > .katex { text-align: left; }

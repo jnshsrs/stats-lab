@@ -2,6 +2,8 @@
    Feste Population (population.js, dieselben 2.000 Personen wie in daten/). Gezogen wird ohne Zurücklegen.
    Je Stichprobe werden Mittelwert und SD gespeichert, die letzten acht Stichproben zusätzlich mit ihren Personen. */
 (() => {
+const tz = x => String(x).replace(/\./g, "{.}").replace(/,/g, "{,}").replace(/−/g, "-");
+const TB = (t, fb) => window.katex ? texBlock(t) : fb;
 "use strict";
 
 const D = window.STICHPROBE_POP;
@@ -162,9 +164,9 @@ function drawVsN() {
   $("vsn").innerHTML = s;
   $("vsn").setAttribute("aria-label", `Bei n = ${S.n}: σ = ${fmt(SIGMA, 2)}, Standardfehler ${fmt(se, 2)}`);
   const n4 = 4 * S.n;
-  $("se-formula").innerHTML = `<span>SE = σ / √n = ${fmt(SIGMA, 2)} / √${S.n}</span><span class="big">= ${fmt(se, 2)} ${UNIT}</span>` +
-    `<span>bei 4 · n = ${n4}: ${fmt(SIGMA, 2)} / √${n4} = ${fmt(SIGMA / Math.sqrt(n4), 2)} ${UNIT}, also halb so groß</span>` +
-    (means.length >= 20 ? `<span>simuliert: mittleres s der Stichproben = ${fmt(mean(sds), 2)}, SD der Mittelwerte = ${fmt(sd(means), 2)}</span>` : "");
+  $("se-formula").innerHTML = TB(String.raw`SE = \dfrac{\sigma}{\sqrt{n}} = \dfrac{${tz(fmt(SIGMA, 2))}}{\sqrt{${S.n}}} = ${tz(fmt(se, 2))}\ \text{${UNIT}} \qquad \text{bei } 4n = ${n4}\text{: } \dfrac{${tz(fmt(SIGMA, 2))}}{\sqrt{${n4}}} = ${tz(fmt(SIGMA / Math.sqrt(n4), 2))}\ \text{${UNIT}}`, `<span>SE = σ / √n = ${fmt(SIGMA, 2)} / √${S.n}</span><span class="big">= ${fmt(se, 2)} ${UNIT}</span><span>bei 4 · n = ${n4}: ${fmt(SIGMA / Math.sqrt(n4), 2)} ${UNIT}</span>`) +
+    `<span class="dim">Vierfaches n, halber Standardfehler.</span>` +
+    (means.length >= 20 ? `<span class="dim">simuliert: mittleres s der Stichproben = ${fmt(mean(sds), 2)}, SD der Mittelwerte = ${fmt(sd(means), 2)}</span>` : "");
 }
 
 /* ---------- Gesamt ---------- */

@@ -94,3 +94,7 @@ figcaption { font-size: 14px; font-weight: 600; }
 .reveal b { font-weight: 600; }
 .hyp { font-style: italic; color: var(--muted); }
 #lln-tab th { white-space: normal; vertical-align: bottom; }
+
+/* LaTeX */
+.formula .katex-display { margin: 2px 0; text-align: left; overflow-x: auto; overflow-y: hidden; }
+.formula .katex-display > .katex { text-align: left; }

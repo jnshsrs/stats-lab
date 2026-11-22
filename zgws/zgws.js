@@ -1,6 +1,8 @@
 /* Zentraler Grenzwertsatz, Standardfehler, Konfidenzintervall · Stats Lab
    Alle drei Abschnitte nutzen dieselben Stichproben: je Stichprobe werden Mittelwert und SD gespeichert. */
 (() => {
+const tz = x => String(x).replace(/\./g, "{.}").replace(/,/g, "{,}").replace(/−/g, "-");
+const TB = (t, fb) => window.katex ? texBlock(t) : fb;
 "use strict";
 
 /* ---------- Mathematik (t-Quantil über die unvollständige Betafunktion) ---------- */
@@ -132,8 +134,8 @@ function drawSE() {
   $("se").innerHTML = s;
   $("se").setAttribute("aria-label", `Standardfehler ${fmt(se, 2)} bei n = ${S.n}`);
   const lastS = sds.length ? sds[sds.length - 1] : null;
-  $("se-formula").innerHTML = `<span>theoretisch: SE = σ / √n = ${fmt(P.sigma, 2)} / √${S.n}</span><span class="big">= ${fmt(se, 2)} ${P.unit}</span>` +
-    (lastS != null ? `<span>geschätzt aus der letzten Stichprobe: s / √n = ${fmt(lastS, 2)} / √${S.n} = ${fmt(lastS / Math.sqrt(S.n), 2)}</span>` : "");
+  $("se-formula").innerHTML = TB(String.raw`SE = \dfrac{\sigma}{\sqrt{n}} = \dfrac{${tz(fmt(P.sigma, 2))}}{\sqrt{${S.n}}} = ${tz(fmt(se, 2))}\ \text{${P.unit}}`, `<span>theoretisch: SE = σ / √n = ${fmt(P.sigma, 2)} / √${S.n}</span><span class="big">= ${fmt(se, 2)} ${P.unit}</span>`) +
+    (lastS != null ? `<span class="dim">geschätzt aus der letzten Stichprobe: ${window.katex ? tex(String.raw`\widehat{SE} = s / \sqrt{n} = ${tz(fmt(lastS, 2))} / \sqrt{${S.n}} = ${tz(fmt(lastS / Math.sqrt(S.n), 2))}`) : `s / √n = ${fmt(lastS / Math.sqrt(S.n), 2)}`}</span>` : "");
   const mm = means.length ? means.reduce((a, b) => a + b, 0) / means.length : 0;
   const sdm = means.length > 1 ? Math.sqrt(means.reduce((a, b) => a + (b - mm) ** 2, 0) / (means.length - 1)) : null;
   $("se-stats").innerHTML = readout("SD einer Person (σ)", fmt(P.sigma, 2)) + readout("SE = σ / √n", fmt(se, 2)) +
@@ -169,8 +171,8 @@ function drawCI() {
   $("ci").setAttribute("aria-label", `Konfidenzintervalle: ${hits} von ${means.length} enthalten μ`);
   const k = means.length - 1;
   $("ci-formula").innerHTML = k >= 0
-    ? `<span>letzte Stichprobe: x̄ ± t<sub>${n - 1}; ${fmt(1 - (1 - S.conf) / 2, 3)}</sub> · s / √n</span><span>= ${fmt(means[k], 2)} ± ${fmt(tq, 3)} · ${fmt(sds[k], 2)} / √${n}</span><span class="big">= [${fmt(means[k] - half(k), 2)} ; ${fmt(means[k] + half(k), 2)}] ${P.unit}</span>`
-    : `<span>x̄ ± t · s / √n</span>`;
+    ? TB(String.raw`\bar{x} \pm t_{${n - 1};\,${tz(fmt(1 - (1 - S.conf) / 2, 3))}} \cdot \dfrac{s}{\sqrt{n}} = ${tz(fmt(means[k], 2))} \pm ${tz(fmt(tq, 3))} \cdot \dfrac{${tz(fmt(sds[k], 2))}}{\sqrt{${n}}} = \bigl[\,${tz(fmt(means[k] - half(k), 2))}\,;\ ${tz(fmt(means[k] + half(k), 2))}\,\bigr]\ \text{${P.unit}}`, `<span>letzte Stichprobe: x̄ ± t · s / √n</span><span class="big">= [${fmt(means[k] - half(k), 2)} ; ${fmt(means[k] + half(k), 2)}] ${P.unit}</span>`)
+    : TB(String.raw`\bar{x} \pm t \cdot \dfrac{s}{\sqrt{n}}`, `<span>x̄ ± t · s / √n</span>`);
   $("ci-stats").innerHTML = readout("Intervalle insgesamt", intf(means.length)) + readout("enthalten μ", cov == null ? "–" : pct(cov)) +
     readout("Soll (Konfidenzniveau)", pct(S.conf, 0)) + readout(`t-Wert bei df = ${n - 1}`, fmt(tq, 3));
   $("ci-level-text").textContent = pct(S.conf, 0);
