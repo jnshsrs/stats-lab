@@ -47,15 +47,15 @@ function draw1() {
   SX.forEach((x, j) => s += `<circle class="kid" data-j="${j}" cx="${f.sx(x)}" cy="${f.sy(SY[j])}" r="${j === kid ? 8 : 5.5}" fill="${j === kid ? "var(--fg)" : "var(--surface)"}" stroke="var(--fg)" stroke-width="2"/>`);
   $("d1").innerHTML = s;
   const y = SY[kid], yh = SFIT.fit[kid];
-  $("d1-kid").innerHTML = TB(String.raw`\begin{aligned} \underbrace{y - \bar{y}}_{\text{gesamt}} &= \underbrace{(\hat{y} - \bar{y})}_{\text{erklärt}} + \underbrace{(y - \hat{y})}_{\text{Rest}} \\ ${tz(fmt(y - SMY))} &= ${tz(fmt(yh - SMY))} + (${tz(fmt(y - yh))}) \end{aligned}`, "") +
+  $("d1-kid").innerHTML = TB(String.raw`\begin{aligned} \underbrace{y - \bar{y}}_{\text{gesamt}} &= \underbrace{(\hat{y} - \bar{y})}_{\text{erklärt}} + \underbrace{(y - \hat{y})}_{\text{Residuum}} \\ ${tz(fmt(y - SMY))} &= ${tz(fmt(yh - SMY))} + (${tz(fmt(y - yh))}) \end{aligned}`, "") +
     `<span class="dim">Ausgewähltes Kind: ${fmt(SX[kid], 0)} cm, FEV ${fmt(y)} l, Sollwert der Geraden ${fmt(yh)} l.</span>`;
   // Balken
   const T = SFIT.sqT, pm = SFIT.sqM / T * 100;
   $("d1-bar").innerHTML = `<div class="sqrow"><span class="sqlab">gesamt</span><div class="sqbar"><i class="t" style="width:100%">SQT = ${sq(T)}</i></div></div>
-    <div class="sqrow"><span class="sqlab">zerlegt</span><div class="sqbar"><i class="m" style="width:${pm}%">SQM = ${sq(SFIT.sqM)}</i><i class="r" style="width:${100 - pm}%" title="SQR">${sq(SFIT.sqR)}</i></div></div>`;
+    <div class="sqrow"><span class="sqlab">zerlegt</span><div class="sqbar"><i class="m" style="width:${pm}%">SQM = ${sq(SFIT.sqM)}</i><i class="r" style="width:${100 - pm}%" title="SQR Residuen">${sq(SFIT.sqR)}</i></div></div>`;
   $("d1-f").innerHTML = TB(String.raw`\begin{aligned} \mathrm{SQT} &= \textstyle\sum (y_i - \bar{y})^2 \\ \mathrm{SQM} &= \textstyle\sum (\hat{y}_i - \bar{y})^2 \\ \mathrm{SQR} &= \textstyle\sum (y_i - \hat{y}_i)^2 \\[4pt] \mathrm{SQT} &= \mathrm{SQM} + \mathrm{SQR} \\ ${tz(sq(T))} &= ${tz(sq(SFIT.sqM))} + ${tz(sq(SFIT.sqR))} \\[4pt] R^2 &= \dfrac{\mathrm{SQM}}{\mathrm{SQT}} = ${tz(fmt(SFIT.r2, 3))} \end{aligned}`, "") +
-    `<span class="dim">Die Abstände eines Kindes addieren sich immer. Die Quadrate tun das nur in der Summe über alle Kinder: Die Kreuzprodukte heben sich auf, weil die Reste nicht mit den Vorhersagen zusammenhängen.</span>`;
-  $("d1-r").innerHTML = readout("SQT gesamt", sq(T)) + readout("SQM erklärt", sq(SFIT.sqM)) + readout("SQR Rest", sq(SFIT.sqR)) + readout("R²", fmt(SFIT.r2 * 100, 1) + " %", "r-decision");
+    `<span class="dim">Die Abstände eines Kindes addieren sich immer. Die Quadrate tun das nur in der Summe über alle Kinder: Die Kreuzprodukte heben sich auf, weil die Residuen nicht mit den Vorhersagen zusammenhängen.</span>`;
+  $("d1-r").innerHTML = readout("SQT gesamt", sq(T)) + readout("SQM erklärt", sq(SFIT.sqM)) + readout("SQR Residuen", sq(SFIT.sqR)) + readout("R²", fmt(SFIT.r2 * 100, 1) + " %", "r-decision");
   $("d1-c").innerHTML = `In diesen 25 Kindern erklärt die Größe ${fmt(SFIT.r2 * 100, 0)} % der Unterschiede in der FEV. Mit allen 654 Kindern sind es ${fmt(FULL.r2 * 100, 1)} %. Die übrigen ${fmt((1 - FULL.r2) * 100, 0)} % gehen auf alles zurück, was das Modell nicht kennt. R² ist bei einer einzigen Einflussgröße das Quadrat der Korrelation: r = ${fmt(Math.sqrt(FULL.r2), 3)}, r² = ${fmt(FULL.r2, 3)}.`;
 }
 $("d1").addEventListener("click", e => { const c = e.target.closest("circle.kid"); if (!c) return; kid = +c.dataset.j; draw1(); });
@@ -81,7 +81,7 @@ function draw2(src) {
   const full = lo <= 117 && hi >= 189;
   $("d2-c").innerHTML = full
     ? `Mit allen Kindern: Steigung ${fmt(B1 * 10)} l pro 10 cm, R² = ${fmt(FULL.r2 * 100, 1)} %. Schränken Sie den Bereich ein und beobachten Sie, was mit beiden Zahlen passiert.`
-    : `Die Steigung bleibt in der Nähe von ${fmt(B1 * 10)} l pro 10 cm (hier ${fmt(m.b[1] * 10)} l), der Zusammenhang pro Zentimeter ist also derselbe. R² fällt aber auf ${fmt(m.r2 * 100, 0)} %. Der Grund: Die Größe streut im eingeschränkten Bereich kaum noch (SD ${fmt(sdx, 1)} statt ${fmt(SDX, 1)} cm). Dann gibt es wenig zu erklären, während die Reststreuung gleich bleibt. Für die Praxis: R² und r beschreiben eine Stichprobe, keine Naturkonstante. Studien mit engen Einschlusskriterien finden kleinere Korrelationen.`;
+    : `Die Steigung bleibt in der Nähe von ${fmt(B1 * 10)} l pro 10 cm (hier ${fmt(m.b[1] * 10)} l), der Zusammenhang pro Zentimeter ist also derselbe. R² fällt aber auf ${fmt(m.r2 * 100, 0)} %. Der Grund: Die Größe streut im eingeschränkten Bereich kaum noch (SD ${fmt(sdx, 1)} statt ${fmt(SDX, 1)} cm). Dann gibt es wenig zu erklären, während die Residualstreuung gleich bleibt. Für die Praxis: R² und r beschreiben eine Stichprobe, keine Naturkonstante. Studien mit engen Einschlusskriterien finden kleinere Korrelationen.`;
 }
 ["lo", "hi"].forEach(k => $(k).addEventListener("input", () => draw2(k)));
 document.querySelectorAll("[data-rg]").forEach(b => b.addEventListener("click", () => { const [a, c] = b.dataset.rg.split(","); $("lo").value = a; $("hi").value = c; draw2(); }));
@@ -90,7 +90,7 @@ document.querySelectorAll("[data-rg]").forEach(b => b.addEventListener("click", 
 const BIN = X.map(x => Math.min(7, Math.floor((x - 115) / 10)));
 const grpFit = g => { const k = [...new Set(g)].sort((a, b) => a - b), mu = {}; k.forEach(v => { const id = g.map((z, i) => i).filter(i => g[i] === v); mu[v] = mean(id.map(i => Y[i])); }); return { fit: g.map(v => mu[v]), mu, k }; };
 const MODELS = {
-  line: { name: "Regression (erklärt)", rest: "Residuen (Rest)", df1: 1, fit: FULL.fit },
+  line: { name: "Regression (erklärt)", rest: "Residuen", df1: 1, fit: FULL.fit },
   bins: { name: "zwischen den Gruppen", rest: "innerhalb der Gruppen", df1: 7, ...grpFit(BIN) },
   smoke: { name: "zwischen den Gruppen", rest: "innerhalb der Gruppen", df1: 1, ...grpFit(SM) }
 };

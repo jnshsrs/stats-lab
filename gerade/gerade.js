@@ -75,7 +75,7 @@ function draw2() {
   const rel = sq / best.sq;
   $("ls-c").innerHTML = rel < 1.005 ? `<b>Getroffen.</b> Kleiner wird die Quadratsumme nicht. Diese Gerade läuft durch den Schwerpunkt (x̄ = ${fmt(best.mx, 1)} cm, ȳ = ${fmt(best.my)} l): Positive und negative Residuen gleichen sich genau aus.`
     : `Ihre Quadratsumme ist ${fmt(rel, 1)}-mal so groß wie das Minimum. ${L.b1 < best.b1 * 0.7 ? "Die Gerade ist zu flach." : L.b1 > best.b1 * 1.3 ? "Die Gerade ist zu steil." : "Die Steigung passt ungefähr, jetzt die Höhe anpassen."} Warum Quadrate und nicht einfach Abstände? Große Fehler werden stärker bestraft, und es gibt genau eine beste Lösung, die man mit einer Formel ausrechnen kann.`;
-  $("ls-f").innerHTML = TB(String.raw`SQ_{\text{Rest}} = \sum_{i=1}^{n} \bigl(y_i - \hat{y}_i\bigr)^2 = ${tz(fmt(sq, 2))} \qquad \text{Minimum: } ${tz(fmt(best.sq, 2))}`, `<span>SQ = ${fmt(sq, 2)}</span>`) +
+  $("ls-f").innerHTML = TB(String.raw`SQ_{\text{Residuen}} = \sum_{i=1}^{n} \bigl(y_i - \hat{y}_i\bigr)^2 = ${tz(fmt(sq, 2))} \qquad \text{Minimum: } ${tz(fmt(best.sq, 2))}`, `<span>SQ = ${fmt(sq, 2)}</span>`) +
     TB(String.raw`b_1 = \dfrac{\text{cov}(x, y)}{s_x^2} = ${tz(fmt(best.b1 * 10, 3))}\ \text{l pro 10 cm} \qquad b_0 = \bar{y} - b_1 \bar{x}`, "");
 }
 let showGhost = false;

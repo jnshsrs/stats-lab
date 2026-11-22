@@ -30,9 +30,9 @@ const pick = (id, el) => { const b = id.target.closest("button"); if (!b) return
 const AX = [10, 8, 13, 9, 11, 14, 6, 4, 12, 7, 5], AX4 = [8, 8, 8, 8, 8, 8, 8, 19, 8, 8, 8];
 const ANS = [
   { x: AX, y: [8.04, 6.95, 7.58, 8.81, 8.33, 9.96, 7.24, 4.26, 10.84, 4.82, 5.68], txt: "So soll es aussehen: eine lineare Punktwolke, und im Residuenplot rechts ein Band ohne Muster um die Nulllinie. Die Gerade ist hier ein gutes Modell." },
-  { x: AX, y: [9.14, 8.14, 8.74, 8.77, 9.26, 8.10, 6.13, 3.10, 9.13, 7.26, 4.74], txt: "Ein glatter Bogen. Die Gerade ist das falsche Modell, obwohl r = 0,82 einen starken linearen Zusammenhang vortäuscht. Im Residuenplot ist der Bogen noch deutlicher: links und rechts negative, in der Mitte positive Reste." },
+  { x: AX, y: [9.14, 8.14, 8.74, 8.77, 9.26, 8.10, 6.13, 3.10, 9.13, 7.26, 4.74], txt: "Ein glatter Bogen. Die Gerade ist das falsche Modell, obwohl r = 0,82 einen starken linearen Zusammenhang vortäuscht. Im Residuenplot ist der Bogen noch deutlicher: links und rechts negative, in der Mitte positive Residuen." },
   { x: AX, y: [7.46, 6.77, 12.74, 7.11, 7.81, 8.84, 6.08, 5.39, 8.15, 6.42, 5.73], txt: "Zehn Punkte liegen exakt auf einer flacheren Geraden, ein einziger Ausreißer zieht sie nach oben. Im Residuenplot fällt er sofort auf. Ohne ihn wäre r fast 1." },
-  { x: AX4, y: [6.58, 5.76, 7.71, 8.84, 8.47, 7.04, 5.25, 12.50, 5.56, 7.91, 6.89], txt: "Zehn Punkte haben denselben x-Wert. Die Steigung wird von einem einzigen Punkt allein bestimmt; sein Hebelwert ist 1, sein Rest daher genau null. Ohne ihn ließe sich gar keine Gerade berechnen. Unauffälliger Rest heißt also nicht unauffälliger Punkt." }
+  { x: AX4, y: [6.58, 5.76, 7.71, 8.84, 8.47, 7.04, 5.25, 12.50, 5.56, 7.91, 6.89], txt: "Zehn Punkte haben denselben x-Wert. Die Steigung wird von einem einzigen Punkt allein bestimmt; sein Hebelwert ist 1, sein Residuum daher genau null. Ohne ihn ließe sich gar keine Gerade berechnen. Ein unauffälliges Residuum heißt also nicht, dass der Punkt unauffällig ist." }
 ];
 let ai = 0;
 function drawA() {
@@ -41,7 +41,7 @@ function drawA() {
   let s = f.s + `<line ${f.clip} x1="${f.sx(2)}" x2="${f.sx(20)}" y1="${f.sy(m.b[0] + m.b[1] * 2)}" y2="${f.sy(m.b[0] + m.b[1] * 20)}" stroke="var(--therapie)" stroke-width="2.5"/>`;
   D.x.forEach((x, i) => s += `<circle cx="${f.sx(x)}" cy="${f.sy(D.y[i])}" r="6" fill="var(--fg)"/>`);
   $("a1").innerHTML = s;
-  const g = frame(520, 380, 2, 20, -4, 4, { P: { L: 44, R: 10, T: 12, B: 44 }, xl: "x", yl: "Rest y − ŷ", nx: 6 });
+  const g = frame(520, 380, 2, 20, -4, 4, { P: { L: 44, R: 10, T: 12, B: 44 }, xl: "x", yl: "Residuum y − ŷ", nx: 6 });
   let t = g.s + `<line x1="${g.sx(2)}" x2="${g.sx(20)}" y1="${g.sy(0)}" y2="${g.sy(0)}" stroke="var(--therapie)" stroke-width="2"/>`;
   D.x.forEach((x, i) => t += `<line x1="${g.sx(x)}" x2="${g.sx(x)}" y1="${g.sy(0)}" y2="${g.sy(m.res[i])}" stroke="var(--beta-ink)" stroke-width="2" stroke-opacity=".6"/><circle cx="${g.sx(x)}" cy="${g.sy(m.res[i])}" r="6" fill="var(--beta-ink)"/>`);
   $("a2").innerHTML = t;
@@ -59,7 +59,7 @@ function terc(m) { const o = m.fit.map((f, i) => i).sort((a, b) => m.fit[a] - m.
 function drawR() {
   const m = MODS[md], lg = md === "log";
   const flo = Math.min(...m.fit), fhi = Math.max(...m.fit), pad = (fhi - flo) * 0.04, ylim = lg ? 0.7 : 2;
-  const f = frame(520, 380, flo - pad, fhi + pad, -ylim, ylim, { P: { L: 50, R: 10, T: 12, B: 44 }, xl: lg ? "Vorhersage ln(FEV)" : "Vorhersage ŷ in Litern", yl: lg ? "Rest (ln-Einheiten)" : "Rest in Litern", nx: 5, fx: v => fmt(v, 1) });
+  const f = frame(520, 380, flo - pad, fhi + pad, -ylim, ylim, { P: { L: 50, R: 10, T: 12, B: 44 }, xl: lg ? "Vorhersage ln(FEV)" : "Vorhersage ŷ in Litern", yl: lg ? "Residuum (ln-Einheiten)" : "Residuum in Litern", nx: 5, fx: v => fmt(v, 1) });
   let s = f.s;
   const o = m.fit.map((v, i) => i).sort((a, b) => m.fit[a] - m.fit[b]), G = 14, grp = [];
   for (let k = 0; k < G; k++) { const id = o.slice(Math.floor(k * N / G), Math.floor((k + 1) * N / G)), r = id.map(i => m.res[i]), mu = mean(r), sd = Math.sqrt(r.reduce((a, v) => a + (v - mu) ** 2, 0) / (r.length - 1)); grp.push({ x: mean(id.map(i => m.fit[i])), mu, sd }); }
@@ -69,15 +69,15 @@ function drawR() {
   s += `<path ${f.clip} d="M${grp.map(g => f.sx(g.x).toFixed(1) + "," + f.sy(g.mu).toFixed(1)).join("L")}" fill="none" stroke="var(--therapie)" stroke-width="3"/>`;
   $("r1").innerHTML = s;
   const z = m.res.map(v => v / m.s).sort((a, b) => a - b), q = z.map((v, i) => qnorm((i + 0.5) / N));
-  const g = frame(520, 380, -3.5, 3.5, -4, 4, { P: { L: 44, R: 10, T: 12, B: 44 }, xl: "erwartet bei Normalverteilung", yl: "standardisierter Rest", nx: 7, fx: v => fmt(v, 0) });
+  const g = frame(520, 380, -3.5, 3.5, -4, 4, { P: { L: 44, R: 10, T: 12, B: 44 }, xl: "erwartet bei Normalverteilung", yl: "standardisiertes Residuum", nx: 7, fx: v => fmt(v, 0) });
   let t = g.s + `<line ${g.clip} x1="${g.sx(-3.5)}" x2="${g.sx(3.5)}" y1="${g.sy(-3.5)}" y2="${g.sy(3.5)}" stroke="var(--therapie)" stroke-width="2"/>`;
   z.forEach((v, i) => t += `<circle cx="${g.sx(q[i]).toFixed(1)}" cy="${g.sy(v).toFixed(1)}" r="2.2" fill="var(--fg)" fill-opacity=".5"/>`);
   $("r2").innerHTML = t;
   const tc = terc(m), u = lg ? "" : " l";
-  $("r-r").innerHTML = readout("Rest-SD, kleine ŷ", fmt(tc[0], lg ? 3 : 2) + u) + readout("Rest-SD, mittlere ŷ", fmt(tc[1], lg ? 3 : 2) + u) + readout("Rest-SD, große ŷ", fmt(tc[2], lg ? 3 : 2) + u) + readout("Krümmung: p des quadratischen Terms", QP[md] < 0.001 ? "< 0,001" : fmt(QP[md], 2), "r-decision");
+  $("r-r").innerHTML = readout("SD der Residuen, kleine ŷ", fmt(tc[0], lg ? 3 : 2) + u) + readout("SD der Residuen, mittlere ŷ", fmt(tc[1], lg ? 3 : 2) + u) + readout("SD der Residuen, große ŷ", fmt(tc[2], lg ? 3 : 2) + u) + readout("Krümmung: p des quadratischen Terms", QP[md] < 0.001 ? "< 0,001" : fmt(QP[md], 2), "r-decision");
   $("r-c").innerHTML = lg
-    ? `Mit dem Logarithmus der FEV verschwinden beide Probleme. Die Reste streuen überall gleich stark (${fmt(tc[0], 2)}, ${fmt(tc[1], 2)}, ${fmt(tc[2], 2)}), und ein quadratischer Term bringt nichts mehr (p = ${fmt(QP.log, 2)}). Ein Rest von 0,15 auf der ln-Skala bedeutet rund 15 % über dem Sollwert: Kinder streuen in Prozent gleich stark, nicht in Litern. Genau darauf beruhte die relative Normgrenze in <a href="../normbereich/#acc-4">Wie sicher ist der Sollwert?</a>.`
-    : `Zwei Muster: <b>ein Trichter</b>, denn die Reste streuen bei großen Vorhersagen doppelt so stark wie bei kleinen (${fmt(tc[0], 2)} gegen ${fmt(tc[2], 2)} l). Und <b>ein leichter Bogen</b>, denn die blaue Kurve liegt an den Rändern über, in der Mitte unter null. Ein quadratischer Term ist hochsignifikant. Die Steigung ist trotzdem brauchbar geschätzt, aber Vorhersagebänder und Normgrenzen stimmen nicht. Schalten Sie auf Modell 2.`;
+    ? `Mit dem Logarithmus der FEV verschwinden beide Probleme. Die Residuen streuen überall gleich stark (${fmt(tc[0], 2)}, ${fmt(tc[1], 2)}, ${fmt(tc[2], 2)}), und ein quadratischer Term bringt nichts mehr (p = ${fmt(QP.log, 2)}). Ein Residuum von 0,15 auf der ln-Skala bedeutet rund 15 % über dem Sollwert: Kinder streuen in Prozent gleich stark, nicht in Litern. Genau darauf beruhte die relative Normgrenze in <a href="../normbereich/#acc-4">Wie sicher ist der Sollwert?</a>.`
+    : `Zwei Muster: <b>ein Trichter</b>, denn die Residuen streuen bei großen Vorhersagen doppelt so stark wie bei kleinen (${fmt(tc[0], 2)} gegen ${fmt(tc[2], 2)} l). Und <b>ein leichter Bogen</b>, denn die blaue Kurve liegt an den Rändern über, in der Mitte unter null. Ein quadratischer Term ist hochsignifikant. Die Steigung ist trotzdem brauchbar geschätzt, aber Vorhersagebänder und Normgrenzen stimmen nicht. Schalten Sie auf Modell 2.`;
 }
 $("mod").addEventListener("click", e => { const b = pick(e, $("mod")); if (!b) return; md = b.dataset.m; drawR(); });
 
@@ -100,13 +100,13 @@ function drawI() {
   s += `<text x="${f.sx(P.x) + (P.x > 170 ? -30 : 30)}" y="${f.sy(P.y) + 5}" text-anchor="${P.x > 170 ? "end" : "start"}" class="strong" style="fill:var(--beta-ink)">ziehen</text>`;
   $("inf").innerHTML = s;
   const lvl = D > 1 ? "stark" : D > 4 / n ? "auffällig" : "gering";
-  $("inf-r").innerHTML = readout("Hebelwert h", fmt(h, 3)) + readout("standardisierter Rest", fmt(rs, 2)) + readout("Cook-Distanz", fmt(D, 2) + ` (${lvl})`, "r-decision") + readout("Steigung pro 10 cm: ohne / mit", `${fmt(M0.b[1] * 10)} / ${fmt(m.b[1] * 10)} l`);
+  $("inf-r").innerHTML = readout("Hebelwert h", fmt(h, 3)) + readout("standardisiertes Residuum", fmt(rs, 2)) + readout("Cook-Distanz", fmt(D, 2) + ` (${lvl})`, "r-decision") + readout("Steigung pro 10 cm: ohne / mit", `${fmt(M0.b[1] * 10)} / ${fmt(m.b[1] * 10)} l`);
   $("inf-f").innerHTML = TB(String.raw`\begin{aligned} h &= \tfrac{1}{n} + \tfrac{(x - \bar{x})^2}{\sum (x_i - \bar{x})^2} = ${tz(fmt(h, 3))} \\ D &= \dfrac{r^2}{2} \cdot \dfrac{h}{1 - h} \\ &= \dfrac{${tz(fmt(rs, 2))}^2}{2} \cdot \dfrac{${tz(fmt(h, 3))}}{${tz(fmt(1 - h, 3))}} = ${tz(fmt(D, 2))} \end{aligned}`, "") +
-    `<span class="dim">Der Hebelwert misst, wie weit der Punkt bei x am Rand liegt. Die Cook-Distanz kombiniert Hebel und Rest: Einfluss entsteht nur, wenn beides zusammenkommt. Faustregeln: über 4/n = ${fmt(4 / n, 2)} genauer ansehen, über 1 stark einflussreich.</span>`;
+    `<span class="dim">Der Hebelwert misst, wie weit der Punkt bei x am Rand liegt. Die Cook-Distanz kombiniert Hebel und Residuum: Einfluss entsteht nur, wenn beides zusammenkommt. Faustregeln: über 4/n = ${fmt(4 / n, 2)} genauer ansehen, über 1 stark einflussreich.</span>`;
   const hiH = h > 2 * 2 / n, hiR = Math.abs(rs) > 2;
-  $("inf-c").innerHTML = hiH && hiR ? `<b>Großer Hebel und großer Rest:</b> Der Punkt liegt am Rand und weit neben der Geraden. Er kippt die Steigung von ${fmt(M0.b[1] * 10)} auf ${fmt(m.b[1] * 10)} l pro 10 cm. Ein einzelnes Kind bestimmt hier das Ergebnis mit. Prüfen: Messfehler? Anderes Kollektiv? Analyse mit und ohne berichten.`
-    : hiH ? `<b>Großer Hebel, kleiner Rest:</b> Der Punkt liegt am Rand, aber auf der Linie der anderen. Er verändert die Steigung kaum und macht sie sogar genauer. Ein Hebelpunkt ist nicht automatisch ein Problem.`
-    : hiR ? `<b>Großer Rest, kleiner Hebel:</b> Ein klarer Ausreißer, aber in der Mitte der Daten. Er verschiebt die Gerade etwas nach oben oder unten, die Steigung ändert sich kaum. Er vergrößert aber die Reststreuung und damit alle Standardfehler.`
+  $("inf-c").innerHTML = hiH && hiR ? `<b>Großer Hebel und großes Residuum:</b> Der Punkt liegt am Rand und weit neben der Geraden. Er kippt die Steigung von ${fmt(M0.b[1] * 10)} auf ${fmt(m.b[1] * 10)} l pro 10 cm. Ein einzelnes Kind bestimmt hier das Ergebnis mit. Prüfen: Messfehler? Anderes Kollektiv? Analyse mit und ohne berichten.`
+    : hiH ? `<b>Großer Hebel, kleines Residuum:</b> Der Punkt liegt am Rand, aber auf der Linie der anderen. Er verändert die Steigung kaum und macht sie sogar genauer. Ein Hebelpunkt ist nicht automatisch ein Problem.`
+    : hiR ? `<b>Großes Residuum, kleiner Hebel:</b> Ein klarer Ausreißer, aber in der Mitte der Daten. Er verschiebt die Gerade etwas nach oben oder unten, die Steigung ändert sich kaum. Er vergrößert aber die Residualstreuung und damit alle Standardfehler.`
     : `Der Punkt liegt unauffällig im Bereich der anderen Kinder. Ziehen Sie ihn an den Rand und weit weg von der Geraden.`;
 }
 (() => {

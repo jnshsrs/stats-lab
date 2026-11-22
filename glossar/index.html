@@ -6,9 +6,9 @@
 <title>Glossar · Stats Lab</title>
 <meta name="description" content="Fachbegriffe aus Statistik und Forschungsmethodik kurz erklärt, geordnet nach den Kapiteln des Stats Lab.">
 <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="../assets/css/base.css?v=202611221826">
+<link rel="stylesheet" href="../assets/css/base.css?v=202611221921">
 <link rel="stylesheet" href="../assets/vendor/katex/katex.min.css">
-<link rel="stylesheet" href="glossar.css?v=202611221826">
+<link rel="stylesheet" href="glossar.css?v=202611221921">
 </head>
 <body>
 <header class="site-header">
@@ -273,7 +273,7 @@
 <div class="g-term" id="gerade-regressionsgerade"><dt><a class="anchor" href="#gerade-regressionsgerade" aria-label="Link zu Regressionsgerade">#</a>Regressionsgerade</dt><dd>Beschreibt den mittleren Trend von y in Abhängigkeit von x mit zwei Zahlen. Liefert für jedes x einen Vorhersagewert.<span class="g-f">ŷ = b₀ + b₁ · x</span></dd></div>
 <div class="g-term" id="gerade-steigung-b1"><dt><a class="anchor" href="#gerade-steigung-b1" aria-label="Link zu Steigung b₁">#</a>Steigung b₁</dt><dd>Um wie viel sich der vorhergesagte Wert ändert, wenn x um eine Einheit steigt. Die inhaltlich wichtigste Zahl des Modells.<span class="g-f">b₁ = cov(x, y) ÷ sₓ²</span></dd></div>
 <div class="g-term" id="gerade-achsenabschnitt-b0"><dt><a class="anchor" href="#gerade-achsenabschnitt-b0" aria-label="Link zu Achsenabschnitt b₀">#</a>Achsenabschnitt b₀</dt><dd>Vorhergesagter Wert bei x = 0. Oft nur ein Rechenwert ohne inhaltliche Bedeutung.<span class="g-f">b₀ = ȳ − b₁ · x̄</span></dd></div>
-<div class="g-term" id="gerade-residuum"><dt><a class="anchor" href="#gerade-residuum" aria-label="Link zu Residuum">#</a>Residuum</dt><dd>Abstand zwischen beobachtetem und vorhergesagtem Wert, senkrecht gemessen.<span class="g-f">eᵢ = yᵢ − ŷᵢ</span></dd></div>
+<div class="g-term" id="gerade-residuum"><dt><a class="anchor" href="#gerade-residuum" aria-label="Link zu Residuum">#</a>Residuum</dt><dd>Abstand zwischen beobachtetem und vorhergesagtem Wert, senkrecht gemessen. Plural Residuen, lateinisch für „das Übriggebliebene“: der Teil des Messwerts, den das Modell nicht erklärt. Fachbegriff für alles, was umgangssprachlich „Rest“ heißt.<span class="g-f">eᵢ = yᵢ − ŷᵢ</span></dd></div>
 <div class="g-term" id="gerade-kleinste-quadrate"><dt><a class="anchor" href="#gerade-kleinste-quadrate" aria-label="Link zu Methode der kleinsten Quadrate">#</a>Methode der kleinsten Quadrate</dt><dd>Wählt die Gerade, bei der die Summe der quadrierten Residuen am kleinsten ist. Diese Gerade läuft immer durch den Schwerpunkt (x̄, ȳ).</dd></div>
 <div class="g-term" id="gerade-extrapolation"><dt><a class="anchor" href="#gerade-extrapolation" aria-label="Link zu Extrapolation">#</a>Extrapolation</dt><dd>Vorhersage außerhalb des Bereichs der Daten. Riskant, weil niemand weiß, ob der Zusammenhang dort noch linear ist.</dd></div>
 <div class="g-term" id="gerade-zentrieren"><dt><a class="anchor" href="#gerade-zentrieren" aria-label="Link zu Zentrieren">#</a>Zentrieren</dt><dd>x um einen festen Wert c verschieben, etwa auf 150 cm oder den Mittelwert. Der Achsenabschnitt wird dann zum vorhergesagten Wert bei x = c und damit interpretierbar. Die Gerade bleibt dieselbe.<span class="g-f">x* = x − c</span></dd></div>
@@ -289,7 +289,7 @@
 <div class="g-term" id="normbereich-heteroskedastizitaet"><dt><a class="anchor" href="#normbereich-heteroskedastizitaet" aria-label="Link zu Heteroskedastizität">#</a>Heteroskedastizität</dt><dd>Die Streuung um die Gerade ist nicht überall gleich, etwa größer bei großen Kindern. Dann stimmen Vorhersageband und Normgrenze nicht in jedem Bereich.</dd></div>
 </dl></section>
 <section class="g-ch" id="k-bestimmtheitsmass"><div class="g-chh"><h3><span class="num">23</span>Wie viel erklärt die Gerade?</h3><a class="g-link" href="../bestimmtheitsmass/">Zur Seite →</a></div><dl>
-<div class="g-term" id="bestimmtheitsmass-streuungszerlegung"><dt><a class="anchor" href="#bestimmtheitsmass-streuungszerlegung" aria-label="Link zu Streuungszerlegung">#</a>Streuungszerlegung</dt><dd>Die Gesamtstreuung um den Mittelwert zerfällt in den Teil, den das Modell vorhersagt, und den Rest.<span class="g-f">SQT = SQM + SQR</span></dd></div>
+<div class="g-term" id="bestimmtheitsmass-streuungszerlegung"><dt><a class="anchor" href="#bestimmtheitsmass-streuungszerlegung" aria-label="Link zu Streuungszerlegung">#</a>Streuungszerlegung</dt><dd>Die Gesamtstreuung um den Mittelwert zerfällt in den Teil, den das Modell vorhersagt, und die Residuen.<span class="g-f">SQT = SQM + SQR</span></dd></div>
 <div class="g-term" id="bestimmtheitsmass-r2"><dt><a class="anchor" href="#bestimmtheitsmass-r2" aria-label="Link zu Bestimmtheitsmaß R²">#</a>Bestimmtheitsmaß R²</dt><dd>Anteil der Gesamtstreuung, den das Modell erklärt, zwischen 0 und 1. Bei einer Einflussgröße gleich r². Hängt vom Wertebereich der Stichprobe ab.<span class="g-f">R² = SQM ÷ SQT</span></dd></div>
 <div class="g-term" id="bestimmtheitsmass-eta2"><dt><a class="anchor" href="#bestimmtheitsmass-eta2" aria-label="Link zu Eta-Quadrat η²">#</a>Eta-Quadrat η²</dt><dd>Name für R² in der Varianzanalyse: Anteil der Streuung zwischen den Gruppen an der Gesamtstreuung.</dd></div>
 <div class="g-term" id="bestimmtheitsmass-f-test"><dt><a class="anchor" href="#bestimmtheitsmass-f-test" aria-label="Link zu F-Test">#</a>F-Test</dt><dd>Prüft, ob ein Modell mehr Streuung erklärt als durch Zufall zu erwarten. Bei einer einzigen Einflussgröße gilt F = t².<span class="g-f">F = (SQM ÷ df₁) ÷ (SQR ÷ df₂)</span></dd></div>
@@ -297,12 +297,12 @@
 </dl></section>
 <section class="g-ch" id="k-diagnostik"><div class="g-chh"><h3><span class="num">24</span>Passt das Modell?</h3><a class="g-link" href="../diagnostik/">Zur Seite →</a></div><dl>
 <div class="g-term" id="diagnostik-anscombe"><dt><a class="anchor" href="#diagnostik-anscombe" aria-label="Link zu Anscombe-Quartett">#</a>Anscombe-Quartett</dt><dd>Vier Datensätze mit gleichen Mittelwerten, Varianzen, Korrelationen und Regressionsgeraden, aber völlig verschiedenen Streudiagrammen. Lehre: erst zeichnen, dann rechnen.</dd></div>
-<div class="g-term" id="diagnostik-residuenplot"><dt><a class="anchor" href="#diagnostik-residuenplot" aria-label="Link zu Residuenplot">#</a>Residuenplot</dt><dd>Reste gegen Vorhersagen. Bei passendem Modell ein gleichmäßig breites Band ohne Muster um null. Ein Bogen zeigt fehlende Linearität, ein Trichter ungleiche Streuung.</dd></div>
-<div class="g-term" id="diagnostik-homoskedastizitaet"><dt><a class="anchor" href="#diagnostik-homoskedastizitaet" aria-label="Link zu Homoskedastizität">#</a>Homoskedastizität</dt><dd>Annahme, dass die Reste bei allen Vorhersagewerten gleich stark streuen. Gegenteil: Heteroskedastizität.</dd></div>
-<div class="g-term" id="diagnostik-qq-plot"><dt><a class="anchor" href="#diagnostik-qq-plot" aria-label="Link zu Q-Q-Plot">#</a>Q-Q-Plot</dt><dd>Sortierte Reste gegen die bei Normalverteilung erwarteten Werte. Liegen die Punkte auf der Diagonalen, sind die Reste normalverteilt.</dd></div>
+<div class="g-term" id="diagnostik-residuenplot"><dt><a class="anchor" href="#diagnostik-residuenplot" aria-label="Link zu Residuenplot">#</a>Residuenplot</dt><dd>Residuen gegen Vorhersagen. Bei passendem Modell ein gleichmäßig breites Band ohne Muster um null. Ein Bogen zeigt fehlende Linearität, ein Trichter ungleiche Streuung.</dd></div>
+<div class="g-term" id="diagnostik-homoskedastizitaet"><dt><a class="anchor" href="#diagnostik-homoskedastizitaet" aria-label="Link zu Homoskedastizität">#</a>Homoskedastizität</dt><dd>Annahme, dass die Residuen bei allen Vorhersagewerten gleich stark streuen. Gegenteil: Heteroskedastizität.</dd></div>
+<div class="g-term" id="diagnostik-qq-plot"><dt><a class="anchor" href="#diagnostik-qq-plot" aria-label="Link zu Q-Q-Plot">#</a>Q-Q-Plot</dt><dd>Sortierte Residuen gegen die bei Normalverteilung erwarteten Werte. Liegen die Punkte auf der Diagonalen, sind die Residuen normalverteilt.</dd></div>
 <div class="g-term" id="diagnostik-transformation"><dt><a class="anchor" href="#diagnostik-transformation" aria-label="Link zu Log-Transformation">#</a>Log-Transformation</dt><dd>Regression mit dem Logarithmus der Zielgröße. Hilft, wenn die Streuung mit dem Niveau wächst; Effekte gelten dann in Prozent statt in absoluten Einheiten.<span class="g-f">ln(y) = b₀ + b₁ · x</span></dd></div>
 <div class="g-term" id="diagnostik-hebelwert"><dt><a class="anchor" href="#diagnostik-hebelwert" aria-label="Link zu Hebelwert">#</a>Hebelwert</dt><dd>Wie weit ein Punkt bei x vom Mittelwert entfernt liegt, zwischen 1/n und 1. Punkte mit großem Hebel können die Gerade stark beeinflussen.<span class="g-f">h = 1/n + (x − x̄)² ÷ Σ(xᵢ − x̄)²</span></dd></div>
-<div class="g-term" id="diagnostik-cook"><dt><a class="anchor" href="#diagnostik-cook" aria-label="Link zu Cook-Distanz">#</a>Cook-Distanz</dt><dd>Misst, wie stark sich alle Vorhersagen ändern, wenn ein Punkt weggelassen wird. Kombiniert Hebel und Rest. Faustregel: über 4/n ansehen, über 1 stark einflussreich.</dd></div>
+<div class="g-term" id="diagnostik-cook"><dt><a class="anchor" href="#diagnostik-cook" aria-label="Link zu Cook-Distanz">#</a>Cook-Distanz</dt><dd>Misst, wie stark sich alle Vorhersagen ändern, wenn ein Punkt weggelassen wird. Kombiniert Hebel und Residuum. Faustregel: über 4/n ansehen, über 1 stark einflussreich.</dd></div>
 </dl></section>
 <section class="g-ch" id="k-multiple-regression"><div class="g-chh"><h3><span class="num">25</span>Mehrere Einflüsse zugleich</h3><a class="g-link" href="../multiple-regression/">Zur Seite →</a></div><dl>
 <div class="g-term" id="multiple-regression-multiple"><dt><a class="anchor" href="#multiple-regression-multiple" aria-label="Link zu Multiple Regression">#</a>Multiple Regression</dt><dd>Regression mit mehreren Einflussgrößen. Jeder Koeffizient gibt den Effekt einer Größe bei gleichen Werten aller anderen an.<span class="g-f">ŷ = b₀ + b₁x₁ + b₂x₂ + …</span></dd></div>
@@ -322,7 +322,7 @@
 </footer>
 <script src="../assets/vendor/katex/katex.min.js"></script>
 <script src="../assets/vendor/katex/contrib/auto-render.min.js"></script>
-<script src="../assets/js/tex.js?v=202611221826"></script>
-<script src="glossar.js?v=202611221826"></script>
+<script src="../assets/js/tex.js?v=202611221921"></script>
+<script src="glossar.js?v=202611221921"></script>
 </body>
 </html>

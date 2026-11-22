@@ -6,9 +6,9 @@
 <title>Passt das Modell? · Stats Lab</title>
 <meta name="description" content="Regressionsdiagnostik: Anscombe-Quartett, Residuenplot und Q-Q-Plot, Trichter und Krümmung in den FEV-Daten, Logarithmus als Lösung, Hebelwert und Cook-Distanz zum Ziehen.">
 <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="../assets/css/base.css?v=202611221826">
+<link rel="stylesheet" href="../assets/css/base.css?v=202611221921">
 <link rel="stylesheet" href="../assets/vendor/katex/katex.min.css">
-<link rel="stylesheet" href="diagnostik.css?v=202611221826">
+<link rel="stylesheet" href="diagnostik.css?v=202611221921">
 </head>
 <body>
 <header class="site-header">
@@ -30,7 +30,7 @@
     <a class="back" href="../">← Alle Visualisierungen</a>
     <h1>Passt das Modell?</h1>
     <p class="byline">Dr. Jens Hüsers · Forschungsmethodik</p>
-    <p class="lede">Unsere Sollwerte für die <abbr title="Forciertes exspiratorisches Volumen in der ersten Sekunde">FEV</abbr> (forciertes exspiratorisches Volumen in der ersten Sekunde, auch Einsekundenkapazität: die Luftmenge in Litern, die man nach tiefem Einatmen in einer Sekunde kräftig ausatmen kann) beruhen auf einer Geraden. Standardfehler, Konfidenzintervalle und Normgrenzen stimmen aber nur, wenn das Modell zu den Daten passt. Ob es das tut, verraten die Reste, also die Abstände der Punkte von der Geraden. Diese Prüfung heißt Diagnostik.</p>
+    <p class="lede">Unsere Sollwerte für die <abbr title="Forciertes exspiratorisches Volumen in der ersten Sekunde">FEV</abbr> (forciertes exspiratorisches Volumen in der ersten Sekunde, auch Einsekundenkapazität: die Luftmenge in Litern, die man nach tiefem Einatmen in einer Sekunde kräftig ausatmen kann) beruhen auf einer Geraden. Standardfehler, Konfidenzintervalle und Normgrenzen stimmen aber nur, wenn das Modell zu den Daten passt. Ob es das tut, verraten die Residuen, also die Abstände der Punkte von der Geraden. Diese Prüfung heißt Diagnostik.</p>
   </section>
 
   <details class="acc" id="acc-1" open>
@@ -50,7 +50,7 @@
   <details class="acc" id="acc-2" open>
     <summary><span class="acc-no">2</span><span class="acc-title">Residuen der FEV-Daten<span class="acc-teaser">Ein Trichter, ein Bogen und eine einfache Lösung.</span></span></summary>
     <div class="acc-body">
-      <p class="text">Der wichtigste Diagnoseplot: Reste gegen Vorhersage. Passt das Modell, liegen die Punkte als gleichmäßig breites Band ohne Muster um die Nulllinie. Die blaue Kurve zeigt den mittleren Rest, die graue Fläche die Streuung, beides für Gruppen ähnlicher Vorhersagen.</p>
+      <p class="text">Der wichtigste Diagnoseplot: Residuen gegen Vorhersage. Passt das Modell, liegen die Punkte als gleichmäßig breites Band ohne Muster um die Nulllinie. Die blaue Kurve zeigt das mittlere Residuum, die graue Fläche die Streuung, beides für Gruppen ähnlicher Vorhersagen.</p>
       <div class="seg wide" role="group" aria-label="Modell" id="mod"><button type="button" data-m="lin" aria-pressed="true"><b>1</b> FEV = b₀ + b₁ · Größe</button><button type="button" data-m="log" aria-pressed="false"><b>2</b> ln(FEV) = b₀ + b₁ · Größe</button></div>
       <div class="two-charts">
         <svg class="chart" id="r1" viewBox="0 0 520 380" role="img" aria-label="Residuen gegen Vorhersage"></svg>
@@ -61,8 +61,8 @@
       <details class="deep">
         <summary>Vertiefung: Wie liest man den Q-Q-Plot?</summary>
         <div class="deep-body">
-          <p>Der Q-Q-Plot vergleicht die sortierten Reste mit den Werten, die man bei einer Normalverteilung erwarten würde. Liegen die Punkte auf der Diagonalen, sind die Reste normalverteilt. Ein Bogen zeigt Schiefe, ein S zeigt zu dicke oder zu dünne Ränder.</p>
-          <p>Die Normalverteilung der Reste ist die am wenigsten wichtige Annahme. Bei großem n sorgt der <a href="../zgws/">zentrale Grenzwertsatz</a> dafür, dass b₁ trotzdem annähernd normalverteilt ist und Test und Konfidenzintervall stimmen. Wichtig wird sie bei kleinen Stichproben und bei Vorhersageintervallen für einzelne Personen, denn die beschreiben die Reste selbst.</p>
+          <p>Der Q-Q-Plot vergleicht die sortierten Residuen mit den Werten, die man bei einer Normalverteilung erwarten würde. Liegen die Punkte auf der Diagonalen, sind die Residuen normalverteilt. Ein Bogen zeigt Schiefe, ein S zeigt zu dicke oder zu dünne Ränder.</p>
+          <p>Die Normalverteilung der Residuen ist die am wenigsten wichtige Annahme. Bei großem n sorgt der <a href="../zgws/">zentrale Grenzwertsatz</a> dafür, dass b₁ trotzdem annähernd normalverteilt ist und Test und Konfidenzintervall stimmen. Wichtig wird sie bei kleinen Stichproben und bei Vorhersageintervallen für einzelne Personen, denn die beschreiben die Residuen selbst.</p>
           <p>Die logarithmierte FEV ist leicht linksschief. Das ist der Preis für die gleichmäßige Streuung, und bei 654 Kindern unproblematisch.</p>
         </div>
       </details>
@@ -89,7 +89,7 @@
         <li><b>Gleiche Streuung (Homoskedastizität).</b> Öffnet sich ein Trichter? Dann sind Vorhersageband und Normgrenze in einem Teil der Daten zu eng, im anderen zu weit. Lösungen: Logarithmus, robuste Standardfehler.</li>
         <li><b>Unabhängigkeit.</b> Stammt jeder Punkt von einer anderen Person? Mehrere Messungen pro Person, Geschwister oder Kinder aus derselben Klasse verletzen die Annahme. Das zeigt kein Plot, das folgt aus dem Studiendesign. Lösung: gemischte Modelle.</li>
         <li><b>Einflussreiche Punkte.</b> Hängt das Ergebnis an einzelnen Fällen? Cook-Distanz prüfen, Analyse ohne diese Fälle wiederholen und beide Ergebnisse berichten. Nie einfach löschen.</li>
-        <li><b>Normalverteilte Reste.</b> Q-Q-Plot ansehen. Bei großem n wenig kritisch, bei kleinem n und für Vorhersageintervalle wichtig.</li>
+        <li><b>Normalverteilte Residuen.</b> Q-Q-Plot ansehen. Bei großem n wenig kritisch, bei kleinem n und für Vorhersageintervalle wichtig.</li>
       </ol>
       <p class="note">In SPSS: Analysieren → Regression → Linear → Diagramme: *ZRESID auf die y-Achse, *ZPRED auf die x-Achse, Normalverteilungsdiagramm anhaken. Unter „Speichern“ lassen sich Cook-Distanz und Hebelwerte als neue Variablen ablegen.</p>
     </div>
@@ -111,10 +111,10 @@
 </footer>
 <script src="../assets/vendor/katex/katex.min.js"></script>
 <script src="../assets/vendor/katex/contrib/auto-render.min.js"></script>
-<script src="../assets/js/tex.js?v=202611221826"></script>
-<script src="../regression-daten/fev.js?v=202611221826"></script>
-<script src="../assets/js/reg.js?v=202611221826"></script>
-<script src="diagnostik.js?v=202611221826"></script>
-<script src="../assets/js/path.js?v=202611221826"></script>
+<script src="../assets/js/tex.js?v=202611221921"></script>
+<script src="../regression-daten/fev.js?v=202611221921"></script>
+<script src="../assets/js/reg.js?v=202611221921"></script>
+<script src="diagnostik.js?v=202611221921"></script>
+<script src="../assets/js/path.js?v=202611221921"></script>
 </body>
 </html>
