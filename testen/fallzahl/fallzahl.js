@@ -9,16 +9,17 @@ function lgamma(x) { if (x < 0.5) return Math.log(Math.PI / Math.sin(Math.PI * x
 function betacf(a, b, x) { const FP = 1e-300; let qab = a + b, qap = a + 1, qam = a - 1, c = 1, d = 1 - qab * x / qap; if (Math.abs(d) < FP) d = FP; d = 1 / d; let h = d; for (let m = 1; m <= 400; m++) { const m2 = 2 * m; let aa = m * (b - m) * x / ((qam + m2) * (a + m2)); d = 1 + aa * d; if (Math.abs(d) < FP) d = FP; c = 1 + aa / c; if (Math.abs(c) < FP) c = FP; d = 1 / d; h *= d * c; aa = -(a + m) * (qab + m) * x / ((a + m2) * (qap + m2)); d = 1 + aa * d; if (Math.abs(d) < FP) d = FP; c = 1 + aa / c; if (Math.abs(c) < FP) c = FP; d = 1 / d; const del = d * c; h *= del; if (Math.abs(del - 1) < 3e-14) break; } return h; }
 function ibeta(x, a, b) { if (x <= 0) return 0; if (x >= 1) return 1; const bt = Math.exp(lgamma(a + b) - lgamma(a) - lgamma(b) + a * Math.log(x) + b * Math.log(1 - x)); return x < (a + 1) / (a + b + 2) ? bt * betacf(a, b, x) / a : 1 - bt * betacf(b, a, 1 - x) / b; }
 const tcdf = (t, df) => { const ib = ibeta(df / (df + t * t), df / 2, 0.5); return t >= 0 ? 1 - 0.5 * ib : 0.5 * ib; };
-function tinv(p, df) { let lo = -80, hi = 80; for (let i = 0; i < 90; i++) { const m = (lo + hi) / 2; if (tcdf(m, df) < p) lo = m; else hi = m; } return (lo + hi) / 2; }
+function tinv(p, df) { let lo = -1e9, hi = 1e9; for (let i = 0; i < 140; i++) { const m = (lo + hi) / 2; if (tcdf(m, df) < p) lo = m; else hi = m; } return (lo + hi) / 2; }
 function erf(x) { const s = x < 0 ? -1 : 1; x = Math.abs(x); const t = 1 / (1 + 0.3275911 * x); return s * (1 - (((((1.061405429 * t - 1.453152027) * t) + 1.421413741) * t - 0.284496736) * t + 0.254829592) * t * Math.exp(-x * x)); }
 const Phi = x => 0.5 * (1 + erf(x / Math.SQRT2));
 function zinv(p) { let lo = -10, hi = 10; for (let i = 0; i < 80; i++) { const m = (lo + hi) / 2; if (Phi(m) < p) lo = m; else hi = m; } return (lo + hi) / 2; }
 const quadCache = new Map();
 function quad(df) {
+  // Integration über die Chi-Verteilung von s = Wurzel(Chi-Quadrat): Dichte s^(df-1)·e^(-s²/2) ist auch bei df = 1 endlich.
   if (quadCache.has(df)) return quadCache.get(df);
-  const sd = Math.sqrt(2 * df), lo = Math.max(0, df - 12 * sd), hi = df + 14 * sd + 20, N = 300, h = (hi - lo) / N;
-  const lc = -(df / 2) * Math.log(2) - lgamma(df / 2), V = [], W = []; let tot = 0;
-  for (let i = 0; i <= N; i++) { const v = Math.max(lo + i * h, 1e-9), dens = Math.exp(lc + (df / 2 - 1) * Math.log(v) - v / 2), sw = (i === 0 || i === N) ? 1 : (i % 2 ? 4 : 2); V.push(Math.sqrt(v / df)); W.push(dens * sw); tot += dens * sw; }
+  const m = Math.sqrt(df), lo = Math.max(0, m - 9), hi = m + 9, N = 600, h = (hi - lo) / N, V = [], W = []; let tot = 0;
+  const xm = Math.sqrt(Math.max(df - 1, 0)), lmax = df > 1 ? (df - 1) * Math.log(xm) - xm * xm / 2 : 0;
+  for (let i = 0; i <= N; i++) { const x = lo + i * h, dens = x <= 0 ? (df === 1 ? 1 : 0) : Math.exp((df - 1) * Math.log(x) - x * x / 2 - lmax), sw = (i === 0 || i === N) ? 1 : (i % 2 ? 4 : 2); V.push(x / m); W.push(dens * sw); tot += dens * sw; }
   for (let i = 0; i < W.length; i++) W[i] /= tot;
   if (quadCache.size > 3000) quadCache.clear();
   const q = { V, W }; quadCache.set(df, q); return q;
@@ -60,9 +61,11 @@ function solveEffect(test, alpha, n, target, sides, p1, up) {
   for (let i = 0; i < 60; i++) { const m = (lo + hi) / 2; if (pw(m) >= target) hi = m; else lo = m; }
   return hi;
 }
+const ALPHA_MIN = 1e-7;
 function solveAlpha(test, eff, n, target, sides) {
   if (power(test, 0.5, eff, n, sides) < target) return null;
-  let lo = 1e-7, hi = 0.5;
+  if (power(test, ALPHA_MIN, eff, n, sides) >= target) return 0;
+  let lo = ALPHA_MIN, hi = 0.5;
   for (let i = 0; i < 60; i++) { const m = Math.sqrt(lo * hi); if (power(test, m, eff, n, sides) >= target) hi = m; else lo = m; }
   return hi;
 }
@@ -79,7 +82,7 @@ const S = { test: "t2", target: "n", sides: "two", alpha: 0.05, power: 0.8, d: 0
 const $ = id => document.getElementById(id);
 const fmt = (x, d = 2) => x.toLocaleString("de-DE", { minimumFractionDigits: d, maximumFractionDigits: d });
 const pct = (x, d = 1) => (x * 100).toLocaleString("de-DE", { minimumFractionDigits: d, maximumFractionDigits: d }) + " %";
-const apct = a => (a * 100).toLocaleString("de-DE", { maximumFractionDigits: a < 0.01 ? 3 : 1 }) + " %";
+const apct = a => a < 0.00001 ? "< 0,001 %" : (a * 100).toLocaleString("de-DE", { maximumSignificantDigits: a < 0.01 ? 2 : 3 }) + " %";
 const intf = x => Math.round(x).toLocaleString("de-DE");
 const path = pts => pts.map((p, i) => (i ? "L" : "M") + p[0].toFixed(1) + "," + p[1].toFixed(1)).join("");
 
@@ -167,11 +170,13 @@ function update(syncInputs = true) {
   } else {
     const a = solveAlpha(S.test, eff, n, S.power, S.sides);
     if (a == null) { big = "nicht erreichbar"; warn = "Selbst mit α = 50 % reicht die Power nicht. Mehr Personen oder ein größerer Effekt sind nötig."; }
+    else if (a === 0) { alpha = ALPHA_MIN; big = "α beliebig klein"; sub = `Selbst bei α = 0,00001 % erreicht die Studie mehr als ${pct(S.power, 0)} Power. Effekt und Fallzahl sind so groß, dass das Signifikanzniveau praktisch keine Rolle spielt.`; { const el = $("in-alpha"); if (el && document.activeElement !== el) el.value = "0.0000001"; } }
     else { setVal("alpha", a, 4); alpha = a; big = `α = ${apct(a)}`; sub = `Mit diesem Signifikanzniveau erreicht die Studie ${pct(S.power, 0)} Power.`; if (a > 0.05) warn = "Größer als 5 %: Das gängige Niveau ist mit diesem Design nicht einzuhalten."; }
   }
   if (S.target !== "alpha") alpha = S.alpha;
   if (syncInputs) ["alpha", "power", "p1", "p2", "d", "delta", "sd", "n", "dropout"].forEach(k => { if (k !== solvedKey) setVal(k, S[k]); });
 
+  { const tt = $("tab-title"); if (tt) tt.textContent = S.test === "t1" ? "Fallzahl (Personen) für typische Annahmen" : "Fallzahl pro Gruppe für typische Annahmen"; }
   $("result").innerHTML = `<span class="k">Ergebnis · ${TARGETS.find(t => t[0] === S.target)[1]}</span><span class="big">${big}</span>${sub ? `<span class="sub">${sub}</span>` : ""}${warn ? `<span class="warn">${warn}</span>` : ""}`;
 
   // Methodensatz
