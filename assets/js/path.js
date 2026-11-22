@@ -23,7 +23,8 @@ const PATH = [
   ["mammografie", "Positiver Befund: Gigerenzers Mammografie-Aufgabe", 3],
   ["klinische-tests", "Klinische Tests: Gütekriterien und Likelihood-Ratios", 3],
   ["inferenzzyklus", "Induktion, Deduktion und der Signifikanztest", 3],
-  ["korrelation", "Zusammenhang und Korrelation", 4]
+  ["korrelation", "Zusammenhang und Korrelation", 4],
+  ["gerade", "Die beste Gerade: kleinste Quadrate", 4]
 ];
 window.STATS_LAB_PATH = { BLOCKS, PATH };
 const parts = location.pathname.split("/").filter(Boolean);

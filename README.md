@@ -26,6 +26,7 @@ Interaktive Visualisierungen für die Statistiklehre in den Gesundheits- und The
 | [`klinische-tests/`](klinische-tests/) | Klinische Tests: Gütekriterien mit Zielscheiben, Vertiefung Kappa (inkl. Prävalenz-Paradox) und ICC/SEM/MDC, Vierfeldertafel mit Lachman, Pivot-Shift, SLR, gekreuztem SLR, Ottawa Ankle Rules, Likelihood-Ratios und Fagan-Nomogramm (assets/js/fagan.js), SnNout/SpPin (#snnout-sppin), Testtabelle mit Quellen. |
 | [`inferenzzyklus/`](inferenzzyklus/) | Induktion, Deduktion und der Signifikanztest: Poppers Perspektive in fünf Schritten, Schwan-Experiment, Modus tollens und die Frage, ob Induktion und Inferenz dasselbe sind |
 | [`korrelation/`](korrelation/) | Block 5, Station 20: Zusammenhang und Korrelation mit den FEV-Daten (654 Kinder, `regression-daten/`): Streudiagramm nach Größe oder Alter, Kovarianz als Rechtecke mit ziehbaren Punkten und Ausreißer, Gefühl für r per Simulation, Störgröße Alter beim Rauchen. Rechenmodul `assets/js/reg.js`. |
+| [`gerade/`](gerade/) | Block 5, Station 21: Die beste Gerade. Story Sollwert der Lungenfunktion: Mittelwert, Gruppenmittel, Gerade im Vergleich; kleinste Quadrate mit Reglern, Residuenquadraten und Quadratsummen-Balken; Gerade lesen, Vorhersage, % vom Soll, Extrapolation. |
 
 ## Aufbau
 
