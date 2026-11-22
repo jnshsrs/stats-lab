@@ -190,7 +190,13 @@ function buildQuiz() {
 /* ---------- 2 Simulation: 100 Studien ---------- */
 const randn = () => { let u = 0, v = 0; while (!u) u = Math.random(); while (!v) v = Math.random(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); };
 let simRan = false;
-function clearSim(msg) { simRan = false; $("tiles").innerHTML = Array.from({ length: 100 }, () => '<div class="tile"></div>').join(""); $("sim-text").textContent = msg; }
+function legend(eff) {
+  const L = (cls, txt) => `<span><i class="sw ${cls}"></i>${txt}</span>`;
+  $("sim-legend").innerHTML = `<span class="lg-h">${eff ? "Die Therapie wirkt:" : "Die Therapie wirkt nicht (d = 0):"}</span>` + (eff
+    ? L("sw-pow", "signifikant: Effekt gefunden (richtig, Power)") + L("sw-beta", "nicht signifikant: Effekt übersehen (β-Fehler)")
+    : L("sw-alpha", "signifikant: Fehlalarm (α-Fehler)") + L("sw-empty", "nicht signifikant: richtig, kein Effekt"));
+}
+function clearSim(msg) { $("sim-legend") && ($("sim-legend").innerHTML = ""); simRan = false; $("tiles").innerHTML = Array.from({ length: 100 }, () => '<div class="tile"></div>').join(""); $("sim-text").textContent = msg; }
 function simulate(eff) {
   const n = S.n, r = design(S.alpha, S.d, n, S.sides), d = eff ? S.d : 0, res = [];
   for (let k = 0; k < 100; k++) {
@@ -201,10 +207,11 @@ function simulate(eff) {
     res.push(S.sides === "two" ? Math.abs(t) > r.tc : t > r.tc);
   }
   const sig = res.filter(Boolean).length;
-  $("tiles").innerHTML = res.map(s => `<div class="tile ${s ? (eff ? "sig" : "sig h0") : ""}"></div>`).join("");
+  $("tiles").innerHTML = res.map(s => `<div class="tile ${eff ? (s ? "sig" : "beta") : (s ? "sig h0" : "")}"></div>`).join("");
+  legend(eff);
   $("sim-text").innerHTML = eff
     ? `<b>${sig} von 100</b> Studien finden den Effekt. Theoretische Power: <b>${pct(r.power, 0)}</b>. Die übrigen ${100 - sig} sind β-Fehler: Die Therapie wirkt, die Studie hat es übersehen.`
-    : `<b>${sig} von 100</b> Studien sind signifikant, obwohl die Therapie nichts bewirkt. Jede davon ist ein α-Fehler. Erwartet: etwa ${apct(S.alpha)}.`;
+    : `<b>${sig} von 100</b> Studien sind signifikant, obwohl die Therapie nichts bewirkt. Jede davon ist ein α-Fehler. Erwartet: etwa ${apct(S.alpha)}. Die übrigen ${100 - sig} liegen richtig: kein Effekt, nicht signifikant.`;
   simRan = true;
 }
 

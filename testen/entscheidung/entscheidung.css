@@ -95,5 +95,8 @@ input[type=range] { width: 100%; accent-color: var(--accent); margin: 4px 0 0; }
 .tile { aspect-ratio: 1; border-radius: 3px; border: 1px solid var(--line); background: transparent; }
 .tile.sig { background: var(--therapie); border-color: var(--therapie); }
 .tile.sig.h0 { background: var(--alpha-fill); border-color: var(--alpha-ink); }
+.tile.beta { background: var(--beta-fill); border-color: var(--beta-ink); }
+.sw.sw-pow { background: var(--therapie); } .sw.sw-alpha { background: var(--alpha-fill); } .sw.sw-beta { background: var(--beta-fill); }
+#sim-legend .lg-h { font-weight: 600; color: var(--fg); }
 @media (max-width: 480px) { .tiles { grid-template-columns: repeat(10, minmax(0, 1fr)); } }
 .sw-empty { border: 1px solid var(--muted); background: transparent !important; }
