@@ -1,5 +1,5 @@
 /* Passt das Modell? · Stats Lab
-   Station 25: Anscombe-Quartett, Residuen- und Q-Q-Plot (linear gegen log), Hebelwert und Cook-Distanz zum Ziehen. */
+   Station „Passt das Modell?“: Anscombe-Quartett, Residuen- und Q-Q-Plot (linear gegen log), Hebelwert und Cook-Distanz zum Ziehen. */
 (() => {
 "use strict";
 const $ = id => document.getElementById(id);

@@ -1,4 +1,4 @@
-/* Stats Lab · Regressionsrechner (kleinste Quadrate) für Block 5.
+/* Stats Lab · Regressionsrechner (kleinste Quadrate) für die Blöcke „Zusammenhänge und Regression“ und „Logistische Regression“.
    ols(y, X) mit X als Liste von Spalten (ohne Konstante); liefert b, SE, t, p, R², s, Residuen, Vorhersagen.
    Rechnet wie R lm() bzw. SPSS: Normalgleichungen, t-Verteilung mit n − k − 1 Freiheitsgraden. */
 (() => {

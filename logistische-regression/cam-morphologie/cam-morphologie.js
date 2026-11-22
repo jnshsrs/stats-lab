@@ -1,5 +1,5 @@
 /* Cam-Morphologie und Knorpeldefekt · Stats Lab
-   Block 6, Station 2: logistische Regression mit Lehrdatensatz (angelehnt an Heerey et al. 2021). */
+   Block „Logistische Regression“, Station „Cam-Morphologie und Knorpeldefekt“: logistische Regression mit Lehrdatensatz (angelehnt an Heerey et al. 2021). */
 (() => {
 "use strict";
 const $ = id => document.getElementById(id);

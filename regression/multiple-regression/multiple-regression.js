@@ -1,5 +1,5 @@
 /* Mehrere Einflüsse zugleich · Stats Lab
-   Station 26: Adjustierung (Rauchen), Wechselwirkung Alter × Geschlecht mit Zentrierung. */
+   Station „Mehrere Einflüsse zugleich“: Adjustierung (Rauchen), Wechselwirkung Alter × Geschlecht mit Zentrierung. */
 (() => {
 "use strict";
 const $ = id => document.getElementById(id);

@@ -1,5 +1,5 @@
 /* Wie sicher ist der Sollwert? · Stats Lab
-   Station 23: Stichprobenverteilung der Steigung, t-Test und KI für b1, Konfidenz- und Vorhersageband, untere Normgrenze. */
+   Station „Wie sicher ist der Sollwert?“: Stichprobenverteilung der Steigung, t-Test und KI für b1, Konfidenz- und Vorhersageband, untere Normgrenze. */
 (() => {
 "use strict";
 const $ = id => document.getElementById(id);

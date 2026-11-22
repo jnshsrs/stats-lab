@@ -1,5 +1,5 @@
 /* Von der Geraden zur S-Kurve · Stats Lab
-   Block 6, Station 1: Gerade durch 0/1-Daten, Herleitung der S-Kurve aus dem linearen Logit-Modell,
+   Block „Logistische Regression“, Station „Von der Geraden zur S-Kurve“: Gerade durch 0/1-Daten, Herleitung der S-Kurve aus dem linearen Logit-Modell,
    Interpretation von b1 auf drei Skalen (Rise over Run), Exkurs Maximum Likelihood und LR-Test. */
 (() => {
 "use strict";
@@ -68,7 +68,7 @@ $("m1").addEventListener("click", e => { const b = pick(e, $("m1")); if (!b) ret
 
 /* ---------- 2 Herleitung ---------- */
 const st = (lab, tex) => `<span class="step-l">${lab}</span>` + TB(tex, "");
-$("f2").innerHTML = st("(1) Lineares Modell für den Logit, wie in Block 5", String.raw`\begin{aligned} \text{logit}(p) &= \ln\!\Bigl(\dfrac{p}{1-p}\Bigr) \\ &= b_0 + b_1 \cdot \text{Alter} \end{aligned}`) +
+$("f2").innerHTML = st("(1) Lineares Modell für den Logit, wie in „Zusammenhänge und Regression“", String.raw`\begin{aligned} \text{logit}(p) &= \ln\!\Bigl(\dfrac{p}{1-p}\Bigr) \\ &= b_0 + b_1 \cdot \text{Alter} \end{aligned}`) +
   st("(2) Beide Seiten hoch e: links stehen die Odds", String.raw`\dfrac{p}{1-p} = e^{\,b_0 + b_1 \cdot \text{Alter}}`) +
   st("(3) Nach p auflösen (kurz: e hoch Logit)", String.raw`\begin{aligned} p &= e^{\text{Logit}}\,(1 - p) \\ p\,(1 + e^{\text{Logit}}) &= e^{\text{Logit}} \\ p &= \dfrac{e^{\text{Logit}}}{1 + e^{\text{Logit}}} \end{aligned}`) +
   st("(4) Zähler und Nenner durch e hoch Logit teilen", String.raw`p = \dfrac{1}{1 + e^{-(b_0 + b_1 \cdot \text{Alter})}}`) +
@@ -87,7 +87,7 @@ function draw2() {
   const e = ETA(a), o = Math.exp(e), p = o / (1 + o);
   $("bridge").innerHTML = `<span class="br-arrow">→</span><span class="br-f">p = 1 ÷ (1 + e<sup>−Logit</sup>)</span><span class="br-n">${fmt(e, 2)} → ${fmt(p, 3)}</span><span class="br-arrow">→</span>`;
   $("f2b").innerHTML = TB(String.raw`\begin{aligned} \text{Logit} &= ${tz(fmt(B0, 3))} + ${tz(fmt(B1, 3))} \cdot ${a} = ${tz(fmt(e, 2))} \\ \text{Odds} &= e^{${tz(fmt(e, 2))}} = ${tz(fmt(o, 3))} \\ p &= \dfrac{1}{1 + e^{${tz(fmt(-e, 2))}}} = ${tz(fmt(p, 3))} \end{aligned}`, "");
-  $("k2").innerHTML = `Links das lineare Modell, wie Sie es aus Block 5 kennen: eine Gerade, hier für den Logit. Rechts dieselben Alterswerte, durch die Formel in der Mitte in Wahrscheinlichkeiten umgerechnet: die S-Kurve aus Abschnitt 1. Die S-Form entsteht also durch die Umrechnung; die Daten bestimmen nur, wo die Kurve liegt und wie steil sie ist. Für ein ${a}-jähriges Kind: Logit ${fmt(e, 2)}, Odds ${fmt(o, 3)}, Wahrscheinlichkeit ${pc(p)}. Alles, was die lineare Regression kann (mehrere Prädiktoren, Adjustierung, Wechselwirkung), steckt im linearen Teil b₀ + b₁ · Alter.`;
+  $("k2").innerHTML = `Links das lineare Modell, wie Sie es aus dem Block „Zusammenhänge und Regression“ kennen: eine Gerade, hier für den Logit. Rechts dieselben Alterswerte, durch die Formel in der Mitte in Wahrscheinlichkeiten umgerechnet: die S-Kurve aus Abschnitt 1. Die S-Form entsteht also durch die Umrechnung; die Daten bestimmen nur, wo die Kurve liegt und wie steil sie ist. Für ein ${a}-jähriges Kind: Logit ${fmt(e, 2)}, Odds ${fmt(o, 3)}, Wahrscheinlichkeit ${pc(p)}. Alles, was die lineare Regression kann (mehrere Prädiktoren, Adjustierung, Wechselwirkung), steckt im linearen Teil b₀ + b₁ · Alter.`;
 }
 $("a2").addEventListener("input", draw2);
 
