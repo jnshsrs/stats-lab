@@ -67,3 +67,5 @@
 .vtab.when td, .vtab.when th { text-align: left; white-space: normal; }
 
 .block { padding-top: 56px; display: flex; flex-direction: column; gap: 14px; }
+.formula .katex-display { margin: 2px 0; text-align: left; overflow-x: auto; overflow-y: hidden; }
+.formula .katex-display > .katex { text-align: left; }

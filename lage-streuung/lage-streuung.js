@@ -4,6 +4,8 @@
 (() => {
 "use strict";
 const $ = id => document.getElementById(id);
+const tz = x => String(x).replace(/\./g, "{.}").replace(/,/g, "{,}").replace(/−/g, "-");
+const TB = (t, fb) => window.texBlock ? texBlock(t, fb) : fb;
 const dec = (x, d = 1) => x.toLocaleString("de-DE", { minimumFractionDigits: d, maximumFractionDigits: d });
 const sgn = (x, d = 1) => (x < 0 ? "−" : x > 0 ? "+" : "") + dec(Math.abs(x), d);
 const nice = x => Number.isInteger(x) ? String(x) : dec(x, 1);
@@ -54,9 +56,10 @@ function draw1(st, lay) {
   $("c1").innerHTML = s;
   const left = S.data.filter(v => v < st.mean).reduce((a, v) => a + (v - st.mean), 0);
   const sortedTxt = st.sorted.map((v, r) => mid.includes(r + 1) ? `<b>${v}</b>` : v).join(", ");
-  $("f1").innerHTML = `<span class="big">x̄ = Σx ÷ n = ${st.sum} ÷ ${n} = ${dec(st.mean, 2)}</span>` +
+  const medTex = n % 2 ? String.raw`\text{Median } \tilde{x} = x_{(${mid[0]})} = ${tz(nice(st.med))}` : String.raw`\text{Median } \tilde{x} = \dfrac{x_{(${mid[0]})} + x_{(${mid[1]})}}{2} = ${tz(nice(st.med))}`;
+  $("f1").innerHTML = TB(String.raw`\bar{x} = \dfrac{\sum x_i}{n} = \dfrac{${st.sum}}{${n}} = ${tz(dec(st.mean, 2))}`, `<span class="big">x̄ = Σx ÷ n = ${st.sum} ÷ ${n} = ${dec(st.mean, 2)}</span>`) +
     `<span>sortiert: ${sortedTxt}</span>` +
-    `<span class="big">Median = ${n % 2 ? `x<sub>(${mid[0]})</sub> = ${nice(st.med)}` : `(x<sub>(${mid[0]})</sub> + x<sub>(${mid[1]})</sub>) ÷ 2 = ${nice(st.med)}`}</span>` +
+    TB(medTex, `<span class="big">Median = ${nice(st.med)}</span>`) +
     `<span class="dim">Abstände zum Mittelwert: links ${sgn(left)}, rechts ${sgn(-left)}</span>`;
   $("r1").innerHTML = readout("Mittelwert", dec(st.mean)) + readout("Median", nice(st.med)) + readout("Mittelwert − Median", sgn(st.mean - st.med));
   const gap = st.mean - st.med;
@@ -122,12 +125,21 @@ function draw3(st, lay) {
   const dn = S.den === "n1" ? `(n − 1) = ${st.dn}` : `n = ${st.dn}`;
   const terms = lay.idx.map(i => `${sgn(devs[i])}²`).join(" + ");
   const sumDev = devs.reduce((a, b) => a + b, 0);
+  const dnT = S.den === "n1" ? "n - 1" : "n";
+  const termsT = lay.idx.map(i => `(${tz(sgn(devs[i]))})^2`).join(" + ");
   const F = [
+    TB(String.raw`\text{Abweichung} = x_i - \bar{x} \qquad \sum (x_i - \bar{x}) = ${tz(dec(Math.abs(sumDev) < 1e-9 ? 0 : sumDev))}`, "") + `<span class="dim">Plus und Minus heben sich immer auf. Deshalb wird quadriert.</span>`,
+    TB(String.raw`SQ = \sum (x_i - \bar{x})^2 = ${tz(dec(st.sq))}`, "") + `<span class="dim">${terms}</span>`,
+    TB(String.raw`s^2 = \dfrac{SQ}{${dnT}} = \dfrac{${tz(dec(st.sq))}}{${st.dn}} = ${tz(dec(st.vr))}\ \text{Tage}^2`, ""),
+    TB(String.raw`s = \sqrt{s^2} = \sqrt{${tz(dec(st.vr))}} = ${tz(dec(st.sd))}\ \text{Tage}`, "")
+  ];
+  const Ffb = [
     `<span class="big">Abweichung = x − x̄</span><span>Summe aller Abweichungen = ${dec(Math.abs(sumDev) < 1e-9 ? 0 : sumDev)}</span><span class="dim">Plus und Minus heben sich immer auf. Deshalb wird quadriert.</span>`,
     `<span class="big">Quadratsumme SQ = Σ(x − x̄)² = ${dec(st.sq)}</span><span class="dim">${terms}</span>`,
     `<span>SQ = ${dec(st.sq)}</span><span class="big">Varianz s² = SQ ÷ ${dn} = ${dec(st.sq)} ÷ ${st.dn} = ${dec(st.vr)} Tage²</span>`,
     `<span>s² = ${dec(st.vr)} Tage²</span><span class="big">Standardabweichung s = √s² = √${dec(st.vr)} = ${dec(st.sd)} Tage</span>`
   ];
+  if (!window.katex) F.splice(0, 4, ...Ffb);
   $("f3").innerHTML = F[step];
   $("r3").innerHTML = readout("Quadratsumme SQ (Tage²)", dec(st.sq)) + readout("Varianz s² (Tage²)", dec(st.vr)) + readout("Standardabweichung s (Tage)", dec(st.sd)) + readout("Nenner", S.den === "n1" ? `n − 1 = ${st.dn}` : `n = ${st.dn}`);
   const within = S.data.filter(v => Math.abs(v - mean) <= st.sd).length;
