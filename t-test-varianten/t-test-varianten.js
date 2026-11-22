@@ -41,7 +41,8 @@ const pTxt = p => p < 0.001 ? "< 0,001" : "= " + fmt(p, 3);
 const mean = a => a.reduce((s, v) => s + v, 0) / a.length;
 const sd = (a, m = mean(a)) => Math.sqrt(a.reduce((s, v) => s + (v - m) ** 2, 0) / (a.length - 1));
 const path = pts => pts.map((p, i) => (i ? "L" : "M") + p[0].toFixed(1) + "," + p[1].toFixed(1)).join("");
-const li = (b, txt, eq) => `<li><b>${b}</b> ${txt}${eq ? `<span class="eq">${eq}</span>` : ""}</li>`;
+const li = (b, txt, eq) => `<li><b>${b}</b> ${txt}${eq ? `<span class="eq">${tex(eq)}</span>` : ""}</li>`;
+const pT = p => p < 0.001 ? "< 0{,}001" : "= " + dz(p, 3);
 const G = { alpha: 0.05 };
 
 // t-Verteilung mit Ablehnungsbereich (mode: two, right, left)
@@ -72,12 +73,12 @@ function dots(vals, lo, hi, L, R, y0, step, col, res) {
 
 /* Richtung: kritische Werte, p-Wert, Ablehnung */
 function testFor(dir, t, df, a) {
-  if (dir === "two") { const c = tinv(1 - a / 2, df); return { tc: c, p: 2 * (1 - tcdf(Math.abs(t), df)), rej: Math.abs(t) > c, ct: "±" + fmt(c, 3), pf: "2 · (1 − F(|t|))", rule: `|t| > ${fmt(c, 2)}` }; }
-  if (dir === "right") { const c = tinv(1 - a, df); return { tc: c, p: 1 - tcdf(t, df), rej: t > c, ct: fmt(c, 3), pf: "1 − F(t)", rule: `t > ${fmt(c, 2)}` }; }
-  const c = tinv(a, df); return { tc: c, p: tcdf(t, df), rej: t < c, ct: fmt(c, 3), pf: "F(t)", rule: `t < ${fmt(c, 2)}` };
+  if (dir === "two") { const c = tinv(1 - a / 2, df); return { tc: c, p: 2 * (1 - tcdf(Math.abs(t), df)), rej: Math.abs(t) > c, ct: "±" + fmt(c, 3), cT: "\\pm " + dz(c, 3), pf: "2 \\,\\bigl(1 - F(|t|)\\bigr)", rule: `|t| > ${dz(c, 2)}` }; }
+  if (dir === "right") { const c = tinv(1 - a, df); return { tc: c, p: 1 - tcdf(t, df), rej: t > c, ct: fmt(c, 3), cT: dz(c, 3), pf: "1 - F(t)", rule: `t > ${dz(c, 2)}` }; }
+  const c = tinv(a, df); return { tc: c, p: tcdf(t, df), rej: t < c, ct: fmt(c, 3), cT: dz(c, 3), pf: "F(t)", rule: `t < ${dz(c, 2)}` };
 }
 const DN = { two: "zweiseitig", right: "rechtsseitig", left: "linksseitig" };
-const kasLi = (dir, T, t) => li(`Einordnen, ${DN[dir]}.`, `Kritischer Wert und p-Wert genau wie beim Einstichproben-Test, <a href="../t-test/#calc">ausführlich in der Kaskade</a>.`, `t krit = ${T.ct} · p = ${T.pf} ${pTxt(T.p)} · Ablehnung, wenn ${T.rule}`);
+const kasLi = (dir, T, t) => li(`Einordnen, ${DN[dir]}.`, `Kritischer Wert und p-Wert genau wie beim Einstichproben-Test, <a href="../t-test/#calc">ausführlich in der Kaskade</a>.`, String.raw`t_{\text{krit}} = ${T.cT} \qquad p = ${T.pf} ${pT(T.p)} \qquad \text{Ablehnung, wenn } ${T.rule}`);
 const ciTxt = (est, se, df, unit, d) => { const c = tinv(1 - G.alpha / 2, df); return `${fmt((1 - G.alpha) * 100, 0)}-%-KI ${fmt(est - c * se, d)} bis ${fmt(est + c * se, d)} ${unit}`; };
 const segBind = (id, obj, f) => $(id).addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; obj.dir = b.dataset.d; $(id).querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", x === b)); f(); });
 
@@ -110,10 +111,10 @@ function render2() {
   h += `<line x1="${sx(md - 1.96 * se)}" x2="${sx(md + 1.96 * se)}" y1="${y0 + 46}" y2="${y0 + 46}" stroke="var(--therapie)" stroke-width="3"/><circle cx="${sx(md)}" cy="${y0 + 46}" r="6" fill="var(--therapie)"/><text class="strong" x="${Math.min(sx(md) + 10, R - 120)}" y="${y0 + 40}">d̄ = ${fmt(md, 2)} cm</text>`;
   $("dd2").innerHTML = h;
   $("c2").innerHTML =
-    li("Differenzen bilden.", "Für jede Person: nachher minus vorher. Ab jetzt zählt nur noch diese eine Spalte.", `d = ${d.slice(0, 8).map(v => fmt(v, 1)).join(" · ")}${n > 8 ? " · …" : ""}`) +
-    li("Kennwerte der Differenzen.", "", `d̄ = ${fmt(md, 2)} cm · s<sub>d</sub> = ${fmt(sdd, 2)} cm · n = ${n}`) +
-    li("Standardfehler.", "Wie beim Einstichproben-Test, nur mit den Differenzen.", `SE = s<sub>d</sub> / √n = ${fmt(sdd, 2)} / √${n} = ${fmt(se, 3)} cm`) +
-    li("Prüfgröße.", "Einstichproben-t-Test der Differenzen gegen 0.", `t = (d̄ − 0) / SE = ${fmt(md, 2)} / ${fmt(se, 3)} = ${fmt(t, 2)} · df = n − 1 = ${df}`) +
+    li("Differenzen bilden.", "Für jede Person: nachher minus vorher. Ab jetzt zählt nur noch diese eine Spalte.", `d_i = ${d.slice(0, 8).map(v => dz(v, 1)).join(";\\ ")}${n > 8 ? ";\\ \\ldots" : ""}`) +
+    li("Kennwerte der Differenzen.", "", String.raw`\bar{d} = ${dz(md, 2)}\ \text{cm} \qquad s_d = ${dz(sdd, 2)}\ \text{cm} \qquad n = ${n}`) +
+    li("Standardfehler.", "Wie beim Einstichproben-Test, nur mit den Differenzen.", String.raw`SE = \dfrac{s_d}{\sqrt{n}} = \dfrac{${dz(sdd, 2)}}{\sqrt{${n}}} = ${dz(se, 3)}\ \text{cm}`) +
+    li("Prüfgröße.", "Einstichproben-t-Test der Differenzen gegen 0.", String.raw`t = \dfrac{\bar{d} - 0}{SE} = \dfrac{${dz(md, 2)}}{${dz(se, 3)}} = ${dz(t, 2)} \qquad df = n - 1 = ${df}`) +
     kasLi(S2.dir, T2, t);
   tMini($("t2"), df, t, S2.dir, T2.tc);
   const v2 = { two: ["H0 verworfen: Der Armumfang hat sich verändert.", "H0 beibehalten: Eine Veränderung ist nicht belegt."], right: ["H0 verworfen: Der Armumfang hat zugenommen.", "H0 beibehalten: Eine Zunahme ist nicht belegt."], left: ["H0 verworfen: Der Armumfang hat abgenommen.", "H0 beibehalten: Eine Abnahme ist nicht belegt."] }[S2.dir];
@@ -151,14 +152,14 @@ function render3() {
   $("d3").innerHTML = g;
   tMini($("t3"), df, t, S3.dir, T3.tc);
   $("c3").innerHTML =
-    li("Kennwerte je Gruppe.", "", `Rhythmus: x̄₁ = ${fmt(m1, 3)} m, s₁ = ${fmt(s1, 3)}, n₁ = ${n1} · KG: x̄₂ = ${fmt(m2, 3)} m, s₂ = ${fmt(s2, 3)}, n₂ = ${n2}`) +
-    li("Gepoolte Streuung.", "Beide Gruppen schätzen dieselbe Streuung, deshalb wird gemittelt, gewichtet mit den Freiheitsgraden.", `s<sub>p</sub> = √[((n₁ − 1)s₁² + (n₂ − 1)s₂²) / (n₁ + n₂ − 2)] = ${fmt(sp, 3)} m`) +
-    li("Standardfehler der Differenz.", "Zwei Mittelwerte schwanken, deshalb zwei Summanden.", `SE = s<sub>p</sub> · √(1/n₁ + 1/n₂) = ${fmt(sp, 3)} · √(1/${n1} + 1/${n2}) = ${fmt(se, 4)} m`) +
-    li("Prüfgröße.", "", `t = (x̄₁ − x̄₂) / SE = ${fmt(m1 - m2, 3)} / ${fmt(se, 4)} = ${fmt(t, 2)} · df = n₁ + n₂ − 2 = ${df}`) +
+    li("Kennwerte je Gruppe.", "", String.raw`\text{Rhythmus: } \bar{x}_1 = ${dz(m1, 3)}\ \text{m},\ s_1 = ${dz(s1, 3)},\ n_1 = ${n1} \qquad \text{KG: } \bar{x}_2 = ${dz(m2, 3)}\ \text{m},\ s_2 = ${dz(s2, 3)},\ n_2 = ${n2}`) +
+    li("Gepoolte Streuung.", "Beide Gruppen schätzen dieselbe Streuung, deshalb wird gemittelt, gewichtet mit den Freiheitsgraden.", String.raw`s_p = \sqrt{\dfrac{(n_1 - 1)\,s_1^2 + (n_2 - 1)\,s_2^2}{n_1 + n_2 - 2}} = ${dz(sp, 3)}\ \text{m}`) +
+    li("Standardfehler der Differenz.", "Zwei Mittelwerte schwanken, deshalb zwei Summanden.", String.raw`SE = s_p \cdot \sqrt{\dfrac{1}{n_1} + \dfrac{1}{n_2}} = ${dz(sp, 3)} \cdot \sqrt{\dfrac{1}{${n1}} + \dfrac{1}{${n2}}} = ${dz(se, 4)}\ \text{m}`) +
+    li("Prüfgröße.", "", String.raw`t = \dfrac{\bar{x}_1 - \bar{x}_2}{SE} = \dfrac{${dz(m1 - m2, 3)}}{${dz(se, 4)}} = ${dz(t, 2)} \qquad df = n_1 + n_2 - 2 = ${df}`) +
     kasLi(S3.dir, T3, t);
   const v3 = { two: ["H0 verworfen: Die Schrittlänge unterscheidet sich zwischen den Gruppen.", "H0 beibehalten: Ein Unterschied ist nicht belegt."], right: ["H0 verworfen: Mit Rhythmus sind die Schritte länger.", "H0 beibehalten: Längere Schritte mit Rhythmus sind nicht belegt."], left: ["H0 verworfen: Mit Rhythmus sind die Schritte kürzer.", "H0 beibehalten: Kürzere Schritte mit Rhythmus sind nicht belegt."] }[S3.dir];
   $("v3").innerHTML = (rej ? v3[0] : v3[1]) + `<small>Differenz ${fmt(m1 - m2, 3)} m, ${ciTxt(m1 - m2, se, df, "m", 3)}.</small>`;
-  $("welch3").innerHTML = `Welch-Variante (ohne Annahme gleicher Streuungen), ${DN[S3.dir]}: SE = √(s₁²/n₁ + s₂²/n₂) = ${fmt(sew, 4)} m, t = ${fmt(tw, 2)}, df = ${fmt(dfw, 1)}, p ${pTxt(testFor(S3.dir, tw, dfw, a).p)}. Bei gleich großen Gruppen und ähnlichen Streuungen liegen beide Varianten nah beieinander.`;
+  $("welch3").innerHTML = `Welch-Variante (ohne Annahme gleicher Streuungen), ${DN[S3.dir]}: ${tex(String.raw`SE = \sqrt{s_1^2/n_1 + s_2^2/n_2} = ${dz(sew, 4)}\ \text{m}`)}, t = ${fmt(tw, 2)}, df = ${fmt(dfw, 1)}, p ${pTxt(testFor(S3.dir, tw, dfw, a).p)}. Bei gleich großen Gruppen und ähnlichen Streuungen liegen beide Varianten nah beieinander.`;
 }
 
 function renderAll() { render2(); render3(); }

@@ -6,8 +6,9 @@
 <title>Welcher t-Test? · Stats Lab</title>
 <meta name="description" content="Einstichproben-, gepaarter und ungepaarter t-Test an drei Beispielen aus der Physiotherapie, jeweils mit Hypothesen, Rechenweg, kritischem Wert und p-Wert.">
 <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="../assets/css/base.css?v=202611221013">
-<link rel="stylesheet" href="t-test-varianten.css?v=202611221013">
+<link rel="stylesheet" href="../assets/css/base.css?v=202611221014">
+<link rel="stylesheet" href="../assets/vendor/katex/katex.min.css">
+<link rel="stylesheet" href="t-test-varianten.css?v=202611221014">
 </head>
 <body>
 <header class="site-header">
@@ -38,7 +39,7 @@
     <span class="eyebrow">Ausgangspunkt</span>
     <h2 id="base-h">Einstichproben-t-Test: ein Mittelwert gegen einen Sollwert</h2>
     <div class="base-grid">
-      <div class="formula"><span class="big">t = (x̄ − μ₀) / SE</span><span>SE = s / √n · df = n − 1</span></div>
+      <div class="formula tex-auto">\[ t = \dfrac{\bar{x} - \mu_0}{SE} \qquad SE = \dfrac{s}{\sqrt{n}} \]\[ df = n - 1 \]</div>
       <p class="text">Beispiel Knie-TEP: Erreicht eine Klinik im Mittel 90° Flexion? Hypothesen, t-Verteilung, kritischer Wert und p-Wert, zweiseitig und einseitig, stehen Schritt für Schritt in der <a href="../t-test/">t-Test-Kaskade</a>. Die beiden Varianten unten sind derselbe Test mit anderem Signal und anderem Standardfehler.</p>
     </div>
   </section>
@@ -117,7 +118,10 @@
     <span class="footer-links"><a href="https://github.com/jnshsrs/stats-lab">Quellcode auf GitHub</a><span>Ohne Cookies und Tracking</span></span>
   </div>
 </footer>
-<script src="t-test-varianten.js?v=202611221013"></script>
-<script src="../assets/js/path.js?v=202611221013"></script>
+<script src="../assets/vendor/katex/katex.min.js"></script>
+<script src="../assets/vendor/katex/contrib/auto-render.min.js"></script>
+<script src="../assets/js/tex.js?v=202611221014"></script>
+<script src="t-test-varianten.js?v=202611221014"></script>
+<script src="../assets/js/path.js?v=202611221014"></script>
 </body>
 </html>

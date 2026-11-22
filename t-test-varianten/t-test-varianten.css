@@ -133,3 +133,6 @@ figcaption { font-size: 14px; font-weight: 600; }
 .t-solo figcaption { font-size: 13.5px; color: var(--muted); }
 .base-box .formula { display: flex; flex-direction: column; gap: 6px; }
 .base-box .formula .big { font-size: 18px; font-weight: 600; }
+.calc-steps .eq .katex { font-size: 1.06em; }
+.formula.tex-auto .katex-display { margin: 2px 0; text-align: left; }
+.formula.tex-auto .katex-display > .katex { text-align: left; }
