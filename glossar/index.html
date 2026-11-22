@@ -6,8 +6,9 @@
 <title>Glossar · Stats Lab</title>
 <meta name="description" content="Fachbegriffe aus Statistik und Forschungsmethodik kurz erklärt, geordnet nach den Kapiteln des Stats Lab.">
 <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="../assets/css/base.css?v=202611221023">
-<link rel="stylesheet" href="glossar.css?v=202611221023">
+<link rel="stylesheet" href="../assets/css/base.css?v=202611221026">
+<link rel="stylesheet" href="../assets/vendor/katex/katex.min.css">
+<link rel="stylesheet" href="glossar.css?v=202611221026">
 </head>
 <body>
 <header class="site-header">
@@ -32,8 +33,58 @@
     <p class="lede">Die wichtigsten Fachbegriffe kurz erklärt, in der Reihenfolge des Lernpfads. Jeder Begriff hat einen eigenen Link: Klicken Sie auf das # davor, um ihn zu kopieren oder zu teilen.</p>
     <div class="g-search"><label for="q" class="lbl">Begriff suchen</label><input id="q" type="search" placeholder="z. B. p-Wert, Standardfehler, Sensitivität" autocomplete="off"><span class="num" id="g-count">109 Begriffe</span></div>
   </section>
-  <nav class="g-toc" aria-label="Kapitel"><div class="toc-block"><span class="toc-b">1 · Grundlagen</span><a href="#k-skalenniveaus"><span class="num">1</span>Skalenniveaus</a><a href="#k-lage-streuung"><span class="num">2</span>Lage und Streuung</a><a href="#k-wahrscheinlichkeit"><span class="num">3</span>Wahrscheinlichkeit als Fläche</a><a href="#k-binomial"><span class="num">4</span>Pascal und die Binomialverteilung</a><a href="#k-verteilungen"><span class="num">5</span>Diskret und stetig</a></div><div class="toc-block"><span class="toc-b">2 · Schätzen</span><a href="#k-stichprobe"><span class="num">6</span>Stichprobe und Population</a><a href="#k-grosse-zahlen"><span class="num">7</span>Große und kleine Zahlen</a><a href="#k-zgws"><span class="num">8</span>Grenzwertsatz, Standardfehler, Konfidenzintervall</a></div><div class="toc-block"><span class="toc-b">3 · Testen</span><a href="#k-binomialtest"><span class="num">9</span>Binomialtest</a><a href="#k-t-test"><span class="num">10</span>Die t-Test-Kaskade</a><a href="#k-t-test-varianten"><span class="num">11</span>Welcher t-Test?</a><a href="#k-entscheidung"><span class="num">12</span>Entscheidungstheorie</a><a href="#k-fallzahl"><span class="num">13</span>Fallzahl und Power</a><a href="#k-multiples-testen"><span class="num">14</span>Multiples Testen</a><a href="#k-chi-quadrat"><span class="num">15</span>Der Chi-Quadrat-Test</a></div><div class="toc-block"><span class="toc-b">4 · Hintergrund</span><a href="#k-regression-mitte"><span class="num">16</span>Regression zur Mitte</a><a href="#k-mammografie"><span class="num">17</span>Positiver Befund</a><a href="#k-klinische-tests"><span class="num">18</span>Klinische Tests</a><a href="#k-inferenzzyklus"><span class="num">19</span>Induktion und Deduktion</a></div></nav>
+  <nav class="g-toc" aria-label="Kapitel"><a class="toc-notation" href="#notation">Notation lesen: Formeln und Schreibweisen</a><div class="toc-block"><span class="toc-b">1 · Grundlagen</span><a href="#k-skalenniveaus"><span class="num">1</span>Skalenniveaus</a><a href="#k-lage-streuung"><span class="num">2</span>Lage und Streuung</a><a href="#k-wahrscheinlichkeit"><span class="num">3</span>Wahrscheinlichkeit als Fläche</a><a href="#k-binomial"><span class="num">4</span>Pascal und die Binomialverteilung</a><a href="#k-verteilungen"><span class="num">5</span>Diskret und stetig</a></div><div class="toc-block"><span class="toc-b">2 · Schätzen</span><a href="#k-stichprobe"><span class="num">6</span>Stichprobe und Population</a><a href="#k-grosse-zahlen"><span class="num">7</span>Große und kleine Zahlen</a><a href="#k-zgws"><span class="num">8</span>Grenzwertsatz, Standardfehler, Konfidenzintervall</a></div><div class="toc-block"><span class="toc-b">3 · Testen</span><a href="#k-binomialtest"><span class="num">9</span>Binomialtest</a><a href="#k-t-test"><span class="num">10</span>Die t-Test-Kaskade</a><a href="#k-t-test-varianten"><span class="num">11</span>Welcher t-Test?</a><a href="#k-entscheidung"><span class="num">12</span>Entscheidungstheorie</a><a href="#k-fallzahl"><span class="num">13</span>Fallzahl und Power</a><a href="#k-multiples-testen"><span class="num">14</span>Multiples Testen</a><a href="#k-chi-quadrat"><span class="num">15</span>Der Chi-Quadrat-Test</a></div><div class="toc-block"><span class="toc-b">4 · Hintergrund</span><a href="#k-regression-mitte"><span class="num">16</span>Regression zur Mitte</a><a href="#k-mammografie"><span class="num">17</span>Positiver Befund</a><a href="#k-klinische-tests"><span class="num">18</span>Klinische Tests</a><a href="#k-inferenzzyklus"><span class="num">19</span>Induktion und Deduktion</a></div></nav>
   <p class="g-empty" id="g-empty" hidden>Kein Begriff gefunden.</p>
+<section class="g-notation tex-auto" id="notation" aria-labelledby="notation-h">
+  <h2 id="notation-h">Notation lesen</h2>
+  <p class="text">Wie man die Formeln auf den Seiten liest. Links die Schreibweise, daneben wie man sie ausspricht, was sie bedeutet und ein Beispiel aus dem Kurs.</p>
+  <h3>Zufallsvariable und Wert</h3>
+  <div class="table-wrap"><table class="ntab"><thead><tr><th>Schreibweise</th><th>gelesen</th><th>Bedeutung</th><th>Beispiel</th></tr></thead><tbody>
+    <tr><td class="nf">\(X,\; x,\; k\)</td><td class="nr">groß X, klein x</td><td>Großbuchstabe: die Zufallsvariable, deren Wert vor dem Versuch noch offen ist. Kleinbuchstabe: ein konkreter Wert, den sie annehmen kann.</td><td class="ne">\(X = Anzahl Geheilte, k = 15\)</td></tr>
+    <tr><td class="nf">\(X \sim B(n;\, p)\)</td><td class="nr">X ist binomialverteilt mit n und p</td><td>X zählt Erfolge in n unabhängigen Versuchen mit Erfolgswahrscheinlichkeit p.</td><td class="ne">\(X \sim B(20;\, 0{,}5)\)</td></tr>
+    <tr><td class="nf">\(X \sim N(\mu;\, \sigma^2)\)</td><td class="nr">X ist normalverteilt mit μ und σ²</td><td>Glockenkurve mit Erwartungswert μ. Achtung: Der zweite Parameter ist die Varianz σ², nicht die Standardabweichung.</td><td class="ne">\(X \sim N(50;\, 10^2)\)</td></tr>
+    <tr><td class="nf">\(T \sim t_{df}\)</td><td class="nr">T ist t-verteilt mit df Freiheitsgraden</td><td>Verteilung der Prüfgröße t, wenn H0 gilt.</td><td class="ne">\(T \sim t_{19}\)</td></tr>
+  </tbody></table></div>
+  <h3>Wahrscheinlichkeiten</h3>
+  <div class="table-wrap"><table class="ntab"><thead><tr><th>Schreibweise</th><th>gelesen</th><th>Bedeutung</th><th>Beispiel</th></tr></thead><tbody>
+    <tr><td class="nf">\(P(A)\)</td><td class="nr">P von A</td><td>Wahrscheinlichkeit des Ereignisses A, eine Zahl zwischen 0 und 1.</td><td class="ne">\(P(\text{Kopf}) = 0{,}5\)</td></tr>
+    <tr><td class="nf">\(P(X = k)\)</td><td class="nr">Wahrscheinlichkeit, dass X genau k ist</td><td>Einzelwahrscheinlichkeit. Bei diskreten Verteilungen die Höhe des Stäbchens bei k. Bei stetigen Verteilungen immer 0.</td><td class="ne">\(P(X = 15)\)</td></tr>
+    <tr><td class="nf">\(P(X \le k)\)</td><td class="nr">X höchstens k</td><td>k und alles darunter. Bei diskreten Verteilungen ist ≤ etwas anderes als <.</td><td class="ne">\(P(X \le 5) = P(X < 6)\)</td></tr>
+    <tr><td class="nf">\(P(X \ge k)\)</td><td class="nr">X mindestens k</td><td>k und alles darüber, die Gegenwahrscheinlichkeit von „höchstens k − 1“.</td><td class="ne">\(P(X \ge 15) = 1 - P(X \le 14)\)</td></tr>
+    <tr><td class="nf">\(P(a \le X \le b)\)</td><td class="nr">X zwischen a und b</td><td>Alle Werte von a bis b, beide Grenzen eingeschlossen.</td><td class="ne">\(P(4 \le X \le 7)\)</td></tr>
+    <tr><td class="nf">\(P(A \cap B)\)</td><td class="nr">A und B</td><td>Beide Ereignisse treten ein (Schnittmenge).</td><td class="ne">\(P(6 \cap \text{Kopf}) = \tfrac{1}{12}\)</td></tr>
+    <tr><td class="nf">\(P(A \cup B)\)</td><td class="nr">A oder B</td><td>Mindestens eines der beiden tritt ein.</td><td class="ne"></td></tr>
+    <tr><td class="nf">\(P(A \mid B)\)</td><td class="nr">A gegeben B</td><td>Bedingte Wahrscheinlichkeit: nur die Fälle, in denen B eingetreten ist, zählen.</td><td class="ne">\(P(\text{Krebs} \mid \text{positiv})\)</td></tr>
+    <tr><td class="nf">\(\neg A \;\text{oder}\; \bar{A}\)</td><td class="nr">nicht A</td><td>Gegenereignis. Es gilt P(¬A) = 1 − P(A).</td><td class="ne"></td></tr>
+  </tbody></table></div>
+  <h3>Funktionen einer Verteilung</h3>
+  <div class="table-wrap"><table class="ntab"><thead><tr><th>Schreibweise</th><th>gelesen</th><th>Bedeutung</th><th>Beispiel</th></tr></thead><tbody>
+    <tr><td class="nf">\(f(k) = P(X = k)\)</td><td class="nr">Wahrscheinlichkeitsfunktion</td><td>Ordnet jedem möglichen Wert seine Wahrscheinlichkeit zu (diskret, Stäbchendiagramm).</td><td class="ne"></td></tr>
+    <tr><td class="nf">\(P(X = k) = \dbinom{n}{k}\, p^{k}\, (1-p)^{n-k}\)</td><td class="nr">Binomialformel</td><td>Anzahl der Wege mal Wahrscheinlichkeit je Weg.</td><td class="ne">\(\dbinom{10}{5}\, 0{,}5^{5}\, 0{,}5^{5} = 24{,}6\,\%\)</td></tr>
+    <tr><td class="nf">\(\dbinom{n}{k}\)</td><td class="nr">n über k</td><td>Binomialkoeffizient: auf wie viele Arten sich k Erfolge auf n Versuche verteilen lassen.</td><td class="ne">\(\dbinom{10}{5} = 252\)</td></tr>
+    <tr><td class="nf">\(F(x) = P(X \le x)\)</td><td class="nr">Verteilungsfunktion an der Stelle x</td><td>Aufsummierte Wahrscheinlichkeit bis einschließlich x. Diskret eine Treppe, stetig eine glatte Kurve von 0 bis 1.</td><td class="ne">\(F(14) = 0{,}979\)</td></tr>
+    <tr><td class="nf">\(P(a \le X \le b) = F(b) - F(a-1)\)</td><td class="nr">Bereich über F, diskret</td><td>Alles bis b minus alles unterhalb von a.</td><td class="ne">\(F(7) - F(3)\)</td></tr>
+    <tr><td class="nf">\(P(a \le X \le b) = F(b) - F(a)\)</td><td class="nr">Bereich über F, stetig</td><td>Bei stetigen Verteilungen ist P(X = a) = 0, deshalb ohne −1.</td><td class="ne"></td></tr>
+    <tr><td class="nf">\(f(x)\)</td><td class="nr">Dichte an der Stelle x</td><td>Nur bei stetigen Verteilungen. Die Höhe ist keine Wahrscheinlichkeit, erst die Fläche darunter.</td><td class="ne">\(P(a \le X \le b) = \int_a^b f(x)\,dx\)</td></tr>
+    <tr><td class="nf">\(F^{-1}(q)\)</td><td class="nr">Quantil zur Wahrscheinlichkeit q</td><td>Umkehrung der Verteilungsfunktion: der Wert, unterhalb dessen der Anteil q liegt.</td><td class="ne">\(t_{\text{krit}} = F^{-1}(0{,}975)\)</td></tr>
+  </tbody></table></div>
+  <h3>Kennwerte: Population und Stichprobe</h3>
+  <div class="table-wrap"><table class="ntab"><thead><tr><th>Schreibweise</th><th>gelesen</th><th>Bedeutung</th><th>Beispiel</th></tr></thead><tbody>
+    <tr><td class="nf">\(\mu,\; \sigma,\; p\)</td><td class="nr">mü, sigma, p</td><td>Griechisch oder ohne Dach: Werte der Population, in der Regel unbekannt.</td><td class="ne">\(\mu = 90^\circ\)</td></tr>
+    <tr><td class="nf">\(\bar{x},\; s,\; \hat{p}\)</td><td class="nr">x quer, s, p Dach</td><td>Aus der Stichprobe berechnete Schätzwerte. Das Dach steht für „geschätzt“.</td><td class="ne">\(\bar{x} = 93{,}8^\circ\)</td></tr>
+    <tr><td class="nf">\(E(X)\)</td><td class="nr">Erwartungswert von X</td><td>Mittelwert auf lange Sicht. Bei der Binomialverteilung E(X) = n · p.</td><td class="ne">\(E(X) = 20 \cdot 0{,}5 = 10\)</td></tr>
+    <tr><td class="nf">\(\mathrm{Var}(X) = \sigma^2\)</td><td class="nr">Varianz von X</td><td>Mittlere quadrierte Abweichung vom Erwartungswert. Die Wurzel daraus ist die Standardabweichung σ.</td><td class="ne">\(\sigma^2 = n\,p\,(1-p)\)</td></tr>
+    <tr><td class="nf">\(\sum_{i=1}^{n} x_i\)</td><td class="nr">Summe von x i für i von 1 bis n</td><td>Alle Werte x₁ bis xₙ addieren.</td><td class="ne">\(\bar{x} = \tfrac{1}{n}\sum x_i\)</td></tr>
+    <tr><td class="nf">\(SE = \dfrac{\sigma}{\sqrt{n}}\)</td><td class="nr">Standardfehler</td><td>Streuung des Mittelwerts über viele Stichproben.</td><td class="ne"></td></tr>
+  </tbody></table></div>
+  <h3>Hypothesen und Tests</h3>
+  <div class="table-wrap"><table class="ntab"><thead><tr><th>Schreibweise</th><th>gelesen</th><th>Bedeutung</th><th>Beispiel</th></tr></thead><tbody>
+    <tr><td class="nf">\(H_0,\; H_1\)</td><td class="nr">Nullhypothese, Alternativhypothese</td><td>H0 enthält immer das Gleichheitszeichen, H1 das, was gezeigt werden soll.</td><td class="ne">\(H_0: p \le 0{,}5 \quad H_1: p > 0{,}5\)</td></tr>
+    <tr><td class="nf">\(p_0,\; \mu_0\)</td><td class="nr">p null, mü null</td><td>Der Wert, den H0 annimmt.</td><td class="ne">\(\mu_0 = 90^\circ\)</td></tr>
+    <tr><td class="nf">\(\alpha,\; \beta,\; 1-\beta\)</td><td class="nr">alpha, beta, Power</td><td>Fehlerwahrscheinlichkeiten 1. und 2. Art und die Power eines Tests.</td><td class="ne">\(\alpha = 0{,}05\)</td></tr>
+    <tr><td class="nf">\(t_{df;\, 1-\alpha/2}\)</td><td class="nr">t-Quantil mit df Freiheitsgraden</td><td>Kritischer Wert der t-Verteilung, hier für einen zweiseitigen Test.</td><td class="ne">\(t_{19;\,0{,}975} = 2{,}093\)</td></tr>
+  </tbody></table></div>
+</section>
 <section class="g-block" data-block="0"><h2 class="g-bh"><span class="block-no">1</span>Grundlagen</h2>
 <section class="g-ch" id="k-skalenniveaus"><div class="g-chh"><h3><span class="num">1</span>Skalenniveaus</h3><a class="g-link" href="../skalenniveaus/">Zur Seite →</a></div><dl>
 <div class="g-term" id="skalenniveaus-merkmal-variable"><dt><a class="anchor" href="#skalenniveaus-merkmal-variable" aria-label="Link zu Merkmal, Variable">#</a>Merkmal, Variable</dt><dd>Eine Eigenschaft, die bei jeder Person gemessen wird und verschiedene Werte annehmen kann, zum Beispiel Schmerz, Alter oder Diagnose.</dd></div>
@@ -215,6 +266,9 @@
     <span class="footer-links"><a href="https://github.com/jnshsrs/stats-lab">Quellcode auf GitHub</a><span>Ohne Cookies und Tracking</span></span>
   </div>
 </footer>
-<script src="glossar.js?v=202611221023"></script>
+<script src="../assets/vendor/katex/katex.min.js"></script>
+<script src="../assets/vendor/katex/contrib/auto-render.min.js"></script>
+<script src="../assets/js/tex.js?v=202611221026"></script>
+<script src="glossar.js?v=202611221026"></script>
 </body>
 </html>

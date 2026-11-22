@@ -8,6 +8,7 @@ function filter() {
   terms.forEach(t => { const hit = !v || t.dataset.txt.includes(v); t.hidden = !hit; if (hit) n++; });
   document.querySelectorAll(".g-ch").forEach(c => c.hidden = !c.querySelector(".g-term:not([hidden])"));
   document.querySelectorAll(".g-block").forEach(b => b.hidden = !b.querySelector(".g-ch:not([hidden])"));
+  const nt = document.getElementById("notation"); if (nt) nt.hidden = !!q.value.trim();
   document.querySelector(".g-toc").hidden = !!v;
   document.getElementById("g-count").textContent = v ? `${n} von ${total} Begriffen` : `${total} Begriffe`;
   document.getElementById("g-empty").hidden = n > 0;
