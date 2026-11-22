@@ -105,7 +105,8 @@ function render2() {
   // Differenzen
   const dl = Math.min(-0.5, Math.floor((Math.min(...d) - 0.3) * 2) / 2), dh = Math.max(1.5, Math.ceil((Math.max(...d) + 0.3) * 2) / 2), L = 20, R = 420, sx = v => L + (v - dl) / (dh - dl) * (R - L), y0 = 150;
   let h = "";
-  for (let v = Math.ceil(dl * 2) / 2; v <= dh + 1e-9; v += 0.5) h += `<line x1="${sx(v)}" x2="${sx(v)}" y1="20" y2="${y0 + 8}" stroke="var(--grid)"/><text x="${sx(v)}" y="${y0 + 26}" text-anchor="middle">${fmt(v, 1)}</text>`;
+  const stp = dh - dl > 12 ? 2 : dh - dl > 6 ? 1 : 0.5;
+  for (let v = Math.ceil(dl / stp) * stp; v <= dh + 1e-9; v += stp) h += `<line x1="${sx(v)}" x2="${sx(v)}" y1="20" y2="${y0 + 8}" stroke="var(--grid)"/><text x="${sx(v)}" y="${y0 + 26}" text-anchor="middle">${fmt(v, 1)}</text>`;
   h += `<line x1="${sx(0)}" x2="${sx(0)}" y1="14" y2="${y0 + 8}" stroke="var(--alpha-ink)" stroke-width="2" stroke-dasharray="6 4"/><text x="${sx(0) + 6}" y="16" style="fill:var(--alpha-ink)">keine Änderung</text>`;
   h += dots(d, dl, dh, L, R, y0, 10, "var(--pal-4)", 0.1);
   h += `<line x1="${sx(md - 1.96 * se)}" x2="${sx(md + 1.96 * se)}" y1="${y0 + 46}" y2="${y0 + 46}" stroke="var(--therapie)" stroke-width="3"/><circle cx="${sx(md)}" cy="${y0 + 46}" r="6" fill="var(--therapie)"/><text class="strong" x="${Math.min(sx(md) + 10, R - 120)}" y="${y0 + 40}">d̄ = ${fmt(md, 2)} cm</text>`;
