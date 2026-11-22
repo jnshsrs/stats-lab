@@ -54,7 +54,6 @@ function draw1() {
   } else {
     s += `<path ${f.clip} d="${curve(f, lin, 0, 40)}" fill="none" stroke="var(--beta-ink)" stroke-width="1.6" stroke-dasharray="6 5" stroke-opacity=".6"/>`;
     s += `<path ${f.clip} d="${curve(f, P, 0, 40)}" fill="none" stroke="var(--therapie)" stroke-width="4"/>`;
-    if (m1 === "chk") AG.forEach(a => { const g = AGES[a]; s += `<circle cx="${f.sx(a)}" cy="${f.sy(g.k / g.n)}" r="${3 + Math.sqrt(g.n) * 0.8}" fill="var(--surface)" stroke="var(--fg)" stroke-width="2"/>`; });
   }
   $("c1").innerHTML = s;
   $("r1").innerHTML = m1 === "lin"
@@ -62,8 +61,7 @@ function draw1() {
     : readout("S-Kurve mit 4 Jahren", fmt(P(4), 4)) + readout("mit 14 Jahren", fmt(P(14), 2), "r-decision") + readout("mit 35 Jahren", fmt(P(35), 4));
   $("k1").innerHTML = {
     lin: `Die Gerade ist die gewöhnliche lineare Regression durch die Nullen und Einsen. Ihre Vorhersagen ergeben keinen Sinn: Für ein 4-jähriges Kind liefert sie ${fmt(LPM.b[0] + LPM.b[1] * 4, 2)}, für eine 35-jährige Person ${fmt(LPM.b[0] + LPM.b[1] * 35, 2)}. Was sollen „minus 0,14 Rauchen“ oder „1,13 Rauchen“ sein? Auch die Residuen sind seltsam: Bei jedem Alter gibt es nur zwei mögliche Werte.`,
-    log: `Die S-Kurve bleibt immer zwischen 0 und 1, egal wie weit man nach links oder rechts geht. Ihre Werte lassen sich deshalb als <b>Wahrscheinlichkeiten</b> lesen: Ein 14-jähriges Kind raucht mit einer Wahrscheinlichkeit von ${fmt(P(14), 2)}, also ${pc(P(14), 0)}. Wie man zu dieser Kurve kommt, zeigt Abschnitt 2.`,
-    chk: `Zur Kontrolle: Die Kreise sind die tatsächlichen Anteile Rauchender je Altersjahr, ihre Größe zeigt die Zahl der Kinder. Die S-Kurve folgt ihnen gut. Bis 8 Jahre raucht niemand, danach steigt der Anteil steil an. Die Gerade (gestrichelt) verfehlt beides.`
+    log: `Die S-Kurve bleibt immer zwischen 0 und 1, egal wie weit man nach links oder rechts geht. Ihre Werte lassen sich deshalb als <b>Wahrscheinlichkeiten</b> lesen: Ein 14-jähriges Kind raucht mit einer Wahrscheinlichkeit von ${fmt(P(14), 2)}, also ${pc(P(14), 0)}. Wie man zu dieser Kurve kommt, zeigt Abschnitt 2.`
   }[m1];
 }
 $("m1").addEventListener("click", e => { const b = pick(e, $("m1")); if (!b) return; m1 = b.dataset.m; draw1(); });
