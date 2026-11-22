@@ -222,6 +222,7 @@ function render() {
   document.querySelectorAll("[data-s]").forEach(b => b.setAttribute("aria-pressed", b.dataset.s === S.sides));
   const r = design(S.alpha, S.d, S.n, S.sides);
   drawDist(r); drawCurve(r); drawEcon();
+  if ($("i-df")) { $("i-df").textContent = r.df; $("i-dcalc").textContent = `${fmt(S.d, 2)} · √(${S.n}/2) = ${fmt(r.delta, 2)}`; }
 }
 let raf = 0;
 const schedule = () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(render); if (simRan) clearSim("Design geändert. Simulieren Sie erneut."); };
@@ -230,6 +231,7 @@ $("alpha").value = toSlider(S.alpha);
 $("alpha").addEventListener("input", e => { S.alpha = toAlpha(+e.target.value); schedule(); });
 document.querySelectorAll("[data-a]").forEach(b => b.addEventListener("click", () => { S.alpha = +b.dataset.a; $("alpha").value = toSlider(S.alpha); schedule(); }));
 $("d").addEventListener("input", e => { S.d = +e.target.value; schedule(); });
+if ($("ex-odi")) $("ex-odi").addEventListener("click", () => { S.d = 0.5; S.n = 64; S.alpha = 0.05; $("d").value = 0.5; $("n").value = 64; $("alpha").value = toSlider(0.05); schedule(); document.getElementById("s1").scrollIntoView({ behavior: "smooth", block: "start" }); });
 $("n").addEventListener("input", e => { S.n = +e.target.value; schedule(); });
 document.querySelectorAll("[data-s]").forEach(b => b.addEventListener("click", () => { S.sides = b.dataset.s; schedule(); }));
 const ECON = ["studies", "prior", "pat", "harm", "cost", "gain", "qv"];

@@ -6,9 +6,9 @@
 <title>Effektgrößen · Stats Lab</title>
 <meta name="description" content="Effektgrößen verstehen: Cohen's d als Unterschied in Standardabweichungen, Überlappung und Überlegenheitswahrscheinlichkeit, wie groß ist groß, MCID, signifikant gegen relevant und eine Übersicht aller Effektgrößen.">
 <link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="../../assets/css/base.css?v=202611222354">
+<link rel="stylesheet" href="../../assets/css/base.css?v=202611230003">
 <link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
-<link rel="stylesheet" href="effektgroessen.css?v=202611222354">
+<link rel="stylesheet" href="effektgroessen.css?v=202611230003">
 </head>
 <body>
 <header class="site-header">
@@ -59,15 +59,15 @@
     <div class="acc-body">
       <p class="text">Jacob Cohen hat für d drei Richtwerte vorgeschlagen: 0,2 klein, 0,5 mittel, 0,8 groß. So sehen sie aus:</p>
       <div class="three-small"><svg class="chart" id="s02" viewBox="0 0 300 170" role="img" aria-label="d = 0,2"></svg><svg class="chart" id="s05" viewBox="0 0 300 170" role="img" aria-label="d = 0,5"></svg><svg class="chart" id="s08" viewBox="0 0 300 170" role="img" aria-label="d = 0,8"></svg></div>
-      <p class="callout">Cohen selbst hat diese Grenzen nur als Notlösung empfohlen, wenn man nichts Besseres weiß. Besser ist ein inhaltlicher Maßstab: die <b>minimal klinisch relevante Differenz</b> (MCID), also die kleinste Veränderung, die Patientinnen und Patienten als bedeutsam erleben. Für akute Schmerzen auf der 100-mm-VAS wird oft etwa 13 mm genannt. Ein „kleines“ d kann deshalb klinisch wichtig sein, ein „mittleres“ unwichtig, je nach Skala und Streuung.</p>
+      <p class="callout">Cohen selbst hat diese Grenzen nur als Notlösung empfohlen, wenn man nichts Besseres weiß. Besser ist ein inhaltlicher Maßstab: die <b>minimal klinisch relevante Differenz</b> (MCID), also die kleinste Veränderung, die Patientinnen und Patienten als bedeutsam erleben. Für Rückenschmerz empfiehlt ein internationaler Konsens zum Beispiel 15 mm auf der 100-mm-VAS, 2 Punkte auf der NRS und 10 Punkte im Oswestry Disability Index (Ostelo et al., 2008). Diese Werte beschreiben die Veränderung einer einzelnen Person; als Unterschied zwischen zwei Gruppen sind sie eine eher großzügige Messlatte. Ein „kleines“ d kann deshalb klinisch wichtig sein, ein „mittleres“ unwichtig, je nach Skala und Streuung.</p>
     </div>
   </details>
 
   <details class="acc" id="acc-3" open>
     <summary><span class="acc-no">3</span><span class="acc-title">Signifikant heißt nicht relevant<span class="acc-teaser">Derselbe Effekt mit wenigen und mit vielen Personen.</span></span></summary>
     <div class="acc-body">
-      <p class="text">Der p-Wert hängt von zwei Dingen ab: von der Effektgröße und von der Stichprobengröße. Die Effektgröße hängt nur vom Effekt ab. Wählen Sie eine Studie und verändern Sie die Zahl der Personen.</p>
-      <div class="seg wide" role="group" aria-label="Studie" id="st"><button type="button" data-s="small" aria-pressed="true">Studie A: Δ = 3 mm (d = 0,15)</button><button type="button" data-s="big" aria-pressed="false">Studie B: Δ = 15 mm (d = 0,75)</button></div>
+      <p class="text">Der p-Wert hängt von zwei Dingen ab: von der Effektgröße und von der Stichprobengröße. Die Effektgröße hängt nur vom Effekt ab. Die gestrichelte Linie markiert die MCID (minimal klinisch relevante Differenz, siehe Abschnitt 2), hier 15 mm auf der Schmerz-VAS. Wählen Sie eine Studie und verändern Sie die Zahl der Personen.</p>
+      <div class="seg wide" role="group" aria-label="Studie" id="st"><button type="button" data-s="small" aria-pressed="true">Studie A: Δ = 3 mm (d = 0,15)</button><button type="button" data-s="big" aria-pressed="false">Studie B: Δ = 18 mm (d = 0,9)</button></div>
       <div class="controls"><div class="ctrl"><div class="ctrl-head"><label for="nn">Personen pro Gruppe</label><output id="nn-v"></output></div><input id="nn" type="range" min="0" max="100" step="1" value="30"></div></div>
       <svg class="chart" id="c3" viewBox="0 0 900 230" role="img" aria-label="Konfidenzintervall der Differenz und MCID"></svg>
       <div class="readouts" id="r3"></div>
@@ -97,7 +97,7 @@
     <h2 id="refs-h">Quellen und Weiterlesen</h2>
     <ul><li>Cohen, J. (1988). Statistical Power Analysis for the Behavioral Sciences (2. Aufl.). Erlbaum.</li>
     <li>Lakens, D. (2013). Calculating and reporting effect sizes to facilitate cumulative science. Frontiers in Psychology, 4, 863.</li>
-    <li>Kelly, A. M. (2001). The minimum clinically significant difference in visual analogue scale pain score does not differ with severity of pain. Emergency Medicine Journal, 18, 205–207.</li>
+    <li>Ostelo, R. W. J. G. et al. (2008). Interpreting change scores for pain and functional status in low back pain: towards international consensus regarding minimal important change. Spine, 33(1), 90–94.</li>
     <li>Die Zahlen der Beispiele sind Beispielzahlen.</li></ul>
   </section>
 </main>
@@ -110,8 +110,8 @@
 </footer>
 <script src="../../assets/vendor/katex/katex.min.js"></script>
 <script src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
-<script src="../../assets/js/tex.js?v=202611222354"></script>
-<script src="effektgroessen.js?v=202611222354"></script>
-<script src="../../assets/js/path.js?v=202611222354"></script>
+<script src="../../assets/js/tex.js?v=202611230003"></script>
+<script src="effektgroessen.js?v=202611230003"></script>
+<script src="../../assets/js/path.js?v=202611230003"></script>
 </body>
 </html>

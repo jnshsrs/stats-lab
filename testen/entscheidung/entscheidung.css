@@ -100,3 +100,8 @@ input[type=range] { width: 100%; accent-color: var(--accent); margin: 4px 0 0; }
 #sim-legend .lg-h { font-weight: 600; color: var(--fg); }
 @media (max-width: 480px) { .tiles { grid-template-columns: repeat(10, minmax(0, 1fr)); } }
 .sw-empty { border: 1px solid var(--muted); background: transparent !important; }
+.deep { border: 1px dashed var(--line); border-radius: 10px; padding: 0; margin-top: 14px; }
+.deep > summary { cursor: pointer; padding: 10px 14px; font-weight: 600; color: var(--accent); }
+.deep[open] > summary { border-bottom: 1px dashed var(--line); }
+.deep-body { padding: 12px 16px 16px; display: flex; flex-direction: column; gap: 10px; max-width: 80ch; font-size: 15.5px; line-height: 1.55; }
+.deep-body p { margin: 0; }

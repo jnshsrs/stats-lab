@@ -69,22 +69,22 @@ function draw1() {
 
 /* ---------- 3 ---------- */
 let study = "small";
-const MCID = 13, SD = 20;
+const MCID = 15, SD = 20;
 const nOf = v => Math.round(5 * Math.pow(400, v / 100));
 function draw3() {
-  const n = nOf(+$("nn").value), D = study === "small" ? 3 : 15, se = SD * Math.sqrt(2 / n), df = 2 * n - 2, t = D / se;
+  const n = nOf(+$("nn").value), D = study === "small" ? 3 : 18, se = SD * Math.sqrt(2 / n), df = 2 * n - 2, t = D / se;
   const p = 2 * (1 - tcdf(t, df)), tc = tinv(0.975, df), lo = D - tc * se, hi = D + tc * se, sig = lo > 0, rel = D >= MCID;
   $("nn-v").textContent = n.toLocaleString("de-DE");
   const f = frame(900, 230, -15, 40, 0, 1, { xl: "Differenz der Mittelwerte in mm VAS", yl: "", ny: 0, nx: 11, fx: v => fmt(v, 0), P: { L: 20, R: 16, T: 40, B: 46 } });
   let s = f.s;
-  s += `<rect x="${f.sx(MCID)}" y="${f.P.T}" width="${f.sx(40) - f.sx(MCID)}" height="${f.sy(0) - f.P.T}" fill="var(--therapie)" fill-opacity=".08"/><line x1="${f.sx(MCID)}" x2="${f.sx(MCID)}" y1="${f.P.T - 20}" y2="${f.sy(0)}" stroke="var(--therapie)" stroke-width="2" stroke-dasharray="6 4"/><text x="${f.sx(MCID) + 6}" y="${f.P.T - 8}" class="strong" style="fill:var(--therapie)">MCID 13 mm: klinisch relevant</text>`;
+  s += `<rect x="${f.sx(MCID)}" y="${f.P.T}" width="${f.sx(40) - f.sx(MCID)}" height="${f.sy(0) - f.P.T}" fill="var(--therapie)" fill-opacity=".08"/><line x1="${f.sx(MCID)}" x2="${f.sx(MCID)}" y1="${f.P.T - 20}" y2="${f.sy(0)}" stroke="var(--therapie)" stroke-width="2" stroke-dasharray="6 4"/><text x="${f.sx(MCID) + 6}" y="${f.P.T - 8}" class="strong" style="fill:var(--therapie)">MCID 15 mm: klinisch relevant</text>`;
   s += `<line x1="${f.sx(0)}" x2="${f.sx(0)}" y1="${f.P.T - 20}" y2="${f.sy(0)}" stroke="var(--fg)" stroke-width="2"/><text x="${f.sx(0) - 6}" y="${f.P.T - 8}" text-anchor="end" class="strong">kein Unterschied</text>`;
   const y = f.sy(0.5), L = Math.max(-15, lo), H = Math.min(40, hi), col = sig ? "var(--beta-ink)" : "var(--muted)";
   s += `<line x1="${f.sx(L)}" x2="${f.sx(H)}" y1="${y}" y2="${y}" stroke="${col}" stroke-width="6" stroke-linecap="round"/><circle cx="${f.sx(D)}" cy="${y}" r="9" fill="var(--surface)" stroke="${col}" stroke-width="3"/>`;
   s += `<text x="${f.sx(D)}" y="${y + 30}" text-anchor="middle" class="strong halo">${D} mm, 95-%-KI ${fmt(lo, 1)} bis ${fmt(hi, 1)}</text>`;
   $("c3").innerHTML = s;
   $("r3").innerHTML = readout("Personen pro Gruppe", n.toLocaleString("de-DE")) + readout("Cohen's d (bleibt gleich)", fmt(D / SD, 2)) + readout("p-Wert", fp(p), "r-decision") + readout("Ergebnis", sig ? "signifikant" : "nicht signifikant");
-  $("k3").innerHTML = sig && rel ? `<b>Signifikant und relevant.</b> Der Unterschied ist sicher größer als null, und mit ${D} mm liegt er über der MCID. Das Konfidenzintervall zeigt allerdings, wie genau: Reicht es unter 13 mm, ist auch ein klinisch unbedeutender Effekt mit den Daten vereinbar.`
+  $("k3").innerHTML = sig && rel ? `<b>Signifikant und relevant.</b> Der Unterschied ist sicher größer als null, und mit ${D} mm liegt er über der MCID. Das Konfidenzintervall zeigt allerdings, wie genau: Reicht es unter 15 mm, ist auch ein klinisch unbedeutender Effekt mit den Daten vereinbar.`
     : sig ? `<b>Signifikant, aber klinisch unbedeutend.</b> Mit ${n.toLocaleString("de-DE")} Personen pro Gruppe wird selbst ein Unterschied von ${D} mm signifikant. Die Effektgröße bleibt aber d = ${fmt(D / SD, 2)}, und das Konfidenzintervall liegt vollständig unter der MCID. Ein kleiner p-Wert heißt nicht „großer Effekt“.`
     : rel ? `<b>Nicht signifikant, aber möglicherweise relevant.</b> Der geschätzte Unterschied von ${D} mm liegt über der MCID, doch mit ${n} Personen pro Gruppe ist das Konfidenzintervall so breit, dass es auch null einschließt. Das ist kein Beleg, dass die Therapie nicht wirkt; die Studie war zu klein (vgl. <a href="../../testen/fallzahl/">Fallzahl und Power</a>). Erhöhen Sie n.`
     : `<b>Nicht signifikant und klein.</b> Der Unterschied ist klein, und mit ${n} Personen pro Gruppe ist er auch nicht von null zu unterscheiden. Erhöhen Sie n: Irgendwann wird er signifikant, ohne größer zu werden.`;

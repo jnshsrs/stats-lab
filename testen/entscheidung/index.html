@@ -6,8 +6,8 @@
 <title>Entscheidungstheorie · Stats Lab</title>
 <meta name="description" content="Alpha, Beta und Power als Entscheidung unter Unsicherheit, mit Power-Kurve und einem Gedankenexperiment zu den Kosten von Fehlentscheidungen.">
 <link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="../../assets/css/base.css?v=202611222354">
-<link rel="stylesheet" href="entscheidung.css?v=202611222354">
+<link rel="stylesheet" href="../../assets/css/base.css?v=202611230003">
+<link rel="stylesheet" href="entscheidung.css?v=202611230003">
 </head>
 <body>
 <header class="site-header">
@@ -66,6 +66,18 @@
     <svg class="chart" id="dist" viewBox="0 0 920 300" role="img"></svg>
     <div class="legend"><span><i class="sw" style="background:var(--alpha-fill)"></i>α: Fehlalarm, die Therapie wirkt nicht</span><span><i class="sw" style="background:var(--beta-fill)"></i>β: wirksame Therapie übersehen</span><span><i class="sw" style="background:var(--power-fill);opacity:.6"></i>Power: Wirkung erkannt</span></div>
     <div class="matrix" id="matrix"></div>
+    <details class="deep" id="info-verteilungen">
+      <summary>Zusatzinfo: Welche Verteilungen sind das, und woher kennen wir H1?</summary>
+      <div class="deep-body">
+        <p><b>Beide Kurven sind t-Verteilungen</b>, keine Normalverteilungen. Unter H0 ist es die gewöhnliche (zentrale) t-Verteilung mit df = 2n − 2, hier df = <span id="i-df"></span>, symmetrisch um 0. Bei vielen Personen ist sie kaum von einer Normalverteilung zu unterscheiden. Stellen Sie n auf 5: Dann sieht man die breiteren Ränder.</p>
+        <p><b>Unter H1 ist es die nichtzentrale t-Verteilung.</b> Sie hat dieselben Freiheitsgrade und zusätzlich den Nichtzentralitätsparameter δ, der angibt, wo sie im Mittel liegt: δ = d · √(n/2) = <span id="i-dcalc"></span>. Sie ist leicht rechtsschief und etwas breiter als die H0-Verteilung.</p>
+        <p><b>Woher kennen wir H1?</b> Gar nicht. „Die Therapie wirkt“ ist keine einzelne Verteilung, sondern unendlich viele, eine für jedes mögliche d. Für die Planung <b>nimmt man ein d an</b>, und daraus folgt die Kurve rein rechnerisch. Typische Quellen für d: die minimal klinisch relevante Differenz (MCID, minimal clinically important difference), also die kleinste Veränderung, die Patientinnen und Patienten als bedeutsam erleben; frühere Studien oder Metaanalysen; eine Pilotstudie, die aber oft zu große Effekte liefert. Power gilt deshalb immer bedingt: „80 % Power für d = 0,5“. Ist der wahre Effekt kleiner, ist auch die Power kleiner.</p>
+        <p><b>Beispiel aus der Physiotherapie:</b> Eine Studie vergleicht ein Übungsprogramm mit der Standardversorgung bei chronischem Rückenschmerz. Zielgröße ist der Oswestry Disability Index (ODI, 0 bis 100 Punkte). Ein internationaler Konsens empfiehlt als MCID 10 Punkte (Ostelo et al., 2008; dort auch: 15 mm auf der Schmerz-VAS, 2 Punkte auf der NRS, 5 Punkte im Roland Disability Questionnaire). Nimmt man eine Standardabweichung von 20 Punkten an, ist d = 10 ÷ 20 = 0,5. Mit 64 Personen pro Gruppe ergibt das δ = 2,83 und 80 % Power, genau die Voreinstellung dieser Seite.</p>
+        <p class="note">Einschränkung: Die Konsenswerte beschreiben die Veränderung einer einzelnen Person. Auch die Kontrollgruppe verbessert sich meist, deshalb ist ein Gruppenunterschied in Höhe der MCID eine eher optimistische Annahme. Kleinere Annahmen brauchen mehr Personen.<br>Quelle: Ostelo, R. W. J. G. et al. (2008). Interpreting change scores for pain and functional status in low back pain. Spine, 33(1), 90–94.</p>
+        <div class="ctrl-row"><button class="btn" type="button" id="ex-odi">Beispiel Rückenschmerz einstellen (d = 0,5; n = 64; α = 5 %)</button></div>
+        <p><b>Nach der Studie</b> kennt man den wahren Effekt immer noch nicht. Eine nachträglich aus dem beobachteten Effekt berechnete Power („post hoc“) sagt deshalb wenig aus; sie folgt direkt aus dem p-Wert.</p>
+      </div>
+    </details>
   </section>
 
   <section class="block" aria-labelledby="s-sim" id="studien">
@@ -134,7 +146,7 @@
     <span class="footer-links"><a href="https://github.com/jnshsrs/stats-lab">Quellcode auf GitHub</a><span>Ohne Cookies und Tracking</span></span>
   </div>
 </footer>
-<script src="entscheidung.js?v=202611222354"></script>
-<script src="../../assets/js/path.js?v=202611222354"></script>
+<script src="entscheidung.js?v=202611230003"></script>
+<script src="../../assets/js/path.js?v=202611230003"></script>
 </body>
 </html>
