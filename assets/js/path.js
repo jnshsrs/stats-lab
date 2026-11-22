@@ -2,7 +2,7 @@
    Einzige Stelle für Reihenfolge und Blöcke. Die Startseite und die Vor/Zurück-Leiste jeder Seite lesen von hier. */
 (() => {
 "use strict";
-const BLOCKS = ["Grundlagen", "Schätzen", "Testen", "Hintergrund"];
+const BLOCKS = ["Grundlagen", "Schätzen", "Testen", "Hintergrund", "Zusammenhänge und Regression"];
 const PATH = [
   ["skalenniveaus", "Skalenniveaus", 0],
   ["lage-streuung", "Lage und Streuung", 0],
@@ -22,7 +22,8 @@ const PATH = [
   ["regression-mitte", "Regression zur Mitte", 3],
   ["mammografie", "Positiver Befund: Gigerenzers Mammografie-Aufgabe", 3],
   ["klinische-tests", "Klinische Tests: Gütekriterien und Likelihood-Ratios", 3],
-  ["inferenzzyklus", "Induktion, Deduktion und der Signifikanztest", 3]
+  ["inferenzzyklus", "Induktion, Deduktion und der Signifikanztest", 3],
+  ["korrelation", "Zusammenhang und Korrelation", 4]
 ];
 window.STATS_LAB_PATH = { BLOCKS, PATH };
 const parts = location.pathname.split("/").filter(Boolean);
