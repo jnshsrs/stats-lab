@@ -122,3 +122,12 @@ figcaption { font-size: 14px; font-weight: 600; }
 .explain-box { border: 1px solid var(--line); border-radius: 10px; padding: 10px 14px; display: flex; flex-direction: column; gap: 4px; font-size: 15px; }
 .explain-box b { color: var(--accent); }
 .big-eq .katex { font-size: 1.35em; }
+/* 4 Zentrieren und Skalieren */
+.seg.small { margin-top: 6px; }
+.seg.small button { padding: 5px 9px; font-size: 13px; }
+.lbl-plain { font-size: 14px; font-weight: 500; }
+.deep { border: 1px dashed var(--line); border-radius: 10px; padding: 0; }
+.deep > summary { cursor: pointer; padding: 10px 14px; font-weight: 600; color: var(--accent); }
+.deep[open] > summary { border-bottom: 1px dashed var(--line); }
+.deep-body { padding: 12px 16px 16px; display: flex; flex-direction: column; gap: 10px; max-width: 80ch; }
+#cs .xs { fill: var(--accent); font-weight: 600; }

@@ -89,7 +89,7 @@ $("view").addEventListener("click", e => { const b = e.target.closest("button");
 function draw3() {
   $("eq").innerHTML = TB(String.raw`\widehat{\text{FEV}} = b_0 + b_1 \cdot \text{Größe} = ${tz(fmt(B0, 2))} + ${tz(fmt(B1, 4))} \cdot \text{Größe}`, `<span class="big">FEV = ${fmt(B0, 2)} + ${fmt(B1, 4)} · Größe</span>`);
   $("b1-txt").innerHTML = `Pro Zentimeter mehr Körpergröße liegt die FEV im Mittel um ${fmt(B1, 3)} l höher, pro 10 cm also um gut ${fmt(B1 * 10, 2)} l. Das ist die eigentliche Aussage des Modells.`;
-  $("b0-txt").innerHTML = `${fmt(B0, 2)} l wäre die FEV bei 0 cm Größe. Das ist sinnlos: Der Achsenabschnitt ist nur ein Rechenwert, damit die Gerade an der richtigen Höhe liegt. Er wird erst sinnvoll, wenn x = 0 im Bereich der Daten liegt.`;
+  $("b0-txt").innerHTML = `${fmt(B0, 2)} l wäre die FEV bei 0 cm Größe. Das ist sinnlos: Der Achsenabschnitt ist hier nur ein Rechenwert, damit die Gerade an der richtigen Höhe liegt. In Abschnitt 4 machen wir ihn lesbar.`;
   const x = +$("px").value, y = +$("py").value, yh = B0 + B1 * x, inside = x >= 117 && x <= 189;
   $("px-v").textContent = x + " cm"; $("py-v").textContent = fmt(y) + " l";
   const f = frame(900, 360, 85, 205, -1, 6);
@@ -109,5 +109,65 @@ function draw3() {
 }
 ["px", "py"].forEach(id => $(id).addEventListener("input", draw3));
 
-draw1(); pick(seed); draw2(); draw3();
+/* ---------- 4 Zentrieren und Skalieren ---------- */
+const MX = mean(X), SDX = Math.sqrt(X.reduce((a, v) => a + (v - MX) ** 2, 0) / (X.length - 1)), SDY = Math.sqrt(Y.reduce((a, v) => a + (v - FULL.mean) ** 2, 0) / (Y.length - 1));
+let kSel = "1";
+const kVal = () => kSel === "sd" ? SDX : +kSel;
+const seB0 = c => FULL.s * Math.sqrt(1 / X.length + (c - MX) ** 2 / X.reduce((a, v) => a + (v - MX) ** 2, 0));
+function draw4() {
+  const raw = +$("cc").value, isMean = Math.abs(raw - MX) < 0.6, c = isMean ? MX : raw, k = kVal(), b0s = B0 + B1 * c, b1s = B1 * k;
+  $("cc-v").textContent = (isMean ? fmt(MX, 1) : c) + " cm";
+  $("kk-v").textContent = kSel === "sd" ? `1 SD = ${fmt(SDX, 1)} cm` : `${k} cm`;
+  $("cc-pre").querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", b.dataset.c === "mean" ? isMean : +b.dataset.c === raw && !isMean));
+  const cT = isMean ? String.raw`\bar{x} = ${tz(fmt(MX, 1))}` : String(c), kT = kSel === "sd" ? String.raw`s_x = ${tz(fmt(SDX, 1))}` : String(k);
+  $("cs-def").innerHTML = (raw === 0 && kSel === "1") ? TB(String.raw`x^{*} = \dfrac{\text{Größe} - 0}{1} = \text{Größe}\quad\text{(roh)}`, "<span>x* = Größe</span>") + `<span class="dim">c verschiebt den Nullpunkt (Zentrieren), k legt fest, was „eine Einheit mehr“ bedeutet (Skalieren).</span>` : TB(String.raw`x^{*} = \dfrac{\text{Größe} - c}{k} = \dfrac{\text{Größe} - ${isMean ? tz(fmt(MX, 1)) : c}}{${kSel === "sd" ? tz(fmt(SDX, 1)) : k}}`, `<span>x* = (Größe − c) / k</span>`) +
+    `<span class="dim">c verschiebt den Nullpunkt (Zentrieren), k legt fest, was „eine Einheit mehr“ bedeutet (Skalieren).</span>`;
+  // chart
+  const W = 900, H = 440, P = { L: 60, R: 16, T: 14, B: 78 }, f = frame(W, H, 105, 195, 0, 6, P);
+  let s = f.s.replace(/<text x="[^"]*" y="[^"]*" text-anchor="end">Körpergröße in cm<\/text>/, "");
+  s += `<text x="${P.L - 8}" y="${H - P.B + 18}" text-anchor="end">cm</text><text x="${P.L - 8}" y="${H - P.B + 42}" text-anchor="end" class="xs">x*</text>`;
+  const pxPer = (W - P.L - P.R) / 90, mult = [1, 2, 5, 10, 20, 50, 100, 200].find(m => m * k * pxPer >= 46);
+  const jlo = Math.ceil((105 - c) / (k * mult)), jhi = Math.floor((195 - c) / (k * mult));
+  for (let j = jlo; j <= jhi; j++) { const v = j * mult, xx = c + v * k; s += `<line x1="${f.sx(xx)}" x2="${f.sx(xx)}" y1="${H - P.B + 24}" y2="${H - P.B + 29}" stroke="var(--accent)"/><text x="${f.sx(xx)}" y="${H - P.B + 42}" text-anchor="middle" class="xs">${fmt(v, 0)}</text>`; }
+  s += `<line x1="${P.L}" x2="${W - P.R}" y1="${H - P.B + 24}" y2="${H - P.B + 24}" stroke="var(--accent)" stroke-opacity=".5"/>`;
+  R.forEach(r => s += `<circle cx="${f.sx(r[2])}" cy="${f.sy(r[1])}" r="2.4" fill="var(--pal-3)" fill-opacity=".45"/>`);
+  s += `<line ${f.clip} x1="${f.sx(105)}" x2="${f.sx(195)}" y1="${f.sy(B0 + B1 * 105)}" y2="${f.sy(B0 + B1 * 195)}" stroke="var(--therapie)" stroke-width="3"/>`;
+  const inView = c >= 105 && c <= 195;
+  if (inView) {
+    s += `<line x1="${f.sx(c)}" x2="${f.sx(c)}" y1="${P.T}" y2="${H - P.B + 24}" stroke="var(--accent)" stroke-width="1.6" stroke-dasharray="5 4"/>`;
+    s += `<line x1="${P.L}" x2="${f.sx(c)}" y1="${f.sy(b0s)}" y2="${f.sy(b0s)}" stroke="var(--accent)" stroke-width="1.4" stroke-dasharray="3 3"/>`;
+    s += `<circle cx="${f.sx(c)}" cy="${f.sy(b0s)}" r="7" fill="var(--accent)"/><text x="${f.sx(c) - 12}" y="${f.sy(b0s) - 12}" text-anchor="end" class="strong" style="fill:var(--accent)">b₀* = ${fmt(b0s)} l</text>`;
+  } else {
+    s += `<text x="${P.L + 10}" y="${P.T + 18}" class="strong" style="fill:var(--accent)">← x* = 0 liegt bei ${c} cm, weit außerhalb der Daten</text>`;
+  }
+  // Steigungsdreieck
+  let t0 = inView && c + k <= 192 ? c : (c - k >= 108 && inView ? c - k : 165 - k / 2);
+  const ya = B0 + B1 * t0, yb = B0 + B1 * (t0 + k);
+  s += `<path d="M${f.sx(t0)},${f.sy(ya)} H${f.sx(t0 + k)} V${f.sy(yb)}" fill="none" stroke="var(--fg)" stroke-width="2"/>`;
+  const kLab = kSel === "sd" ? "1 SD" : k + " cm", bLab = "+" + fmt(b1s, kSel === "1" ? 3 : 2) + " l";
+  s += (f.sx(t0 + k) - f.sx(t0) < 60)
+    ? `<line x1="${f.sx(t0 + k) + 4}" x2="${f.sx(t0 + k) + 34}" y1="${f.sy(ya) + 2}" y2="${f.sy(ya) + 30}" stroke="var(--fg)"/><text x="${f.sx(t0 + k) + 38}" y="${f.sy(ya) + 42}" class="strong">+${kLab} → ${bLab}</text>`
+    : `<text x="${(f.sx(t0) + f.sx(t0 + k)) / 2}" y="${f.sy(ya) + 18}" text-anchor="middle">+1 Einheit (${kLab})</text><text x="${f.sx(t0 + k) + 8}" y="${(f.sy(ya) + f.sy(yb)) / 2 + 4}" class="strong">${bLab}</text>`;
+  $("cs").innerHTML = s;
+  // Gleichung
+  const varT = String.raw`\dfrac{\text{Größe} - ${isMean ? tz(fmt(MX, 1)) : c}}{${kSel === "sd" ? tz(fmt(SDX, 1)) : k}}`;
+  const plain = raw === 0 && kSel === "1";
+  $("cs-eq").innerHTML = TB(String.raw`\widehat{\text{FEV}} = ${tz(fmt(b0s, 2))} + ${tz(fmt(b1s, kSel === "1" ? 4 : 3))} \cdot ${plain ? String.raw`\text{Größe}` : String.raw`x^{*}`}`, `<span class="big">FEV = ${fmt(b0s)} + ${fmt(b1s, 3)} · x*</span>`) +
+    (plain ? "" : `<span class="dim">ausgeschrieben, mit der Größe in cm:</span>` + TB(String.raw`\widehat{\text{FEV}} = ${tz(fmt(b0s, 2))} + ${tz(fmt(b1s, kSel === "1" ? 4 : 3))} \cdot ${varT}`, ""));
+  const yG = b0s + b1s * (150 - c) / k;
+  $("cs-r").innerHTML = readout("b₀*", fmt(b0s) + " l", "r-decision") + readout("b₁*", fmt(b1s, 3) + " l") + readout("R²", fmt(FULL.r2, 3)) + readout("Sollwert für 150 cm", fmt(yG) + " l");
+  const unit = kSel === "sd" ? `eine Standardabweichung (${fmt(SDX, 1)} cm)` : k === 1 ? "einen Zentimeter" : `${k} cm`;
+  const where = isMean ? `durchschnittlich großes Kind (${fmt(MX, 1)} cm)` : `Kind mit ${c} cm`;
+  $("cs-b0").innerHTML = raw === 0 ? `Vorhergesagte FEV bei 0 cm Größe: ${fmt(b0s)} l. Inhaltlich sinnlos, weil x = 0 weit außerhalb der Daten liegt.`
+    : !inView ? `Vorhergesagte FEV bei ${c} cm. Auch das liegt außerhalb der Daten (117 bis 189 cm) und ist eine Extrapolation.`
+    : `Ein ${where} hat im Mittel eine FEV von ${fmt(b0s)} l.${isMean ? " Beim Mittelwert ist b₀* genau ȳ: Die Gerade läuft durch den Schwerpunkt." : c === 150 ? " Das ist direkt der Sollwert für unser Mädchen." : ""}`;
+  $("cs-b1").innerHTML = `Pro ${unit} mehr Körpergröße liegt die FEV im Mittel um ${fmt(b1s, kSel === "1" ? 3 : 2)} l höher.${kSel === "1" ? " Korrekt, aber eine sehr kleine Zahl, die man schlecht greifen kann." : kSel === "sd" ? " Das macht Variablen mit verschiedenen Einheiten vergleichbar." : ""}`;
+  $("cs-c").innerHTML = `Die Gerade im Bild bewegt sich nicht, egal was Sie einstellen. Es ändert sich nur die Beschriftung der x-Achse und damit die Bedeutung der beiden Zahlen. Faustregel: Zentrieren Sie auf einen Wert, der in den Daten vorkommt und inhaltlich etwas bedeutet. Skalieren Sie so, dass „eine Einheit mehr“ ein Unterschied ist, der in der Praxis zählt.`;
+  $("se0").textContent = fmt(seB0(0), 3); $("se150").textContent = fmt(seB0(150), 3); $("r-std").textContent = fmt(B1 * SDX / SDY, 3);
+}
+$("cc").addEventListener("input", draw4);
+$("cc-pre").addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; $("cc").value = b.dataset.c === "mean" ? MX : b.dataset.c; draw4(); });
+$("kk").addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; kSel = b.dataset.k; $("kk").querySelectorAll("button").forEach(z => z.setAttribute("aria-pressed", z === b)); draw4(); });
+
+draw1(); pick(seed); draw2(); draw3(); draw4();
 })();

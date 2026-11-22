@@ -6,10 +6,10 @@
 <title>Die beste Gerade · Stats Lab</title>
 <meta name="description" content="Warum eine Gerade? Vom Mittelwert über Gruppenmittel zur Regressionsgeraden, Methode der kleinsten Quadrate zum Anfassen und Sollwerte für die Lungenfunktion.">
 <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="../assets/css/base.css?v=202611221055">
+<link rel="stylesheet" href="../assets/css/base.css?v=202611221207">
 <link rel="stylesheet" href="../assets/vendor/katex/katex.min.css">
 <link rel="stylesheet" href="../assets/vendor/katex/katex.min.css">
-<link rel="stylesheet" href="gerade.css?v=202611221055">
+<link rel="stylesheet" href="gerade.css?v=202611221207">
 </head>
 <body>
 <header class="site-header">
@@ -80,6 +80,37 @@
     </div>
   </details>
 
+  <details class="acc" id="acc-4" open>
+    <summary><span class="acc-no">4</span><span class="acc-title">Den Achsenabschnitt sinnvoll machen<span class="acc-teaser">Zentrieren und Skalieren: gleiche Gerade, lesbare Zahlen.</span></span></summary>
+    <div class="acc-body">
+      <p class="text">Der Achsenabschnitt b₀ ist immer der Wert bei x = 0. Bei 0 cm Körpergröße ist das sinnlos. Wir können aber selbst festlegen, wo „null“ liegt und in welcher Einheit wir messen. Dazu bauen wir eine neue Variable:</p>
+      <div class="formula" id="cs-def"></div>
+      <div class="panel-grid">
+        <div class="ctrl"><div class="ctrl-head"><label for="cc">Bezugspunkt c (hier ist x* = 0)</label><output id="cc-v"></output></div><input id="cc" type="range" min="0" max="190" step="1" value="0">
+          <div class="seg small" role="group" aria-label="Bezugspunkt wählen" id="cc-pre"><button type="button" data-c="0" aria-pressed="true">0 cm (roh)</button><button type="button" data-c="120" aria-pressed="false">120 cm</button><button type="button" data-c="150" aria-pressed="false">150 cm</button><button type="button" data-c="mean" aria-pressed="false">Mittelwert</button></div></div>
+        <div class="ctrl"><div class="ctrl-head"><span class="lbl-plain" id="kk-l">Einheit k (eine Einheit von x*)</span><output id="kk-v"></output></div>
+          <div class="seg small" role="group" aria-labelledby="kk-l" id="kk"><button type="button" data-k="1" aria-pressed="true">1 cm</button><button type="button" data-k="5" aria-pressed="false">5 cm</button><button type="button" data-k="10" aria-pressed="false">10 cm</button><button type="button" data-k="sd" aria-pressed="false">1 SD</button></div></div>
+      </div>
+      <svg class="chart" id="cs" viewBox="0 0 900 440" role="img" aria-label="Gerade mit verschobener und skalierter x-Achse"></svg>
+      <div class="formula" id="cs-eq"></div>
+      <div class="readouts" id="cs-r"></div>
+      <div class="two-col">
+        <div class="explain-box"><b>Achsenabschnitt b₀*</b><span id="cs-b0"></span></div>
+        <div class="explain-box"><b>Steigung b₁*</b><span id="cs-b1"></span></div>
+      </div>
+      <p class="callout" id="cs-c"></p>
+      <details class="deep">
+        <summary>Vertiefung: Was sich ändert und was nicht</summary>
+        <div class="deep-body">
+          <p>Zentrieren und Skalieren ist eine lineare Umrechnung der x-Achse, wie von Celsius nach Fahrenheit. Die Gerade selbst bleibt dieselbe. Deshalb bleiben gleich: alle Vorhersagen ŷ, alle Residuen, die Quadratsumme, R² und der t-Test für die Steigung (t und p ändern sich nicht, nur die Einheit von b₁ und SE(b₁)).</p>
+          <p>Es ändern sich: der Achsenabschnitt, sein Standardfehler und sein Test. Roh liegt x = 0 weit außerhalb der Daten, b₀ ist dort sehr unsicher (SE = <span id="se0"></span> l). Zentriert auf 150 cm wird b₀* zum Sollwert eines 150 cm großen Kindes und ist präzise geschätzt (SE = <span id="se150"></span> l). Am kleinsten ist der Standardfehler beim Mittelwert der Größe, dort ist er genau s/√n.</p>
+          <p>Werden x und y beide standardisiert (z-Werte), ist b₀* = 0 und die Steigung gleich dem Korrelationskoeffizienten r = <span id="r-std"></span>. So hängen Regression und <a href="../korrelation/">Korrelation</a> zusammen.</p>
+          <p>Richtig wichtig wird Zentrieren in der multiplen Regression mit Wechselwirkungen: Dort sind die Haupteffekte nur dann interpretierbar, wenn die anderen Variablen an einem sinnvollen Wert „null“ sind. Das kommt später im Block.</p>
+        </div>
+      </details>
+    </div>
+  </details>
+
   <section class="block refs" aria-labelledby="refs-h">
     <h2 id="refs-h">Daten</h2>
     <ul><li>FEV-Daten von 654 Kindern aus East Boston (Tager et al., 1979; Kahn, 2005), siehe <a href="../korrelation/">Zusammenhang und Korrelation</a>. Download: <a href="../regression-daten/fev.csv">fev.csv</a>.</li>
@@ -95,13 +126,10 @@
 </footer>
 <script src="../assets/vendor/katex/katex.min.js"></script>
 <script src="../assets/vendor/katex/contrib/auto-render.min.js"></script>
-<script src="../assets/js/tex.js?v=202611221055"></script>
-<script src="../assets/vendor/katex/katex.min.js"></script>
-<script src="../assets/vendor/katex/contrib/auto-render.min.js"></script>
-<script src="../assets/js/tex.js?v=202611221055"></script>
-<script src="../regression-daten/fev.js?v=202611221055"></script>
-<script src="../assets/js/reg.js?v=202611221055"></script>
-<script src="gerade.js?v=202611221055"></script>
-<script src="../assets/js/path.js?v=202611221055"></script>
+<script src="../assets/js/tex.js?v=202611221207"></script>
+<script src="../regression-daten/fev.js?v=202611221207"></script>
+<script src="../assets/js/reg.js?v=202611221207"></script>
+<script src="gerade.js?v=202611221207"></script>
+<script src="../assets/js/path.js?v=202611221207"></script>
 </body>
 </html>
