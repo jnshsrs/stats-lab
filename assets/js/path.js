@@ -11,6 +11,7 @@ const PATH = [
   ["risiko-odds", "Risiko, Odds und Odds Ratio", 0],
   ["binomial", "Pascal und die Binomialverteilung", 0],
   ["verteilungen", "Diskret und stetig", 0],
+  ["effektgroessen", "Effektgrößen", 0],
   ["stichprobe", "Stichprobe und Population", 1],
   ["grosse-zahlen", "Große und kleine Zahlen", 1],
   ["zgws", "Grenzwertsatz, Standardfehler, Konfidenzintervall", 1],

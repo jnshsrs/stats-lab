@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Effektgrößen · Stats Lab</title>
+<meta name="description" content="Effektgrößen verstehen: Cohen's d als Unterschied in Standardabweichungen, Überlappung und Überlegenheitswahrscheinlichkeit, wie groß ist groß, MCID, signifikant gegen relevant und eine Übersicht aller Effektgrößen.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../assets/css/base.css?v=202611222354">
+<link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
+<link rel="stylesheet" href="effektgroessen.css?v=202611222354">
+</head>
+<body>
+<header class="site-header">
+  <div class="column">
+    <a class="brand" href="../../">
+      <svg class="brand-mark" viewBox="0 0 22 22" aria-hidden="true"><path d="M1 19 C5 19 6 4 9 4 S13 19 17 19" fill="none" class="bm-a" stroke-width="2.2" stroke-linecap="round"/><path d="M5 19 C9 19 10 7 13 7 S17 19 21 19" fill="none" class="bm-b" stroke-width="2.2" stroke-linecap="round"/></svg>
+      Stats Lab
+    </a>
+    <nav class="site-nav" aria-label="Hauptnavigation">
+      <a href="../../">Visualisierungen</a>
+      <a href="../../glossar/">Glossar</a>
+      <a href="https://github.com/jnshsrs/stats-lab">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main class="column">
+  <section class="intro">
+    <a class="back" href="../../">← Alle Visualisierungen</a>
+    <h1>Effektgrößen</h1>
+    <p class="byline">Dr. Jens Hüsers · Forschungsmethodik</p>
+    <p class="lede">Ein Signifikanztest beantwortet nur, ob ein Unterschied wahrscheinlich nicht null ist. Für Patientinnen und Patienten zählt etwas anderes: <b>Wie groß</b> ist der Unterschied? Diese Frage beantworten Effektgrößen. Sie hängen nicht von der Stichprobengröße ab und machen Studien vergleichbar. Für ja/nein-Zielgrößen kennen Sie sie schon aus <a href="../risiko-odds/">Risiko, Odds und Odds Ratio</a>; hier geht es um Messwerte. Die Glockenkurven kennen Sie aus <a href="../verteilungen/">Diskret und stetig</a>, den p-Wert behandelt der Block „Testen“ ausführlich.</p>
+  </section>
+
+  <details class="acc" id="acc-1" open>
+    <summary><span class="acc-no">1</span><span class="acc-title">Cohen's d: Unterschied in Standardabweichungen<span class="acc-teaser">Rohe Differenz geteilt durch die Streuung, und was das anschaulich bedeutet.</span></span></summary>
+    <div class="acc-body">
+      <p class="text">Beispiel: Schmerz auf der visuellen Analogskala (VAS, 0 bis 100 mm) nach einer Therapie gegen eine Kontrollgruppe. Die rohe Differenz in Millimetern ist anschaulich, lässt sich aber nicht mit Studien vergleichen, die anders messen. Cohen's d teilt die Differenz durch die Streuung: Wie viele Standardabweichungen liegen die Gruppen auseinander?</p>
+      <div class="controls"><div class="panel-grid">
+        <div class="ctrl"><div class="ctrl-head"><label for="dd">Differenz der Mittelwerte Δ</label><output id="dd-v"></output></div><input id="dd" type="range" min="0" max="40" step="1" value="10"></div>
+        <div class="ctrl"><div class="ctrl-head"><label for="sd">Standardabweichung in beiden Gruppen</label><output id="sd-v"></output></div><input id="sd" type="range" min="5" max="40" step="1" value="20"></div>
+      </div></div>
+      <svg class="chart" id="c1" viewBox="0 0 900 360" role="img" aria-label="Zwei Verteilungen mit Überlappung"></svg>
+      <div class="legend"><span><i style="background:var(--kontrolle)"></i>Kontrolle</span><span><i style="background:var(--therapie)"></i>Therapie (weniger Schmerz)</span><span><i style="background:var(--beta-ink);opacity:.35"></i>Überlappung</span></div>
+      <div class="formula" id="f1"></div>
+      <div class="readouts" id="r1"></div>
+      <p class="callout" id="k1"></p>
+      <details class="deep"><summary>Vertiefung: gepoolte SD, Hedges' g und Varianten</summary><div class="deep-body">
+        <p>Haben beide Gruppen unterschiedliche Streuungen, nimmt man die gepoolte Standardabweichung: s = √[((n₁ − 1)s₁² + (n₂ − 1)s₂²) ÷ (n₁ + n₂ − 2)].</p>
+        <p>Bei kleinen Stichproben überschätzt d den wahren Effekt etwas. <b>Hedges' g</b> korrigiert das mit dem Faktor 1 − 3 ÷ (4(n₁ + n₂) − 9). Bei 20 Personen pro Gruppe ist g etwa 2 % kleiner als d, ab etwa 50 pro Gruppe ist der Unterschied vernachlässigbar. Metaanalysen berichten meist g.</p>
+        <p>Für Vorher-nachher-Vergleiche gibt es mehrere Varianten: geteilt durch die SD der Ausgangswerte oder durch die SD der Differenzen. Die zweite Variante (oft d<sub>z</sub>) wird bei hoher Korrelation der Messzeitpunkte viel größer. Prüfen Sie daher immer, welche Formel eine Studie verwendet hat.</p>
+      </div></details>
+    </div>
+  </details>
+
+  <details class="acc" id="acc-2" open>
+    <summary><span class="acc-no">2</span><span class="acc-title">Wie groß ist groß?<span class="acc-teaser">Cohens Faustregeln, ihre Grenzen und die klinisch relevante Differenz.</span></span></summary>
+    <div class="acc-body">
+      <p class="text">Jacob Cohen hat für d drei Richtwerte vorgeschlagen: 0,2 klein, 0,5 mittel, 0,8 groß. So sehen sie aus:</p>
+      <div class="three-small"><svg class="chart" id="s02" viewBox="0 0 300 170" role="img" aria-label="d = 0,2"></svg><svg class="chart" id="s05" viewBox="0 0 300 170" role="img" aria-label="d = 0,5"></svg><svg class="chart" id="s08" viewBox="0 0 300 170" role="img" aria-label="d = 0,8"></svg></div>
+      <p class="callout">Cohen selbst hat diese Grenzen nur als Notlösung empfohlen, wenn man nichts Besseres weiß. Besser ist ein inhaltlicher Maßstab: die <b>minimal klinisch relevante Differenz</b> (MCID), also die kleinste Veränderung, die Patientinnen und Patienten als bedeutsam erleben. Für akute Schmerzen auf der 100-mm-VAS wird oft etwa 13 mm genannt. Ein „kleines“ d kann deshalb klinisch wichtig sein, ein „mittleres“ unwichtig, je nach Skala und Streuung.</p>
+    </div>
+  </details>
+
+  <details class="acc" id="acc-3" open>
+    <summary><span class="acc-no">3</span><span class="acc-title">Signifikant heißt nicht relevant<span class="acc-teaser">Derselbe Effekt mit wenigen und mit vielen Personen.</span></span></summary>
+    <div class="acc-body">
+      <p class="text">Der p-Wert hängt von zwei Dingen ab: von der Effektgröße und von der Stichprobengröße. Die Effektgröße hängt nur vom Effekt ab. Wählen Sie eine Studie und verändern Sie die Zahl der Personen.</p>
+      <div class="seg wide" role="group" aria-label="Studie" id="st"><button type="button" data-s="small" aria-pressed="true">Studie A: Δ = 3 mm (d = 0,15)</button><button type="button" data-s="big" aria-pressed="false">Studie B: Δ = 15 mm (d = 0,75)</button></div>
+      <div class="controls"><div class="ctrl"><div class="ctrl-head"><label for="nn">Personen pro Gruppe</label><output id="nn-v"></output></div><input id="nn" type="range" min="0" max="100" step="1" value="30"></div></div>
+      <svg class="chart" id="c3" viewBox="0 0 900 230" role="img" aria-label="Konfidenzintervall der Differenz und MCID"></svg>
+      <div class="readouts" id="r3"></div>
+      <p class="callout" id="k3"></p>
+    </div>
+  </details>
+
+  <details class="acc" id="acc-4" open>
+    <summary><span class="acc-no">4</span><span class="acc-title">Effektgrößen im Überblick<span class="acc-teaser">Welche Kennzahl zu welcher Fragestellung gehört.</span></span></summary>
+    <div class="acc-body">
+      <div class="tab-wrap"><table class="anova ov">
+        <thead><tr><th>Fragestellung</th><th>Effektgröße</th><th>kein Effekt</th><th>Richtwerte (Cohen)</th><th>Station</th></tr></thead>
+        <tbody>
+          <tr><td>Unterschied zweier Mittelwerte</td><td>rohe Differenz Δ; Cohen's d, Hedges' g</td><td>0</td><td>d: 0,2 · 0,5 · 0,8</td><td><a href="../../testen/t-test-varianten/">Welcher t-Test?</a></td></tr>
+          <tr><td>Zusammenhang zweier Messwerte</td><td>Korrelation r</td><td>0</td><td>r: 0,1 · 0,3 · 0,5</td><td><a href="../../regression/korrelation/">Korrelation</a></td></tr>
+          <tr><td>erklärter Anteil der Streuung</td><td>R² (Regression), η² (ANOVA)</td><td>0</td><td>η²: 0,01 · 0,06 · 0,14</td><td><a href="../../regression/bestimmtheitsmass/">Wie viel erklärt die Gerade?</a></td></tr>
+          <tr><td>Zusammenhang zweier Kategorien</td><td>Cramérs V, φ</td><td>0</td><td>0,1 · 0,3 · 0,5 (bei 2 × 2)</td><td><a href="../../testen/chi-quadrat/">Chi-Quadrat-Test</a></td></tr>
+          <tr><td>ja/nein: absolut</td><td>Risikodifferenz RD, NNT</td><td>RD = 0</td><td>keine; inhaltlich bewerten</td><td><a href="../risiko-odds/#acc-2">Risiko und Odds</a></td></tr>
+          <tr><td>ja/nein: relativ</td><td>relatives Risiko RR, Odds Ratio OR</td><td>1</td><td>keine festen; hängen vom Ausgangsrisiko ab</td><td><a href="../risiko-odds/#acc-3">Risiko und Odds</a></td></tr>
+          <tr><td>Übereinstimmung, Reliabilität</td><td>Kappa, ICC</td><td>0</td><td>eigene Skalen</td><td><a href="../../hintergrund/klinische-tests/">Klinische Tests</a></td></tr>
+        </tbody></table></div>
+      <p class="note">Umrechnen geht für zwei Gruppen gleicher Größe: r = d ÷ √(d² + 4), also d = 0,5 entspricht r ≈ 0,24. Die Richtwerte für d und r sind deshalb nicht gleichwertig. Berichten Sie immer die Effektgröße mit Konfidenzintervall und, wo möglich, zusätzlich in der Originaleinheit.</p>
+    </div>
+  </details>
+
+  <section class="block refs" aria-labelledby="refs-h">
+    <h2 id="refs-h">Quellen und Weiterlesen</h2>
+    <ul><li>Cohen, J. (1988). Statistical Power Analysis for the Behavioral Sciences (2. Aufl.). Erlbaum.</li>
+    <li>Lakens, D. (2013). Calculating and reporting effect sizes to facilitate cumulative science. Frontiers in Psychology, 4, 863.</li>
+    <li>Kelly, A. M. (2001). The minimum clinically significant difference in visual analogue scale pain score does not differ with severity of pain. Emergency Medicine Journal, 18, 205–207.</li>
+    <li>Die Zahlen der Beispiele sind Beispielzahlen.</li></ul>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="column">
+    <span>© 2026 Dr. Jens Hüsers · Lehrmaterial für Forschungsmethodik und Statistik</span>
+    <span class="footer-links"><a href="https://github.com/jnshsrs/stats-lab">Quellcode auf GitHub</a><span>Ohne Cookies und Tracking</span></span>
+  </div>
+</footer>
+<script src="../../assets/vendor/katex/katex.min.js"></script>
+<script src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
+<script src="../../assets/js/tex.js?v=202611222354"></script>
+<script src="effektgroessen.js?v=202611222354"></script>
+<script src="../../assets/js/path.js?v=202611222354"></script>
+</body>
+</html>
