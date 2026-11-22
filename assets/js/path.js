@@ -24,7 +24,8 @@ const PATH = [
   ["klinische-tests", "Klinische Tests: Gütekriterien und Likelihood-Ratios", 3],
   ["inferenzzyklus", "Induktion, Deduktion und der Signifikanztest", 3],
   ["korrelation", "Zusammenhang und Korrelation", 4],
-  ["gerade", "Die beste Gerade: kleinste Quadrate", 4]
+  ["gerade", "Die beste Gerade: kleinste Quadrate", 4],
+  ["normbereich", "Wie sicher ist der Sollwert? Inferenz und Normgrenze", 4]
 ];
 window.STATS_LAB_PATH = { BLOCKS, PATH };
 const parts = location.pathname.split("/").filter(Boolean);

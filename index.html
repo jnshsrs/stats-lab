@@ -6,7 +6,7 @@
 <title>Stats Lab</title>
 <meta name="description" content="Interaktive Visualisierungen für die Statistiklehre in Gesundheits- und Therapiewissenschaften.">
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="assets/css/base.css?v=202611221207">
+<link rel="stylesheet" href="assets/css/base.css?v=202611221336">
 <style>
   .hero { padding-block: 56px 40px; display: flex; flex-direction: column; gap: 16px; }
   .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; }
@@ -417,6 +417,21 @@
         <h3>Die beste Gerade</h3>
         <p>Warum überhaupt eine Gerade? Vom Mittelwert über Gruppenmittel zum Sollwert für die Lungenfunktion. Kleinste Quadrate zum Anfassen, Steigung, Achsenabschnitt und Extrapolation.</p>
         <div class="tags"><span class="tag">Regression</span><span class="tag">Residuum</span><span class="tag">Sollwert</span></div>
+      </div>
+    </a>
+    <a class="card" href="normbereich/">
+      <div class="card-thumb"><span class="path-no">22</span>
+        <svg viewBox="0 0 320 180" aria-hidden="true">
+          <line x1="40" x2="290" y1="150" y2="150" class="t-axis" stroke-width="2"/><line x1="40" x2="40" y1="20" y2="150" class="t-axis" stroke-width="2"/>
+          <path d="M50 108 L285 10 L285 70 L50 168 Z" class="t-soft"/>
+          <path d="M50 132 C120 112 210 74 285 46 L285 34 C210 62 120 100 50 124 Z" class="t-strong" opacity=".55"/>
+          <line x1="50" x2="285" y1="128" y2="40" class="t-dash"/>
+        </svg>
+      </div>
+      <div class="card-body">
+        <h3>Wie sicher ist der Sollwert?</h3>
+        <p>Viele Stichproben, viele Geraden: Standardfehler und t-Test für die Steigung. Konfidenz- gegen Vorhersageband und warum die untere Normgrenze besser ist als 80 % vom Soll.</p>
+        <div class="tags"><span class="tag">Inferenz</span><span class="tag">Vorhersageband</span><span class="tag">Normgrenze</span></div>
       </div>
     </a>
     </div>

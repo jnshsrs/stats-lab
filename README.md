@@ -27,6 +27,7 @@ Interaktive Visualisierungen für die Statistiklehre in den Gesundheits- und The
 | [`inferenzzyklus/`](inferenzzyklus/) | Induktion, Deduktion und der Signifikanztest: Poppers Perspektive in fünf Schritten, Schwan-Experiment, Modus tollens und die Frage, ob Induktion und Inferenz dasselbe sind |
 | [`korrelation/`](korrelation/) | Block 5, Station 20: Zusammenhang und Korrelation mit den FEV-Daten (654 Kinder, `regression-daten/`): Streudiagramm nach Größe oder Alter, Kovarianz als Rechtecke mit ziehbaren Punkten und Ausreißer, Gefühl für r per Simulation, Störgröße Alter beim Rauchen. Rechenmodul `assets/js/reg.js`. |
 | [`gerade/`](gerade/) | Block 5, Station 21: Die beste Gerade. Story Sollwert der Lungenfunktion: Mittelwert, Gruppenmittel, Gerade im Vergleich; kleinste Quadrate mit Reglern, Residuenquadraten und Quadratsummen-Balken; Gerade lesen, Vorhersage, % vom Soll, Extrapolation. |
+| [`normbereich/`](normbereich/) | Block 5, Station 22: Wie sicher ist der Sollwert? Stichprobenverteilung der Steigung (auch unter H₀), t-Test und KI für b₁, Konfidenz- gegen Vorhersageband, untere Normgrenze (fest, relativ über log) gegen 80-%-Regel mit Anteilen je Größengruppe. |
 
 ## Aufbau
 
