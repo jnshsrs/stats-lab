@@ -135,3 +135,7 @@ input[type=range] { width: 100%; accent-color: var(--accent); margin: 4px 0 0; }
 .ttab tr.hr td.hit, .ttab td.hit { background: var(--accent); color: var(--on-accent); font-weight: 700; }
 .ttab thead th.hc { color: var(--accent); }
 .ttab tr.inf th, .ttab tr.inf td { border-top: 2px solid var(--line); }
+.formula .katex-display { margin: 4px 0; text-align: left; }
+.formula .katex-display > .katex { text-align: left; }
+.formula .katex { font-size: 1.15em; }
+.calc-steps .eq .katex { font-size: 1.08em; }

@@ -109,10 +109,10 @@ function drawHyp() {
   $("hyp").innerHTML = `<p class="who">${d.who}</p><div class="hyp-grid"><div><span class="k">H0</span><div class="v">${d.h0}</div><span class="s">${d.h0s}</span></div><div><span class="k">H1, soll gezeigt werden</span><div class="v">${d.h1}</div><span class="s">${d.h1s}</span></div></div>`;
 }
 function drawRuler(c) {
-  $("formula").innerHTML =
-    `t = (<span class="ink-therapie"><b>x̄ − μ₀</b></span>) / (<span class="ink-kontrolle"><b>s / √n</b></span>)` +
+  const fbF = `t = (<span class="ink-therapie"><b>x̄ − μ₀</b></span>) / (<span class="ink-kontrolle"><b>s / √n</b></span>)` +
     ` = (<span class="ink-therapie">${fmt(c.m)} − 90</span>) / (<span class="ink-kontrolle">${fmt(c.s)} / √${c.n}</span>)` +
     ` = <span class="ink-therapie">${fmt(c.diff)}</span> / <span class="ink-kontrolle">${fmt(c.se, 2)}</span> = <b>${fmt(c.t, 2)}</b><br><span class="df-line">Freiheitsgrade: df = n − 1 = ${c.df}</span>`;
+  $("formula").innerHTML = window.katex ? texBlock(String.raw`t = \dfrac{\bar{x} - \mu_0}{s / \sqrt{n}} = \dfrac{${dz(c.m, 1)} - 90}{${dz(c.s, 1)} / \sqrt{${c.n}}} = \dfrac{${dz(c.diff, 1)}}{${dz(c.se, 2)}} = \mathbf{${dz(c.t, 2)}}`) + `<span class="df-line">${tex(String.raw`df = n - 1 = ${c.df}`)}</span>` : fbF;
   const lo = Math.min(MU0, c.m), hi = Math.max(MU0, c.m);
   const span = Math.max(hi - lo, c.se * 2, 4), pad = span * 0.25, a = lo - pad, b = lo + span + pad;
   const sx = v => L + (v - a) / (b - a) * (R - L);
@@ -169,7 +169,7 @@ function drawT(c) {
   $("t-stats").innerHTML = readout("t-Wert", fmt(c.t, 2)) + readout("kritisches t", T.critTxt, "r-alpha") + readout(`p-Wert (${DIRS[S.dir].name})`, fmtP(T.p), "r-p") +
     readout(`Entscheidung bei α = ${fmt(S.alpha, 2)}`, T.rej ? "H0 verwerfen" : "H0 beibehalten", "r-decision" + (T.rej ? " sig" : ""));
   // Vergleich der drei Richtungen
-  const rows = ["two", "right", "left"].map(k => { const r = testFor(k, c.t, c.df, S.alpha); return `<tr class="${k === S.dir ? "cur" : ""}"><td><b>${DIRS[k].name}</b><br><span class="muted">H1: ${DIRS[k].h1}</span></td><td>${r.critTxt}</td><td>${k === "two" ? "2 · (1 − F(|t|))" : k === "right" ? "1 − F(t)" : "F(t)"}</td><td>${fmtP(r.p)}</td><td>${r.rej ? "<b>H0 verwerfen</b>" : "H0 beibehalten"}</td></tr>`; });
+  const rows = ["two", "right", "left"].map(k => { const r = testFor(k, c.t, c.df, S.alpha); return `<tr class="${k === S.dir ? "cur" : ""}"><td><b>${DIRS[k].name}</b><br><span class="muted">H1: ${DIRS[k].h1}</span></td><td>${r.critTxt}</td><td>${k === "two" ? tex("2\\,\\bigl(1 - F(|t|)\\bigr)", "2 · (1 − F(|t|))") : k === "right" ? tex("1 - F(t)", "1 − F(t)") : tex("F(t)", "F(t)")}</td><td>${fmtP(r.p)}</td><td>${r.rej ? "<b>H0 verwerfen</b>" : "H0 beibehalten"}</td></tr>`; });
   $("dir-tab").innerHTML = `<thead><tr><th>Hypothese</th><th>kritisches t</th><th>Formel für p</th><th>p-Wert</th><th>Entscheidung</th></tr></thead><tbody>${rows.join("")}</tbody>`;
   const r2 = testFor("two", c.t, c.df, S.alpha), rR = testFor("right", c.t, c.df, S.alpha), rL = testFor("left", c.t, c.df, S.alpha);
   const good = c.t >= 0 ? rR : rL, wrong = c.t >= 0 ? rL : rR, goodName = c.t >= 0 ? "rechtsseitig" : "linksseitig", wrongName = c.t >= 0 ? "linksseitig" : "rechtsseitig";
@@ -210,25 +210,27 @@ function drawCdf(c) {
   $("tcdf").setAttribute("aria-label", `Verteilungsfunktion der t-Verteilung, ${DIRS[dir].name}, kritisches t ${T.critTxt}, p ${fmtP(T.p)}`);
   const pe = pEq(T.p), dec = T.rej ? "H0 verwerfen" : "H0 beibehalten", cmp = T.p < a0 ? "<" : "≥";
   let st;
+  const tp = T.p < 0.001 ? "< 0{,}001" : "= " + dz(T.p, 3), cmpT = T.p < a0 ? "<" : "\\ge", decT = `\\text{${dec}}`;
+  const c2 = dz(T.crit[T.crit.length - 1], 2), c3 = dz(T.crit[T.crit.length - 1], 3);
   if (dir === "two") st = [
-    ["Annahmebereich festlegen.", `Er enthält die mittleren ${fmt((1 - a0) * 100, 0)} % der t-Verteilung, links und rechts bleiben je α/2 = ${fmt(a0 / 2, 3)}.`, `F(t) zwischen ${fmt(a0 / 2, 3)} und ${fmt(1 - a0 / 2, 3)}`],
-    ["Kritischen Wert rückwärts ablesen.", `Gesucht ist das t, bei dem F(t) den Wert ${fmt(1 - a0 / 2, 3)} erreicht. Wegen der Symmetrie liegt der linke bei minus demselben Wert.`, `t<sub>krit</sub> = F⁻¹(${fmt(1 - a0 / 2, 3)}; df = ${c.df}) = ±${fmt(T.crit[1], 3)}`],
-    ["Bereiche benennen.", "", `Annahmebereich: −${fmt(T.crit[1], 2)} ≤ t ≤ ${fmt(T.crit[1], 2)} · Ablehnungsbereich: |t| > ${fmt(T.crit[1], 2)}`],
-    ["p-Wert vorwärts ablesen.", "Vom beobachteten |t| hinauf zur Kurve. Was rechts übrig bleibt, zählt doppelt, weil beide Ränder zählen.", `p = 2 · (1 − F(${fmt(tObs, 2)})) = 2 · (1 − ${fmt(Ft, 4)}) ${pe}`],
-    ["Entscheiden.", "Beide Wege führen zum selben Ergebnis.", `|t| = ${fmt(tObs, 2)} ${T.rej ? ">" : "≤"} ${fmt(T.crit[1], 2)} und p ${pe} ${cmp} α = ${fmt(a0, 2)} → ${dec}`]];
+    ["Annahmebereich festlegen.", `Er enthält die mittleren ${fmt((1 - a0) * 100, 0)} % der t-Verteilung, links und rechts bleiben je α/2 = ${fmt(a0 / 2, 3)}.`, String.raw`${dz(a0 / 2, 3)} \le F(t) \le ${dz(1 - a0 / 2, 3)}`],
+    ["Kritischen Wert rückwärts ablesen.", `Gesucht ist das t, bei dem F(t) den Wert ${fmt(1 - a0 / 2, 3)} erreicht. Wegen der Symmetrie liegt der linke bei minus demselben Wert.`, String.raw`t_{\text{krit}} = F^{-1}\!\left(${dz(1 - a0 / 2, 3)};\ df = ${c.df}\right) = \pm ${c3}`],
+    ["Bereiche benennen.", "", String.raw`\text{Annahme: } {-}${c2} \le t \le ${c2} \qquad \text{Ablehnung: } |t| > ${c2}`],
+    ["p-Wert vorwärts ablesen.", "Vom beobachteten |t| hinauf zur Kurve. Was rechts übrig bleibt, zählt doppelt, weil beide Ränder zählen.", String.raw`p = 2 \cdot \bigl(1 - F(|t|)\bigr) = 2 \cdot (1 - ${dz(Ft, 4)}) ${tp}`],
+    ["Entscheiden.", "Beide Wege führen zum selben Ergebnis.", String.raw`|t| = ${dz(tObs, 2)} ${T.rej ? ">" : "\\le"} ${c2} \ \text{und}\ p ${tp} ${cmpT} \alpha = ${dz(a0, 2)} \;\Rightarrow\; ${decT}`]];
   else if (dir === "right") st = [
-    ["Annahmebereich festlegen.", "H1 sagt μ > 90° voraus. Das ganze α kommt deshalb an den rechten Rand, links gibt es keinen Ablehnungsbereich.", `F(t) bis ${fmt(1 - a0, 3)}`],
-    ["Kritischen Wert rückwärts ablesen.", "Er liegt näher an der Mitte als zweiseitig, weil α nicht geteilt wird.", `t<sub>krit</sub> = F⁻¹(${fmt(1 - a0, 3)}; df = ${c.df}) = ${fmt(T.crit[0], 3)}`],
-    ["Bereiche benennen.", "", `Annahmebereich: t ≤ ${fmt(T.crit[0], 2)} · Ablehnungsbereich: t > ${fmt(T.crit[0], 2)}`],
-    ["p-Wert vorwärts ablesen.", "Nur die Fläche rechts vom beobachteten t zählt, ohne Faktor 2.", `p = 1 − F(${fmt(c.t, 2)}) = 1 − ${fmt(Ft, 4)} ${pe}`],
-    ["Entscheiden.", "", `t = ${fmt(c.t, 2)} ${T.rej ? ">" : "≤"} ${fmt(T.crit[0], 2)} und p ${pe} ${cmp} α = ${fmt(a0, 2)} → ${dec}`]];
+    ["Annahmebereich festlegen.", "H1 sagt μ > 90° voraus. Das ganze α kommt deshalb an den rechten Rand, links gibt es keinen Ablehnungsbereich.", String.raw`F(t) \le ${dz(1 - a0, 3)}`],
+    ["Kritischen Wert rückwärts ablesen.", "Er liegt näher an der Mitte als zweiseitig, weil α nicht geteilt wird.", String.raw`t_{\text{krit}} = F^{-1}\!\left(${dz(1 - a0, 3)};\ df = ${c.df}\right) = ${c3}`],
+    ["Bereiche benennen.", "", String.raw`\text{Annahme: } t \le ${c2} \qquad \text{Ablehnung: } t > ${c2}`],
+    ["p-Wert vorwärts ablesen.", "Nur die Fläche rechts vom beobachteten t zählt, ohne Faktor 2.", String.raw`p = 1 - F(t) = 1 - F(${dz(c.t, 2)}) = 1 - ${dz(Ft, 4)} ${tp}`],
+    ["Entscheiden.", "", String.raw`t = ${dz(c.t, 2)} ${T.rej ? ">" : "\\le"} ${c2} \ \text{und}\ p ${tp} ${cmpT} \alpha = ${dz(a0, 2)} \;\Rightarrow\; ${decT}`]];
   else st = [
-    ["Annahmebereich festlegen.", "H1 sagt μ < 90° voraus. Das ganze α kommt deshalb an den linken Rand, rechts gibt es keinen Ablehnungsbereich.", `F(t) ab ${fmt(a0, 3)}`],
-    ["Kritischen Wert rückwärts ablesen.", "Gesucht ist das t, bei dem F(t) erst α erreicht. Er ist negativ.", `t<sub>krit</sub> = F⁻¹(${fmt(a0, 3)}; df = ${c.df}) = ${fmt(T.crit[0], 3)}`],
-    ["Bereiche benennen.", "", `Annahmebereich: t ≥ ${fmt(T.crit[0], 2)} · Ablehnungsbereich: t < ${fmt(T.crit[0], 2)}`],
-    ["p-Wert vorwärts ablesen.", "Nur die Fläche links vom beobachteten t zählt: Das ist F(t) selbst.", `p = F(${fmt(c.t, 2)}) ${pe}`],
-    ["Entscheiden.", "", `t = ${fmt(c.t, 2)} ${T.rej ? "<" : "≥"} ${fmt(T.crit[0], 2)} und p ${pe} ${cmp} α = ${fmt(a0, 2)} → ${dec}`]];
-  $("calc-steps").innerHTML = st.map(([b, t, e]) => `<li><b>${b}</b> ${t}<span class="eq">${e}</span></li>`).join("");
+    ["Annahmebereich festlegen.", "H1 sagt μ < 90° voraus. Das ganze α kommt deshalb an den linken Rand, rechts gibt es keinen Ablehnungsbereich.", String.raw`F(t) \ge ${dz(a0, 3)}`],
+    ["Kritischen Wert rückwärts ablesen.", "Gesucht ist das t, bei dem F(t) erst α erreicht. Er ist negativ.", String.raw`t_{\text{krit}} = F^{-1}\!\left(${dz(a0, 3)};\ df = ${c.df}\right) = ${c3}`],
+    ["Bereiche benennen.", "", String.raw`\text{Annahme: } t \ge ${c2} \qquad \text{Ablehnung: } t < ${c2}`],
+    ["p-Wert vorwärts ablesen.", "Nur die Fläche links vom beobachteten t zählt: Das ist F(t) selbst.", String.raw`p = F(t) = F(${dz(c.t, 2)}) ${tp}`],
+    ["Entscheiden.", "", String.raw`t = ${dz(c.t, 2)} ${T.rej ? "<" : "\\ge"} ${c2} \ \text{und}\ p ${tp} ${cmpT} \alpha = ${dz(a0, 2)} \;\Rightarrow\; ${decT}`]];
+  $("calc-steps").innerHTML = st.map(([b, t, e]) => `<li><b>${b}</b> ${t}<span class="eq">${tex(e)}</span></li>`).join("");
 }
 
 
