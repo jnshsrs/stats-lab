@@ -72,7 +72,7 @@ function draw2() {
   $("f2").innerHTML = TB(String.raw`\begin{aligned} \ln(\text{Odds}) &= ${tz(fmt(M1.b[0], 3))} + ${tz(fmt(M1.b[1], 4))} \cdot \alpha \\ \text{OR}_{\text{pro } ${u}^\circ} &= e^{${u > 1 ? u + " \\cdot " : ""}${tz(fmt(M1.b[1], 4))}} = ${tz(fmt(ORu, 3))} \\ \text{95-\%-KI} &= [${tz(fmt(c[0], 3))};\ ${tz(fmt(c[1], 3))}] \\ p(${ax}^\circ) &= \dfrac{e^{${tz(fmt(eta, 2))}}}{1 + e^{${tz(fmt(eta, 2))}}} = ${tz(fmt(od / (1 + od), 3))} \end{aligned}`, "");
   $("r2").innerHTML = readout(`OR pro ${u}°`, fmt(ORu, 3), "r-decision") + readout("95-%-KI", `${fmt(c[0], 3)} bis ${fmt(c[1], 3)}`) + readout(`p bei ${ax}°`, pc(P(ax))) + readout("Nagelkerke-R²", fmt(M1.nagelkerke, 3));
   $("k2").innerHTML = u === 1
-    ? `Exp(B) = ${fmt(Math.exp(M1.b[1]), 3)}: Mit jedem Grad Alpha-Winkel steigen die Odds eines Knorpeldefekts um ${fmt((Math.exp(M1.b[1]) - 1) * 100, 1)} %. Das wirkt klein, weil ein Grad klein ist. Wählen Sie „10 Grad“.`
+    ? `Exp(B) = ${fmt(Math.exp(M1.b[1]), 3)}: Mit jedem Grad Alpha-Winkel steigen die Odds eines Knorpeldefekts um ${fmt((Math.exp(M1.b[1]) - 1) * 100, 1)} %. Das wirkt klein, weil ein Grad klein ist. Wählen Sie „10 Grad“. Warum man Exp(B) liest und nicht B, zeigt die <a href="../s-kurve/#acc-3">Rise-over-Run-Tabelle</a>.`
     : `Pro ${u} Grad steigen die Odds um den Faktor ${fmt(ORu, 2)}, also um ${fmt((ORu - 1) * 100, 0)} %. Rechnung: e hoch (${u} · B), nicht ${u} · Exp(B). Auch das Konfidenzintervall wird so umgerechnet. Die Kurve ist flacher als beim Rauchen in der <a href="../s-kurve/">S-Kurven-Station</a>: Der Alpha-Winkel ist ein Risikofaktor unter vielen, Nagelkerke-R² = ${fmt(M1.nagelkerke, 2)}.`;
   $("ev").textContent = Y.reduce((a, v) => a + v, 0);
   report();

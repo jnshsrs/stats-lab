@@ -1,5 +1,6 @@
 /* Von der Geraden zur S-Kurve · Stats Lab
-   Block 6, Station 1: lineares Wahrscheinlichkeitsmodell gegen logistisches Modell, Skalen p/Odds/Logit, OR pro Einheit, Maximum Likelihood. */
+   Block 6, Station 1: Gerade durch 0/1-Daten, Herleitung der S-Kurve aus dem linearen Logit-Modell,
+   Interpretation von b1 auf drei Skalen (Rise over Run), Exkurs Maximum Likelihood und LR-Test. */
 (() => {
 "use strict";
 const $ = id => document.getElementById(id);
@@ -24,108 +25,143 @@ function frame(W, H, xlo, xhi, ylo, yhi, o = {}) {
 const { ols, logit } = window.REG;
 const R = window.FEV.rows, A = R.map(r => r[0]), S = R.map(r => r[4]), N = R.length;
 const LPM = ols(S, [A]), LG = logit(S, [A]), B0 = LG.b[0], B1 = LG.b[1];
-const P = x => 1 / (1 + Math.exp(-(B0 + B1 * x))), OD = x => Math.exp(B0 + B1 * x);
+const ETA = x => B0 + B1 * x, P = x => 1 / (1 + Math.exp(-ETA(x))), OD = x => Math.exp(ETA(x));
 const AGES = {}; A.forEach((a, i) => { AGES[a] = AGES[a] || { n: 0, k: 0 }; AGES[a].n++; AGES[a].k += S[i]; });
 const AG = Object.keys(AGES).map(Number).sort((a, b) => a - b);
 const pick = (e, el) => { const b = e.target.closest("button"); if (!b) return null; el.querySelectorAll("button").forEach(z => z.setAttribute("aria-pressed", z === b)); return b; };
 const pc = (x, d = 1) => fmt(x * 100, d) + " %";
 const curve = (f, fn, lo, hi, st = 0.1) => { let d = ""; for (let x = lo; x <= hi + 1e-9; x += st) d += (d ? "L" : "M") + f.sx(x).toFixed(1) + "," + f.sy(fn(x)).toFixed(1); return d; };
 const jit = i => ((i * 2654435761) % 1000) / 1000 - 0.5;
+const meanOf = v => v.reduce((a, x) => a + x, 0) / v.length;
 
-/* ---------- 1 ---------- */
+/* ---------- 1 Gerade durch 0/1 ---------- */
 let m1 = "lin";
 function draw1() {
-  const f = frame(900, 420, 2, 20, -0.25, 1.1, { xl: "Alter in Jahren", yl: "Anteil Rauchender", nx: 9, ny: 0 });
+  const f = frame(900, 440, 0, 40, -0.45, 1.45, { xl: "Alter in Jahren", yl: "", nx: 8, ny: 0, P: { L: 120, R: 16, T: 14, B: 46 } });
   let s = f.s;
-  [-0.25, 0, 0.25, 0.5, 0.75, 1].forEach(v => s += `<line x1="${f.P.L}" x2="${900 - f.P.R}" y1="${f.sy(v)}" y2="${f.sy(v)}" stroke="var(--grid)"/><text x="${f.P.L - 8}" y="${f.sy(v) + 4}" text-anchor="end">${fmt(v * 100, 0)} %</text>`);
-  s += `<rect x="${f.P.L}" y="${f.sy(0)}" width="${900 - f.P.L - f.P.R}" height="${f.sy(-0.25) - f.sy(0)}" fill="var(--beta-ink)" fill-opacity=".08"/><text x="${f.sx(19.8)}" y="${f.sy(-0.2)}" text-anchor="end" style="fill:var(--beta-ink)">unmöglich: unter 0 %</text>`;
-  A.forEach((a, i) => s += `<circle cx="${(f.sx(a) + jit(i) * 22).toFixed(1)}" cy="${(f.sy(S[i]) + jit(i * 7) * 10).toFixed(1)}" r="2" fill="var(--pal-3)" fill-opacity=".45"/>`);
-  AG.forEach(a => { const g = AGES[a]; s += `<circle cx="${f.sx(a)}" cy="${f.sy(g.k / g.n)}" r="${3 + Math.sqrt(g.n) * 0.9}" fill="var(--surface)" stroke="var(--fg)" stroke-width="2"/>`; });
+  const band = (y0, y1, lab, ly) => `<rect x="${f.P.L}" y="${f.sy(y1)}" width="${900 - f.P.L - f.P.R}" height="${f.sy(y0) - f.sy(y1)}" fill="var(--beta-ink)" fill-opacity=".08"/><text x="${f.sx(39.5)}" y="${f.sy(ly)}" text-anchor="end" style="fill:var(--beta-ink)">${lab}</text>`;
+  s += band(-0.45, 0, "unter 0: keine Bedeutung", -0.33) + band(1, 1.45, "über 1: keine Bedeutung", 1.36);
+  s += `<rect x="${f.sx(19.5)}" y="${f.P.T}" width="${f.sx(40) - f.sx(19.5)}" height="${f.sy(-0.45) - f.P.T}" fill="var(--highlight)" fill-opacity=".6"/><text x="${f.sx(29.75)}" y="${f.sy(0.5)}" text-anchor="middle" style="fill:var(--muted)">keine Daten über 19 Jahre</text>`;
+  [[0, "0 = raucht nicht"], [1, "1 = raucht"]].forEach(([v, l]) => s += `<line x1="${f.P.L}" x2="${900 - f.P.R}" y1="${f.sy(v)}" y2="${f.sy(v)}" stroke="var(--fg)" stroke-opacity=".35"/><text x="${f.P.L - 8}" y="${f.sy(v) + 4}" text-anchor="end" class="strong">${l}</text>`);
+  if (m1 !== "lin") s += `<text x="${f.P.L - 8}" y="${f.sy(0.5) + 4}" text-anchor="end" style="fill:var(--muted)">0,5</text><line x1="${f.P.L}" x2="${900 - f.P.R}" y1="${f.sy(0.5)}" y2="${f.sy(0.5)}" stroke="var(--grid)"/>`;
+  A.forEach((a, i) => s += `<circle cx="${(f.sx(a) + jit(i) * 14).toFixed(1)}" cy="${(f.sy(S[i]) + jit(i * 7) * 14).toFixed(1)}" r="2.6" fill="${S[i] ? "var(--fg)" : "var(--pal-3)"}" fill-opacity="${S[i] ? .75 : .5}"/>`);
+  const lin = x => LPM.b[0] + LPM.b[1] * x;
   if (m1 === "lin") {
-    s += `<path ${f.clip} d="${curve(f, x => LPM.b[0] + LPM.b[1] * x, 2, 20)}" fill="none" stroke="var(--beta-ink)" stroke-width="3"/>`;
-    const x0 = -LPM.b[0] / LPM.b[1];
-    s += `<line x1="${f.sx(x0)}" x2="${f.sx(x0)}" y1="${f.sy(0)}" y2="${f.sy(-0.25)}" stroke="var(--beta-ink)" stroke-dasharray="3 3"/><text x="${f.sx(x0) - 8}" y="${f.sy(-0.08)}" text-anchor="end" class="strong halo" style="fill:var(--beta-ink)">unter ${fmt(x0, 1)} Jahren negativ</text>`;
-  } else s += `<path ${f.clip} d="${curve(f, P, 2, 20)}" fill="none" stroke="var(--therapie)" stroke-width="3.5"/>`;
+    s += `<path ${f.clip} d="${curve(f, lin, 0, 40)}" fill="none" stroke="var(--beta-ink)" stroke-width="3.5"/>`;
+    const x0 = -LPM.b[0] / LPM.b[1], x1 = (1 - LPM.b[0]) / LPM.b[1];
+    s += `<circle cx="${f.sx(x0)}" cy="${f.sy(0)}" r="6" fill="var(--beta-ink)"/><circle cx="${f.sx(x1)}" cy="${f.sy(1)}" r="6" fill="var(--beta-ink)"/>`;
+    s += `<text x="${f.sx(x0) + 8}" y="${f.sy(0) + 22}" class="strong halo" style="fill:var(--beta-ink)">unter ${fmt(x0, 1)} J. negativ</text><text x="${f.sx(x1) - 8}" y="${f.sy(1) - 12}" text-anchor="end" class="strong halo" style="fill:var(--beta-ink)">ab ${fmt(x1, 1)} J. über 1</text>`;
+  } else {
+    s += `<path ${f.clip} d="${curve(f, lin, 0, 40)}" fill="none" stroke="var(--beta-ink)" stroke-width="1.6" stroke-dasharray="6 5" stroke-opacity=".6"/>`;
+    s += `<path ${f.clip} d="${curve(f, P, 0, 40)}" fill="none" stroke="var(--therapie)" stroke-width="4"/>`;
+    if (m1 === "chk") AG.forEach(a => { const g = AGES[a]; s += `<circle cx="${f.sx(a)}" cy="${f.sy(g.k / g.n)}" r="${3 + Math.sqrt(g.n) * 0.8}" fill="var(--surface)" stroke="var(--fg)" stroke-width="2"/>`; });
+  }
   $("c1").innerHTML = s;
   $("r1").innerHTML = m1 === "lin"
-    ? readout("Vorhersage mit 4 Jahren", pc(LPM.b[0] + LPM.b[1] * 4), "r-decision") + readout("Vorhersage mit 35 Jahren", pc(LPM.b[0] + LPM.b[1] * 35)) + readout("Steigung", "+" + fmt(LPM.b[1] * 100, 1) + " %-Punkte pro Jahr")
-    : readout("Vorhersage mit 4 Jahren", pc(P(4), 2), "r-decision") + readout("mit 14 Jahren", pc(P(14))) + readout("mit 35 Jahren", pc(P(35)));
-  $("k1").innerHTML = m1 === "lin"
-    ? `Die Gerade wächst stur um ${fmt(LPM.b[1] * 100, 1)} Prozentpunkte pro Jahr. Für 4-Jährige sagt sie ${pc(LPM.b[0] + LPM.b[1] * 4)} Rauchende voraus, für 35-Jährige ${pc(LPM.b[0] + LPM.b[1] * 35)}. Beides ist unmöglich. Außerdem verfehlt sie die Kreise: Bis 9 Jahre raucht niemand, danach steigt der Anteil steil an.`
-    : `Die S-Kurve bleibt immer zwischen 0 und 100 %. Bei jungen Kindern liegt sie fast bei null, dann steigt sie und flacht nach oben wieder ab. Sie trifft die Kreise deutlich besser. Wie entsteht diese Form? Abschnitt 2.`;
+    ? readout("Gerade: ŷ = b₀ + b₁ · Alter", `${fmt(LPM.b[0], 3)} + ${fmt(LPM.b[1], 3)} · Alter`) + readout("ŷ mit 4 Jahren", fmt(LPM.b[0] + LPM.b[1] * 4, 2), "r-decision") + readout("ŷ mit 35 Jahren", fmt(LPM.b[0] + LPM.b[1] * 35, 2), "r-decision")
+    : readout("S-Kurve mit 4 Jahren", fmt(P(4), 4)) + readout("mit 14 Jahren", fmt(P(14), 2), "r-decision") + readout("mit 35 Jahren", fmt(P(35), 4));
+  $("k1").innerHTML = {
+    lin: `Die Gerade ist die gewöhnliche lineare Regression durch die Nullen und Einsen. Ihre Vorhersagen ergeben keinen Sinn: Für ein 4-jähriges Kind liefert sie ${fmt(LPM.b[0] + LPM.b[1] * 4, 2)}, für eine 35-jährige Person ${fmt(LPM.b[0] + LPM.b[1] * 35, 2)}. Was sollen „minus 0,14 Rauchen“ oder „1,13 Rauchen“ sein? Auch die Residuen sind seltsam: Bei jedem Alter gibt es nur zwei mögliche Werte.`,
+    log: `Die S-Kurve bleibt immer zwischen 0 und 1, egal wie weit man nach links oder rechts geht. Ihre Werte lassen sich deshalb als <b>Wahrscheinlichkeiten</b> lesen: Ein 14-jähriges Kind raucht mit einer Wahrscheinlichkeit von ${fmt(P(14), 2)}, also ${pc(P(14), 0)}. Wie man zu dieser Kurve kommt, zeigt Abschnitt 2.`,
+    chk: `Zur Kontrolle: Die Kreise sind die tatsächlichen Anteile Rauchender je Altersjahr, ihre Größe zeigt die Zahl der Kinder. Die S-Kurve folgt ihnen gut. Bis 8 Jahre raucht niemand, danach steigt der Anteil steil an. Die Gerade (gestrichelt) verfehlt beides.`
+  }[m1];
 }
 $("m1").addEventListener("click", e => { const b = pick(e, $("m1")); if (!b) return; m1 = b.dataset.m; draw1(); });
 
-/* ---------- 2 ---------- */
-let sc = "p";
+/* ---------- 2 Herleitung ---------- */
+const st = (lab, tex) => `<span class="step-l">${lab}</span>` + TB(tex, "");
+$("f2").innerHTML = st("(1) Lineares Modell für den Logit, wie in Block 5", String.raw`\ln\!\Bigl(\dfrac{p}{1-p}\Bigr) = b_0 + b_1 x = \eta`) +
+  st("(2) Beide Seiten hoch e: links stehen die Odds", String.raw`\dfrac{p}{1-p} = e^{\eta}`) +
+  st("(3) Nach p auflösen", String.raw`\begin{aligned} p &= e^{\eta}\,(1 - p) \\ p\,(1 + e^{\eta}) &= e^{\eta} \\ p &= \dfrac{e^{\eta}}{1 + e^{\eta}} \end{aligned}`) +
+  st("(4) Zähler und Nenner durch e hoch η teilen", String.raw`p = \dfrac{1}{1 + e^{-(b_0 + b_1 x)}}`) +
+  `<span class="dim">η (eta) steht für den linearen Teil b₀ + b₁ · x, den „linearen Prädiktor“. Mit den FEV-Daten: b₀ = ${fmt(B0, 3)}, b₁ = ${fmt(B1, 3)}.</span>`;
 function draw2() {
   const a = +$("a2").value; $("a2-v").textContent = a + " Jahre";
-  const T = { p: P, o: OD, l: x => B0 + B1 * x }[sc];
-  const yr = { p: [0, 1], o: [0, 4], l: [-7, 3] }[sc], yl = { p: "Wahrscheinlichkeit", o: "Odds", l: "Logit = ln(Odds)" }[sc];
-  const f = frame(900, 400, 2, 20, yr[0], yr[1], { xl: "Alter in Jahren", yl, nx: 9, fx: v => fmt(v, 0) });
-  let s = f.s;
-  AG.forEach(x => { const g = AGES[x], q = g.k / g.n; const v = sc === "p" ? q : sc === "o" ? q / (1 - q) : Math.log(q / (1 - q));
-    if (q === 0 && sc === "l") s += `<path d="M${f.sx(x) - 6},${f.sy(yr[0]) - 2}L${f.sx(x) + 6},${f.sy(yr[0]) - 2}L${f.sx(x)},${f.sy(yr[0]) - 12}Z" fill="var(--muted)"/>`;
-    else if (isFinite(v)) s += `<circle cx="${f.sx(x)}" cy="${f.sy(Math.min(v, yr[1]))}" r="${3 + Math.sqrt(g.n) * 0.9}" fill="var(--surface)" stroke="var(--fg)" stroke-width="2"/>`; });
-  s += `<path ${f.clip} d="${curve(f, T, 2, 20)}" fill="none" stroke="var(--therapie)" stroke-width="3.5"/>`;
-  const v = T(a); s += `<line x1="${f.sx(a)}" x2="${f.sx(a)}" y1="${f.sy(yr[0])}" y2="${f.sy(Math.min(v, yr[1]))}" stroke="var(--beta-ink)" stroke-dasharray="3 3"/><circle cx="${f.sx(a)}" cy="${f.sy(Math.max(yr[0], Math.min(v, yr[1])))}" r="8" fill="var(--beta-ink)"/>`;
-  if (sc === "l") s += `<text x="${f.sx(2.3)}" y="${f.sy(yr[0]) - 30}" class="halo" style="fill:var(--muted)">▲ Alter ohne Rauchende: Logit −∞</text>`;
-  $("c2").innerHTML = s;
-  const eta = B0 + B1 * a, od = Math.exp(eta), p = od / (1 + od);
-  $("f2").innerHTML = TB(String.raw`\begin{aligned} \ln(\text{Odds}) &= b_0 + b_1 \cdot \text{Alter} \\ &= ${tz(fmt(B0, 2))} + ${tz(fmt(B1, 3))} \cdot ${a} \\ \text{Odds} &= e^{${tz(fmt(eta, 2))}} = ${tz(fmt(od, 3))} \\ p &= \dfrac{\text{Odds}}{1 + \text{Odds}} = ${tz(fmt(p, 3))} \end{aligned}`, "");
-  $("r2").innerHTML = readout("Logit", fmt(eta, 2)) + readout("Odds", fmt(od, 3)) + readout("Wahrscheinlichkeit", pc(p), "r-decision");
-  $("k2").innerHTML = { p: `Auf der Wahrscheinlichkeitsskala ist das Modell eine S-Kurve. Wechseln Sie zu „Logit“.`, o: `Als Odds wächst die Kurve exponentiell: Jedes Jahr werden die Odds mit demselben Faktor multipliziert. Nach oben gibt es keine Grenze mehr.`, l: `Auf der Logit-Skala ist das Modell eine <b>Gerade</b>: ln(Odds) = ${fmt(B0, 2)} + ${fmt(B1, 3)} · Alter. Alles, was Sie aus der linearen Regression kennen, gilt hier: Achsenabschnitt, Steigung, mehrere Einflussgrößen, Adjustierung. Nur die Zielgröße ist eine andere, und das ist der ganze Trick.` }[sc];
+  const mini = (id, fn, ylo, yhi, yl, fy, col) => {
+    const f = frame(340, 300, 2, 20, ylo, yhi, { P: { L: 60, R: 8, T: 10, B: 40 }, xl: "Alter", yl, nx: 4, ny: 4, fx: v => fmt(v, 0) });
+    let s = f.s.replace(/<text x="[^"]*" y="[^"]*" text-anchor="end">([−\d,.]+)<\/text>/g, (m, v) => m);
+    s += `<path ${f.clip} d="${curve(f, fn, 2, 20)}" fill="none" stroke="${col}" stroke-width="3"/>`;
+    const v = fn(a), vy = Math.max(ylo, Math.min(yhi, v));
+    s += `<line x1="${f.sx(a)}" x2="${f.sx(a)}" y1="${f.sy(ylo)}" y2="${f.sy(vy)}" stroke="var(--fg)" stroke-dasharray="3 3"/><circle cx="${f.sx(a)}" cy="${f.sy(vy)}" r="6" fill="var(--fg)"/><text x="${f.sx(a) + (a > 14 ? -8 : 8)}" y="${f.sy(vy) - 10}" text-anchor="${a > 14 ? "end" : "start"}" class="strong halo">${fy(v)}</text>`;
+    $(id).innerHTML = s;
+  };
+  mini("c2a", ETA, -7, 3, "Logit η", v => fmt(v, 2), "var(--fg)");
+  mini("c2b", OD, 0, 4, "Odds", v => fmt(v, 3), "var(--beta-ink)");
+  mini("c2c", P, 0, 1, "p", v => fmt(v, 3), "var(--therapie)");
+  const e = ETA(a), o = Math.exp(e), p = o / (1 + o);
+  $("f2b").innerHTML = TB(String.raw`\begin{aligned} \eta &= ${tz(fmt(B0, 3))} + ${tz(fmt(B1, 3))} \cdot ${a} = ${tz(fmt(e, 2))} \\ \text{Odds} &= e^{${tz(fmt(e, 2))}} = ${tz(fmt(o, 3))} \\ p &= \dfrac{1}{1 + e^{${tz(fmt(-e, 2))}}} = ${tz(fmt(p, 3))} \end{aligned}`, "");
+  $("k2").innerHTML = `Links das lineare Modell, wie Sie es aus Block 5 kennen: eine Gerade, hier für den Logit. In der Mitte dieselbe Gerade mit e potenziert: die Odds, die exponentiell wachsen. Rechts die Odds in Wahrscheinlichkeiten zurückgerechnet: die S-Kurve aus Abschnitt 1. Für ein ${a}-jähriges Kind: Logit ${fmt(e, 2)}, Odds ${fmt(o, 3)}, Wahrscheinlichkeit ${pc(p)}. Alles, was die lineare Regression kann (mehrere Prädiktoren, Adjustierung, Wechselwirkung), steckt im linearen Teil η.`;
 }
-$("sc").addEventListener("click", e => { const b = pick(e, $("sc")); if (!b) return; sc = b.dataset.s; draw2(); });
 $("a2").addEventListener("input", draw2);
 
-/* ---------- 3 ---------- */
+/* ---------- 3 Rise over Run ---------- */
+(() => {
+  const ages = [9, 10, 11, 12, 13, 14, 15, 16];
+  let h = `<thead><tr><th rowspan="2">Alter</th><th class="grp" colspan="2">Logit</th><th class="grp" colspan="2">Wahrscheinlichkeit</th><th class="grp" colspan="2">Odds</th></tr><tr><th>η</th><th>Δ pro Jahr</th><th>p</th><th>Δ pro Jahr</th><th>Odds</th><th>× pro Jahr</th></tr></thead><tbody>`;
+  ages.forEach((a, k) => {
+    const prev = k ? ages[k - 1] : null;
+    h += `<tr><td>${a}</td><td>${fmt(ETA(a), 2)}</td><td class="const">${prev ? "+" + fmt(ETA(a) - ETA(prev), 3) : ""}</td><td>${fmt(P(a), 3)}</td><td class="var">${prev ? "+" + fmt(P(a) - P(prev), 3) : ""}</td><td>${fmt(OD(a), 3)}</td><td class="const">${prev ? "× " + fmt(OD(a) / OD(prev), 3) : ""}</td></tr>`;
+  });
+  $("rr").innerHTML = h + `</tbody>`;
+  const dps = ages.slice(1).map((a, k) => P(a) - P(ages[k]));
+  $("e-l").innerHTML = `Steigt jedes Jahr um genau b₁ = ${fmt(B1, 3)}. Konstant wie in der linearen Regression, aber was heißt „0,48 Logit mehr“? Inhaltlich lesbar ist nur die Richtung: positiv, also steigt das Rauchen mit dem Alter.`;
+  $("e-p").innerHTML = `Steigt jedes Jahr um einen anderen Betrag: von ${fmt(Math.min(...dps), 3)} bis ${fmt(Math.max(...dps), 3)}. Eine Steigung „pro Jahr“ gibt es hier nicht, der Zuwachs hängt vom Ausgangsalter ab.`;
+  $("e-o").innerHTML = `Wachsen jedes Jahr um denselben <b>Faktor</b> e<sup>b₁</sup> = e<sup>${fmt(B1, 3)}</sup> = ${fmt(Math.exp(B1), 2)}. Das ist das <b>Odds Ratio pro Jahr</b>: Mit jedem Lebensjahr sind die Odds zu rauchen um ${fmt((Math.exp(B1) - 1) * 100, 0)} % höher.`;
+})();
 let u = 1;
 function draw3() {
   const a = +$("a3").value; $("a3-v").textContent = a + " Jahre";
   const b = a + u, ORu = Math.exp(B1 * u), oa = OD(a), ob = OD(b), pa = P(a), pb = P(b);
-  const f = frame(900, 360, 7, 20, 0, 1, { xl: "Alter in Jahren", yl: "Wahrscheinlichkeit", nx: 13, fx: v => fmt(v, 0) });
+  const f = frame(900, 340, 7, 20, 0, 1, { xl: "Alter in Jahren", yl: "Wahrscheinlichkeit", nx: 13, fx: v => fmt(v, 0) });
   let s = f.s + `<path ${f.clip} d="${curve(f, P, 7, 20)}" fill="none" stroke="var(--therapie)" stroke-width="3"/>`;
-  for (let x = 8; x + u <= 19; x += u) { s += `<line x1="${f.sx(x)}" x2="${f.sx(x + u)}" y1="${f.sy(P(x))}" y2="${f.sy(P(x))}" stroke="var(--muted)" stroke-width="1" stroke-dasharray="2 3"/><line x1="${f.sx(x + u)}" x2="${f.sx(x + u)}" y1="${f.sy(P(x))}" y2="${f.sy(P(x + u))}" stroke="var(--muted)" stroke-width="1" stroke-dasharray="2 3"/>`; }
   s += `<line x1="${f.sx(a)}" x2="${f.sx(b)}" y1="${f.sy(pa)}" y2="${f.sy(pa)}" stroke="var(--fg)" stroke-width="2.5"/><line x1="${f.sx(b)}" x2="${f.sx(b)}" y1="${f.sy(pa)}" y2="${f.sy(pb)}" stroke="var(--beta-ink)" stroke-width="5"/>`;
-  s += `<circle cx="${f.sx(a)}" cy="${f.sy(pa)}" r="7" fill="var(--fg)"/><circle cx="${f.sx(b)}" cy="${f.sy(pb)}" r="7" fill="var(--beta-ink)"/><text x="${f.sx(b) + 10}" y="${f.sy((pa + pb) / 2) + 4}" class="strong halo" style="fill:var(--beta-ink)">+${fmt((pb - pa) * 100, 1)} %-Punkte</text>`;
+  s += `<circle cx="${f.sx(a)}" cy="${f.sy(pa)}" r="7" fill="var(--fg)"/><circle cx="${f.sx(b)}" cy="${f.sy(pb)}" r="7" fill="var(--beta-ink)"/><text x="${f.sx(b) + 10}" y="${f.sy((pa + pb) / 2) + 4}" class="strong halo" style="fill:var(--beta-ink)">p: +${fmt(pb - pa, 3)}</text>`;
   $("c3").innerHTML = s;
   $("f3").innerHTML = TB(String.raw`\begin{aligned} \text{OR}_{\text{pro } ${u} \text{ Jahr${u > 1 ? "e" : ""}}} &= e^{${u > 1 ? u + " \\cdot " : ""}b_1} = e^{${u > 1 ? u + " \\cdot " : ""}${tz(fmt(B1, 3))}} = ${tz(fmt(ORu, 2))} \\ \dfrac{\text{Odds}(${b})}{\text{Odds}(${a})} &= \dfrac{${tz(fmt(ob, 3))}}{${tz(fmt(oa, 3))}} = ${tz(fmt(ob / oa, 2))} \end{aligned}`, "");
-  $("r3").innerHTML = readout(`p mit ${a} Jahren`, pc(pa)) + readout(`p mit ${b} Jahren`, pc(pb)) + readout("Risikodifferenz", "+" + fmt((pb - pa) * 100, 1) + " %-Punkte") + readout(`Odds Ratio pro ${u} J.`, fmt(ORu, 2), "r-decision");
-  $("k3").innerHTML = `Egal bei welchem Alter Sie starten: Die Odds wachsen ${u === 1 ? "pro Jahr" : `über ${u} Jahre`} immer um den Faktor ${fmt(ORu, 2)}. Die Risikodifferenz dagegen hängt vom Ausgangsalter ab (graue Treppe): Bei 9 Jahren ist sie winzig, in der Mitte der Kurve am größten. Deshalb berichtet man das OR und rechnet für konkrete Personen in Wahrscheinlichkeiten zurück. Die Einheit wählen Sie wie in der linearen Regression so, dass sie inhaltlich sinnvoll ist (vgl. <a href="../../regression/gerade/#acc-4">Skalieren</a>). Die Rechnung kennen Sie aus der Diagnostik: Nachtest-Odds = Vortest-Odds × LR. Hier: Odds mit ${b} = Odds mit ${a} × OR.`;
+  $("k3").innerHTML = `Von ${a} auf ${b} Jahre steigt die Wahrscheinlichkeit um ${fmt(pb - pa, 3)}, die Odds steigen um den Faktor ${fmt(ORu, 2)}. Verschieben Sie das Ausgangsalter: Der Faktor bleibt, der Zuwachs an Wahrscheinlichkeit nicht. Für k Einheiten gilt e hoch (k · b₁), nicht k mal das OR. Die Einheit wählt man so, dass sie inhaltlich sinnvoll ist (vgl. <a href="../../regression/gerade/#acc-4">Skalieren</a>). Dieselbe Rechnung kennen Sie aus der Diagnostik: Nachtest-Odds = Vortest-Odds × LR; hier Odds mit ${b} = Odds mit ${a} × OR.`;
 }
 $("a3").addEventListener("input", draw3);
 $("unit").addEventListener("click", e => { const b = pick(e, $("unit")); if (!b) return; u = +b.dataset.u; draw3(); });
 
-/* ---------- 4 ML ---------- */
+/* ---------- 4 Exkurs Maximum Likelihood ---------- */
 const llOf = (b0, b1) => S.reduce((a, y, i) => { const e = b0 + b1 * A[i]; return a + y * e - Math.log(1 + Math.exp(e)); }, 0);
-const bestB0 = b1 => { let b0 = Math.log(0.1 / 0.9) - b1 * mean(A); for (let it = 0; it < 30; it++) { let g = 0, h = 0; for (let i = 0; i < N; i++) { const p = 1 / (1 + Math.exp(-(b0 + b1 * A[i]))); g += S[i] - p; h += p * (1 - p); } b0 += g / h; } return b0; };
-function mean(v) { return v.reduce((a, x) => a + x, 0) / v.length; }
-const PROF = []; for (let b = 0.1; b <= 1.0001; b += 0.01) { const b0 = bestB0(b); PROF.push([b, llOf(b0, b)]); }
+const bestB0 = b1 => { let b0 = Math.log(0.1 / 0.9) - b1 * meanOf(A); for (let it = 0; it < 30; it++) { let g = 0, h = 0; for (let i = 0; i < N; i++) { const p = 1 / (1 + Math.exp(-(b0 + b1 * A[i]))); g += S[i] - p; h += p * (1 - p); } b0 += g / h; } return b0; };
+const PROF = []; for (let b = 0.1; b <= 1.0001; b += 0.01) PROF.push([b, llOf(bestB0(b), b)]);
+const EX = (() => { const want = [[8, 0], [10, 0], [12, 1], [13, 0], [15, 1], [17, 0]]; return want.map(([a, y]) => A.findIndex((x, i) => x === a && S[i] === y)); })();
 function draw4() {
-  const b1 = +$("b1").value, b0 = bestB0(b1), ll = llOf(b0, b1); $("b1-v").textContent = fmt(b1, 2);
-  const f = frame(520, 380, 2, 20, 0, 1, { P: { L: 48, R: 10, T: 12, B: 44 }, xl: "Alter in Jahren", yl: "Wahrscheinlichkeit", nx: 6, fx: v => fmt(v, 0) });
+  const b1 = +$("b1").value, b0 = bestB0(b1), ll = llOf(b0, b1), pf = x => 1 / (1 + Math.exp(-(b0 + b1 * x))); $("b1-v").textContent = fmt(b1, 2);
+  const f = frame(520, 380, 2, 20, -0.1, 1.1, { P: { L: 48, R: 10, T: 12, B: 44 }, xl: "Alter in Jahren", yl: "vorhergesagtes p", nx: 6, ny: 0, fx: v => fmt(v, 0) });
   let s = f.s;
-  AG.forEach(a => { const g = AGES[a]; s += `<circle cx="${f.sx(a)}" cy="${f.sy(g.k / g.n)}" r="${3 + Math.sqrt(g.n) * 0.7}" fill="var(--surface)" stroke="var(--fg)" stroke-width="1.6"/>`; });
-  s += `<path ${f.clip} d="${curve(f, P, 2, 20)}" fill="none" stroke="var(--muted)" stroke-width="1.6" stroke-dasharray="5 4"/>`;
-  s += `<path ${f.clip} d="${curve(f, x => 1 / (1 + Math.exp(-(b0 + b1 * x))), 2, 20)}" fill="none" stroke="var(--beta-ink)" stroke-width="3"/>`;
+  [0, 0.5, 1].forEach(v => s += `<line x1="${f.P.L}" x2="${510}" y1="${f.sy(v)}" y2="${f.sy(v)}" stroke="var(--grid)"/><text x="${f.P.L - 8}" y="${f.sy(v) + 4}" text-anchor="end">${fmt(v, v === 0.5 ? 1 : 0)}</text>`);
+  A.forEach((a, i) => s += `<circle cx="${(f.sx(a) + jit(i) * 10).toFixed(1)}" cy="${(f.sy(S[i]) + jit(i * 7) * 10).toFixed(1)}" r="2" fill="var(--pal-3)" fill-opacity=".5"/>`);
+  s += `<path ${f.clip} d="${curve(f, pf, 2, 20)}" fill="none" stroke="var(--beta-ink)" stroke-width="3"/>`;
+  EX.forEach(i => { const y = S[i], p = pf(A[i]); s += `<line x1="${f.sx(A[i])}" x2="${f.sx(A[i])}" y1="${f.sy(y)}" y2="${f.sy(p)}" stroke="var(--fg)" stroke-width="1.6" stroke-dasharray="3 2"/><circle cx="${f.sx(A[i])}" cy="${f.sy(y)}" r="6" fill="var(--fg)"/>`; });
   $("c4a").innerHTML = s;
   const lo = Math.min(...PROF.map(p => p[1])), hi = LG.ll;
   const g = frame(520, 380, 0.1, 1, lo - 5, hi + 10, { P: { L: 56, R: 10, T: 12, B: 44 }, xl: "Steigung b₁", yl: "Log-Likelihood", nx: 9, fx: v => fmt(v, 1) });
   let t = g.s + `<path d="M${PROF.map(p => g.sx(p[0]).toFixed(1) + "," + g.sy(p[1]).toFixed(1)).join("L")}" fill="none" stroke="var(--therapie)" stroke-width="3"/>`;
-  t += `<line x1="${g.sx(B1)}" x2="${g.sx(B1)}" y1="${g.P.T}" y2="${g.sy(lo - 5)}" stroke="var(--muted)" stroke-dasharray="4 4"/><text x="${g.sx(B1) + 6}" y="${g.P.T + 14}" style="fill:var(--muted)">Maximum bei ${fmt(B1, 3)}</text>`;
-  t += `<circle cx="${g.sx(b1)}" cy="${g.sy(ll)}" r="8" fill="var(--beta-ink)"/>`;
+  t += `<line x1="${g.sx(B1)}" x2="${g.sx(B1)}" y1="${g.P.T}" y2="${g.sy(lo - 5)}" stroke="var(--muted)" stroke-dasharray="4 4"/><text x="${g.sx(B1) + 6}" y="${g.P.T + 14}" style="fill:var(--muted)">Maximum bei ${fmt(B1, 3)}</text><circle cx="${g.sx(b1)}" cy="${g.sy(ll)}" r="8" fill="var(--beta-ink)"/>`;
   $("c4b").innerHTML = t;
-  $("r4").innerHTML = readout("Log-Likelihood Ihrer Kurve", fmt(ll, 1)) + readout("Maximum", fmt(LG.ll, 1), "r-decision") + readout("−2 Log-Likelihood", fmt(-2 * ll, 1)) + readout("Nagelkerke-R²", fmt(LG.nagelkerke, 3));
-  const ci = (b, se) => [Math.exp(b - 1.96 * se), Math.exp(b + 1.96 * se)], c1 = ci(B1, LG.se[1]);
+  let prod = 1, sum = 0;
+  let h = `<thead><tr><th>Kind</th><th>Alter</th><th>raucht</th><th>p der Kurve</th><th>Beitrag: p bzw. 1 − p</th><th>ln(Beitrag)</th></tr></thead><tbody>`;
+  EX.forEach((i, k) => { const p = pf(A[i]), c = S[i] ? p : 1 - p; prod *= c; sum += Math.log(c); h += `<tr><td>${k + 1}</td><td>${A[i]}</td><td>${S[i] ? "ja" : "nein"}</td><td>${fmt(p, 3)}</td><td>${fmt(c, 3)}</td><td>${fmt(Math.log(c), 3)}</td></tr>`; });
+  const l10 = ll / Math.LN10, ex = Math.floor(l10), man = Math.pow(10, l10 - ex);
+  h += `<tr class="hl"><td colspan="4">diese 6 Kinder</td><td>Produkt ${fmt(prod, 4)}</td><td>Summe ${fmt(sum, 3)}</td></tr><tr class="tot"><td colspan="4">alle ${N} Kinder</td><td>Produkt ≈ ${fmt(man, 1)} · 10<sup>${ex}</sup></td><td>Summe ${fmt(ll, 1)}</td></tr></tbody>`;
+  $("lt").innerHTML = h;
+  const atBest = Math.abs(b1 - B1) < 0.006;
+  $("k4").innerHTML = (atBest ? `<b>Das ist die beste Kurve:</b> Keine andere Steigung macht die beobachteten Daten wahrscheinlicher. ` : `Ihre Kurve erreicht eine Log-Likelihood von ${fmt(ll, 1)}, die beste ${fmt(LG.ll, 1)}. `) +
+    `Warum der Logarithmus? Das Produkt über alle ${N} Kinder ist eine winzige Zahl mit ${-ex - 1} Nullen hinter dem Komma; damit kann kein Rechner sinnvoll arbeiten. Der Logarithmus macht aus dem Produkt eine <b>Summe</b>, und weil er monoton ist, liegt das Maximum an derselben Stelle. Die Software maximiert also die Summe der logarithmierten Beiträge, die <b>Log-Likelihood</b>.`;
+}
+$("lrt-b").innerHTML = `<p>Die Log-Likelihood vergleicht auch Modelle. Ein Modell ohne Alter sagt für alle Kinder denselben Anteil voraus (${pc(meanOf(S))}); seine Log-Likelihood ist ${fmt(LG.ll0, 1)}. Mit Alter steigt sie auf ${fmt(LG.ll, 1)}. Software berichtet meist −2 · Log-Likelihood: ${fmt(-2 * LG.ll0, 1)} gegen ${fmt(-2 * LG.ll, 1)}.</p><p>Die Differenz χ² = ${fmt(LG.chi2, 1)} folgt unter H₀ (Alter hat keinen Effekt) einer χ²-Verteilung mit so vielen Freiheitsgraden, wie Prädiktoren dazugekommen sind, hier 1; p &lt; 0,001. Das ist der <b>Likelihood-Ratio-Test</b> (in SPSS: „Omnibus-Tests der Modellkoeffizienten“).</p><p>Achtung, Namensvetter: Die Likelihood-Ratio aus der <a href="../../hintergrund/klinische-tests/">Diagnostik</a> (LR+ und LR− eines Tests) ist etwas anderes. Gemeinsam ist beiden nur die Idee, zwei Wahrscheinlichkeiten ins Verhältnis zu setzen.</p>`;
+$("b1").addEventListener("input", draw4);
+$("best").addEventListener("click", () => { $("b1").value = B1.toFixed(2); draw4(); });
+(() => {
+  const c1 = [Math.exp(B1 - 1.96 * LG.se[1]), Math.exp(B1 + 1.96 * LG.se[1])];
   $("spss").innerHTML = `<thead><tr><th></th><th>B</th><th>Standardfehler</th><th>Wald</th><th>df</th><th>Sig.</th><th>Exp(B)</th><th>95-%-KI für Exp(B)</th></tr></thead><tbody>
     <tr class="hl"><td>Alter</td><td>${fmt(B1, 3)}</td><td>${fmt(LG.se[1], 3)}</td><td>${fmt(LG.wald[1], 1)}</td><td>1</td><td>${fp(LG.p[1])}</td><td>${fmt(Math.exp(B1), 3)}</td><td>${fmt(c1[0], 3)} bis ${fmt(c1[1], 3)}</td></tr>
     <tr><td>Konstante</td><td>${fmt(B0, 3)}</td><td>${fmt(LG.se[0], 3)}</td><td>${fmt(LG.wald[0], 1)}</td><td>1</td><td>${fp(LG.p[0])}</td><td>${fmt(Math.exp(B0), 5)}</td><td></td></tr></tbody>`;
-  $("k4").innerHTML = Math.abs(b1 - B1) < 0.006 ? `Das ist die beste Kurve: Keine andere Steigung macht die beobachteten Daten wahrscheinlicher. So entstehen die Koeffizienten in SPSS und R.` :
-    `Ihre Kurve erreicht eine Log-Likelihood von ${fmt(ll, 1)}, die beste ${fmt(LG.ll, 1)}. Je näher am Maximum, desto besser passt die Kurve zu den Kreisen.`;
-}
-$("b1").addEventListener("input", draw4);
-$("best").addEventListener("click", () => { $("b1").value = B1.toFixed(2); draw4(); $("k4").innerHTML = `Das Maximum liegt bei b₁ = ${fmt(B1, 3)}. Lesen Sie die SPSS-Tabelle: <b>B</b> ist die Steigung auf der Logit-Skala, <b>Exp(B)</b> = ${fmt(Math.exp(B1), 2)} das Odds Ratio pro Jahr. <b>Wald</b> = (B ÷ SE)² ist der Test von H₀: B = 0, das Gegenstück zum t-Test der linearen Regression. Das Konfidenzintervall für Exp(B) schließt die 1 aus. Der Likelihood-Ratio-Test vergleicht das Modell mit einem ohne Alter: χ² = ${fmt(LG.chi2, 1)}, df = 1. Nagelkerke-R² ist ein Pseudo-R² und nicht wie R² in der linearen Regression als erklärter Varianzanteil zu lesen.`; });
+  $("spss-n").innerHTML = `<b>B</b> = Steigung auf der Logit-Skala (Abschnitt 3), <b>Exp(B)</b> = ${fmt(Math.exp(B1), 2)} das Odds Ratio pro Jahr. <b>Wald</b> = (B ÷ SE)² testet H₀: B = 0, das Gegenstück zum t-Test der linearen Regression. Nagelkerke-R² = ${fmt(LG.nagelkerke, 2)} ist ein Pseudo-R² und nicht als erklärter Varianzanteil zu lesen.`;
+})();
 
 draw1(); draw2(); draw3(); draw4();
 })();

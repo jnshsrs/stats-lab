@@ -170,3 +170,12 @@ table.coef tr.hl td { background: var(--highlight); font-weight: 600; }
 .chart text.halo { paint-order: stroke; stroke: var(--surface); stroke-width: 5px; stroke-linejoin: round; }
 h3.sub { font-size: 16px; margin: 6px 0 0; }
 table.coef td { white-space: nowrap; }
+.three-charts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.three-charts figure { margin: 0; } .three-charts figcaption { font-size: 14px; margin-bottom: 4px; }
+@media (max-width: 760px) { .three-charts { grid-template-columns: minmax(0, 1fr); } }
+.three-cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+@media (max-width: 760px) { .three-cards { grid-template-columns: minmax(0, 1fr); } }
+.three-cards .explain-box.hl { border-color: var(--therapie); background: var(--highlight); }
+table.rr { min-width: 600px; } table.rr td.const { color: var(--therapie); font-weight: 700; } table.rr td.var { color: var(--beta-ink); font-weight: 600; }
+table.rr th.grp { text-align: center; border-bottom: 2px solid var(--line); }
+.step-l { font-size: 14px; font-weight: 600; color: var(--accent); margin-top: 6px; }
