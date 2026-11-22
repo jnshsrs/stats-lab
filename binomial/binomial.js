@@ -4,7 +4,7 @@
 (() => {
 "use strict";
 
-const S = { n: 10, p: 0.6, k: 6, mode: "paths" };
+const S = { n: 10, p: 0.5, k: 5, mode: "paths" };
 let counts = [], balls = [], queue = 0, lastSpawn = 0;
 
 const $ = id => document.getElementById(id);
@@ -156,7 +156,19 @@ function updateText() {
   $("n-v").textContent = n; $("p-v").textContent = pct(p, 0); $("k-v").textContent = k;
   const c = binom(n, k), w = Math.pow(p, k) * Math.pow(1 - p, n - k), pk = c * w;
   $("k-title").textContent = `Genau ${k} von ${n} sprechen an`;
-  $("formula").innerHTML =
+  // Rechenweg als LaTeX (KaTeX); ohne KaTeX bleibt die Textfassung
+  const tn = (x, d) => fmt(x, d).replace(/\./g, "{.}").replace(",", "{,}");
+  const tw = w < 0.0001 ? (() => { const [m, e] = w.toExponential(2).split("e"); return `${m.replace(".", "{,}")} \\cdot 10^{${+e}}`; })() : tn(w, 6);
+  const tc = intf(c).replace(/\./g, "{.}");
+  const tq = x => x.toLocaleString("de-DE", { maximumFractionDigits: 2 }).replace(",", "{,}");
+  const tex = String.raw`\begin{aligned}
+    P(X = ${k}) &= \binom{${n}}{${k}} \cdot p^{${k}} \cdot (1-p)^{${n - k}} \\
+    &= ${tc} \cdot ${tq(p)}^{${k}} \cdot ${tq(1 - p)}^{${n - k}} \\
+    &= ${tc}\ \text{Wege} \cdot ${tw}\ \text{je Weg} \\
+    &= \mathbf{${tn(pk * 100, 1)}\,\%}
+  \end{aligned}`;
+  if (window.katex) { $("formula").classList.add("tex"); katex.render(tex, $("formula"), { throwOnError: false, displayMode: true }); }
+  else $("formula").innerHTML =
     `<span>P(X = ${k}) = (${n} über ${k}) · p<sup>${k}</sup> · (1 − p)<sup>${n - k}</sup></span>` +
     `<span>= ${intf(c)} Wege · ${w < 0.0001 ? w.toExponential(2).replace(".", ",") : fmt(w, 6)} je Weg</span>` +
     `<span class="big">= ${pct(pk)}</span>`;
@@ -201,4 +213,5 @@ rebuild(false);
 for (let i = 0; i < 200; i++) counts[newBall().k]++;
 updateText(); draw();
 if (document.fonts) document.fonts.ready.then(() => draw());
+if (window.renderMathInElement) renderMathInElement(document.querySelector(".explain"), { delimiters: [{ left: "\\[", right: "\\]", display: true }, { left: "\\(", right: "\\)", display: false }], throwOnError: false });
 })();

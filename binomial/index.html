@@ -6,8 +6,9 @@
 <title>Pascal und die Binomialverteilung · Stats Lab</title>
 <meta name="description" content="Galton-Brett und Pascalsches Dreieck: wie aus vielen Ja-Nein-Entscheidungen die Binomialverteilung entsteht.">
 <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="../assets/css/base.css?v=202611211731">
-<link rel="stylesheet" href="binomial.css?v=202611211731">
+<link rel="stylesheet" href="../assets/css/base.css?v=202611220946">
+<link rel="stylesheet" href="../assets/vendor/katex/katex.min.css">
+<link rel="stylesheet" href="binomial.css?v=202611220946">
 </head>
 <body>
 <header class="site-header">
@@ -48,7 +49,7 @@
     <article class="detail">
       <span class="kicker">Parameter</span>
       <div class="ctrl"><div class="ctrl-head"><label for="n">n · Anzahl Personen (Stiftreihen)</label><output id="n-v"></output></div><input id="n" type="range" min="1" max="15" step="1" value="10"></div>
-      <div class="ctrl"><div class="ctrl-head"><label for="p">p · Erfolgswahrscheinlichkeit je Person</label><output id="p-v"></output></div><input id="p" type="range" min="0.05" max="0.95" step="0.05" value="0.6"></div>
+      <div class="ctrl"><div class="ctrl-head"><label for="p">p · Erfolgswahrscheinlichkeit je Person</label><output id="p-v"></output></div><input id="p" type="range" min="0.05" max="0.95" step="0.05" value="0.5"></div>
       <div class="ctrl"><div class="ctrl-head"><label for="k">k · Anzahl Erfolge im Fokus</label><output id="k-v"></output></div><input id="k" type="range" min="0" max="10" step="1" value="6"></div>
       <div class="ctrl">
         <span class="lbl" id="mode-lbl">Zahlen im Dreieck</span>
@@ -64,9 +65,10 @@
 
       <div class="explain">
         <h3>Warum Pascal?</h3>
-        <p>Jede Zahl im Dreieck ist die Summe der beiden Zahlen darüber. Sie zählt, auf wie vielen Wegen eine Kugel diesen Stift erreicht. Gezählt wird ab Zeile 0, dem obersten Stift. Bei n Personen gibt es n Stiftreihen, die Fächer darunter bilden Zeile n. Dort steht, wie viele Abfolgen von n Ja-Nein-Entscheidungen genau k Erfolge enthalten: der Binomialkoeffizient (n über k).</p>
+        <p>Jede Zahl im Dreieck ist die Summe der beiden Zahlen darüber. Sie zählt, auf wie vielen Wegen eine Kugel diesen Stift erreicht. Gezählt wird ab Zeile 0, dem obersten Stift. Bei n Personen gibt es n Stiftreihen, die Fächer darunter bilden Zeile n. Dort steht, wie viele Abfolgen von n Ja-Nein-Entscheidungen genau k Erfolge enthalten: der Binomialkoeffizient \(\binom{n}{k}\).</p>
         <h3>Warum mal p hoch k?</h3>
-        <p>Jeder einzelne Weg mit k Erfolgen hat dieselbe Wahrscheinlichkeit p<sup>k</sup> · (1 − p)<sup>n − k</sup>, weil die Personen unabhängig voneinander ansprechen. Das ist der Multiplikationssatz. Anzahl Wege mal Wahrscheinlichkeit je Weg ergibt die Binomialverteilung.</p>
+        <p>Jeder einzelne Weg mit k Erfolgen hat dieselbe Wahrscheinlichkeit \(p^{k}\,(1-p)^{n-k}\), weil die Personen unabhängig voneinander ansprechen. Das ist der Multiplikationssatz. Anzahl Wege mal Wahrscheinlichkeit je Weg ergibt die Binomialverteilung:</p>
+        <div class="tex-block">\[ P(X = k) = \underbrace{\binom{n}{k}}_{\text{Anzahl Wege}} \cdot \underbrace{p^{k}\,(1-p)^{n-k}}_{\text{Wahrscheinlichkeit je Weg}} \]</div>
         <h3>Und bei großem n?</h3>
         <p>Je mehr Reihen, desto glockenförmiger das Histogramm. Das ist ein erster Blick auf den <a href="../zgws/">zentralen Grenzwertsatz</a>.</p>
       </div>
@@ -80,7 +82,9 @@
     <span class="footer-links"><a href="https://github.com/jnshsrs/stats-lab">Quellcode auf GitHub</a><span>Ohne Cookies und Tracking</span></span>
   </div>
 </footer>
-<script src="binomial.js?v=202611211731"></script>
-<script src="../assets/js/path.js?v=202611211731"></script>
+<script src="../assets/vendor/katex/katex.min.js"></script>
+<script src="../assets/vendor/katex/contrib/auto-render.min.js"></script>
+<script src="binomial.js?v=202611220946"></script>
+<script src="../assets/js/path.js?v=202611220946"></script>
 </body>
 </html>

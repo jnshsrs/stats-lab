@@ -7,11 +7,11 @@ const $ = id => document.getElementById(id);
 const fmt = (x, d = 1) => x.toLocaleString("de-DE", { minimumFractionDigits: d, maximumFractionDigits: d });
 const pct = (x, d = 1) => fmt(x * 100, d) + " %";
 const readout = (l, v, cls = "") => `<div class="readout ${cls}"><div class="val">${v}</div><div class="lbl">${l}</div></div>`;
-const S = { n: 20, p0: 0.6, alpha: 0.05, side: "two", k: 17, anim: null, sc: "medikament" };
+const S = { n: 20, p0: 0.5, alpha: 0.05, side: "two", k: 15, anim: null, sc: "medikament" };
 /* Beispiele: Texte und Voreinstellungen */
 const SC = {
-  medikament: { n: 20, p0: 0.6, k: 17, hint: "zum Beispiel auf 17 und auf 7",
-    lede: "Ein fiktives Medikament X soll eine Erkrankung heilen. Mit der Standardtherapie werden 60 % der Behandelten gesund. Wir behandeln n = 20 Patientinnen und Patienten mit X und zählen, wie viele geheilt werden. H0 sagt: X heilt genauso oft wie der Standard, die Heilungswahrscheinlichkeit ist p<sub>0</sub> = 0,6. Bevor wir auf das Ergebnis schauen, legen wir fest, welche Anzahlen wir als „zu selten für Zufall“ ansehen.",
+  medikament: { n: 20, p0: 0.5, k: 15, hint: "zum Beispiel auf 15 und auf 5",
+    lede: "Ein fiktives Medikament X soll eine Erkrankung heilen. Mit der Standardtherapie wird die Hälfte der Behandelten gesund. Wir behandeln n = 20 Patientinnen und Patienten mit X und zählen, wie viele geheilt werden. H0 sagt: X heilt genauso oft wie der Standard, die Heilungswahrscheinlichkeit ist p<sub>0</sub> = 0,5. Bevor wir auf das Ergebnis schauen, legen wir fest, welche Anzahlen wir als „zu selten für Zufall“ ansehen.",
     nLbl: "n · behandelte Patientinnen und Patienten", pLbl: "p<sub>0</sub> · Heilungswahrscheinlichkeit unter H0", kLbl: "k · beobachtete Heilungen", unit: "Heilungen", what: "Anzahl Heilungen",
     lead: "Die Punkte zeigen, wie wahrscheinlich jede Anzahl Heilungen wäre, wenn X genauso wirkt wie der Standard.",
     expect: "Wenn X genauso wirkt wie der Standard, wären im Mittel n · p<sub>0</sub> Heilungen zu erwarten.",

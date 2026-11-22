@@ -44,3 +44,11 @@ input[type=range] { width: 100%; accent-color: var(--accent); }
 .explain { display: flex; flex-direction: column; gap: 8px; border-top: 1px solid var(--line); padding-top: 14px; }
 .explain h3 { font-size: 16px; margin-top: 6px; }
 .explain p { font-size: 15.5px; color: var(--muted); }
+
+/* LaTeX-Formeln (KaTeX) */
+.formula.tex { font-family: inherit; display: block; padding: 6px 14px; }
+.formula.tex .katex-display { margin: 6px 0; text-align: left; }
+.formula.tex .katex-display > .katex { text-align: left; }
+.formula .katex { font-size: 1.12em; }
+.tex-block { background: var(--highlight); border-radius: 8px; padding: 4px 12px; overflow-x: auto; }
+.explain .katex { font-size: 1.05em; }
