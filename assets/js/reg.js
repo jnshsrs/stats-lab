@@ -24,5 +24,26 @@ function ols(y, cols) {
 const mean = a => a.reduce((s, v) => s + v, 0) / a.length;
 function cor(x, y) { const mx = mean(x), my = mean(y); let sxy = 0, sxx = 0, syy = 0; for (let i = 0; i < x.length; i++) { sxy += (x[i] - mx) * (y[i] - my); sxx += (x[i] - mx) ** 2; syy += (y[i] - my) ** 2; } return sxy / Math.sqrt(sxx * syy); }
 const fcdf = (F, d1, d2) => F <= 0 ? 0 : ibeta(d1 * F / (d1 * F + d2), d1 / 2, d2 / 2);
-window.REG = { ols, cor, mean, tcdf, tinv, fcdf };
+/* Logistische Regression (Maximum Likelihood, Newton-Raphson/IRLS) wie SPSS „Binär logistisch“ bzw. R glm(family = binomial). */
+function erf(x) { const t = 1 / (1 + 0.3275911 * Math.abs(x)), y = 1 - (((((1.061405429 * t - 1.453152027) * t) + 1.421413741) * t - 0.284496736) * t + 0.254829592) * t * Math.exp(-x * x); return x >= 0 ? y : -y; }
+const pnorm = z => 0.5 * (1 + erf(z / Math.SQRT2));
+function solve(A, b) { const n = b.length, M = A.map((r, i) => [...r, b[i]]); for (let i = 0; i < n; i++) { let mx = i; for (let k = i + 1; k < n; k++) if (Math.abs(M[k][i]) > Math.abs(M[mx][i])) mx = k; [M[i], M[mx]] = [M[mx], M[i]]; for (let k = i + 1; k < n; k++) { const f = M[k][i] / M[i][i]; for (let j = i; j <= n; j++) M[k][j] -= f * M[i][j]; } } const x = new Array(n).fill(0); for (let i = n - 1; i >= 0; i--) { let s = M[i][n]; for (let j = i + 1; j < n; j++) s -= M[i][j] * x[j]; x[i] = s / M[i][i]; } return x; }
+function inv(A) { const n = A.length; return A.map((_, j) => solve(A, A.map((__, i) => i === j ? 1 : 0))).reduce((R, col, j) => { col.forEach((v, i) => R[i][j] = v); return R; }, A.map(() => new Array(n).fill(0))); }
+function logit(y, cols) {
+  const n = y.length, k = cols.length + 1, X = y.map((_, i) => [1, ...cols.map(c => c[i])]);
+  let b = new Array(k).fill(0), ll = -Infinity, H;
+  for (let it = 0; it < 50; it++) {
+    const eta = X.map(r => r.reduce((a, v, j) => a + v * b[j], 0)), p = eta.map(e => 1 / (1 + Math.exp(-e)));
+    const g = new Array(k).fill(0); H = Array.from({ length: k }, () => new Array(k).fill(0));
+    for (let i = 0; i < n; i++) { const w = p[i] * (1 - p[i]), r = y[i] - p[i]; for (let a = 0; a < k; a++) { g[a] += X[i][a] * r; for (let c = 0; c < k; c++) H[a][c] += w * X[i][a] * X[i][c]; } }
+    const step = solve(H, g); b = b.map((v, j) => v + step[j]);
+    const nll = y.reduce((a, yi, i) => { const e = X[i].reduce((s, v, j) => s + v * b[j], 0); return a + yi * e - Math.log(1 + Math.exp(e)); }, 0);
+    if (Math.abs(nll - ll) < 1e-10) { ll = nll; break; } ll = nll;
+  }
+  const V = inv(H), se = V.map((r, i) => Math.sqrt(r[i])), z = b.map((v, i) => v / se[i]), p = z.map(v => 2 * (1 - pnorm(Math.abs(v))));
+  const ybar = y.reduce((a, v) => a + v, 0) / n, ll0 = n * (ybar * Math.log(ybar) + (1 - ybar) * Math.log(1 - ybar));
+  const fit = X.map(r => 1 / (1 + Math.exp(-r.reduce((a, v, j) => a + v * b[j], 0))));
+  return { b, se, z, p, wald: z.map(v => v * v), V, ll, ll0, chi2: 2 * (ll - ll0), n, fit, nagelkerke: (1 - Math.exp(2 * (ll0 - ll) / n)) / (1 - Math.exp(2 * ll0 / n)) };
+}
+window.REG = { ols, cor, mean, tcdf, tinv, fcdf, logit, pnorm };
 })();

@@ -32,6 +32,8 @@ Interaktive Visualisierungen für die Statistiklehre in den Gesundheits- und The
 | [`regression/bestimmtheitsmass/`](regression/bestimmtheitsmass/) | Block 5, Station 24: Wie viel erklärt die Gerade? Streuungszerlegung an 25 Kindern, R² und Wertebereich, ANOVA-Tabelle für Gerade, Größenklassen und Rauchen (F = t², η²), standardisierte Regression und Regression zur Mitte. |
 | [`regression/diagnostik/`](regression/diagnostik/) | Block 5, Station 25: Passt das Modell? Anscombe-Quartett mit Residuenplot, Residuen- und Q-Q-Plot der FEV-Daten (linear gegen ln), Hebelwert und Cook-Distanz mit ziehbarem Punkt, Checkliste mit SPSS-Hinweis. |
 | [`regression/multiple-regression/`](regression/multiple-regression/) | Block 5, Station 26: Mehrere Einflüsse zugleich. Rauch-Effekt in fünf Modellen (roh, + Alter, + Größe, + Geschlecht, ln) mit Koeffiziententabelle und Effektplot, Wechselwirkung Alter × Geschlecht mit Zentrierungsregler, Leseregeln und Ausblick auf logistische Regression und gemischte Modelle. |
+| [`logistische-regression/s-kurve/`](logistische-regression/s-kurve/) | Block 6, Station 27: Von der Geraden zur S-Kurve. Rauchen nach Alter (FEV-Daten): lineares Wahrscheinlichkeitsmodell gegen S-Kurve, Skalen Wahrscheinlichkeit/Odds/Logit, OR pro Einheit mit wählbarer Einheit, Maximum Likelihood mit Profil-Log-Likelihood und SPSS-Tabelle. |
+| [`logistische-regression/cam-morphologie/`](logistische-regression/cam-morphologie/) | Block 6, Station 28: Cam-Morphologie und Knorpeldefekt. Lehrdatensatz (simuliert, angelehnt an Heerey et al. 2021) mit Download als CSV und SPSS, Alpha-Winkel nach Defekt, Vierfeldertafel Cam ja/nein, logistische Regression mit OR pro 1/5/10 Grad und SPSS-Tabelle, Adjustierung für Schmerz mit Wechselwirkung, Ergebnissatz und Checkliste. |
 
 ## Aufbau
 
@@ -73,7 +75,7 @@ Settings → Pages → Source: „Deploy from a branch“, Branch `main`, Ordner
 
 ## Lernpfad
 
-Reihenfolge und Blöcke stehen zentral in `assets/js/path.js`. Jede Station liegt im Ordner ihres Blocks: `grundlagen/`, `schaetzen/`, `testen/`, `hintergrund/`, `regression/`, also etwa `regression/korrelation/`. Unter den alten Adressen ohne Block (etwa `korrelation/`) liegen Weiterleitungen, damit verteilte Links weiter funktionieren; die Block-Ordner selbst leiten auf den passenden Abschnitt der Startseite. Daraus entsteht unten auf jeder Seite die Leiste „Zurück / Weiter“. Wer eine Seite ergänzt, trägt sie dort ein und legt auf der Startseite die Karte im passenden Block an.
+Reihenfolge und Blöcke stehen zentral in `assets/js/path.js`. Jede Station liegt im Ordner ihres Blocks: `grundlagen/`, `schaetzen/`, `testen/`, `hintergrund/`, `regression/`, `logistische-regression/`, also etwa `regression/korrelation/`. Unter den alten Adressen ohne Block (etwa `korrelation/`) liegen Weiterleitungen, damit verteilte Links weiter funktionieren; die Block-Ordner selbst leiten auf den passenden Abschnitt der Startseite. Daraus entsteht unten auf jeder Seite die Leiste „Zurück / Weiter“. Wer eine Seite ergänzt, trägt sie dort ein und legt auf der Startseite die Karte im passenden Block an.
 
 ## Glossar
 

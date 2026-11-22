@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Von der Geraden zur S-Kurve · Stats Lab</title>
+<meta name="description" content="Einstieg in die logistische Regression mit echten Daten: Warum eine Gerade bei ja/nein versagt, vom Risiko über Odds zum Logit, Odds Ratio pro Einheit und Maximum-Likelihood-Schätzung.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../assets/css/base.css?v=202611222101">
+<link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
+<link rel="stylesheet" href="s-kurve.css?v=202611222101">
+</head>
+<body>
+<header class="site-header">
+  <div class="column">
+    <a class="brand" href="../../">
+      <svg class="brand-mark" viewBox="0 0 22 22" aria-hidden="true"><path d="M1 19 C5 19 6 4 9 4 S13 19 17 19" fill="none" class="bm-a" stroke-width="2.2" stroke-linecap="round"/><path d="M5 19 C9 19 10 7 13 7 S17 19 21 19" fill="none" class="bm-b" stroke-width="2.2" stroke-linecap="round"/></svg>
+      Stats Lab
+    </a>
+    <nav class="site-nav" aria-label="Hauptnavigation">
+      <a href="../../">Visualisierungen</a>
+      <a href="../../glossar/">Glossar</a>
+      <a href="https://github.com/jnshsrs/stats-lab">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main class="column">
+  <section class="intro">
+    <a class="back" href="../../">← Alle Visualisierungen</a>
+    <h1>Von der Geraden zur S-Kurve</h1>
+    <p class="byline">Dr. Jens Hüsers · Forschungsmethodik</p>
+    <p class="lede">Bisher war die Zielgröße ein Messwert. Jetzt ist sie ja oder nein: verletzt oder nicht, Schmerz oder nicht, auffälliger Test oder nicht. Als Einstieg dienen wieder die 654 Kinder aus Block 5. Die Frage: Wie hängt die Wahrscheinlichkeit, dass ein Kind raucht, vom Alter ab? Was Risiko, Odds und Odds Ratio bedeuten, zeigt die Station <a href="../../grundlagen/risiko-odds/">Risiko, Odds und Odds Ratio</a>.</p>
+  </section>
+
+  <details class="acc" id="acc-1" open>
+    <summary><span class="acc-no">1</span><span class="acc-title">Warum keine Gerade?<span class="acc-teaser">Eine Gerade sagt Wahrscheinlichkeiten unter 0 und über 100 % voraus.</span></span></summary>
+    <div class="acc-body">
+      <p class="text">Jedes Kind ist ein Punkt bei 0 (raucht nicht) oder 1 (raucht). Die Kreise zeigen den Anteil Rauchender je Altersjahr, ihre Größe die Zahl der Kinder.</p>
+      <div class="seg wide" role="group" aria-label="Modell" id="m1"><button type="button" data-m="lin" aria-pressed="true"><b>1</b> Gerade</button><button type="button" data-m="log" aria-pressed="false"><b>2</b> S-Kurve</button></div>
+      <svg class="chart" id="c1" viewBox="0 0 900 420" role="img" aria-label="Rauchen nach Alter mit Gerade oder S-Kurve"></svg>
+      <div class="readouts" id="r1"></div>
+      <p class="callout" id="k1"></p>
+    </div>
+  </details>
+
+  <details class="acc" id="acc-2" open>
+    <summary><span class="acc-no">2</span><span class="acc-title">Vom Risiko über Odds zum Logit<span class="acc-teaser">Auf der Logit-Skala wird die S-Kurve wieder zur Geraden.</span></span></summary>
+    <div class="acc-body">
+      <p class="text">Die logistische Regression löst das Problem mit zwei Umrechnungen. Wahrscheinlichkeiten werden zu Odds (0 bis unendlich), Odds werden logarithmiert (minus bis plus unendlich). Auf dieser <b>Logit-Skala</b> darf eine Gerade beliebig steigen. Schalten Sie zwischen den drei Skalen um: Es ist immer dasselbe Modell.</p>
+      <div class="seg wide" role="group" aria-label="Skala" id="sc"><button type="button" data-s="p" aria-pressed="true">Wahrscheinlichkeit p</button><button type="button" data-s="o" aria-pressed="false">Odds</button><button type="button" data-s="l" aria-pressed="false">Logit = ln(Odds)</button></div>
+      <div class="controls"><div class="ctrl"><div class="ctrl-head"><label for="a2">Alter</label><output id="a2-v"></output></div><input id="a2" type="range" min="3" max="19" step="1" value="14"></div></div>
+      <svg class="chart" id="c2" viewBox="0 0 900 400" role="img" aria-label="Modell auf drei Skalen"></svg>
+      <div class="formula" id="f2"></div>
+      <div class="readouts" id="r2"></div>
+      <p class="callout" id="k2"></p>
+    </div>
+  </details>
+
+  <details class="acc" id="acc-3" open>
+    <summary><span class="acc-no">3</span><span class="acc-title">Das Odds Ratio pro Einheit<span class="acc-teaser">e hoch Steigung: um diesen Faktor wachsen die Odds pro Jahr.</span></span></summary>
+    <div class="acc-body">
+      <p class="text">Die Steigung b₁ gilt auf der Logit-Skala. Zurückgerechnet heißt sie: Mit jedem Jahr werden die Odds mit demselben Faktor e<sup>b₁</sup> multipliziert. Dieser Faktor ist das <b>Odds Ratio pro Einheit</b>.</p>
+      <div class="controls"><div class="panel-grid">
+        <div class="ctrl"><div class="ctrl-head"><label for="a3">Ausgangsalter</label><output id="a3-v"></output></div><input id="a3" type="range" min="8" max="17" step="1" value="10"></div>
+        <div class="ctrl"><div class="ctrl-head"><span class="lbl-plain" id="u-l">Einheit</span></div><div class="seg small" role="group" aria-labelledby="u-l" id="unit"><button type="button" data-u="1" aria-pressed="true">pro Jahr</button><button type="button" data-u="2" aria-pressed="false">pro 2 Jahre</button><button type="button" data-u="5" aria-pressed="false">pro 5 Jahre</button></div></div>
+      </div></div>
+      <svg class="chart" id="c3" viewBox="0 0 900 360" role="img" aria-label="Odds Ratio pro Einheit"></svg>
+      <div class="formula" id="f3"></div>
+      <div class="readouts" id="r3"></div>
+      <p class="callout" id="k3"></p>
+    </div>
+  </details>
+
+  <details class="acc" id="acc-4" open>
+    <summary><span class="acc-no">4</span><span class="acc-title">Wie die Kurve geschätzt wird<span class="acc-teaser">Maximum Likelihood statt kleinster Quadrate.</span></span></summary>
+    <div class="acc-body">
+      <p class="text">Bei ja/nein-Daten gibt es keine sinnvollen quadrierten Abstände. Stattdessen fragt man: Wie wahrscheinlich wären genau diese Daten, wenn die Kurve stimmt? Für jedes rauchende Kind zählt seine vorhergesagte Wahrscheinlichkeit p, für jedes nichtrauchende 1 − p. Das Produkt über alle Kinder heißt <b>Likelihood</b>. Die beste Kurve macht die beobachteten Daten am wahrscheinlichsten. Probieren Sie andere Steigungen; der Achsenabschnitt wird jeweils bestmöglich angepasst.</p>
+      <div class="controls"><div class="ctrl"><div class="ctrl-head"><label for="b1">Steigung b₁ (Logit pro Jahr)</label><output id="b1-v"></output></div><input id="b1" type="range" min="0.1" max="1" step="0.01" value="0.25"></div><div class="ctrl-row"><button class="btn" type="button" id="best">Beste Kurve zeigen</button></div></div>
+      <div class="two-charts">
+        <svg class="chart" id="c4a" viewBox="0 0 520 380" role="img" aria-label="Kurve mit gewählter Steigung"></svg>
+        <svg class="chart" id="c4b" viewBox="0 0 520 380" role="img" aria-label="Log-Likelihood nach Steigung"></svg>
+      </div>
+      <div class="readouts" id="r4"></div>
+      <h3 class="sub">So sieht das Ergebnis in SPSS aus („Variablen in der Gleichung“)</h3>
+      <div class="tab-wrap"><table class="anova coef" id="spss"></table></div>
+      <p class="callout" id="k4"></p>
+    </div>
+  </details>
+
+  <section class="block refs" aria-labelledby="refs-h">
+    <h2 id="refs-h">Quellen und Daten</h2>
+    <ul><li>FEV-Daten von 654 Kindern aus East Boston (Tager et al., 1979; Kahn, 2005), siehe <a href="../../regression/korrelation/">Zusammenhang und Korrelation</a>. Download: <a href="../../regression-daten/fev.csv">fev.csv</a>.</li>
+    <li>Hosmer, D. W., Lemeshow, S. &amp; Sturdivant, R. X. (2013). Applied Logistic Regression (3. Aufl.). Wiley.</li></ul>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="column">
+    <span>© 2026 Dr. Jens Hüsers · Lehrmaterial für Forschungsmethodik und Statistik</span>
+    <span class="footer-links"><a href="https://github.com/jnshsrs/stats-lab">Quellcode auf GitHub</a><span>Ohne Cookies und Tracking</span></span>
+  </div>
+</footer>
+<script src="../../assets/vendor/katex/katex.min.js"></script>
+<script src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
+<script src="../../assets/js/tex.js?v=202611222101"></script>
+<script src="../../regression-daten/fev.js?v=202611222101"></script>
+<script src="../../assets/js/reg.js?v=202611222101"></script>
+<script src="s-kurve.js?v=202611222101"></script>
+<script src="../../assets/js/path.js?v=202611222101"></script>
+</body>
+</html>

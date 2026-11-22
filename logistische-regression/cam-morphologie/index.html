@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cam-Morphologie und Knorpeldefekt · Stats Lab</title>
+<meta name="description" content="Logistische Regression in der Praxis: Alpha-Winkel und Knorpeldefekt bei Fußballspielern, Odds Ratio pro Grad und pro 10 Grad, SPSS-Ausgabe lesen, Adjustierung für Symptomstatus, Ergebnisse berichten.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../assets/css/base.css?v=202611222101">
+<link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
+<link rel="stylesheet" href="cam-morphologie.css?v=202611222101">
+</head>
+<body>
+<header class="site-header">
+  <div class="column">
+    <a class="brand" href="../../">
+      <svg class="brand-mark" viewBox="0 0 22 22" aria-hidden="true"><path d="M1 19 C5 19 6 4 9 4 S13 19 17 19" fill="none" class="bm-a" stroke-width="2.2" stroke-linecap="round"/><path d="M5 19 C9 19 10 7 13 7 S17 19 21 19" fill="none" class="bm-b" stroke-width="2.2" stroke-linecap="round"/></svg>
+      Stats Lab
+    </a>
+    <nav class="site-nav" aria-label="Hauptnavigation">
+      <a href="../../">Visualisierungen</a>
+      <a href="../../glossar/">Glossar</a>
+      <a href="https://github.com/jnshsrs/stats-lab">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main class="column">
+  <section class="intro">
+    <a class="back" href="../../">← Alle Visualisierungen</a>
+    <h1>Cam-Morphologie und Knorpeldefekt</h1>
+    <p class="byline">Dr. Jens Hüsers · Forschungsmethodik</p>
+    <p class="lede">Bei einer Cam-Morphologie ist der Übergang vom Hüftkopf zum Schenkelhals nicht rund, sondern verdickt. Gemessen wird das mit dem <b>Alpha-Winkel</b>: Je größer, desto ausgeprägter die Cam-Morphologie; ab etwa 60 Grad spricht man meist von Cam. Hängt der Alpha-Winkel bei jungen Fußballspielern mit Knorpeldefekten im MRT zusammen? Der Datensatz ist ein <b>Lehrdatensatz</b>: simuliert, aber in Aufbau und Effektgröße an Heerey et al. (2021) angelehnt.</p>
+    <div class="dl-bar"><span>Daten herunterladen:</span><a class="btn ghost" href="../daten/cam.csv" download>CSV</a><a class="btn ghost" href="../daten/cam.sav" download>SPSS (.sav, mit Labels)</a></div>
+  </section>
+
+  <details class="acc" id="acc-1" open>
+    <summary><span class="acc-no">1</span><span class="acc-title">Die Daten ansehen<span class="acc-teaser">240 Spieler, Alpha-Winkel und Knorpeldefekt ja oder nein.</span></span></summary>
+    <div class="acc-body">
+      <p class="text">Jeder Punkt ist ein Spieler: oben mit Knorpeldefekt, unten ohne. 185 Spieler haben seit über sechs Monaten Hüft- oder Leistenschmerzen und einen positiven FADIR-Test, 55 sind schmerzfrei.</p>
+      <svg class="chart" id="c1" viewBox="0 0 900 340" role="img" aria-label="Alpha-Winkel nach Knorpeldefekt"></svg>
+      <div class="readouts" id="r1"></div>
+      <div class="ft-grid">
+        <div class="tab-wrap"><table class="ktab" id="t1"></table></div>
+        <div class="formula" id="f1"></div>
+      </div>
+      <p class="callout" id="k1"></p>
+    </div>
+  </details>
+
+  <details class="acc" id="acc-2" open>
+    <summary><span class="acc-no">2</span><span class="acc-title">Das Modell: Odds Ratio pro Grad<span class="acc-teaser">Logistische Regression mit dem Alpha-Winkel als stetigem Prädiktor.</span></span></summary>
+    <div class="acc-body">
+      <div class="controls"><div class="panel-grid">
+        <div class="ctrl"><div class="ctrl-head"><label for="ax">Alpha-Winkel einer Person</label><output id="ax-v"></output></div><input id="ax" type="range" min="40" max="98" step="1" value="75"></div>
+        <div class="ctrl"><div class="ctrl-head"><span class="lbl-plain" id="u-l">Odds Ratio pro</span></div><div class="seg small" role="group" aria-labelledby="u-l" id="unit"><button type="button" data-u="1" aria-pressed="true">1 Grad</button><button type="button" data-u="5" aria-pressed="false">5 Grad</button><button type="button" data-u="10" aria-pressed="false">10 Grad</button></div></div>
+      </div></div>
+      <svg class="chart" id="c2" viewBox="0 0 900 400" role="img" aria-label="Logistische Kurve für den Knorpeldefekt"></svg>
+      <h3 class="sub">SPSS: Variablen in der Gleichung</h3>
+      <div class="tab-wrap"><table class="anova coef" id="spss2"></table></div>
+      <div class="formula" id="f2"></div>
+      <div class="readouts" id="r2"></div>
+      <p class="callout" id="k2"></p>
+    </div>
+  </details>
+
+  <details class="acc" id="acc-3" open>
+    <summary><span class="acc-no">3</span><span class="acc-title">Adjustiert für Schmerz<span class="acc-teaser">Zwei Prädiktoren, und gilt der Zusammenhang für beide Gruppen?</span></span></summary>
+    <div class="acc-body">
+      <p class="text">Symptomatische Spieler haben im Mittel größere Alpha-Winkel. Ist der Zusammenhang mit dem Knorpeldefekt nur ein Umweg über den Schmerz? Das Modell bekommt einen zweiten Prädiktor, wie in der <a href="../../regression/multiple-regression/">multiplen Regression</a>.</p>
+      <div class="seg wide" role="group" aria-label="Modell" id="m3"><button type="button" data-m="0" aria-pressed="true">Alpha + Schmerz</button><button type="button" data-m="1" aria-pressed="false">mit Wechselwirkung Alpha × Schmerz</button></div>
+      <svg class="chart" id="c3" viewBox="0 0 900 380" role="img" aria-label="Kurven für symptomatische und schmerzfreie Spieler"></svg>
+      <div class="legend"><span><i style="background:var(--beta-ink)"></i>symptomatisch</span><span><i style="background:var(--therapie)"></i>schmerzfrei</span></div>
+      <div class="tab-wrap"><table class="anova coef" id="spss3"></table></div>
+      <p class="callout" id="k3"></p>
+    </div>
+  </details>
+
+  <details class="acc" id="acc-4" open>
+    <summary><span class="acc-no">4</span><span class="acc-title">Berichten und prüfen<span class="acc-teaser">Ein Ergebnissatz und fünf Fragen an jedes logistische Modell.</span></span></summary>
+    <div class="acc-body">
+      <div class="formula" id="rep"></div>
+      <ol class="check">
+        <li><b>Einheit sinnvoll wählen.</b> OR 1,03 pro Grad klingt nach nichts, OR pro 10 Grad ist dieselbe Aussage in einer Einheit, die klinisch zählt.</li>
+        <li><b>Nicht unnötig dichotomisieren.</b> „Cam ja/nein“ wirft Information weg: Ein Spieler mit 61 Grad zählt wie einer mit 95 Grad.</li>
+        <li><b>Genug Ereignisse.</b> Faustregel: mindestens etwa 10 Ereignisse (hier Knorpeldefekte) pro Prädiktor. Mit <span id="ev"></span> Defekten trägt dieser Datensatz einige wenige Prädiktoren, nicht zwanzig.</li>
+        <li><b>Linear auf der Logit-Skala?</b> Die Kreise in Abschnitt 2 sollten der Kurve folgen. Bei einem Bogen helfen Kategorien oder ein quadratischer Term.</li>
+        <li><b>Design beachten.</b> Symptomatische Spieler sind hier stark überrepräsentiert. Das OR bleibt gültig, die vorhergesagten Wahrscheinlichkeiten gelten aber nur für Gruppen mit derselben Zusammensetzung (vgl. <a href="../../grundlagen/risiko-odds/#acc-4">Fall-Kontroll-Studien</a>).</li>
+      </ol>
+      <p class="note">In SPSS: Analysieren → Regression → Binär logistisch. Abhängige Variable: knorpeldefekt; Kovariaten: alpha, schmerz (unter „Kategorial“ als kategorial definieren). Unter „Optionen“ „KI für Exp(B)“ anhaken. Eine Variable alpha10 = alpha / 10 liefert direkt das OR pro 10 Grad.</p>
+    </div>
+  </details>
+
+  <section class="block refs" aria-labelledby="refs-h">
+    <h2 id="refs-h">Quellen und Daten</h2>
+    <ul><li>Lehrdatensatz, simuliert (n = 240, eine Hüfte pro Spieler). Aufbau und Effektgröße angelehnt an: Heerey, J. J. et al. (2021). Cam morphology is associated with MRI-defined cartilage defects and labral tears: a case–control study of 237 young adult football players with and without hip and groin pain. BMJ Open Sport &amp; Exercise Medicine, 7, e001199. Dort: OR 1,03 (95-%-KI 1,01–1,04) pro Grad Alpha-Winkel für Knorpeldefekte.</li>
+    <li>Zum Vergleich in einer großen Kohorte: World COACH Consortium, Cam-Morphologie (Alpha-Winkel ≥ 60°) und Hüftarthrose innerhalb von 8 Jahren, 23.886 Hüften: OR 1,87, pro Grad 1,02.</li></ul>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="column">
+    <span>© 2026 Dr. Jens Hüsers · Lehrmaterial für Forschungsmethodik und Statistik</span>
+    <span class="footer-links"><a href="https://github.com/jnshsrs/stats-lab">Quellcode auf GitHub</a><span>Ohne Cookies und Tracking</span></span>
+  </div>
+</footer>
+<script src="../../assets/vendor/katex/katex.min.js"></script>
+<script src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
+<script src="../../assets/js/tex.js?v=202611222101"></script>
+<script src="../daten/cam.js?v=202611222101"></script>
+<script src="../../assets/js/reg.js?v=202611222101"></script>
+<script src="cam-morphologie.js?v=202611222101"></script>
+<script src="../../assets/js/path.js?v=202611222101"></script>
+</body>
+</html>

@@ -2,8 +2,8 @@
    Einzige Stelle für Reihenfolge und Blöcke. Die Startseite und die Vor/Zurück-Leiste jeder Seite lesen von hier. */
 (() => {
 "use strict";
-const BLOCKS = ["Grundlagen", "Schätzen", "Testen", "Hintergrund", "Zusammenhänge und Regression"];
-const BLOCK_SLUGS = ["grundlagen", "schaetzen", "testen", "hintergrund", "regression"];
+const BLOCKS = ["Grundlagen", "Schätzen", "Testen", "Hintergrund", "Zusammenhänge und Regression", "Logistische Regression"];
+const BLOCK_SLUGS = ["grundlagen", "schaetzen", "testen", "hintergrund", "regression", "logistische-regression"];
 const PATH = [
   ["skalenniveaus", "Skalenniveaus", 0],
   ["lage-streuung", "Lage und Streuung", 0],
@@ -30,7 +30,9 @@ const PATH = [
   ["normbereich", "Wie sicher ist der Sollwert? Inferenz und Normgrenze", 4],
   ["bestimmtheitsmass", "Wie viel erklärt die Gerade? R² und Streuungszerlegung", 4],
   ["diagnostik", "Passt das Modell? Residuen und Einfluss", 4],
-  ["multiple-regression", "Mehrere Einflüsse zugleich: multiple Regression", 4]
+  ["multiple-regression", "Mehrere Einflüsse zugleich: multiple Regression", 4],
+  ["s-kurve", "Von der Geraden zur S-Kurve", 5],
+  ["cam-morphologie", "Cam-Morphologie und Knorpeldefekt", 5]
 ];
 window.STATS_LAB_PATH = { BLOCKS, BLOCK_SLUGS, PATH };
 const url = p => `../../${BLOCK_SLUGS[p[2]]}/${p[0]}/`;
