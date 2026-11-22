@@ -29,6 +29,7 @@ Interaktive Visualisierungen für die Statistiklehre in den Gesundheits- und The
 | [`gerade/`](gerade/) | Block 5, Station 21: Die beste Gerade. Story Sollwert der Lungenfunktion: Mittelwert, Gruppenmittel, Gerade im Vergleich; kleinste Quadrate mit Reglern, Residuenquadraten und Quadratsummen-Balken; Gerade lesen, Vorhersage, % vom Soll, Extrapolation. |
 | [`normbereich/`](normbereich/) | Block 5, Station 22: Wie sicher ist der Sollwert? Stichprobenverteilung der Steigung (auch unter H₀), t-Test und KI für b₁, Konfidenz- gegen Vorhersageband, untere Normgrenze (fest, relativ über log) gegen 80-%-Regel mit Anteilen je Größengruppe. |
 | [`bestimmtheitsmass/`](bestimmtheitsmass/) | Block 5, Station 23: Wie viel erklärt die Gerade? Streuungszerlegung an 25 Kindern, R² und Wertebereich, ANOVA-Tabelle für Gerade, Größenklassen und Rauchen (F = t², η²), standardisierte Regression und Regression zur Mitte. |
+| [`diagnostik/`](diagnostik/) | Block 5, Station 24: Passt das Modell? Anscombe-Quartett mit Residuenplot, Residuen- und Q-Q-Plot der FEV-Daten (linear gegen ln), Hebelwert und Cook-Distanz mit ziehbarem Punkt, Checkliste mit SPSS-Hinweis. |
 
 ## Aufbau
 
