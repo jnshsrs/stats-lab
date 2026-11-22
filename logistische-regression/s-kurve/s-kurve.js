@@ -68,41 +68,33 @@ $("m1").addEventListener("click", e => { const b = pick(e, $("m1")); if (!b) ret
 
 /* ---------- 2 Herleitung ---------- */
 const st = (lab, tex) => `<span class="step-l">${lab}</span>` + TB(tex, "");
-$("f2").innerHTML = st("(1) Lineares Modell für den Logit, wie in Block 5", String.raw`\ln\!\Bigl(\dfrac{p}{1-p}\Bigr) = b_0 + b_1 x = \eta`) +
-  st("(2) Beide Seiten hoch e: links stehen die Odds", String.raw`\dfrac{p}{1-p} = e^{\eta}`) +
-  st("(3) Nach p auflösen", String.raw`\begin{aligned} p &= e^{\eta}\,(1 - p) \\ p\,(1 + e^{\eta}) &= e^{\eta} \\ p &= \dfrac{e^{\eta}}{1 + e^{\eta}} \end{aligned}`) +
-  st("(4) Zähler und Nenner durch e hoch η teilen", String.raw`p = \dfrac{1}{1 + e^{-(b_0 + b_1 x)}}`) +
-  `<span class="dim">η (eta) steht für den linearen Teil b₀ + b₁ · x, den „linearen Prädiktor“. Mit den FEV-Daten: b₀ = ${fmt(B0, 3)}, b₁ = ${fmt(B1, 3)}.</span>`;
+$("f2").innerHTML = st("(1) Lineares Modell für den Logit, wie in Block 5", String.raw`\begin{aligned} \text{logit}(p) &= \ln\!\Bigl(\dfrac{p}{1-p}\Bigr) \\ &= b_0 + b_1 \cdot \text{Alter} \end{aligned}`) +
+  st("(2) Beide Seiten hoch e: links stehen die Odds", String.raw`\dfrac{p}{1-p} = e^{\,b_0 + b_1 \cdot \text{Alter}}`) +
+  st("(3) Nach p auflösen (kurz: e hoch Logit)", String.raw`\begin{aligned} p &= e^{\text{Logit}}\,(1 - p) \\ p\,(1 + e^{\text{Logit}}) &= e^{\text{Logit}} \\ p &= \dfrac{e^{\text{Logit}}}{1 + e^{\text{Logit}}} \end{aligned}`) +
+  st("(4) Zähler und Nenner durch e hoch Logit teilen", String.raw`p = \dfrac{1}{1 + e^{-(b_0 + b_1 \cdot \text{Alter})}}`) +
+  `<span class="dim">Mit den FEV-Daten: b₀ = ${fmt(B0, 3)}, b₁ = ${fmt(B1, 3)}. In Lehrbüchern hat der lineare Teil b₀ + b₁ · x oft ein eigenes Symbol: η („linearer Prädiktor“), z oder g(x). Gemeint ist immer der vorhergesagte Logit.</span>`;
 function draw2() {
   const a = +$("a2").value; $("a2-v").textContent = a + " Jahre";
   const mini = (id, fn, ylo, yhi, yl, fy, col) => {
-    const f = frame(340, 300, 2, 20, ylo, yhi, { P: { L: 60, R: 8, T: 10, B: 40 }, xl: "Alter", yl, nx: 4, ny: 4, fx: v => fmt(v, 0) });
-    let s = f.s.replace(/<text x="[^"]*" y="[^"]*" text-anchor="end">([−\d,.]+)<\/text>/g, (m, v) => m);
-    s += `<path ${f.clip} d="${curve(f, fn, 2, 20)}" fill="none" stroke="${col}" stroke-width="3"/>`;
+    const f = frame(420, 320, 2, 20, ylo, yhi, { P: { L: 60, R: 10, T: 12, B: 40 }, xl: "Alter in Jahren", yl, nx: 6, ny: 4, fx: v => fmt(v, 0) });
+    let s = f.s + `<path ${f.clip} d="${curve(f, fn, 2, 20)}" fill="none" stroke="${col}" stroke-width="3"/>`;
     const v = fn(a), vy = Math.max(ylo, Math.min(yhi, v));
-    s += `<line x1="${f.sx(a)}" x2="${f.sx(a)}" y1="${f.sy(ylo)}" y2="${f.sy(vy)}" stroke="var(--fg)" stroke-dasharray="3 3"/><circle cx="${f.sx(a)}" cy="${f.sy(vy)}" r="6" fill="var(--fg)"/><text x="${f.sx(a) + (a > 14 ? -8 : 8)}" y="${f.sy(vy) - 10}" text-anchor="${a > 14 ? "end" : "start"}" class="strong halo">${fy(v)}</text>`;
+    s += `<line x1="${f.sx(a)}" x2="${f.sx(a)}" y1="${f.sy(ylo)}" y2="${f.sy(vy)}" stroke="var(--fg)" stroke-dasharray="3 3"/><circle cx="${f.sx(a)}" cy="${f.sy(vy)}" r="7" fill="var(--fg)"/><text x="${f.sx(a) + (a > 14 ? -10 : 10)}" y="${f.sy(vy) - 10}" text-anchor="${a > 14 ? "end" : "start"}" class="strong halo">${fy(v)}</text>`;
     $(id).innerHTML = s;
   };
-  mini("c2a", ETA, -7, 3, "Logit η", v => fmt(v, 2), "var(--fg)");
-  (() => {
-    const e = ETA(a), L = z => 1 / (1 + Math.exp(-z));
-    const f = frame(340, 300, -7, 4, 0, 1, { P: { L: 60, R: 8, T: 10, B: 40 }, xl: "η", yl: "p", nx: 4, ny: 4, fx: v => fmt(v, 0) });
-    let s = f.s + `<path ${f.clip} d="${curve(f, L, -7, 4, 0.05)}" fill="none" stroke="var(--beta-ink)" stroke-width="3"/>`;
-    s += `<line x1="${f.sx(e)}" x2="${f.sx(e)}" y1="${f.sy(0)}" y2="${f.sy(L(e))}" stroke="var(--fg)" stroke-dasharray="3 3"/><line x1="${f.sx(-7)}" x2="${f.sx(e)}" y1="${f.sy(L(e))}" y2="${f.sy(L(e))}" stroke="var(--fg)" stroke-dasharray="3 3"/>`;
-    s += `<circle cx="${f.sx(e)}" cy="${f.sy(L(e))}" r="6" fill="var(--fg)"/><text x="${f.sx(e) + (e > 0 ? -8 : 8)}" y="${f.sy(L(e)) - 10}" text-anchor="${e > 0 ? "end" : "start"}" class="strong halo">η ${fmt(e, 2)} → p ${fmt(L(e), 3)}</text>`;
-    $("c2b").innerHTML = s;
-  })();
-  mini("c2c", P, 0, 1, "p", v => fmt(v, 3), "var(--therapie)");
+  mini("c2a", ETA, -7, 3, "Logit", v => "Logit " + fmt(v, 2), "var(--fg)");
+  mini("c2c", P, 0, 1, "Wahrscheinlichkeit p", v => "p = " + fmt(v, 3), "var(--therapie)");
   const e = ETA(a), o = Math.exp(e), p = o / (1 + o);
-  $("f2b").innerHTML = TB(String.raw`\begin{aligned} \eta &= ${tz(fmt(B0, 3))} + ${tz(fmt(B1, 3))} \cdot ${a} = ${tz(fmt(e, 2))} \\ \text{Odds} &= e^{${tz(fmt(e, 2))}} = ${tz(fmt(o, 3))} \\ p &= \dfrac{1}{1 + e^{${tz(fmt(-e, 2))}}} = ${tz(fmt(p, 3))} \end{aligned}`, "");
-  $("k2").innerHTML = `Links das lineare Modell, wie Sie es aus Block 5 kennen: eine Gerade, hier für η, den Logit. In der Mitte die <b>logistische Funktion</b> p = 1 / (1 + e<sup>−η</sup>): Sie nimmt jeden beliebigen Wert von η und zwängt ihn zwischen 0 und 1. Diese Kurve ist immer dieselbe, sie hängt nicht von den Daten ab. Rechts das Ergebnis: die S-Kurve aus Abschnitt 1. Die S-Form kommt also aus der Umrechnung, die Daten bestimmen nur, wo die Kurve liegt und wie steil sie ist. Für ein ${a}-jähriges Kind: η = ${fmt(e, 2)}, Odds ${fmt(o, 3)}, Wahrscheinlichkeit ${pc(p)}. Alles, was die lineare Regression kann (mehrere Prädiktoren, Adjustierung, Wechselwirkung), steckt im linearen Teil η.`;
+  $("bridge").innerHTML = `<span class="br-arrow">→</span><span class="br-f">p = 1 ÷ (1 + e<sup>−Logit</sup>)</span><span class="br-n">${fmt(e, 2)} → ${fmt(p, 3)}</span><span class="br-arrow">→</span>`;
+  $("f2b").innerHTML = TB(String.raw`\begin{aligned} \text{Logit} &= ${tz(fmt(B0, 3))} + ${tz(fmt(B1, 3))} \cdot ${a} = ${tz(fmt(e, 2))} \\ \text{Odds} &= e^{${tz(fmt(e, 2))}} = ${tz(fmt(o, 3))} \\ p &= \dfrac{1}{1 + e^{${tz(fmt(-e, 2))}}} = ${tz(fmt(p, 3))} \end{aligned}`, "");
+  $("k2").innerHTML = `Links das lineare Modell, wie Sie es aus Block 5 kennen: eine Gerade, hier für den Logit. Rechts dieselben Alterswerte, durch die Formel in der Mitte in Wahrscheinlichkeiten umgerechnet: die S-Kurve aus Abschnitt 1. Die S-Form entsteht also durch die Umrechnung; die Daten bestimmen nur, wo die Kurve liegt und wie steil sie ist. Für ein ${a}-jähriges Kind: Logit ${fmt(e, 2)}, Odds ${fmt(o, 3)}, Wahrscheinlichkeit ${pc(p)}. Alles, was die lineare Regression kann (mehrere Prädiktoren, Adjustierung, Wechselwirkung), steckt im linearen Teil b₀ + b₁ · Alter.`;
 }
 $("a2").addEventListener("input", draw2);
 
 /* ---------- 3 Rise over Run ---------- */
 (() => {
   const ages = [9, 10, 11, 12, 13, 14, 15, 16];
-  let h = `<thead><tr><th rowspan="2">Alter</th><th class="grp" colspan="2">Logit</th><th class="grp" colspan="2">Wahrscheinlichkeit</th><th class="grp" colspan="2">Odds</th></tr><tr><th>η</th><th>Δ pro Jahr</th><th>p</th><th>Δ pro Jahr</th><th>Odds</th><th>× pro Jahr</th></tr></thead><tbody>`;
+  let h = `<thead><tr><th rowspan="2">Alter</th><th class="grp" colspan="2">Logit</th><th class="grp" colspan="2">Wahrscheinlichkeit</th><th class="grp" colspan="2">Odds</th></tr><tr><th>Logit</th><th>Δ pro Jahr</th><th>p</th><th>Δ pro Jahr</th><th>Odds</th><th>× pro Jahr</th></tr></thead><tbody>`;
   ages.forEach((a, k) => {
     const prev = k ? ages[k - 1] : null;
     h += `<tr><td>${a}</td><td>${fmt(ETA(a), 2)}</td><td class="const">${prev ? "+" + fmt(ETA(a) - ETA(prev), 3) : ""}</td><td>${fmt(P(a), 3)}</td><td class="var">${prev ? "+" + fmt(P(a) - P(prev), 3) : ""}</td><td>${fmt(OD(a), 3)}</td><td class="const">${prev ? "× " + fmt(OD(a) / OD(prev), 3) : ""}</td></tr>`;

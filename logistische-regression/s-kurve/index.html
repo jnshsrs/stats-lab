@@ -6,9 +6,9 @@
 <title>Von der Geraden zur S-Kurve · Stats Lab</title>
 <meta name="description" content="Einstieg in die logistische Regression mit echten Daten: Warum eine Gerade bei ja/nein versagt, vom Risiko über Odds zum Logit, Odds Ratio pro Einheit und Maximum-Likelihood-Schätzung.">
 <link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="../../assets/css/base.css?v=202611222321">
+<link rel="stylesheet" href="../../assets/css/base.css?v=202611222327">
 <link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
-<link rel="stylesheet" href="s-kurve.css?v=202611222321">
+<link rel="stylesheet" href="s-kurve.css?v=202611222327">
 </head>
 <body>
 <header class="site-header">
@@ -58,10 +58,10 @@
       <p class="note">Beim Logit liegt „halbe-halbe“ genau bei 0, seltene Ereignisse werden negativ, häufige positiv, und zwar symmetrisch.</p>
       <div class="formula" id="f2"></div>
       <div class="controls"><div class="ctrl"><div class="ctrl-head"><label for="a2">Alter</label><output id="a2-v"></output></div><input id="a2" type="range" min="3" max="19" step="1" value="14"></div></div>
-      <div class="three-charts">
-        <figure><figcaption><b>1</b> Lineares Modell: Alter → η</figcaption><svg class="chart" id="c2a" viewBox="0 0 340 300" role="img" aria-label="Logit als Gerade"></svg></figure>
-        <figure><figcaption><b>2</b> Logistische Funktion: η → p</figcaption><svg class="chart" id="c2b" viewBox="0 0 340 300" role="img" aria-label="Logistische Funktion"></svg></figure>
-        <figure><figcaption><b>3</b> Ergebnis: p nach Alter</figcaption><svg class="chart" id="c2c" viewBox="0 0 340 300" role="img" aria-label="Wahrscheinlichkeit als S-Kurve"></svg></figure>
+      <div class="bridge-grid">
+        <figure><figcaption><b>Lineares Modell:</b> Alter → Logit</figcaption><svg class="chart" id="c2a" viewBox="0 0 420 320" role="img" aria-label="Logit als Gerade über dem Alter"></svg></figure>
+        <div class="bridge" id="bridge"></div>
+        <figure><figcaption><b>Ergebnis:</b> Alter → Wahrscheinlichkeit</figcaption><svg class="chart" id="c2c" viewBox="0 0 420 320" role="img" aria-label="Wahrscheinlichkeit als S-Kurve über dem Alter"></svg></figure>
       </div>
       <div class="formula" id="f2b"></div>
       <p class="callout" id="k2"></p>
@@ -126,10 +126,10 @@
 </footer>
 <script src="../../assets/vendor/katex/katex.min.js"></script>
 <script src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
-<script src="../../assets/js/tex.js?v=202611222321"></script>
-<script src="../../regression-daten/fev.js?v=202611222321"></script>
-<script src="../../assets/js/reg.js?v=202611222321"></script>
-<script src="s-kurve.js?v=202611222321"></script>
-<script src="../../assets/js/path.js?v=202611222321"></script>
+<script src="../../assets/js/tex.js?v=202611222327"></script>
+<script src="../../regression-daten/fev.js?v=202611222327"></script>
+<script src="../../assets/js/reg.js?v=202611222327"></script>
+<script src="s-kurve.js?v=202611222327"></script>
+<script src="../../assets/js/path.js?v=202611222327"></script>
 </body>
 </html>
