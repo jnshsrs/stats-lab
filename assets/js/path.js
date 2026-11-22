@@ -27,7 +27,8 @@ const PATH = [
   ["gerade", "Die beste Gerade: kleinste Quadrate", 4],
   ["normbereich", "Wie sicher ist der Sollwert? Inferenz und Normgrenze", 4],
   ["bestimmtheitsmass", "Wie viel erklärt die Gerade? R² und Streuungszerlegung", 4],
-  ["diagnostik", "Passt das Modell? Residuen und Einfluss", 4]
+  ["diagnostik", "Passt das Modell? Residuen und Einfluss", 4],
+  ["multiple-regression", "Mehrere Einflüsse zugleich: multiple Regression", 4]
 ];
 window.STATS_LAB_PATH = { BLOCKS, PATH };
 const parts = location.pathname.split("/").filter(Boolean);
