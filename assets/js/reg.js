@@ -23,5 +23,6 @@ function ols(y, cols) {
 }
 const mean = a => a.reduce((s, v) => s + v, 0) / a.length;
 function cor(x, y) { const mx = mean(x), my = mean(y); let sxy = 0, sxx = 0, syy = 0; for (let i = 0; i < x.length; i++) { sxy += (x[i] - mx) * (y[i] - my); sxx += (x[i] - mx) ** 2; syy += (y[i] - my) ** 2; } return sxy / Math.sqrt(sxx * syy); }
-window.REG = { ols, cor, mean, tcdf, tinv };
+const fcdf = (F, d1, d2) => F <= 0 ? 0 : ibeta(d1 * F / (d1 * F + d2), d1 / 2, d2 / 2);
+window.REG = { ols, cor, mean, tcdf, tinv, fcdf };
 })();

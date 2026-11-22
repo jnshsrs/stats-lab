@@ -6,9 +6,9 @@
 <title>Glossar · Stats Lab</title>
 <meta name="description" content="Fachbegriffe aus Statistik und Forschungsmethodik kurz erklärt, geordnet nach den Kapiteln des Stats Lab.">
 <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="../assets/css/base.css?v=202611221336">
+<link rel="stylesheet" href="../assets/css/base.css?v=202611221610">
 <link rel="stylesheet" href="../assets/vendor/katex/katex.min.css">
-<link rel="stylesheet" href="glossar.css?v=202611221336">
+<link rel="stylesheet" href="glossar.css?v=202611221610">
 </head>
 <body>
 <header class="site-header">
@@ -31,9 +31,9 @@
     <h1>Glossar</h1>
     <p class="byline">Dr. Jens Hüsers · Forschungsmethodik</p>
     <p class="lede">Die wichtigsten Fachbegriffe kurz erklärt, in der Reihenfolge des Lernpfads. Jeder Begriff hat einen eigenen Link: Klicken Sie auf das # davor, um ihn zu kopieren oder zu teilen.</p>
-    <div class="g-search"><label for="q" class="lbl">Begriff suchen</label><input id="q" type="search" placeholder="z. B. p-Wert, Standardfehler, Sensitivität" autocomplete="off"><span class="num" id="g-count">148 Begriffe</span></div>
+    <div class="g-search"><label for="q" class="lbl">Begriff suchen</label><input id="q" type="search" placeholder="z. B. p-Wert, Standardfehler, Sensitivität" autocomplete="off"><span class="num" id="g-count">153 Begriffe</span></div>
   </section>
-  <nav class="g-toc" aria-label="Kapitel"><a class="toc-notation" href="#notation">Notation lesen: Formeln und Schreibweisen</a><div class="toc-block"><span class="toc-b">1 · Grundlagen</span><a href="#k-skalenniveaus"><span class="num">1</span>Skalenniveaus</a><a href="#k-lage-streuung"><span class="num">2</span>Lage und Streuung</a><a href="#k-wahrscheinlichkeit"><span class="num">3</span>Wahrscheinlichkeit als Fläche</a><a href="#k-binomial"><span class="num">4</span>Pascal und die Binomialverteilung</a><a href="#k-verteilungen"><span class="num">5</span>Diskret und stetig</a></div><div class="toc-block"><span class="toc-b">2 · Schätzen</span><a href="#k-stichprobe"><span class="num">6</span>Stichprobe und Population</a><a href="#k-grosse-zahlen"><span class="num">7</span>Große und kleine Zahlen</a><a href="#k-zgws"><span class="num">8</span>Grenzwertsatz, Standardfehler, Konfidenzintervall</a></div><div class="toc-block"><span class="toc-b">3 · Testen</span><a href="#k-binomialtest"><span class="num">9</span>Binomialtest</a><a href="#k-t-test"><span class="num">10</span>Die t-Test-Kaskade</a><a href="#k-t-test-varianten"><span class="num">11</span>Welcher t-Test?</a><a href="#k-entscheidung"><span class="num">12</span>Entscheidungstheorie</a><a href="#k-fallzahl"><span class="num">13</span>Fallzahl und Power</a><a href="#k-multiples-testen"><span class="num">14</span>Multiples Testen</a><a href="#k-chi-quadrat"><span class="num">15</span>Der Chi-Quadrat-Test</a></div><div class="toc-block"><span class="toc-b">4 · Hintergrund</span><a href="#k-regression-mitte"><span class="num">16</span>Regression zur Mitte</a><a href="#k-mammografie"><span class="num">17</span>Positiver Befund</a><a href="#k-klinische-tests"><span class="num">18</span>Klinische Tests</a><a href="#k-inferenzzyklus"><span class="num">19</span>Induktion und Deduktion</a></div><div class="toc-block"><span class="toc-b">5 · Regression</span><a href="#k-korrelation"><span class="num">20</span>Korrelation</a><a href="#k-gerade"><span class="num">21</span>Die beste Gerade</a><a href="#k-normbereich"><span class="num">22</span>Wie sicher ist der Sollwert?</a></div></nav>
+  <nav class="g-toc" aria-label="Kapitel"><a class="toc-notation" href="#notation">Notation lesen: Formeln und Schreibweisen</a><div class="toc-block"><span class="toc-b">1 · Grundlagen</span><a href="#k-skalenniveaus"><span class="num">1</span>Skalenniveaus</a><a href="#k-lage-streuung"><span class="num">2</span>Lage und Streuung</a><a href="#k-wahrscheinlichkeit"><span class="num">3</span>Wahrscheinlichkeit als Fläche</a><a href="#k-binomial"><span class="num">4</span>Pascal und die Binomialverteilung</a><a href="#k-verteilungen"><span class="num">5</span>Diskret und stetig</a></div><div class="toc-block"><span class="toc-b">2 · Schätzen</span><a href="#k-stichprobe"><span class="num">6</span>Stichprobe und Population</a><a href="#k-grosse-zahlen"><span class="num">7</span>Große und kleine Zahlen</a><a href="#k-zgws"><span class="num">8</span>Grenzwertsatz, Standardfehler, Konfidenzintervall</a></div><div class="toc-block"><span class="toc-b">3 · Testen</span><a href="#k-binomialtest"><span class="num">9</span>Binomialtest</a><a href="#k-t-test"><span class="num">10</span>Die t-Test-Kaskade</a><a href="#k-t-test-varianten"><span class="num">11</span>Welcher t-Test?</a><a href="#k-entscheidung"><span class="num">12</span>Entscheidungstheorie</a><a href="#k-fallzahl"><span class="num">13</span>Fallzahl und Power</a><a href="#k-multiples-testen"><span class="num">14</span>Multiples Testen</a><a href="#k-chi-quadrat"><span class="num">15</span>Der Chi-Quadrat-Test</a></div><div class="toc-block"><span class="toc-b">4 · Hintergrund</span><a href="#k-regression-mitte"><span class="num">16</span>Regression zur Mitte</a><a href="#k-mammografie"><span class="num">17</span>Positiver Befund</a><a href="#k-klinische-tests"><span class="num">18</span>Klinische Tests</a><a href="#k-inferenzzyklus"><span class="num">19</span>Induktion und Deduktion</a></div><div class="toc-block"><span class="toc-b">5 · Regression</span><a href="#k-korrelation"><span class="num">20</span>Korrelation</a><a href="#k-gerade"><span class="num">21</span>Die beste Gerade</a><a href="#k-normbereich"><span class="num">22</span>Wie sicher ist der Sollwert?</a><a href="#k-bestimmtheitsmass"><span class="num">23</span>Wie viel erklärt die Gerade?</a></div></nav>
   <p class="g-empty" id="g-empty" hidden>Kein Begriff gefunden.</p>
 <section class="g-notation tex-auto" id="notation" aria-labelledby="notation-h">
   <h2 id="notation-h">Notation lesen</h2>
@@ -287,6 +287,13 @@
 <div class="g-term" id="normbereich-untere-normgrenze"><dt><a class="anchor" href="#normbereich-untere-normgrenze" aria-label="Link zu Untere Normgrenze (LLN)">#</a>Untere Normgrenze (LLN)</dt><dd>Wert, unter dem nur 5 % der Gesunden liegen. Entspricht z = −1,645. Ersetzt in der Lungenfunktion die Faustregel „80 % vom Soll“.</dd></div>
 <div class="g-term" id="normbereich-heteroskedastizitaet"><dt><a class="anchor" href="#normbereich-heteroskedastizitaet" aria-label="Link zu Heteroskedastizität">#</a>Heteroskedastizität</dt><dd>Die Streuung um die Gerade ist nicht überall gleich, etwa größer bei großen Kindern. Dann stimmen Vorhersageband und Normgrenze nicht in jedem Bereich.</dd></div>
 </dl></section>
+<section class="g-ch" id="k-bestimmtheitsmass"><div class="g-chh"><h3><span class="num">23</span>Wie viel erklärt die Gerade?</h3><a class="g-link" href="../bestimmtheitsmass/">Zur Seite →</a></div><dl>
+<div class="g-term" id="bestimmtheitsmass-streuungszerlegung"><dt><a class="anchor" href="#bestimmtheitsmass-streuungszerlegung" aria-label="Link zu Streuungszerlegung">#</a>Streuungszerlegung</dt><dd>Die Gesamtstreuung um den Mittelwert zerfällt in den Teil, den das Modell vorhersagt, und den Rest.<span class="g-f">SQT = SQM + SQR</span></dd></div>
+<div class="g-term" id="bestimmtheitsmass-r2"><dt><a class="anchor" href="#bestimmtheitsmass-r2" aria-label="Link zu Bestimmtheitsmaß R²">#</a>Bestimmtheitsmaß R²</dt><dd>Anteil der Gesamtstreuung, den das Modell erklärt, zwischen 0 und 1. Bei einer Einflussgröße gleich r². Hängt vom Wertebereich der Stichprobe ab.<span class="g-f">R² = SQM ÷ SQT</span></dd></div>
+<div class="g-term" id="bestimmtheitsmass-eta2"><dt><a class="anchor" href="#bestimmtheitsmass-eta2" aria-label="Link zu Eta-Quadrat η²">#</a>Eta-Quadrat η²</dt><dd>Name für R² in der Varianzanalyse: Anteil der Streuung zwischen den Gruppen an der Gesamtstreuung.</dd></div>
+<div class="g-term" id="bestimmtheitsmass-f-test"><dt><a class="anchor" href="#bestimmtheitsmass-f-test" aria-label="Link zu F-Test">#</a>F-Test</dt><dd>Prüft, ob ein Modell mehr Streuung erklärt als durch Zufall zu erwarten. Bei einer einzigen Einflussgröße gilt F = t².<span class="g-f">F = (SQM ÷ df₁) ÷ (SQR ÷ df₂)</span></dd></div>
+<div class="g-term" id="bestimmtheitsmass-mq"><dt><a class="anchor" href="#bestimmtheitsmass-mq" aria-label="Link zu Mittlere Quadratsumme MQ">#</a>Mittlere Quadratsumme MQ</dt><dd>Quadratsumme geteilt durch ihre Freiheitsgrade. MQ der Residuen ist die geschätzte Varianz um die Gerade, s².</dd></div>
+</dl></section>
 </section>
 </main>
 
@@ -298,7 +305,7 @@
 </footer>
 <script src="../assets/vendor/katex/katex.min.js"></script>
 <script src="../assets/vendor/katex/contrib/auto-render.min.js"></script>
-<script src="../assets/js/tex.js?v=202611221336"></script>
-<script src="glossar.js?v=202611221336"></script>
+<script src="../assets/js/tex.js?v=202611221610"></script>
+<script src="glossar.js?v=202611221610"></script>
 </body>
 </html>

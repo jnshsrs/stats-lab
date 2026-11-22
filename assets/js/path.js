@@ -25,7 +25,8 @@ const PATH = [
   ["inferenzzyklus", "Induktion, Deduktion und der Signifikanztest", 3],
   ["korrelation", "Zusammenhang und Korrelation", 4],
   ["gerade", "Die beste Gerade: kleinste Quadrate", 4],
-  ["normbereich", "Wie sicher ist der Sollwert? Inferenz und Normgrenze", 4]
+  ["normbereich", "Wie sicher ist der Sollwert? Inferenz und Normgrenze", 4],
+  ["bestimmtheitsmass", "Wie viel erklärt die Gerade? R² und Streuungszerlegung", 4]
 ];
 window.STATS_LAB_PATH = { BLOCKS, PATH };
 const parts = location.pathname.split("/").filter(Boolean);
