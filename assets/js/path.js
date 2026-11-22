@@ -8,6 +8,7 @@ const PATH = [
   ["skalenniveaus", "Skalenniveaus", 0],
   ["lage-streuung", "Lage und Streuung", 0],
   ["wahrscheinlichkeit", "Wahrscheinlichkeit als Fläche", 0],
+  ["risiko-odds", "Risiko, Odds und Odds Ratio", 0],
   ["binomial", "Pascal und die Binomialverteilung", 0],
   ["verteilungen", "Diskret und stetig", 0],
   ["stichprobe", "Stichprobe und Population", 1],

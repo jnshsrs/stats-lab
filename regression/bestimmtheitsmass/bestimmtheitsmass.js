@@ -1,5 +1,5 @@
 /* Wie viel erklärt die Gerade? · Stats Lab
-   Station 23: Streuungszerlegung SQT = SQM + SQR, R² und Wertebereich, ANOVA-Tabelle, Regression zur Mitte. */
+   Station 24: Streuungszerlegung SQT = SQM + SQR, R² und Wertebereich, ANOVA-Tabelle, Regression zur Mitte. */
 (() => {
 "use strict";
 const $ = id => document.getElementById(id);
