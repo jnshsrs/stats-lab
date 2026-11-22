@@ -6,9 +6,9 @@
 <title>Binomialtest · Stats Lab</title>
 <meta name="description" content="Annahme- und Ablehnungsbereich am Binomialtest mit einem fiktiven Medikament: Ergebnisse von außen nach innen sammeln, kritische Werte aus der Verteilungsfunktion, p-Wert als Summe extremer Ergebnisse.">
 <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="../assets/css/base.css?v=202611220955">
+<link rel="stylesheet" href="../assets/css/base.css?v=202611221007">
 <link rel="stylesheet" href="../assets/vendor/katex/katex.min.css">
-<link rel="stylesheet" href="binomialtest.css?v=202611220955">
+<link rel="stylesheet" href="binomialtest.css?v=202611221007">
 </head>
 <body>
 <header class="site-header">
@@ -61,7 +61,7 @@
   <section class="step" aria-labelledby="s2">
     <span class="eyebrow">Schritt 2 von 3 · Nachrechnen</span>
     <h2 id="s2">Kritische Werte aus der Verteilungsfunktion</h2>
-    <p class="text">Die Verteilungsfunktion F(k) = P(X ≤ k) summiert die Stäbchen aus Schritt 1 von links auf. Jeder Sprung der Treppe ist genau so hoch wie das Stäbchen an dieser Stelle und hat dessen Farbe. Der linke kritische Wert ist das größte k, bei dem F(k) noch unter der α-Linie bleibt. Rechts sucht man die letzte Stufe, die noch unter 1 − α liegt: Alles danach gehört zum Ablehnungsbereich.</p>
+    <p class="text">Die Verteilungsfunktion F(k) = P(X ≤ k) summiert die Stäbchen aus Schritt 1 von links auf. Jeder Sprung der Treppe (zart gestrichelt) ist genau so hoch wie das Stäbchen an dieser Stelle. Der linke kritische Wert ist das größte k, bei dem F(k) noch unter der α-Linie bleibt. Rechts sucht man die letzte Stufe, die noch unter 1 − α liegt: Alles danach gehört zum Ablehnungsbereich.</p>
     <div class="ctrl-row zoom-row"><span class="lbl" id="z-lbl">Ansicht</span><div class="seg" role="group" aria-labelledby="z-lbl" id="zoom"><button type="button" data-z="all" aria-pressed="true">ganze Treppe</button><button type="button" data-z="low" aria-pressed="false">Lupe unterer Rand</button><button type="button" data-z="high" aria-pressed="false">Lupe oberer Rand</button></div></div>
     <svg class="chart" id="cdf" viewBox="0 0 920 300" role="img" aria-label="Treppe der Verteilungsfunktion mit kritischen Werten"></svg>
     <div class="legend"><span><i class="sw" style="background:var(--therapie)"></i>Sprung im Ablehnungsbereich</span><span><i class="sw" style="background:var(--pal-3)"></i>Sprung im Annahmebereich</span><span><i class="sw dash"></i>α-Grenze</span></div>
@@ -121,7 +121,7 @@
   </div>
 </footer>
 <script src="../assets/vendor/katex/katex.min.js"></script>
-<script src="binomialtest.js?v=202611220955"></script>
-<script src="../assets/js/path.js?v=202611220955"></script>
+<script src="binomialtest.js?v=202611221007"></script>
+<script src="../assets/js/path.js?v=202611221007"></script>
 </body>
 </html>

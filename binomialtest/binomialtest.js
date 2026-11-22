@@ -117,7 +117,7 @@ function stairs(d, mode, zoom) {
   // Sprünge (Stäbchen) und Stufen
   for (let k = 0; k <= n; k++) {
     const prev = k ? d.F[k - 1] : 0, col = rej(d, k) ? REJ : ACC;
-    s += `<line x1="${x(k)}" x2="${x(k)}" y1="${y(prev)}" y2="${y(d.F[k])}" stroke="${col}" stroke-width="${Math.min(10, bw * 0.28)}" stroke-opacity=".9"/>`;
+    s += `<line x1="${x(k)}" x2="${x(k)}" y1="${y(prev)}" y2="${y(d.F[k])}" stroke="${col}" stroke-width="1.6" stroke-opacity=".45" stroke-dasharray="3 2"/>`;
     s += `<line x1="${x(k)}" x2="${k < n ? x(k + 1) : R}" y1="${y(d.F[k])}" y2="${y(d.F[k])}" stroke="var(--fg)" stroke-width="2"/>`;
     s += `<circle cx="${x(k)}" cy="${y(d.F[k])}" r="3.4" fill="var(--fg)"/>`;
     if (k < n) s += `<circle cx="${x(k + 1)}" cy="${y(d.F[k])}" r="3.2" fill="var(--surface)" stroke="var(--fg)" stroke-width="1.4"/>`;
@@ -127,8 +127,8 @@ function stairs(d, mode, zoom) {
   if (mode === "crit") {
     if (S.side !== "right" && vis(lo)) s += `<line x1="${L}" x2="${R}" y1="${y(lo)}" y2="${y(lo)}" stroke="var(--alpha-ink)" stroke-width="1.6" stroke-dasharray="6 4"/><text x="${R}" y="${y(lo) - 6}" text-anchor="end" style="fill:var(--alpha-ink)">${S.side === "two" ? "α/2" : "α"} = ${fmt(lo, 3)}</text>`;
     if (S.side !== "left" && vis(hi)) s += `<line x1="${L}" x2="${R}" y1="${y(hi)}" y2="${y(hi)}" stroke="var(--alpha-ink)" stroke-width="1.6" stroke-dasharray="6 4"/><text x="${L + 6}" y="${y(hi) - 6}" style="fill:var(--alpha-ink)">${S.side === "two" ? "1 − α/2" : "1 − α"} = ${fmt(hi, 3)}</text>`;
-    if (d.kL >= 0 && vis(d.F[d.kL])) s += `<text class="strong" x="${x(d.kL) + 8}" y="${Math.max(T + 30, y(d.F[d.kL]) - 26)}" style="fill:var(--alpha-ink)">F(${d.kL}) = ${fmt(d.F[d.kL], 3)} ≤ ${fmt(lo, 3)}</text>`;
-    if (d.kU <= n && d.kU > 0 && vis(d.F[d.kU - 1])) s += `<text class="strong" x="${x(d.kU - 1) - 8}" y="${Math.min(B - 8, y(d.F[d.kU - 1]) + 34)}" text-anchor="end" style="fill:var(--alpha-ink)">F(${d.kU - 1}) = ${fmt(d.F[d.kU - 1], 3)} ≥ ${fmt(hi, 3)}</text>`;
+    if (d.kL >= 0 && vis(d.F[d.kL])) s += `<text class="strong" x="${x(d.kL) - 10}" text-anchor="end" y="${Math.max(T + 30, y(d.F[d.kL]) - 14)}" style="fill:var(--alpha-ink)">F(${d.kL}) = ${fmt(d.F[d.kL], 3)} ≤ ${fmt(lo, 3)}</text>`;
+    if (d.kU <= n && d.kU > 0 && vis(d.F[d.kU - 1])) s += `<text class="strong" x="${x(d.kU - 1) + 12}" y="${Math.min(B - 8, y(d.F[d.kU - 1]) + 30)}" text-anchor="start" style="fill:var(--alpha-ink)">F(${d.kU - 1}) = ${fmt(d.F[d.kU - 1], 3)} ≥ ${fmt(hi, 3)}</text>`;
   }
   s += `<text x="${R}" y="${B + 40}" text-anchor="end">k · ${SCN().what}</text><text x="18" y="${(T + B) / 2}" transform="rotate(-90 18 ${(T + B) / 2})" text-anchor="middle">F(k) = P(X ≤ k)</text>`;
   return s;
