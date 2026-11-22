@@ -6,10 +6,10 @@
 <title>Zusammenhang und Korrelation · Stats Lab</title>
 <meta name="description" content="Streudiagramm, Kovarianz und Korrelationskoeffizient r an echten Lungenfunktionsdaten von 654 Kindern, mit Ausreißern und Drittvariablen.">
 <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="../assets/css/base.css?v=202611221921">
+<link rel="stylesheet" href="../assets/css/base.css?v=202611221942">
 <link rel="stylesheet" href="../assets/vendor/katex/katex.min.css">
 <link rel="stylesheet" href="../assets/vendor/katex/katex.min.css">
-<link rel="stylesheet" href="korrelation.css?v=202611221921">
+<link rel="stylesheet" href="korrelation.css?v=202611221942">
 </head>
 <body>
 <header class="site-header">
@@ -73,11 +73,11 @@
   <details class="acc" id="acc-4" open>
     <summary><span class="acc-no">4</span><span class="acc-title">Korrelation ist nicht Kausalität<span class="acc-teaser">Rauchen verbessert die Lunge? Eine Drittvariable steckt dahinter.</span></span></summary>
     <div class="acc-body">
-      <p class="text">In den Daten haben rauchende Jugendliche im Mittel die <b>höhere</b> FEV. Heißt das, Rauchen nützt der Lunge? Die Grafik zeigt FEV gegen Alter, Rauchende sind hervorgehoben.</p>
+      <p class="text">In den Daten haben rauchende Jugendliche im Mittel die <b>höhere</b> FEV. Heißt das, Rauchen nützt der Lunge? Die Grafik zeigt FEV gegen Alter, Rauchende sind hervorgehoben. Die waagerechten Linien markieren die mittlere FEV beider Gruppen, die senkrechten das mittlere Alter.</p>
       <svg class="chart" id="conf" viewBox="0 0 900 380" role="img" aria-label="FEV gegen Alter, Rauchende hervorgehoben"></svg>
-      <div class="legend"><span><i class="sw" style="background:var(--pal-3)"></i>raucht nicht</span><span><i class="sw" style="background:var(--therapie)"></i>raucht</span></div>
+      <div class="legend"><span><i class="sw" style="background:var(--pal-3)"></i>raucht nicht</span><span><i class="sw" style="background:var(--therapie)"></i>raucht</span><span>○ Gruppenmittel (Alter, FEV)</span></div>
       <div class="readouts" id="conf-r"></div>
-      <p class="callout">Rauchende sind im Mittel vier Jahre älter, und ältere Kinder sind größer und haben mehr Lungenvolumen. Das Alter beeinflusst beides, Rauchen und FEV. Eine solche Drittvariable heißt <b>Störgröße</b> oder <b>Konfundierer</b>. Wie man sie herausrechnet, zeigt die multiple Regression am Ende dieses Blocks. Dort dreht sich das Vorzeichen um.</p>
+      <p class="callout">Rauchende sind im Mittel vier Jahre älter, und ältere Kinder sind größer und haben mehr Lungenvolumen. Das Alter beeinflusst beides, Rauchen und FEV. Eine solche Drittvariable heißt <b>Störgröße</b> oder <b>Konfundierer</b>. Wie man sie herausrechnet, zeigt die <a href="../multiple-regression/">multiple Regression</a> am Ende dieses Blocks. Dort dreht sich das Vorzeichen um.</p>
     </div>
   </details>
 
@@ -100,13 +100,13 @@
 </footer>
 <script src="../assets/vendor/katex/katex.min.js"></script>
 <script src="../assets/vendor/katex/contrib/auto-render.min.js"></script>
-<script src="../assets/js/tex.js?v=202611221921"></script>
+<script src="../assets/js/tex.js?v=202611221942"></script>
 <script src="../assets/vendor/katex/katex.min.js"></script>
 <script src="../assets/vendor/katex/contrib/auto-render.min.js"></script>
-<script src="../assets/js/tex.js?v=202611221921"></script>
-<script src="../regression-daten/fev.js?v=202611221921"></script>
-<script src="../assets/js/reg.js?v=202611221921"></script>
-<script src="korrelation.js?v=202611221921"></script>
-<script src="../assets/js/path.js?v=202611221921"></script>
+<script src="../assets/js/tex.js?v=202611221942"></script>
+<script src="../regression-daten/fev.js?v=202611221942"></script>
+<script src="../assets/js/reg.js?v=202611221942"></script>
+<script src="korrelation.js?v=202611221942"></script>
+<script src="../assets/js/path.js?v=202611221942"></script>
 </body>
 </html>

@@ -101,9 +101,19 @@ function draw4() {
   const f = frame(900, 380, 2, 20, 0, 6, LAB.alter, LAB.fev), rnd = mulberry32(5);
   let s = f.s;
   [0, 1].forEach(sm => R.forEach(r => { if (r[4] !== sm) return; s += `<circle cx="${f.sx(r[0] + (rnd() - 0.5) * 0.5)}" cy="${f.sy(r[1])}" r="${sm ? 4.6 : 3}" fill="${sm ? "var(--therapie)" : "var(--pal-3)"}" fill-opacity="${sm ? .95 : .5}"/>`; }));
-  $("conf").innerHTML = s;
   const g = sm => R.filter(r => r[4] === sm);
   const f0 = mean(g(0).map(r => r[1])), f1 = mean(g(1).map(r => r[1])), a0 = mean(g(0).map(r => r[0])), a1 = mean(g(1).map(r => r[0]));
+  const C0 = "var(--fg)", C1 = "var(--therapie)", X0 = f.sx(2), X1 = f.sx(20), YT = f.sy(6), YB = f.sy(0);
+  const halo = 'style="paint-order:stroke;stroke:var(--surface);stroke-width:5px;stroke-linejoin:round;fill:';
+  // mittleres Alter (dezent)
+  s += `<line x1="${f.sx(a0)}" x2="${f.sx(a0)}" y1="${YT}" y2="${YB}" stroke="${C0}" stroke-width="1.4" stroke-dasharray="3 4" stroke-opacity=".55"/><line x1="${f.sx(a1)}" x2="${f.sx(a1)}" y1="${YT}" y2="${YB}" stroke="${C1}" stroke-width="1.4" stroke-dasharray="3 4" stroke-opacity=".7"/>`;
+  s += `<text x="${f.sx(a0) - 6}" y="${YT + 14}" text-anchor="end" ${halo}${C0}">Ø Alter Nichtrauchende ${fmt(a0, 1)} J.</text><text x="${f.sx(a1) + 6}" y="${YT + 14}" ${halo}${C1}">Ø Alter Rauchende ${fmt(a1, 1)} J.</text>`;
+  // mittlere FEV
+  s += `<line x1="${X0}" x2="${X1}" y1="${f.sy(f0)}" y2="${f.sy(f0)}" stroke="${C0}" stroke-width="2.6" stroke-dasharray="9 5"/><line x1="${X0}" x2="${X1}" y1="${f.sy(f1)}" y2="${f.sy(f1)}" stroke="${C1}" stroke-width="3"/>`;
+  s += `<text x="${X0 + 8}" y="${f.sy(f1) - 9}" class="strong" ${halo}${C1}">Ø FEV Rauchende ${fmt(f1)} l</text><text x="${X0 + 8}" y="${f.sy(f0) - 9}" class="strong" ${halo}${C0}">Ø FEV Nichtrauchende ${fmt(f0)} l</text>`;
+  // Schwerpunkte
+  s += `<circle cx="${f.sx(a0)}" cy="${f.sy(f0)}" r="8" fill="var(--surface)" stroke="${C0}" stroke-width="3"/><circle cx="${f.sx(a1)}" cy="${f.sy(f1)}" r="8" fill="var(--surface)" stroke="${C1}" stroke-width="3"/>`;
+  $("conf").innerHTML = s;
   $("conf-r").innerHTML = readout("FEV Rauchende", fmt(f1) + " l", "r-decision") + readout("FEV Nichtrauchende", fmt(f0) + " l") + readout("Alter Rauchende", fmt(a1, 1) + " J.") + readout("Alter Nichtrauchende", fmt(a0, 1) + " J.");
 }
 
