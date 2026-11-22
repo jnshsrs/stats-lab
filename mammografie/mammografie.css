@@ -143,3 +143,7 @@ input[type=range] { width: 100%; accent-color: var(--accent); }
 .fagan .fg-v { font-size: 12.5px; font-weight: 700; fill: var(--fg); }
 .lr-fagan-text p { font-size: 15px; margin: 0 0 8px; }
 .next-hint { font-size: 15px; border-left: 3px solid var(--accent); padding-left: 12px; }
+.formula .katex-display { margin: 4px 0; text-align: left; overflow-x: auto; overflow-y: hidden; }
+.formula .katex-display > .katex { text-align: left; }
+.lr-card .f .katex { font-size: 1.3em; }
+.lr-step .eq { font-family: inherit; }
