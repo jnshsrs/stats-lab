@@ -86,7 +86,7 @@ const path = pts => pts.map((p, i) => (i ? "L" : "M") + p[0].toFixed(1) + "," + 
 const effOf = () => S.test === "p2" ? { p1: S.p1, p2: S.p2 } : { d: S.effMode === "raw" ? (S.sd > 0 ? S.delta / S.sd : 0) : S.d };
 
 function numInput(key, label, min, max, step, help) {
-  return `<div class="in" data-key="${key}"><label for="in-${key}">${label}</label><input type="number" id="in-${key}" min="${min}" max="${max}" step="${step}" inputmode="decimal">${help ? `<span class="help">${help}</span>` : ""}</div>`;
+  return `<div class="in" data-key="${key}"><label for="in-${key}">${label}</label><input type="number" id="in-${key}" min="${min}" max="${max}" step="${step}" inputmode="decimal">${help ? `<span class="help">${help}</span>` : ""}<span class="state"></span></div>`;
 }
 function buildForm() {
   $("test-seg").innerHTML = Object.entries(TESTS).map(([k, t]) => `<button type="button" data-test="${k}" aria-pressed="${k === S.test}">${t.label}<small>${t.sub}</small></button>`).join("");
@@ -126,11 +126,16 @@ function update(syncInputs = true) {
   document.querySelectorAll("[data-sides]").forEach(b => b.setAttribute("aria-pressed", b.dataset.sides === S.sides));
   document.querySelectorAll("[data-eff]").forEach(b => b.setAttribute("aria-pressed", b.dataset.eff === S.effMode));
   // welche Felder sichtbar und welches berechnet wird
-  const show = (k, on) => { const row = document.querySelector(`.in[data-key="${k}"]`); if (row) row.hidden = !on; };
-  if (S.test !== "p2") { show("d", S.effMode === "d"); show("delta", S.effMode === "raw"); show("sd", S.effMode === "raw"); }
-  show("dropout", S.target === "n");
   const solvedKey = S.target === "n" ? "n" : S.target === "power" ? "power" : S.target === "alpha" ? "alpha" : (S.test === "p2" ? "p2" : (S.effMode === "raw" ? "delta" : "d"));
-  document.querySelectorAll(".in[data-key]").forEach(r => r.classList.toggle("solved", r.dataset.key === solvedKey));
+  const unused = {};
+  if (S.test !== "p2") { if (S.effMode === "d") { unused.delta = unused.sd = "nicht benötigt: Effekt als Cohen's d angegeben"; } else unused.d = "nicht benötigt: Effekt als Differenz und SD angegeben"; }
+  if (S.target !== "n") unused.dropout = "nicht benötigt: nur für die Fallzahl relevant";
+  document.querySelectorAll(".in[data-key]").forEach(r => {
+    const k = r.dataset.key, sol = k === solvedKey, un = !sol && unused[k], st = r.querySelector(".state"), inp = r.querySelector("input");
+    r.hidden = false; r.classList.toggle("solved", sol); r.classList.toggle("unused", !!un);
+    if (inp) inp.disabled = sol || !!un;
+    if (st) st.textContent = sol ? "wird berechnet, siehe Ergebnis" : un || "";
+  });
 
   const T = TESTS[S.test], unitN = S.test === "t1" ? "Personen" : "pro Gruppe";
   let eff = effOf(), big = "", sub = "", warn = "", n = S.n, pw = S.power, alpha = S.alpha;

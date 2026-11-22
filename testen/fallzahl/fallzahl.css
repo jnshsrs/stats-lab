@@ -24,8 +24,12 @@
 .in .help { grid-column: 1 / -1; font-size: 12.5px; color: var(--muted); }
 .in input[type=number] { width: 100%; font: 500 15px var(--font-mono); padding: 7px 9px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); color: var(--fg); text-align: right; }
 .in input:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
-.in.solved { opacity: .45; }
-.in.solved input { pointer-events: none; }
+.in.solved, .in.unused { opacity: .5; }
+.in.solved input, .in.unused input { pointer-events: none; background: var(--highlight); }
+.in .state { grid-column: 1 / -1; font-size: 12px; font-weight: 600; color: var(--muted); }
+.in .state:empty { display: none; }
+.in.solved .state { color: var(--accent); }
+.in.solved { opacity: .75; } .in.solved input { border-style: dashed; }
 .sub-seg { grid-column: 1 / -1; }
 
 .out { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
