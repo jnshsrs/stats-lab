@@ -20,6 +20,8 @@ function bcdf(n, p, k) { if (k < 0) return 0; let s = 0; for (let i = 0; i <= Ma
 
 /* ---------- Helfer ---------- */
 const $ = id => document.getElementById(id);
+const tz = x => String(x).replace(/\./g, "{.}").replace(/,/g, "{,}").replace(/−/g, "-").replace(/ %/g, "\\,\\%").replace(/≤/g, "\\le ").replace(/≥/g, "\\ge ");
+const TB = (t, fb) => window.katex ? texBlock(t) : fb;
 const fmt = (x, d = 3) => x.toLocaleString("de-DE", { minimumFractionDigits: d, maximumFractionDigits: d });
 const pct = (x, d = 1) => (x * 100).toLocaleString("de-DE", { minimumFractionDigits: d, maximumFractionDigits: d }) + " %";
 const path = pts => pts.map((p, i) => (i ? "L" : "M") + p[0].toFixed(1) + "," + p[1].toFixed(1)).join("");
@@ -108,8 +110,8 @@ function renderD() {
   $("d-cdf").setAttribute("aria-label", `Verteilungsfunktion als Treppe, F(${hi}) = ${fmt(Fhi)}`);
 
   $("d-formula").innerHTML = D.mode === "eq"
-    ? `<span>P(X = ${lo}) = (${n} über ${lo}) · ${fmt(p, 2)}<sup>${lo}</sup> · ${fmt(1 - p, 2)}<sup>${n - lo}</sup> = ${fmt(prob, 4)}</span><span>= Sprunghöhe der Treppe bei k = ${lo}: F(${lo}) − F(${lo - 1}) = ${fmt(Fhi, 4)} − ${fmt(Flo, 4)}</span>`
-    : `<span>${dQuestion()} = Summe der markierten Balken</span><span>= F(${hi}) − F(${lo - 1}) = ${fmt(Fhi, 4)} − ${fmt(Flo, 4)} = ${fmt(prob, 4)}</span>`;
+    ? TB(String.raw`\begin{aligned}P(X = ${lo}) &= \binom{${n}}{${lo}} \cdot ${tz(fmt(p, 2))}^{${lo}} \cdot ${tz(fmt(1 - p, 2))}^{${n - lo}} \\ &= ${tz(fmt(prob, 4))} \\ &= F(${lo}) - F(${lo - 1})\end{aligned}`, `<span>P(X = ${lo}) = ${fmt(prob, 4)}</span>`) + `<span class="dim">Die Wahrscheinlichkeit ist die Sprunghöhe der Treppe bei k = ${lo}.</span>`
+    : TB(String.raw`\begin{aligned}${tz(dQuestion())} &= F(${hi}) - F(${lo - 1}) \\ &= ${tz(fmt(Fhi, 4))} - ${tz(fmt(Flo, 4))} = ${tz(fmt(prob, 4))}\end{aligned}`, `<span>${dQuestion()} = ${fmt(prob, 4)}</span>`) + `<span class="dim">Summe der markierten Balken</span>`;
   $("d-stats").innerHTML = readout("Erwartungswert n · p", fmt(n * p, 1)) + readout("Standardabweichung", fmt(Math.sqrt(n * p * (1 - p)), 2)) + readout(`F(${hi})`, fmt(Fhi, 3));
 }
 
@@ -226,11 +228,12 @@ function renderC() {
   $("c-cdf").innerHTML = c;
 
   const z = C.dist === "normal" ? v => ` (z = ${fmt((v - P.mu) / P.sigma, 2)})` : () => "";
+  const qT = tz(q), zT = v => C.dist === "normal" ? String.raw`\quad (z = ${tz(fmt((v - P.mu) / P.sigma, 2))})` : "";
   $("c-formula").innerHTML = C.mode === "eq"
-    ? `<span>P(X = ${xf(C.a)}) = 0, denn eine Linie hat keine Fläche.</span><span>f(${xf(C.a)}) = ${fmt(Dd.pdf(C.a, P), 4)} ist eine Dichte, keine Wahrscheinlichkeit.</span>`
-    : C.mode === "le" ? `<span>${q} = Fläche links von b = F(${xf(hi)})${z(hi)}</span><span>= ${fmt(Fh, 4)}</span>`
-    : C.mode === "ge" ? `<span>${q} = 1 − F(${xf(lo)})${z(lo)}</span><span>= 1 − ${fmt(Fl, 4)} = ${fmt(prob, 4)}</span>`
-    : `<span>${q} = Fläche zwischen a und b</span><span>= F(${xf(hi)}) − F(${xf(lo)}) = ${fmt(Fh, 4)} − ${fmt(Fl, 4)} = ${fmt(prob, 4)}</span>${C.dist === "normal" ? `<span>z-Werte: ${fmt((lo - P.mu) / P.sigma, 2)} und ${fmt((hi - P.mu) / P.sigma, 2)}</span>` : ""}`;
+    ? TB(String.raw`P(X = ${tz(xf(C.a))}) = 0`, `<span>P(X = ${xf(C.a)}) = 0</span>`) + `<span class="dim">Eine Linie hat keine Fläche. f(${xf(C.a)}) = ${fmt(Dd.pdf(C.a, P), 4)} ist eine Dichte, keine Wahrscheinlichkeit.</span>`
+    : C.mode === "le" ? TB(String.raw`${qT} = F(${tz(xf(hi))}) = ${tz(fmt(Fh, 4))}`, `<span>${q} = ${fmt(Fh, 4)}</span>`) + `<span class="dim">Fläche links von b</span>`
+    : C.mode === "ge" ? TB(String.raw`\begin{aligned}${qT} &= 1 - F(${tz(xf(lo))}) \\ &= 1 - ${tz(fmt(Fl, 4))} = ${tz(fmt(prob, 4))}\end{aligned}`, `<span>${q} = ${fmt(prob, 4)}</span>`)
+    : TB(String.raw`\begin{aligned}${qT} &= F(${tz(xf(hi))}) - F(${tz(xf(lo))}) \\ &= ${tz(fmt(Fh, 4))} - ${tz(fmt(Fl, 4))} = ${tz(fmt(prob, 4))}\end{aligned}`, `<span>${q} = ${fmt(prob, 4)}</span>`) + `<span class="dim">Fläche zwischen a und b${C.dist === "normal" ? `, z-Werte ${fmt((lo - P.mu) / P.sigma, 2)} und ${fmt((hi - P.mu) / P.sigma, 2)}` : ""}</span>`;
   const m = Dd.mean(P), sd = Dd.sd(P);
   $("c-stats").innerHTML = readout("Erwartungswert", isNaN(m) ? "n. def." : fmt(m, 1)) + readout("Standardabweichung", isNaN(sd) ? "n. def." : fmt(sd, 2)) +
     readout(C.mode === "ge" || C.mode === "eq" ? `F(${xf(lo)})` : `F(${xf(hi)})`, fmt(C.mode === "ge" || C.mode === "eq" ? Dd.cdf(lo, P) : Fh, 3));

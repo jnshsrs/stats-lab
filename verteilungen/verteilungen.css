@@ -46,3 +46,8 @@ input[type=range] { width: 100%; accent-color: var(--accent); }
 .compare th, .compare td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
 .compare th { font-weight: 600; background: var(--highlight); }
 .compare td:first-child { font-weight: 600; white-space: nowrap; }
+
+/* LaTeX */
+.formula .katex-display { margin: 2px 0; text-align: left; overflow-x: auto; overflow-y: hidden; }
+.formula .katex-display > .katex { text-align: left; }
+.formula .dim { white-space: normal; }
