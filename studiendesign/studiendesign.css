@@ -208,7 +208,7 @@ table.when .yes { color: var(--kontrolle); font-weight: 600; } table.when .no { 
 .q p { margin: 0; font-weight: 500; }
 .q .opts { display: flex; flex-wrap: wrap; gap: 6px; }
 .q .opts button { border: 1px solid var(--line); background: var(--surface); color: var(--fg); border-radius: 8px; padding: 6px 10px; font: 500 13.5px var(--font-sans); cursor: pointer; }
-.q .opts button.right { background: var(--kontrolle); border-color: var(--kontrolle); color: var(--on-accent); }
+.q .opts button.right { background: var(--therapie); border-color: var(--therapie); color: var(--on-accent); }
 .q .opts button.wrong { border-color: var(--beta-ink); color: var(--beta-ink); text-decoration: line-through; }
 .q .fb { font-size: 14.5px; color: var(--muted); margin: 0; }
 .q .fb b { color: var(--fg); }
