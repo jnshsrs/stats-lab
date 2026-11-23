@@ -20,6 +20,7 @@ const PATH = [
   ["grosse-zahlen", "Große und kleine Zahlen", 2],
   ["zgws", "Grenzwertsatz, Standardfehler, Konfidenzintervall", 2],
   ["binomialtest", "Binomialtest: Annahme- und Ablehnungsbereich", 3],
+  ["z-test", "Der z-Test: Brücke zum t-Test", 3],
   ["t-test", "Die t-Test-Kaskade", 3],
   ["t-test-varianten", "Welcher t-Test?", 3],
   ["entscheidung", "Entscheidungstheorie", 3],
