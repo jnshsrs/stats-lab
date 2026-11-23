@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Die Fall-Kontroll-Studie · Stats Lab</title>
+<meta name="description" content="Fall-Kontroll-Studie Schritt für Schritt: Fälle sammeln, Kontrollen ziehen, Exposition erfragen. Warum nur das Odds Ratio zulässig ist, Doll und Hill 1950 zu Rauchen und Lungenkrebs, Erinnerungsverzerrung und die Wahl der Kontrollen.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../assets/css/base.css?v=202611231757">
+<link rel="stylesheet" href="../studiendesign.css?v=202611231757">
+</head>
+<body>
+<header class="site-header">
+  <div class="column">
+    <a class="brand" href="../../">
+      <svg class="brand-mark" viewBox="0 0 22 22" aria-hidden="true"><path d="M1 19 C5 19 6 4 9 4 S13 19 17 19" fill="none" class="bm-a" stroke-width="2.2" stroke-linecap="round"/><path d="M5 19 C9 19 10 7 13 7 S17 19 21 19" fill="none" class="bm-b" stroke-width="2.2" stroke-linecap="round"/></svg>
+      Stats Lab
+    </a>
+    <nav class="site-nav" aria-label="Hauptnavigation">
+      <a href="../../">Visualisierungen</a>
+      <a href="../../glossar/">Glossar</a>
+      <a href="https://github.com/jnshsrs/stats-lab">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main class="column">
+  <section class="intro">
+    <a class="back" href="../../">← Alle Visualisierungen</a>
+    <h1>Die Fall-Kontroll-Studie</h1>
+    <p class="byline">Dr. Jens Hüsers · Forschungsmethodik</p>
+    <p class="lede">Eine Kohortenstudie wartet, bis Menschen erkranken. Bei seltenen Erkrankungen dauert das Jahrzehnte und braucht Zehntausende. Die Fall-Kontroll-Studie dreht die Richtung um: Sie beginnt bei denen, die schon erkrankt sind, sucht vergleichbare Gesunde dazu und fragt beide, was früher war.</p>
+  </section>
+
+  <details class="acc" id="acc-1" open>
+    <summary><span class="acc-no">1</span><span class="acc-title">Rückwärts von den Fällen aus<span class="acc-teaser">Population, Fälle, Kontrollen, Vierfeldertafel.</span></span></summary>
+    <div class="acc-body">
+      <p class="text">1.000 Menschen, 30 % davon exponiert. Exponierte erkranken dreimal so oft wie nicht Exponierte (wahres relatives Risiko 3). Diese Wahrheit kennt in der Realität niemand. Klicken Sie sich durch die Studie.</p>
+      <div class="seg four" role="group" aria-label="Schritt" id="f-sw"><button type="button" data-k="0" aria-pressed="true"><b>1</b> Population</button><button type="button" data-k="1" aria-pressed="false"><b>2</b> Fälle sammeln</button><button type="button" data-k="2" aria-pressed="false"><b>3</b> Kontrollen ziehen</button><button type="button" data-k="3" aria-pressed="false"><b>4</b> Exposition erfragen</button></div>
+      <div class="controls"><div class="panel-grid" style="background:none;padding:0">
+        <div class="ctrl"><div class="ctrl-head"><label for="fp">Risiko bei nicht Exponierten</label><output id="fp-v"></output></div><input id="fp" type="range" min="0" max="5" step="1" value="1"></div>
+        <div class="ctrl"><div class="ctrl-head"><label for="fk">Kontrollen je Fall</label><output id="fk-v"></output></div><input id="fk" type="range" min="1" max="4" step="1" value="1"></div>
+      </div><div class="actions"><button type="button" class="btn ghost" id="f-new">Neue Population</button></div></div>
+      <svg class="chart" id="f-ch" viewBox="0 0 900 360" role="img" aria-label="Population als Punkte"></svg>
+      <div class="legend"><span><i style="background:var(--pal-3)"></i>Person</span><span><i style="background:transparent;border:2px solid var(--accent)"></i>exponiert</span><span><i style="background:var(--beta-ink)"></i>erkrankt (Fall)</span><span><i style="background:var(--fg)"></i>als Kontrolle gezogen</span></div>
+      <div class="two-col">
+        <div class="tab-wrap"><table class="cells" id="f-tab"></table></div>
+        <div class="readouts" id="f-r"></div>
+      </div>
+      <p class="callout" id="f-c"></p>
+    </div>
+  </details>
+
+  <details class="acc" id="acc-2" open>
+    <summary><span class="acc-no">2</span><span class="acc-title">Doll und Hill, 1950<span class="acc-teaser">Rauchen und Lungenkrebs: die berühmteste Fall-Kontroll-Studie.</span></span></summary>
+    <div class="acc-body">
+      <p class="text">Richard Doll und Austin Bradford Hill befragten in Londoner Krankenhäusern Patientinnen und Patienten mit Lungenkrebs. Zu jedem Fall suchten sie eine Kontrolle: gleiches Geschlecht, gleiche Fünfjahres-Altersgruppe, dasselbe Krankenhaus, etwa zur selben Zeit, mit einer anderen Erkrankung als Krebs. Gefragt wurde nach dem Rauchen.</p>
+      <div class="seg two" role="group" aria-label="Geschlecht" id="h-sw"><button type="button" data-k="0" aria-pressed="true">Männer (649 Paare)</button><button type="button" data-k="1" aria-pressed="false">Frauen (60 Paare)</button></div>
+      <div class="two-charts">
+        <div class="tab-wrap" style="align-self:center"><table class="cells" id="h-tab"></table></div>
+        <svg class="chart" id="h-ch" viewBox="0 0 520 260" role="img" aria-label="Anteil Nichtrauchende bei Fällen und Kontrollen"></svg>
+      </div>
+      <p class="callout" id="h-c"></p>
+      <p class="note">Bradford Hill hatte zwei Jahre zuvor das erste moderne RCT mitgestaltet, die Streptomycin-Studie. Zum Rauchen war ein RCT unmöglich. Doll und Hill bestätigten den Befund ab 1951 zusätzlich in einer Kohorte von über 30.000 britischen Ärzten.</p>
+    </div>
+  </details>
+
+  <details class="acc" id="acc-3" open>
+    <summary><span class="acc-no">3</span><span class="acc-title">Fallstricke<span class="acc-teaser">Erinnerung, Kontrollen, zeitliche Reihenfolge.</span></span></summary>
+    <div class="acc-body">
+      <p class="text">Wer erkrankt ist, denkt intensiver über mögliche Ursachen nach als jemand, der gesund ist. Fälle erinnern sich deshalb oft vollständiger an frühere Expositionen. Im Beispiel liegt das wahre Odds Ratio bei 2,0. Lassen Sie die Kontrollen einen Teil ihrer Expositionen vergessen.</p>
+      <div class="controls"><div class="ctrl"><div class="ctrl-head"><label for="rb">Kontrollen vergessen ihre Exposition zu</label><output id="rb-v"></output></div><input id="rb" type="range" min="0" max="50" step="5" value="0"></div></div>
+      <div class="two-col">
+        <div class="tab-wrap"><table class="cells" id="rb-tab"></table></div>
+        <div class="readouts" id="rb-r"></div>
+      </div>
+      <ol class="check">
+        <li><b>Erinnerungsverzerrung (Recall-Bias).</b> Schon 20 % Vergessen bei den Kontrollen machen aus einem Odds Ratio von 2,0 eines von rund 2,7. Abhilfe: Exposition aus Akten statt aus dem Gedächtnis, standardisierte Interviews, Befragende, die nicht wissen, wer Fall und wer Kontrolle ist.</li>
+        <li><b>Die Wahl der Kontrollen.</b> Kontrollen sollen aus derselben Population stammen wie die Fälle und hätten im Erkrankungsfall ebenfalls Fall werden können. Krankenhauskontrollen sind bequem, aber gefährlich, wenn ihre Erkrankung selbst mit der Exposition zusammenhängt. Stammen die Kontrollen etwa aus der Lungenambulanz, wo viele Menschen mit chronischer Bronchitis behandelt werden, rauchen sie überdurchschnittlich viel. Das drückt das Odds Ratio Richtung 1.</li>
+        <li><b>Matching ersetzt keine Adjustierung.</b> Gleiches Alter und Geschlecht machen Fälle und Kontrollen in diesen Merkmalen vergleichbar. Für das gematchte Merkmal selbst lässt sich dann kein Effekt mehr schätzen, und andere Störgrößen bleiben. Sie gehören ins <a href="../../regression/drittvariablen/">Pfeildiagramm</a> und ins Modell, meist eine <a href="../../logistische-regression/s-kurve/">logistische Regression</a>.</li>
+        <li><b>Was war zuerst da?</b> Die Exposition muss vor der Erkrankung liegen. Wer wegen beginnender Knieschmerzen den Sport aufgibt, erscheint in der Befragung als „inaktiv“, obwohl die Inaktivität Folge und nicht Ursache ist.</li>
+      </ol>
+    </div>
+  </details>
+
+  <section class="block refs" aria-labelledby="refs-h">
+    <h2 id="refs-h">Quellen</h2>
+    <ul><li>Doll, R., &amp; Hill, A. B. (1950). Smoking and carcinoma of the lung. Preliminary report. British Medical Journal, 2(4682), 739–748. Tabelle IV.</li>
+    <li>Doll, R., &amp; Hill, A. B. (1954). The mortality of doctors in relation to their smoking habits. British Medical Journal, 1(4877), 1451–1455.</li>
+    <li>Schulz, K. F., &amp; Grimes, D. A. (2002). Case-control studies: research in reverse. The Lancet, 359(9304), 431–434.</li>
+    <li>Simulation in Abschnitt 1 und 3: eigene Zahlen.</li></ul>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="column">
+    <span>© 2026 Dr. Jens Hüsers · Lehrmaterial für Forschungsmethodik und Statistik</span>
+    <span class="footer-links"><a href="https://github.com/jnshsrs/stats-lab">Quellcode auf GitHub</a><span>Ohne Cookies und Tracking</span></span>
+  </div>
+</footer>
+<script src="fall-kontrolle.js?v=202611231757"></script>
+<script src="../../assets/js/path.js?v=202611231757"></script>
+</body>
+</html>

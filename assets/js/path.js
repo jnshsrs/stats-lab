@@ -13,6 +13,7 @@ const PATH = [
   ["verteilungen", "Diskret und stetig", 0],
   ["effektgroessen", "Effektgrößen", 0],
   ["studienarten", "Beobachten oder eingreifen: Studiendesigns im Überblick", 1],
+  ["fall-kontrolle", "Die Fall-Kontroll-Studie", 1],
   ["stichprobe", "Stichprobe und Population", 2],
   ["grosse-zahlen", "Große und kleine Zahlen", 2],
   ["zgws", "Grenzwertsatz, Standardfehler, Konfidenzintervall", 2],

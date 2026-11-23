@@ -214,3 +214,10 @@ table.when .yes { color: var(--kontrolle); font-weight: 600; } table.when .no { 
 .q .fb b { color: var(--fg); }
 table.when td:first-child { white-space: normal; }
 .pedro { display: inline-flex; align-items: center; gap: 4px; font: 600 12px var(--font-mono); color: var(--accent); border: 1px solid var(--accent-soft); border-radius: 999px; padding: 1px 8px; margin: 2px 4px 2px 0; white-space: nowrap; }
+table.cells { border-collapse: collapse; font-size: 15px; width: 100%; }
+table.cells th, table.cells td { padding: 8px 10px; border-bottom: 1px solid var(--line); text-align: right; font-variant-numeric: tabular-nums; }
+table.cells th:first-child, table.cells td:first-child { text-align: left; }
+table.cells thead th { font-size: 13px; color: var(--muted); font-weight: 600; }
+table.cells tr.sum td { border-top: 2px solid var(--fg); font-weight: 600; }
+table.cells .muted { color: var(--muted); font-size: 13px; }
+.seg button b { font-family: var(--font-mono); margin-right: 6px; }
