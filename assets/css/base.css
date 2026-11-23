@@ -1,7 +1,7 @@
 /* Stats Lab · gemeinsame Basis für alle Visualisierungen
    Layout: eine zentrierte Lesespalte, schmale Kopfzeile, ruhiger Footer.
    Farben und Schriften kommen ausschließlich aus theme.css. Hier stehen keine festen Farbwerte. */
-@import url("theme.css?v=202611232139");
+@import url("theme.css?v=202611232157");
 
 :root { --column: 960px; }
 
@@ -20,13 +20,15 @@ img, svg { max-width: 100%; }
 /* Kopfzeile */
 .site-header { border-bottom: 1px solid var(--line); background: var(--surface); }
 .site-header .column { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 60px; }
-.brand { display: inline-flex; align-items: center; gap: 10px; font-weight: 700; font-size: 18px; color: var(--fg); text-decoration: none; letter-spacing: -0.01em; }
+.brand { white-space: nowrap; display: inline-flex; align-items: center; gap: 10px; font-weight: 700; font-size: 18px; color: var(--fg); text-decoration: none; letter-spacing: -0.01em; }
 .brand-mark { display: inline-block; width: 22px; height: 22px; }
 .brand-mark .bm-a { stroke: var(--kontrolle); }
 .brand-mark .bm-b { stroke: var(--therapie); }
 .site-nav { display: flex; gap: 20px; font-size: 15px; }
 .site-nav a { color: var(--muted); text-decoration: none; }
 .site-nav a:hover, .site-nav a[aria-current="page"] { color: var(--fg); }
+@media (max-width: 560px) { .site-header .column { gap: 10px; } .site-nav { gap: 12px; font-size: 14px; } .site-nav a[href^="https://github.com"] { display: none; } }
+@media (max-width: 360px) { .brand { font-size: 16px; gap: 6px; } .site-nav { gap: 10px; font-size: 13px; } }
 
 /* Typografie */
 h1, h2, h3 { line-height: 1.15; letter-spacing: -0.015em; text-wrap: balance; }
