@@ -6,9 +6,9 @@
 <title>Cam-Morphologie und Knorpeldefekt · Stats Lab</title>
 <meta name="description" content="Logistische Regression in der Praxis: Alpha-Winkel und Knorpeldefekt bei Fußballspielern, Odds Ratio pro Grad und pro 10 Grad, SPSS-Ausgabe lesen, Adjustierung für Symptomstatus, Ergebnisse berichten.">
 <link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="../../assets/css/base.css?v=202611232118">
+<link rel="stylesheet" href="../../assets/css/base.css?v=202611232139">
 <link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
-<link rel="stylesheet" href="cam-morphologie.css?v=202611232118">
+<link rel="stylesheet" href="cam-morphologie.css?v=202611232139">
 </head>
 <body>
 <header class="site-header">
@@ -77,7 +77,33 @@
   </details>
 
   <details class="acc" id="acc-4" open>
-    <summary><span class="acc-no">4</span><span class="acc-title">Berichten und prüfen<span class="acc-teaser">Ein Ergebnissatz und fünf Fragen an jedes logistische Modell.</span></span></summary>
+    <summary><span class="acc-no">4</span><span class="acc-title">Vom Odds Ratio zu Prozentpunkten<span class="acc-teaser">Vorhergesagte Wahrscheinlichkeiten und Marginal Effects.</span></span></summary>
+    <div class="acc-body">
+      <p class="text">„OR <span id="or10"></span> pro 10 Grad“ ist korrekt, aber schwer greifbar, und Odds Ratios werden leicht wie relative Risiken gelesen. Die Frage aus der Praxis lautet: Um wie viele Prozentpunkte steigt die Wahrscheinlichkeit eines Knorpeldefekts? Dafür rechnet man das Modell auf die Skala der Wahrscheinlichkeiten zurück. Diese Übersetzungen heißen Marginal Effects. Grundlage ist hier das Modell mit Alpha-Winkel und Schmerz aus Abschnitt 3.</p>
+      <h3 class="sub">Vorhergesagte Wahrscheinlichkeiten an typischen Werten</h3>
+      <div class="controls"><div class="ctrl"><div class="ctrl-head"><label for="me-a">Alpha-Winkel</label><output id="me-a-v"></output></div><input id="me-a" type="range" min="40" max="85" step="5" value="60"></div></div>
+      <svg class="chart" id="c4" viewBox="0 0 900 360" role="img" aria-label="Vorhergesagte Wahrscheinlichkeit nach Alpha-Winkel mit Zuwachs um 10 Grad"></svg>
+      <div class="legend"><span><i style="background:var(--beta-ink)"></i>symptomatisch</span><span><i style="background:var(--therapie)"></i>schmerzfrei</span></div>
+      <div class="readouts" id="r4"></div>
+      <p class="callout" id="k4"></p>
+      <h3 class="sub">Im Mittel über alle Spieler: Average Marginal Effect</h3>
+      <div class="formula" id="f4"></div>
+      <p class="callout" id="k4b"></p>
+      <h3 class="sub">Cam ja oder nein: adjustierte Risikodifferenz und adjustiertes relatives Risiko</h3>
+      <div class="two-charts">
+        <svg class="chart" id="c4b" viewBox="0 0 520 300" role="img" aria-label="Mittlere vorhergesagte Wahrscheinlichkeit mit und ohne Cam"></svg>
+        <div class="tab-wrap" style="align-self:center"><table class="vtab" id="t4"></table></div>
+      </div>
+      <p class="callout" id="k4c"></p>
+      <div class="infobox">
+        <p><b>Nur, wenn die Stichprobe nicht nach dem Outcome gezogen wurde.</b> Alle Marginal Effects stehen auf vorhergesagten Wahrscheinlichkeiten. In Kohorte, Querschnitt und RCT sind sie gültig. In einer <a href="../../studiendesign/fall-kontrolle/">Fall-Kontroll-Studie</a> legen die Forschenden das Verhältnis von Fällen zu Kontrollen fest, der Achsenabschnitt und damit alle Wahrscheinlichkeiten sind dann künstlich; gültig bleibt nur das Odds Ratio. Hier wurde nach Schmerz ausgewählt, nicht nach dem Knorpeldefekt. Die Wahrscheinlichkeiten gelten deshalb, aber nur für eine Gruppe mit derselben Mischung aus symptomatischen und schmerzfreien Spielern.</p>
+      </div>
+      <p class="note">SPSS bietet Marginal Effects nicht per Menü an; man kann die vorhergesagten Wahrscheinlichkeiten speichern (Binär logistisch → Speichern → Wahrscheinlichkeiten) und von Hand mitteln. In R übernimmt das Paket marginaleffects, in Stata der Befehl margins, jeweils mit Konfidenzintervallen.</p>
+    </div>
+  </details>
+
+  <details class="acc" id="acc-5" open>
+    <summary><span class="acc-no">5</span><span class="acc-title">Berichten und prüfen<span class="acc-teaser">Ein Ergebnissatz und fünf Fragen an jedes logistische Modell.</span></span></summary>
     <div class="acc-body">
       <div class="formula" id="rep"></div>
       <ol class="check">
@@ -85,7 +111,7 @@
         <li><b>Nicht unnötig dichotomisieren.</b> „Cam ja/nein“ wirft Information weg: Ein Spieler mit 61 Grad zählt wie einer mit 95 Grad.</li>
         <li><b>Genug Ereignisse.</b> Faustregel: mindestens etwa 10 Ereignisse (hier Knorpeldefekte) pro Prädiktor. Mit <span id="ev"></span> Defekten trägt dieser Datensatz einige wenige Prädiktoren, nicht zwanzig.</li>
         <li><b>Linear auf der Logit-Skala?</b> Die Kreise in Abschnitt 2 sollten der Kurve folgen. Bei einem Bogen helfen Kategorien oder ein quadratischer Term.</li>
-        <li><b>Design beachten.</b> Symptomatische Spieler sind hier stark überrepräsentiert. Das OR bleibt gültig, die vorhergesagten Wahrscheinlichkeiten gelten aber nur für Gruppen mit derselben Zusammensetzung (vgl. <a href="../../grundlagen/risiko-odds/#acc-4">Fall-Kontroll-Studien</a>).</li>
+        <li><b>Design beachten.</b> Symptomatische Spieler sind hier stark überrepräsentiert. Das OR bleibt gültig, die vorhergesagten Wahrscheinlichkeiten gelten aber nur für Gruppen mit derselben Zusammensetzung (siehe Abschnitt 4 und <a href="../../studiendesign/fall-kontrolle/">Fall-Kontroll-Studie</a>).</li>
       </ol>
       <p class="note">In SPSS: Analysieren → Regression → Binär logistisch. Abhängige Variable: knorpeldefekt; Kovariaten: alpha, schmerz (unter „Kategorial“ als kategorial definieren). Unter „Optionen“ „KI für Exp(B)“ anhaken. Eine Variable alpha10 = alpha / 10 liefert direkt das OR pro 10 Grad.</p>
     </div>
@@ -106,10 +132,10 @@
 </footer>
 <script src="../../assets/vendor/katex/katex.min.js"></script>
 <script src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
-<script src="../../assets/js/tex.js?v=202611232118"></script>
-<script src="../daten/cam.js?v=202611232118"></script>
-<script src="../../assets/js/reg.js?v=202611232118"></script>
-<script src="cam-morphologie.js?v=202611232118"></script>
-<script src="../../assets/js/path.js?v=202611232118"></script>
+<script src="../../assets/js/tex.js?v=202611232139"></script>
+<script src="../daten/cam.js?v=202611232139"></script>
+<script src="../../assets/js/reg.js?v=202611232139"></script>
+<script src="cam-morphologie.js?v=202611232139"></script>
+<script src="../../assets/js/path.js?v=202611232139"></script>
 </body>
 </html>

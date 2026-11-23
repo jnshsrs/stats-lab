@@ -37,11 +37,12 @@ $("z-gen").innerHTML = TB(String.raw`z = \dfrac{\text{Beobachtung} - \text{Erwar
 
 /* ---------- 1 Binomial gegen Normal ---------- */
 function draw1() {
-  const n = +$("bn").value, q = +$("bq").value, p0 = 0.5, k = Math.round(q * n), mu = n * p0, se = Math.sqrt(n * p0 * (1 - p0));
-  $("bn-v").textContent = n; $("bq-v").textContent = `${fmt(q * 100, 0)} % (${k} Treffer)`;
+  const n = +$("bn").value, q = +$("bq").value, p0 = +$("bp").value, k = Math.round(q * n), mu = n * p0, se = Math.sqrt(n * p0 * (1 - p0));
+  $("bn-v").textContent = n; $("bp-v").textContent = fmt(p0, 2); $("bq-v").textContent = `${fmt(q * 100, 0)} % (${k} Treffer)`;
   const pm = Array.from({ length: n + 1 }, (_, i) => bpmf(i, n, p0));
-  const d = Math.abs(k - mu), ext = i => Math.abs(i - mu) >= d - 1e-9;
-  const pEx = Math.min(1, pm.reduce((s, v, i) => s + (ext(i) ? v : 0), 0));
+  const ext = i => k >= mu ? i >= k : i <= k; // beobachtete Seite; zweiseitig wird verdoppelt
+  let F = 0, G = 0; pm.forEach((v, i) => { if (i <= k) F += v; if (i >= k) G += v; });
+  const pEx = Math.min(1, 2 * Math.min(F, G)); // wie im Binomialtest: kleinere Randfläche verdoppeln
   const z = (k - mu) / se, pZ = 2 * (1 - Phi(Math.abs(z))), zc = (Math.abs(k - mu) - 0.5) / se, pC = Math.min(1, 2 * (1 - Phi(zc)));
   const lo = Math.max(0, Math.floor(mu - 4.5 * se)), hi = Math.min(n, Math.ceil(mu + 4.5 * se)), xlo = Math.min(lo, k) - 0.5, xhi = Math.max(hi, k) + 0.5;
   const W = 900, H = 340, P = { L: 20, R: 20, T: 14, B: 44 }, ymax = Math.max(...pm) * 1.12;
@@ -51,14 +52,14 @@ function draw1() {
   s += `<path d="${curve(x => phi((x - mu) / se) / se, A.sx, A.sy, xlo, xhi)}" fill="none" stroke="var(--beta-ink)" stroke-width="3"/>`;
   s += `<line x1="${A.sx(k)}" x2="${A.sx(k)}" y1="${P.T}" y2="${H - P.B}" stroke="var(--fg)" stroke-width="1.6" stroke-dasharray="5 4"/><text x="${A.sx(k) + (k > mu ? -8 : 8)}" y="${P.T + 14}" text-anchor="${k > mu ? "end" : "start"}" class="strong halo">beobachtet: ${k}</text>`;
   $("b-ch").innerHTML = s;
-  $("b-f").innerHTML = TS(String.raw`z = \dfrac{k - n \cdot p_0}{\sqrt{n \cdot p_0 \cdot (1 - p_0)}} = \dfrac{${k} - ${tz(fmt(mu, 0))}}{\sqrt{${n} \cdot 0{,}5 \cdot 0{,}5}} = \dfrac{${tz(fmt(k - mu, 0))}}{${tz(fmt(se, 2))}} = \mathbf{${tz(fmt(z, 2))}}`, `<span class="big">z = ${fmt(z, 2)}</span>`);
-  const ok = n * p0 >= 10;
-  $("b-r").innerHTML = readout("p exakt (Binomialtest)", fp(pEx), "hl") + readout("p z-Test", fp(pZ)) + readout("p z-Test mit Stetigkeitskorrektur", fp(pC)) + readout("n · p₀ ≥ 10?", ok ? "ja" : "nein");
+  $("b-f").innerHTML = TS(String.raw`z = \dfrac{k - n \cdot p_0}{\sqrt{n \cdot p_0 \cdot (1 - p_0)}} = \dfrac{${k} - ${tz(fmt(mu, 1))}}{\sqrt{${n} \cdot ${tz(fmt(p0, 2))} \cdot ${tz(fmt(1 - p0, 2))}}} = \dfrac{${tz(fmt(k - mu, 1))}}{${tz(fmt(se, 2))}} = \mathbf{${tz(fmt(z, 2))}}`, `<span class="big">z = ${fmt(z, 2)}</span>`);
+  const ok = n * p0 >= 10 && n * (1 - p0) >= 10;
+  $("b-r").innerHTML = readout("p exakt (Binomialtest)", fp(pEx), "hl") + readout("p z-Test", fp(pZ)) + readout("p z-Test mit Stetigkeitskorrektur", fp(pC)) + readout("n · p₀ und n · (1 − p₀) ≥ 10?", ok ? "ja" : "nein");
   const dev = pZ - pEx;
-  $("b-c").innerHTML = (ok ? `Mit n · p<sub>0</sub> = ${fmt(mu, 0)} ist die Faustregel erfüllt. ` : `Mit n · p<sub>0</sub> = ${fmt(mu, 0)} ist die Faustregel (mindestens 10) nicht erfüllt. `) +
-    `Der z-Test liefert p = ${fp(pZ)}, der exakte Binomialtest p = ${fp(pEx)}. ${Math.abs(dev) < 0.005 ? "Beide stimmen praktisch überein." : dev < 0 ? "Der z-Test ist hier zu optimistisch: Die glatte Kurve lässt die Hälfte des Balkens am Rand weg." : "Der z-Test ist hier etwas vorsichtiger als der exakte Test."} Die Stetigkeitskorrektur rückt die Grenze um einen halben Treffer nach innen und gleicht das weitgehend aus (p = ${fp(pC)}). Je größer n, desto feiner die Balken und desto besser die Näherung.`;
+  $("b-c").innerHTML = (ok ? `Mit n · p<sub>0</sub> = ${fmt(mu, 1)} und n · (1 − p<sub>0</sub>) = ${fmt(n - mu, 1)} ist die Faustregel erfüllt. ` : `Mit n · p<sub>0</sub> = ${fmt(mu, 1)} und n · (1 − p<sub>0</sub>) = ${fmt(n - mu, 1)} ist die Faustregel (beide mindestens 10) nicht erfüllt. `) +
+    `Der z-Test liefert p = ${fp(pZ)}, der exakte Binomialtest p = ${fp(pEx)}. ${Math.abs(dev) < 0.005 ? "Beide stimmen praktisch überein." : dev < 0 ? `Der z-Test ist hier zu optimistisch: Die glatte Kurve lässt die Hälfte des Balkens am Rand weg${Math.abs(p0 - 0.5) > 0.01 ? ", und sie ist symmetrisch, wo die Binomialverteilung schief ist" : ""}.` : "Der z-Test ist hier etwas vorsichtiger als der exakte Test."} Die Stetigkeitskorrektur rückt die Grenze um einen halben Treffer nach innen und gleicht das weitgehend aus (p = ${fp(pC)}). Je größer n, desto feiner die Balken und desto besser die Näherung.`;
 }
-["bn", "bq"].forEach(id => $(id).addEventListener("input", draw1));
+["bn", "bp", "bq"].forEach(id => $(id).addEventListener("input", draw1));
 
 /* ---------- 2 Mittelwert mit bekanntem σ ---------- */
 const MU0 = 30, SIG = 6;
@@ -78,7 +79,7 @@ function draw2() {
   $("m-f").innerHTML = TS(String.raw`z = \dfrac{\bar{x} - \mu_0}{\sigma / \sqrt{n}} = \dfrac{${tz(fmt(xb, 1))} - 30}{6 / \sqrt{${n}}} = \dfrac{${tz(fmt(xb - MU0, 1))}}{${tz(fmt(se, 2))}} = \mathbf{${tz(fmt(z, 2))}}`, `<span class="big">z = ${fmt(z, 2)}</span>`);
   normPlot("m-ch", z, 1.96, 0);
   $("m-r").innerHTML = readout("Standardfehler σ/√n", `${fmt(se, 2)} kg`) + readout("z", fmt(z, 2)) + readout("p (zweiseitig)", fp(p), p < 0.05 ? "hl" : "") + readout("95-%-KI", `${fmt(xb - 1.96 * se, 1)} bis ${fmt(xb + 1.96 * se, 1)} kg`);
-  $("m-c").innerHTML = `Der Mittelwert der Patientinnen liegt ${fmt(Math.abs(xb - MU0), 1)} kg ${xb < MU0 ? "unter" : "über"} der Norm, das sind ${fmt(Math.abs(z), 2)} Standardfehler. ${p < 0.05 ? `Jenseits von ±1,96: H0 wird bei α = 5 % verworfen (p ${fp(p).startsWith("<") ? fp(p) : "= " + fp(p)}). Das 95-%-KI schließt 30 kg aus.` : `Innerhalb von ±1,96: H0 wird beibehalten (p = ${fp(p)}). Das 95-%-KI enthält 30 kg.`} Derselbe Unterschied wird mit mehr Patientinnen eher signifikant, weil der Standardfehler mit √n schrumpft. Bekannt ist σ hier nur, weil es aus einer großen Normstichprobe stammt; in der eigenen Studie wäre es geschätzt, und dann gilt der t-Test.`;
+  $("m-c").innerHTML = `Der Mittelwert der Patientinnen liegt ${fmt(Math.abs(xb - MU0), 1)} kg ${xb < MU0 ? "unter" : "über"} der Norm, das sind ${fmt(Math.abs(z), 2)} Standardfehler. ${p < 0.05 ? `Jenseits von ±1,96: H0 wird bei α = 5 % verworfen (p ${fp(p).startsWith("<") ? fp(p) : "= " + fp(p)}). Das 95-%-KI schließt 30 kg aus.` : `Innerhalb von ±1,96: H0 wird beibehalten (p = ${fp(p)}). Das 95-%-KI enthält 30 kg.`} Derselbe Unterschied wird mit mehr Patientinnen eher signifikant, weil der Standardfehler mit √n schrumpft. Bekannt ist σ hier nur, weil es aus einer großen Normstichprobe stammt; in der eigenen Studie wäre es geschätzt. Wie man dann vorgeht, zeigt die nächste Station, der t-Test.`;
 }
 ["mn", "mx"].forEach(id => $(id).addEventListener("input", draw2));
 
