@@ -9,6 +9,7 @@ const NS = "http://www.w3.org/2000/svg";
 const dec = (x, d = 1) => x.toLocaleString("de-DE", { minimumFractionDigits: d, maximumFractionDigits: d });
 const tz = x => String(x).replace(/\./g, "{.}").replace(/,/g, "{,}").replace(/−/g, "-").replace(/ %/g, "\\,\\%").replace(/≤/g, "\\le ").replace(/≥/g, "\\ge ");
 const TB = (t, fb) => window.katex ? texBlock(t) : fb;
+const TS = (t, fb) => window.katex ? texSteps(t) : fb;
 const pct = (x, d = 1) => dec(x * 100, d) + " %";
 const deg = x => (x < 0 ? "−" : "") + Math.abs(Math.round(x)) + "°";
 const readout = (l, v) => `<div class="readout"><div class="val">${v}</div><div class="lbl">${l}</div></div>`;
@@ -213,8 +214,8 @@ function hopDraw() {
   if (H.z > 0) s += `<line x1="${x(H.z)}" x2="${x(H.z)}" y1="30" y2="214" stroke="var(--accent)" stroke-width="2.5" stroke-dasharray="6 4"/><text x="${x(H.z) + 6}" y="30" style="fill:var(--accent)">neue „Null“</text>`;
   $("hop").innerHTML = s;
   const lsi = H.b / H.g, gb = H.g - H.z, bb = H.b - H.z, lsiZ = gb > 0 && bb > 0 ? bb / gb : null;
-  let f = TB(String.raw`LSI = \dfrac{\text{betroffen}}{\text{gesund}} \cdot 100 = \dfrac{${H.b}}{${H.g}} \cdot 100 = ${tz(pct(lsi, 0))}`, `<span class="big">LSI = ${H.b} ÷ ${H.g} × 100 = ${pct(lsi, 0)}</span>`);
-  if (H.z > 0) f += `<span class="warn">Mit Null bei ${H.z} cm:</span>` + TB(String.raw`LSI = \dfrac{${H.b} - ${H.z}}{${H.g} - ${H.z}} \cdot 100 = ${lsiZ === null ? "\\text{nicht berechenbar}" : tz(pct(lsiZ, 0))}`, `<span class="warn">(${H.b} − ${H.z}) ÷ (${H.g} − ${H.z}) × 100 = ${lsiZ === null ? "nicht berechenbar" : pct(lsiZ, 0)}</span>`);
+  let f = TS(String.raw`LSI = \dfrac{\text{betroffen}}{\text{gesund}} \cdot 100 = \dfrac{${H.b}}{${H.g}} \cdot 100 = ${tz(pct(lsi, 0))}`, `<span class="big">LSI = ${H.b} ÷ ${H.g} × 100 = ${pct(lsi, 0)}</span>`);
+  if (H.z > 0) f += `<span class="warn">Mit Null bei ${H.z} cm:</span>` + TS(String.raw`LSI = \dfrac{${H.b} - ${H.z}}{${H.g} - ${H.z}} \cdot 100 = ${lsiZ === null ? "\\text{nicht berechenbar}" : tz(pct(lsiZ, 0))}`, `<span class="warn">(${H.b} − ${H.z}) ÷ (${H.g} − ${H.z}) × 100 = ${lsiZ === null ? "nicht berechenbar" : pct(lsiZ, 0)}</span>`);
   f += `<span>Häufiges Kriterium für die Rückkehr zum Sport: LSI ≥ 90 %</span>`;
   $("lsi-f").innerHTML = f;
   $("lsi-r").innerHTML = readout("LSI mit echter Null", pct(lsi, 0)) + readout(H.z ? `LSI mit Null bei ${H.z} cm` : "LSI mit verschobener Null", H.z ? (lsiZ === null ? "–" : pct(lsiZ, 0)) : "Regler bewegen") + readout("Differenz gesund − betroffen", (H.g - H.b) + " cm") + readout("Differenz bei verschobener Null", (H.g - H.b) + " cm");

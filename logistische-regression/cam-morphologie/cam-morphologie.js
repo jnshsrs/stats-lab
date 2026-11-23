@@ -7,6 +7,7 @@ const fmt = (x, d = 2) => x.toLocaleString("de-DE", { minimumFractionDigits: d, 
 const tz = x => String(x).replace(/\./g, "{.}").replace(/,/g, "{,}").replace(/−/g, "-");
 const readout = (l, v, cls = "") => `<div class="readout ${cls}"><div class="val">${v}</div><div class="lbl">${l}</div></div>`;
 const TB = (t, fb) => window.katex ? texBlock(t) : fb;
+const TS = (t, fb) => window.katex ? texSteps(t) : fb;
 const fp = p => p < 0.001 ? "< 0,001" : fmt(p, 3);
 function ticks(lo, hi, n = 8) { const span = hi - lo, raw = span / n, mag = Math.pow(10, Math.floor(Math.log10(raw))); const st = [1, 2, 2.5, 5, 10].map(m => m * mag).find(s => span / s <= n); const o = []; for (let v = Math.ceil(lo / st - 1e-9) * st; v <= hi + 1e-9; v += st) o.push(+v.toFixed(6)); return o; }
 let cpId = 0;
@@ -50,7 +51,7 @@ function draw1() {
   $("r1").innerHTML = readout("Spieler", String(N)) + readout("mit Knorpeldefekt", `${ev} (${pc(ev / N, 0)})`) + readout("Ø Alpha mit Defekt", fmt(mean(AL.filter((a, i) => Y[i])), 1) + "°") + readout("Ø Alpha ohne Defekt", fmt(mean(AL.filter((a, i) => !Y[i])), 1) + "°");
   const a = D.filter((r, i) => CAM[i] && Y[i]).length, b = D.filter((r, i) => CAM[i] && !Y[i]).length, c = D.filter((r, i) => !CAM[i] && Y[i]).length, d = D.filter((r, i) => !CAM[i] && !Y[i]).length;
   $("t1").innerHTML = `<thead><tr><th></th><th>Defekt</th><th>kein Defekt</th><th>Risiko</th></tr></thead><tbody><tr><th>Cam (≥ 60°)</th><td>${a}</td><td>${b}</td><td class="rk">${pc(a / (a + b))}</td></tr><tr><th>keine Cam</th><td>${c}</td><td>${d}</td><td class="rk">${pc(c / (c + d))}</td></tr></tbody>`;
-  $("f1").innerHTML = TB(String.raw`\text{OR} = \dfrac{a \cdot d}{b \cdot c} = \dfrac{${a} \cdot ${d}}{${b} \cdot ${c}} = ${tz(fmt(a * d / (b * c), 2))}`, "");
+  $("f1").innerHTML = TS(String.raw`\text{OR} = \dfrac{a \cdot d}{b \cdot c} = \dfrac{${a} \cdot ${d}}{${b} \cdot ${c}} = ${tz(fmt(a * d / (b * c), 2))}`, "");
   $("k1").innerHTML = `Spieler mit Defekt haben im Mittel einen um ${fmt(mean(AL.filter((x, i) => Y[i])) - mean(AL.filter((x, i) => !Y[i])), 1)} Grad größeren Alpha-Winkel. Teilt man bei 60 Grad in „Cam ja/nein“, ergibt die Vierfeldertafel ein OR von ${fmt(a * d / (b * c), 2)} (siehe <a href="../../grundlagen/risiko-odds/#acc-2">Vierfeldertafel</a>). Die logistische Regression nutzt stattdessen den ganzen Winkel. Violett: symptomatische Spieler, blau: schmerzfreie.`;
 }
 

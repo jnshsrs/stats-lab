@@ -7,6 +7,7 @@ const fmt = (x, d = 2) => x.toLocaleString("de-DE", { minimumFractionDigits: d, 
 const tz = x => String(x).replace(/\./g, "{.}").replace(/,/g, "{,}").replace(/−/g, "-");
 const readout = (l, v, cls = "") => `<div class="readout ${cls}"><div class="val">${v}</div><div class="lbl">${l}</div></div>`;
 const TB = (t, fb) => window.katex ? texBlock(t) : fb;
+const TS = (t, fb) => window.katex ? texSteps(t) : fb;
 const fp = p => p < 0.001 ? "< 0,001" : fmt(p, 3);
 function ticks(lo, hi, n = 8) { const span = hi - lo, raw = span / n, mag = Math.pow(10, Math.floor(Math.log10(raw))); const st = [1, 2, 2.5, 5, 10].map(m => m * mag).find(s => span / s <= n); const o = []; for (let v = Math.ceil(lo / st - 1e-9) * st; v <= hi + 1e-9; v += st) o.push(+v.toFixed(6)); return o; }
 let cpId = 0;
@@ -54,7 +55,7 @@ function draw1() {
   if (D > 0) s += `<line x1="${f.sx(m1)}" x2="${f.sx(m0)}" y1="${yb}" y2="${yb}" stroke="var(--fg)" stroke-width="2"/><text x="${(f.sx(m0) + f.sx(m1)) / 2}" y="${yb - 6}" text-anchor="middle" class="strong">Δ = ${D} mm</text>`;
   s += `<text x="${f.sx(m0) + 6}" y="${f.sy(pdf(0, 0, S) * 0.5)}" class="halo" style="fill:var(--kontrolle)">Kontrolle Ø ${m0}</text><text x="${f.sx(m1) - 6}" y="${f.sy(pdf(0, 0, S) * 0.5)}" text-anchor="end" class="halo" style="fill:var(--therapie)">Therapie Ø ${m1}</text>`;
   $("c1").innerHTML = s;
-  $("f1").innerHTML = TB(String.raw`d = \dfrac{\bar{x}_{\text{Kontrolle}} - \bar{x}_{\text{Therapie}}}{s} = \dfrac{${D}}{${S}} = ${tz(fmt(d, 2))}`, "");
+  $("f1").innerHTML = TS(String.raw`d = \dfrac{\bar{x}_{\text{Kontrolle}} - \bar{x}_{\text{Therapie}}}{s} = \dfrac{${D}}{${S}} = ${tz(fmt(d, 2))}`, "");
   $("r1").innerHTML = readout("Cohen's d", fmt(d, 2), "r-decision") + readout("Überlappung", pc(ovl(d))) + readout("Therapie-Person besser als Kontroll-Person", pc(sup(d))) + readout("Therapie unter dem Kontroll-Mittelwert", pc(Phi(d)));
   $("k1").innerHTML = d < 0.01 ? `Ohne Unterschied liegen beide Verteilungen aufeinander: d = 0, Überlappung 100 %, und eine zufällige Therapie-Person hat nur in 50 % der Fälle weniger Schmerz als eine zufällige Kontroll-Person, wie beim Münzwurf.`
     : `Die Gruppen liegen ${fmt(d, 2)} Standardabweichungen auseinander. Trotzdem überlappen sich die Verteilungen zu ${pc(ovl(d))}: Viele Personen der Kontrollgruppe haben weniger Schmerz als viele der Therapiegruppe. Zieht man zufällig je eine Person aus beiden Gruppen, hat die Therapie-Person in ${pc(sup(d))} der Fälle weniger Schmerz. Verändern Sie die Standardabweichung: Dieselben ${D} mm sind bei großer Streuung ein kleiner, bei kleiner Streuung ein großer Effekt.`;

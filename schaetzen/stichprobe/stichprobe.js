@@ -164,7 +164,7 @@ function drawVsN() {
   $("vsn").innerHTML = s;
   $("vsn").setAttribute("aria-label", `Bei n = ${S.n}: σ = ${fmt(SIGMA, 2)}, Standardfehler ${fmt(se, 2)}`);
   const n4 = 4 * S.n;
-  $("se-formula").innerHTML = TB(String.raw`SE = \dfrac{\sigma}{\sqrt{n}} = \dfrac{${tz(fmt(SIGMA, 2))}}{\sqrt{${S.n}}} = ${tz(fmt(se, 2))}\ \text{${UNIT}} \qquad \text{bei } 4n = ${n4}\text{: } \dfrac{${tz(fmt(SIGMA, 2))}}{\sqrt{${n4}}} = ${tz(fmt(SIGMA / Math.sqrt(n4), 2))}\ \text{${UNIT}}`, `<span>SE = σ / √n = ${fmt(SIGMA, 2)} / √${S.n}</span><span class="big">= ${fmt(se, 2)} ${UNIT}</span><span>bei 4 · n = ${n4}: ${fmt(SIGMA / Math.sqrt(n4), 2)} ${UNIT}</span>`) +
+  $("se-formula").innerHTML = TB(String.raw`\begin{aligned} SE &= \dfrac{\sigma}{\sqrt{n}} \\[6pt] &= \dfrac{${tz(fmt(SIGMA, 2))}}{\sqrt{${S.n}}} \\[6pt] &= ${tz(fmt(se, 2))}\ \text{${UNIT}} \\[12pt] \text{bei } 4n = ${n4}\text{:} \quad SE &= \dfrac{${tz(fmt(SIGMA, 2))}}{\sqrt{${n4}}} = ${tz(fmt(SIGMA / Math.sqrt(n4), 2))}\ \text{${UNIT}} \end{aligned}`, `<span>SE = σ / √n = ${fmt(SIGMA, 2)} / √${S.n}</span><span class="big">= ${fmt(se, 2)} ${UNIT}</span><span>bei 4 · n = ${n4}: ${fmt(SIGMA / Math.sqrt(n4), 2)} ${UNIT}</span>`) +
     `<span class="dim">Vierfaches n, halber Standardfehler.</span>` +
     (means.length >= 20 ? `<span class="dim">simuliert: mittleres s der Stichproben = ${fmt(mean(sds), 2)}, SD der Mittelwerte = ${fmt(sd(means), 2)}</span>` : "");
 }

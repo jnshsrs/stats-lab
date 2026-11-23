@@ -88,9 +88,9 @@ function drawText() {
     `<span>= ${intf(c.tp)} ÷ (${intf(c.tp)} + ${intf(c.fp)}) = ${pc(c.tp / Math.max(1, c.tp + c.fp))}</span>` +
     `<span class="dim">Satz von Bayes: P(K | +) = P(+ | K) · P(K) ÷ [P(+ | K) · P(K) + P(+ | ¬K) · P(¬K)] = ${dec(q.se, 3)} · ${dec(q.p, 4)} ÷ (${dec(q.se, 3)} · ${dec(q.p, 4)} + ${dec(q.f, 3)} · ${dec(1 - q.p, 4)}) = ${pc(q.ppv)}</span>`;
   $("m-formula").innerHTML = window.katex
-    ? texBlock(String.raw`P(K \mid +) = \frac{\text{richtig positive}}{\text{alle positiven}} = \frac{${tz(intf(c.tp))}}{${tz(intf(c.tp))} + ${tz(intf(c.fp))}} = \mathbf{${tz(pc(c.tp / Math.max(1, c.tp + c.fp)))}}`) +
+    ? texSteps(String.raw`P(K \mid +) = \frac{\text{richtig positive}}{\text{alle positiven}} = \frac{${tz(intf(c.tp))}}{${tz(intf(c.tp))} + ${tz(intf(c.fp))}} = \mathbf{${tz(pc(c.tp / Math.max(1, c.tp + c.fp)))}}`) +
       `<span class="dim">Satz von Bayes mit Wahrscheinlichkeiten:</span>` +
-      texBlock(String.raw`P(K \mid +) = \frac{P(+ \mid K)\,P(K)}{P(+ \mid K)\,P(K) + P(+ \mid \neg K)\,P(\neg K)} = \frac{${tz(dec(q.se, 3))} \cdot ${tz(dec(q.p, 4))}}{${tz(dec(q.se, 3))} \cdot ${tz(dec(q.p, 4))} + ${tz(dec(q.f, 3))} \cdot ${tz(dec(1 - q.p, 4))}} = ${tz(pc(q.ppv))}`)
+      texSteps(String.raw`P(K \mid +) = \frac{P(+ \mid K)\,P(K)}{P(+ \mid K)\,P(K) + P(+ \mid \neg K)\,P(\neg K)} = \frac{${tz(dec(q.se, 3))} \cdot ${tz(dec(q.p, 4))}}{${tz(dec(q.se, 3))} \cdot ${tz(dec(q.p, 4))} + ${tz(dec(q.f, 3))} \cdot ${tz(dec(1 - q.p, 4))}} = ${tz(pc(q.ppv))}`)
     : fbM;
   const ratio = q.fp / q.tp;
   $("m-callout").innerHTML = q.ppv < 0.5

@@ -3,6 +3,7 @@
 (() => {
 const tz = x => String(x).replace(/\./g, "{.}").replace(/,/g, "{,}").replace(/−/g, "-").replace(/ %/g, "\\,\\%");
 const TB = (t, fb) => window.katex ? texBlock(t) : fb;
+const TS = (t, fb) => window.katex ? texSteps(t) : fb;
 "use strict";
 
 /* ---------- Mathematik ---------- */
@@ -107,7 +108,7 @@ function drawMosaic(st) {
 
 function drawExpected(st) {
   const i0 = 0, j0 = 0;
-  $("e-formula").innerHTML = `<span class="dim">Beispiel ${S.rows[i0]} · ${S.cols[j0]}</span>` + TB(String.raw`E = \dfrac{\text{Zeilensumme} \cdot \text{Spaltensumme}}{N} = \dfrac{${st.rs[i0]} \cdot ${st.cs[j0]}}{${st.N}} = ${tz(fmt(st.E[i0][j0], 1))}`, `<span class="big">E = ${fmt(st.E[i0][j0], 1)}</span>`) + `<span class="dim">beobachtet: ${S.m[i0][j0]}</span>`;
+  $("e-formula").innerHTML = `<span class="dim">Beispiel ${S.rows[i0]} · ${S.cols[j0]}</span>` + TS(String.raw`E = \dfrac{\text{Zeilensumme} \cdot \text{Spaltensumme}}{N} = \dfrac{${st.rs[i0]} \cdot ${st.cs[j0]}}{${st.N}} = ${tz(fmt(st.E[i0][j0], 1))}`, `<span class="big">E = ${fmt(st.E[i0][j0], 1)}</span>`) + `<span class="dim">beobachtet: ${S.m[i0][j0]}</span>`;
   $("exp").innerHTML = `<tr><th class="rowh">beobachtet (erwartet)</th>${S.cols.map(c => `<th>${c}</th>`).join("")}</tr>` +
     S.m.map((row, i) => `<tr><th class="rowh">${S.rows[i]}</th>${row.map((o, j) => `<td><span class="o">${o}</span> <span class="e">(${fmt(st.E[i][j], 1)})</span></td>`).join("")}</tr>`).join("");
   const low = st.E.flat().filter(e => e < 5).length;
@@ -124,7 +125,7 @@ function drawContrib(st) {
     }).join("")}</tr>`).join("");
   const parts = st.C.flat().map(v => fmt(v, 2));
   const partsT = st.C.flat().map(v => tz(fmt(v, 2)));
-  $("chi-formula").innerHTML = TB(String.raw`\chi^2 = \sum \dfrac{(O - E)^2}{E} = ${partsT.length <= 6 ? partsT.join(" + ") : partsT.slice(0, 5).join(" + ") + " + \\ldots"} = \mathbf{${tz(fmt(st.chi, 2))}}`, `<span class="big">χ² = ${fmt(st.chi, 2)}</span>`);
+  $("chi-formula").innerHTML = TS(String.raw`\chi^2 = \sum \dfrac{(O - E)^2}{E} = ${partsT.length <= 6 ? partsT.join(" + ") : partsT.slice(0, 5).join(" + ") + " + \\ldots"} = \mathbf{${tz(fmt(st.chi, 2))}}`, `<span class="big">χ² = ${fmt(st.chi, 2)}</span>`);
 }
 
 function drawDist(st, crit) {

@@ -6,6 +6,7 @@
 const $ = id => document.getElementById(id);
 const tz = x => String(x).replace(/\./g, "{.}").replace(/,/g, "{,}").replace(/−/g, "-");
 const TB = (t, fb) => window.texBlock ? texBlock(t, fb) : fb;
+const TS = (t, fb) => window.katex ? texSteps(t) : fb;
 const dec = (x, d = 1) => x.toLocaleString("de-DE", { minimumFractionDigits: d, maximumFractionDigits: d });
 const sgn = (x, d = 1) => (x < 0 ? "−" : x > 0 ? "+" : "") + dec(Math.abs(x), d);
 const nice = x => Number.isInteger(x) ? String(x) : dec(x, 1);
@@ -57,7 +58,7 @@ function draw1(st, lay) {
   const left = S.data.filter(v => v < st.mean).reduce((a, v) => a + (v - st.mean), 0);
   const sortedTxt = st.sorted.map((v, r) => mid.includes(r + 1) ? `<b>${v}</b>` : v).join(", ");
   const medTex = n % 2 ? String.raw`\text{Median } \tilde{x} = x_{(${mid[0]})} = ${tz(nice(st.med))}` : String.raw`\text{Median } \tilde{x} = \dfrac{x_{(${mid[0]})} + x_{(${mid[1]})}}{2} = ${tz(nice(st.med))}`;
-  $("f1").innerHTML = TB(String.raw`\bar{x} = \dfrac{\sum x_i}{n} = \dfrac{${st.sum}}{${n}} = ${tz(dec(st.mean, 2))}`, `<span class="big">x̄ = Σx ÷ n = ${st.sum} ÷ ${n} = ${dec(st.mean, 2)}</span>`) +
+  $("f1").innerHTML = TS(String.raw`\bar{x} = \dfrac{\sum x_i}{n} = \dfrac{${st.sum}}{${n}} = ${tz(dec(st.mean, 2))}`, `<span class="big">x̄ = Σx ÷ n = ${st.sum} ÷ ${n} = ${dec(st.mean, 2)}</span>`) +
     `<span>sortiert: ${sortedTxt}</span>` +
     TB(medTex, `<span class="big">Median = ${nice(st.med)}</span>`) +
     `<span class="dim">Abstände zum Mittelwert: links ${sgn(left)}, rechts ${sgn(-left)}</span>`;
@@ -130,8 +131,8 @@ function draw3(st, lay) {
   const F = [
     TB(String.raw`\text{Abweichung} = x_i - \bar{x} \qquad \sum (x_i - \bar{x}) = ${tz(dec(Math.abs(sumDev) < 1e-9 ? 0 : sumDev))}`, "") + `<span class="dim">Plus und Minus heben sich immer auf. Deshalb wird quadriert.</span>`,
     TB(String.raw`SQ = \sum (x_i - \bar{x})^2 = ${tz(dec(st.sq))}`, "") + `<span class="dim">${terms}</span>`,
-    TB(String.raw`s^2 = \dfrac{SQ}{${dnT}} = \dfrac{${tz(dec(st.sq))}}{${st.dn}} = ${tz(dec(st.vr))}\ \text{Tage}^2`, ""),
-    TB(String.raw`s = \sqrt{s^2} = \sqrt{${tz(dec(st.vr))}} = ${tz(dec(st.sd))}\ \text{Tage}`, "")
+    TS(String.raw`s^2 = \dfrac{SQ}{${dnT}} = \dfrac{${tz(dec(st.sq))}}{${st.dn}} = ${tz(dec(st.vr))}\ \text{Tage}^2`, ""),
+    TS(String.raw`s = \sqrt{s^2} = \sqrt{${tz(dec(st.vr))}} = ${tz(dec(st.sd))}\ \text{Tage}`, "")
   ];
   const Ffb = [
     `<span class="big">Abweichung = x − x̄</span><span>Summe aller Abweichungen = ${dec(Math.abs(sumDev) < 1e-9 ? 0 : sumDev)}</span><span class="dim">Plus und Minus heben sich immer auf. Deshalb wird quadriert.</span>`,

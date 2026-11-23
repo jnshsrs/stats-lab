@@ -4,6 +4,7 @@
 (() => {
 const tz = x => String(x).replace(/\./g, "{.}").replace(/,/g, "{,}").replace(/−/g, "-").replace(/ %/g, "\\,\\%");
 const TB = (t, fb) => window.katex ? texBlock(t) : fb;
+const TS = (t, fb) => window.katex ? texSteps(t) : fb;
 "use strict";
 
 /* ---------- Mathematik ---------- */
@@ -133,7 +134,7 @@ function draw3() {
     { f: v => 1 - Math.pow(1 - ALPHA, v), col: "var(--accent-soft)", w: m === "none" ? 3.5 : 2, label: m === "none" },
     { f: v => 1 - Math.pow(1 - ALPHA / v, v), col: "var(--therapie)", w: m === "bonf" ? 3.5 : 2, label: m === "bonf" }
   ], [{ v: S3.N ? S3.faN / S3.N : null, strong: m === "none" }, { v: S3.N ? S3.faB / S3.N : null, strong: m === "bonf" }]);
-  $("f3").innerHTML = TB(String.raw`\alpha_{\text{je Test}} = \dfrac{\alpha}{k} = \dfrac{0{,}05}{${k}} = ${tz(thr(bt))}`, `<span>Schwelle je Test: α / k = ${thr(bt)}</span>`) + TB(String.raw`P(\text{mindestens ein Fehlalarm}) = 1 - (1 - ${tz(thr(bt))})^{${k}} = \mathbf{${tz(pct(thB))}} \le 5\,\%`, `<span class="big">P(mindestens ein Fehlalarm) = ${pct(thB)} ≤ 5 %</span>`);
+  $("f3").innerHTML = TS(String.raw`\alpha_{\text{je Test}} = \dfrac{\alpha}{k} = \dfrac{0{,}05}{${k}} = ${tz(thr(bt))}`, `<span>Schwelle je Test: α / k = ${thr(bt)}</span>`) + TB(String.raw`P(\text{mindestens ein Fehlalarm}) = 1 - (1 - ${tz(thr(bt))})^{${k}} = \mathbf{${tz(pct(thB))}} \le 5\,\%`, `<span class="big">P(mindestens ein Fehlalarm) = ${pct(thB)} ≤ 5 %</span>`);
   $("r3").innerHTML = readout("Schwelle je Test", m === "bonf" ? thr(bt) : "0,05") +
     readout("Studien mit Fehlalarm, ohne Korrektur", S3.N ? pct(S3.faN / S3.N) : pct(thN) + " (Theorie)") +
     readout("Studien mit Fehlalarm, Bonferroni", S3.N ? pct(S3.faB / S3.N) : pct(thB) + " (Theorie)");
