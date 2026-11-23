@@ -92,6 +92,25 @@ Beide Situationen sind Binomialversuche: feste Anzahl unabhängiger Versuche mit
 
 </details>
 
+### A08 · Zuordnung
+
+![Abbildung](abbildungen/binom_p_zuordnen.png)
+
+Die Abbildungen zeigen drei Binomialverteilungen mit n = 10. Die Trefferwahrscheinlichkeiten sind p = 0,2, p = 0,5 und p = 0,8. Welche Zuordnung stimmt?
+
+- [ ] **A** A: 0,8 · B: 0,2 · C: 0,5
+- [ ] **B** A: 0,5 · B: 0,2 · C: 0,8
+- [ ] **C** A: 0,2 · B: 0,8 · C: 0,5
+- [ ] **D** A: 0,8 · B: 0,5 · C: 0,2
+
+<details><summary>Lösung</summary>
+
+**A**: A: 0,8 · B: 0,2 · C: 0,5
+
+Der Gipfel liegt bei n · p Treffern: A um 8, B um 2, C um 5. Bei p = 0,5 ist die Verteilung symmetrisch.
+
+</details>
+
 ## Binomialtest, Hypothesen und p-Wert
 
 ### B01 · Zwei Aussagen bewerten
@@ -229,6 +248,25 @@ Der Standardfehler hängt nur von SD und n ab. α beeinflusst den kritischen Wer
 
 </details>
 
+### C06 · Abbildung
+
+![Abbildung](abbildungen/sd_gegen_se.png)
+
+Eine Abbildung zeigt die Griffkraft einzelner Personen. Die andere zeigt die Mittelwerte vieler Stichproben mit je 36 Personen aus derselben Population. Welche Aussage stimmt?
+
+- [ ] **A** A zeigt die Stichprobenmittelwerte, B die Einzelwerte. Die Breite von A beschreibt den Standardfehler.
+- [ ] **B** Beide Abbildungen zeigen die Standardabweichung, B stammt nur aus einer kleineren Stichprobe.
+- [ ] **C** B zeigt Einzelwerte, die mit einem genaueren Messgerät erhoben wurden.
+- [ ] **D** A zeigt die Einzelwerte, B die Stichprobenmittelwerte. Die Breite von B beschreibt den Standardfehler.
+
+<details><summary>Lösung</summary>
+
+**D**: A zeigt die Einzelwerte, B die Stichprobenmittelwerte. Die Breite von B beschreibt den Standardfehler.
+
+Mittelwerte streuen weniger als Einzelwerte. Die Streuung der Mittelwerte ist der Standardfehler SD/√n, hier 6/√36 = 1.
+
+</details>
+
 ## Konfidenzintervall
 
 ### D01 · Zwei Aussagen bewerten
@@ -363,6 +401,25 @@ Die Abbildung zeigt die Verteilungsfunktion der t-Verteilung (df = 30) mit drei 
 **C**: 0,620: C · 0,027: B · 0,009: A
 
 Je weiter ein t-Wert von 0 entfernt ist, desto kleiner der p-Wert. C liegt nahe der Mitte (großer p-Wert), A am weitesten außen (kleinster p-Wert).
+
+</details>
+
+### E13 · Abbildung
+
+![Abbildung](abbildungen/t_freiheitsgrade.png)
+
+Eine Kurve ist die Standardnormalverteilung, die beiden anderen sind t-Verteilungen mit 2 und mit 10 Freiheitsgraden. Welche Kurve ist die t-Verteilung mit 2 Freiheitsgraden?
+
+- [ ] **A** Das lässt sich nicht erkennen, weil alle Kurven symmetrisch um 0 liegen.
+- [ ] **B** Kurve 3
+- [ ] **C** Kurve 2
+- [ ] **D** Kurve 1
+
+<details><summary>Lösung</summary>
+
+**B**: Kurve 3
+
+Wenige Freiheitsgrade bedeuten mehr Unsicherheit: flacherer Gipfel, dickere Ränder. Mit wachsenden Freiheitsgraden nähert sich die t-Verteilung der Normalverteilung (Kurve 2).
 
 </details>
 
