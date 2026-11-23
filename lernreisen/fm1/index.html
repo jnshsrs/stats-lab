@@ -6,8 +6,8 @@
 <title>Lernreise FM1 · Stats Lab</title>
 <meta name="description" content="Lernreise Forschungsmethodik 1, Teil Inferenzstatistik: elf Stationen von der Wahrscheinlichkeit bis zur Fallzahlplanung, mit Hinweisen zur Vertiefung und Fragen zur Selbstkontrolle.">
 <link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="../../assets/css/base.css?v=202611232157">
-<link rel="stylesheet" href="../lernreisen.css?v=202611232157">
+<link rel="stylesheet" href="../../assets/css/base.css?v=202611232232">
+<link rel="stylesheet" href="../lernreisen.css?v=202611232232">
 </head>
 <body>
 <header class="site-header">
@@ -29,16 +29,18 @@
     <a class="back" href="../">← Alle Lernreisen</a>
     <h1>Forschungsmethodik 1: Inferenzstatistik</h1>
     <p class="byline">Dr. Jens Hüsers · M.Sc. Muskuloskelettale Therapie, OMT 3</p>
-    <p class="lede">Wie schließt man von wenigen Messungen auf alle Patientinnen und Patienten, und wie sicher ist dieser Schluss? Diese Reise führt in elf Stationen von der Wahrscheinlichkeit bis zur Frage, wie viele Personen eine Studie braucht. Gehen Sie die Stationen der Reihe nach durch; jede baut auf der vorherigen auf.</p>
+    <p class="lede">Wie schließt man von wenigen Messungen auf alle Patientinnen und Patienten, und wie sicher ist dieser Schluss? Diese Reise führt in elf Pflichtstationen von der Binomialverteilung bis zur Frage, wie viele Personen eine Studie braucht, ergänzt um eine Grundlage und eine Empfehlung. Gehen Sie die Stationen der Reihe nach durch; jede baut auf der vorherigen auf. Die Fragen zur Selbstkontrolle haben dieselben Formate wie die Klausur.</p>
     <div class="goal">
       <p><b>Worauf es ankommt:</b> weniger auf das Rechnen als auf das Verstehen.</p>
       <ul>
-        <li>Welche Hypothese prüft ein Test, und was sagt ein p-Wert, was nicht?</li>
-        <li>Wie verändern sich Standardfehler, Konfidenzintervall, kritischer Wert und p-Wert, wenn sich n, Streuung, α oder das Konfidenzniveau ändern?</li>
-        <li>Welche Fehler kann eine Testentscheidung haben, und wovon hängt die Power ab?</li>
+        <li>Hypothesen formulieren, gerichtet oder ungerichtet, und zwar vor der Datenerhebung.</li>
+        <li>Einen p-Wert in einer Verteilung verorten und Wahrscheinlichkeiten ablesen, ohne ihn auszurechnen.</li>
+        <li>Standardabweichung und Standardfehler unterscheiden; vorhersagen, wie sich Standardfehler, Konfidenzintervall und kritischer Wert ändern, wenn sich n, Messgenauigkeit, α oder Konfidenzniveau ändern.</li>
+        <li>α-Fehler, β-Fehler und Power erklären; signifikant von klinisch relevant unterscheiden.</li>
+        <li>Einschätzen, was ein Testergebnis in einem RCT und in einer Beobachtungsstudie bedeutet.</li>
       </ul>
     </div>
-    <div class="keys"><span><i></i>Pflichtstation</span><span><i class="done"></i>als erledigt markiert</span><span>↳ Vertiefung, freiwillig</span><span class="progress" id="prog"></span></div>
+    <div class="keys"><span><i></i>Pflichtstation, prüfungsrelevant</span><span><i class="g"></i>Grundlage</span><span><i class="e"></i>Empfehlung, freiwillig</span><span><i class="done"></i>erledigt</span><span>↳ Vertiefung</span><span class="progress" id="prog"></span></div>
   </section>
   <ol class="journey" id="journey"></ol>
 </main>
@@ -48,6 +50,6 @@
     <span class="footer-links"><a href="https://github.com/jnshsrs/stats-lab">Quellcode auf GitHub</a><span>Ohne Cookies und Tracking</span></span>
   </div>
 </footer>
-<script src="fm1.js?v=202611232157"></script>
+<script src="fm1.js?v=202611232232"></script>
 </body>
 </html>
