@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Warum randomisieren? · Stats Lab</title>
+<meta name="description" content="Dieselbe simulierte Population, drei Studien: ein Praxisvergleich, in dem die Therapeutin die Behandlung wählt, ein RCT und ein Vorher-nachher-Vergleich ohne Kontrollgruppe. 200 Wiederholungen zeigen Verzerrung durch Confounding by Indication, natürlichen Verlauf und Regression zur Mitte.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../assets/css/base.css?v=202611231806">
+<link rel="stylesheet" href="../studiendesign.css?v=202611231806">
+</head>
+<body>
+<header class="site-header">
+  <div class="column">
+    <a class="brand" href="../../">
+      <svg class="brand-mark" viewBox="0 0 22 22" aria-hidden="true"><path d="M1 19 C5 19 6 4 9 4 S13 19 17 19" fill="none" class="bm-a" stroke-width="2.2" stroke-linecap="round"/><path d="M5 19 C9 19 10 7 13 7 S17 19 21 19" fill="none" class="bm-b" stroke-width="2.2" stroke-linecap="round"/></svg>
+      Stats Lab
+    </a>
+    <nav class="site-nav" aria-label="Hauptnavigation">
+      <a href="../../">Visualisierungen</a>
+      <a href="../../glossar/">Glossar</a>
+      <a href="https://github.com/jnshsrs/stats-lab">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main class="column">
+  <section class="intro">
+    <a class="back" href="../../">← Alle Visualisierungen</a>
+    <h1>Warum randomisieren?</h1>
+    <p class="byline">Dr. Jens Hüsers · Forschungsmethodik</p>
+    <p class="lede">Routinedaten aus Praxen sind billig und zahlreich. Warum dann der Aufwand eines <a href="../../studiendesign/rct/">RCT</a>? Hier wird dieselbe simulierte Population dreimal untersucht: in einem Praxisvergleich, in dem die Therapeutin entscheidet, wer trainiert, in einem RCT und in einem Vorher-nachher-Vergleich ohne Kontrollgruppe. Weil die Daten simuliert sind, kennen wir den wahren Effekt des Trainings und sehen, welche Studie ihn trifft.</p>
+  </section>
+
+  <details class="acc" id="acc-1" open>
+    <summary><span class="acc-no">1</span><span class="acc-title">Drei Studien, eine Wahrheit<span class="acc-teaser">Praxisvergleich, RCT und Vorher-nachher, beliebig oft wiederholt.</span></span></summary>
+    <div class="acc-body">
+      <p class="text">Jede Studie untersucht 120 Menschen mit Kniearthrose aus derselben Population. Alle haben eine Motivation, die niemand misst. Motivierte trainieren treuer, und es geht ihnen auch ohne Training eher besser. In der Praxis empfiehlt die Therapeutin das Training eher denen, die motiviert wirken.</p>
+      <div class="controls">
+        <div class="ctrl"><div class="ctrl-head"><label for="sel">Wie stark die Praxis nach Motivation auswählt</label><output id="sel-v"></output></div><input id="sel" type="range" min="0" max="3" step="0.5" value="1.5"></div>
+        <div class="actions"><button type="button" class="btn" id="one">Eine Studie</button><button type="button" class="btn" id="many">200-mal wiederholen</button><button type="button" class="btn ghost" id="reset">Zurücksetzen</button><span class="count" id="nrun"></span></div>
+      </div>
+      <svg class="chart" id="r-ch" viewBox="0 0 900 400" role="img" aria-label="Effektschätzer der drei Studien"></svg>
+      <div class="legend"><span><i style="background:var(--beta-ink)"></i>aktuelle Studie mit 95-%-KI</span><span><i style="background:var(--pal-3)"></i>frühere Wiederholungen</span><span><i style="background:transparent;border-top:2px dashed var(--accent);height:0;border-radius:0"></i>wahrer Effekt</span></div>
+      <div class="tab-wrap"><table class="cells" id="r-tab"></table></div>
+      <p class="callout" id="r-c"></p>
+    </div>
+  </details>
+
+  <details class="acc" id="acc-2" open>
+    <summary><span class="acc-no">2</span><span class="acc-title">Was im Vorher-nachher-Effekt steckt<span class="acc-teaser">Training, natürlicher Verlauf und Regression zur Mitte.</span></span></summary>
+    <div class="acc-body">
+      <p class="text">Ohne Kontrollgruppe misst man die gesamte Veränderung der Trainingsgruppe und schreibt sie dem Training zu. In der Simulation lässt sich zerlegen, woraus sie besteht.</p>
+      <div class="meter" id="pp-m"></div>
+      <p class="callout" id="pp-c"></p>
+      <p class="note">Die Regression zur Mitte entsteht, weil nur eingeschlossen wird, wer bei der Eingangsmessung mindestens 4 Punkte Schmerz angibt. Wer an diesem Tag zufällig schlechter dran war, ist überrepräsentiert und misst beim nächsten Mal im Mittel günstiger, ganz ohne Behandlung. Mehr dazu in der Station <a href="../../hintergrund/regression-mitte/">Regression zur Mitte</a>.</p>
+    </div>
+  </details>
+
+  <details class="acc" id="acc-3" open>
+    <summary><span class="acc-no">3</span><span class="acc-title">Und wenn kein RCT möglich ist?<span class="acc-teaser">Was Beobachtungsstudien leisten können und was nicht.</span></span></summary>
+    <div class="acc-body">
+      <ol class="check">
+        <li><b>Adjustieren hilft nur für Gemessenes.</b> Hätte die Praxis die Motivation erfasst, ließe sie sich als <a href="../../regression/drittvariablen/">Confounder</a> ins Modell nehmen. Für Ungemessenes gibt es keine Adjustierung. Genau das leistet der Zufall: Er verteilt auch das, was niemand kennt.</li>
+        <li><b>Confounding by Indication.</b> In der Routine wird behandelt, wer nach Einschätzung der Behandelnden profitiert, oder wer besonders krank ist. Die Gründe für die Behandlung hängen fast immer mit dem Verlauf zusammen. Je nachdem, in welche Richtung, wird der Effekt über- oder unterschätzt.</li>
+        <li><b>Die Kontrollgruppe ist keine Formsache.</b> Natürlicher Verlauf, Regression zur Mitte und Erwartungseffekte betreffen beide Gruppen. Erst der Vergleich zieht sie ab.</li>
+        <li><b>Beobachtungsdaten bleiben wertvoll.</b> Für seltene Schäden, lange Verläufe und die Frage, ob ein Ergebnis aus RCTs im Alltag hält, sind sie unverzichtbar. Moderne Ansätze planen die Auswertung von Routinedaten wie ein gedachtes RCT (target trial emulation) und machen ihre Annahmen in einem Pfeildiagramm sichtbar.</li>
+      </ol>
+    </div>
+  </details>
+
+  <section class="block refs" aria-labelledby="refs-h">
+    <h2 id="refs-h">Quellen</h2>
+    <ul><li>Simulation: eigenes Modell, siehe <a href="../rct-sim.js">rct-sim.js</a>.</li>
+    <li>Kyriacou, D. N., &amp; Lewis, R. J. (2016). Confounding by indication in clinical research. JAMA, 316(17), 1818–1819.</li>
+    <li>Hernán, M. A., &amp; Robins, J. M. (2016). Using big data to emulate a target trial when a randomized trial is not available. American Journal of Epidemiology, 183(8), 758–764.</li></ul>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="column">
+    <span>© 2026 Dr. Jens Hüsers · Lehrmaterial für Forschungsmethodik und Statistik</span>
+    <span class="footer-links"><a href="https://github.com/jnshsrs/stats-lab">Quellcode auf GitHub</a><span>Ohne Cookies und Tracking</span></span>
+  </div>
+</footer>
+<script src="../rct-sim.js?v=202611231806"></script>
+<script src="randomisierung.js?v=202611231806"></script>
+<script src="../../assets/js/path.js?v=202611231806"></script>
+</body>
+</html>
