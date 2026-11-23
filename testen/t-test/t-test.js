@@ -112,7 +112,7 @@ function drawRuler(c) {
   const fbF = `t = (<span class="ink-therapie"><b>x̄ − μ₀</b></span>) / (<span class="ink-kontrolle"><b>s / √n</b></span>)` +
     ` = (<span class="ink-therapie">${fmt(c.m)} − 90</span>) / (<span class="ink-kontrolle">${fmt(c.s)} / √${c.n}</span>)` +
     ` = <span class="ink-therapie">${fmt(c.diff)}</span> / <span class="ink-kontrolle">${fmt(c.se, 2)}</span> = <b>${fmt(c.t, 2)}</b><br><span class="df-line">Freiheitsgrade: df = n − 1 = ${c.df}</span>`;
-  $("formula").innerHTML = window.katex ? texBlock(String.raw`t = \dfrac{\bar{x} - \mu_0}{s / \sqrt{n}} = \dfrac{${dz(c.m, 1)} - 90}{${dz(c.s, 1)} / \sqrt{${c.n}}} = \dfrac{${dz(c.diff, 1)}}{${dz(c.se, 2)}} = \mathbf{${dz(c.t, 2)}}`) + `<span class="df-line">${tex(String.raw`df = n - 1 = ${c.df}`)}</span>` : fbF;
+  $("formula").innerHTML = window.katex ? texBlock(String.raw`\begin{aligned} t &= \dfrac{\bar{x} - \mu_0}{s / \sqrt{n}} && \textcolor{gray}{\small\text{Formel}} \\[6pt] &= \dfrac{${dz(c.m, 1)} - 90}{${dz(c.s, 1)} / \sqrt{${c.n}}} && \textcolor{gray}{\small\text{Werte einsetzen}} \\[6pt] &= \dfrac{${dz(c.diff, 1)}}{${dz(c.se, 2)}} && \textcolor{gray}{\small\text{Differenz durch SE}} \\[6pt] &= \mathbf{${dz(c.t, 2)}} \end{aligned}`) + `<span class="df-line">${tex(String.raw`df = n - 1 = ${c.df}`)}</span>` : fbF;
   const lo = Math.min(MU0, c.m), hi = Math.max(MU0, c.m);
   const span = Math.max(hi - lo, c.se * 2, 4), pad = span * 0.25, a = lo - pad, b = lo + span + pad;
   const sx = v => L + (v - a) / (b - a) * (R - L);
@@ -338,9 +338,9 @@ function drawCI(c) {
   const f = v => fmt(v, 1);
   const ciTxt = dir === "two" ? `[${f(ci[0])}°; ${f(ci[1])}°]` : dir === "right" ? `ab ${f(ci[0])}°` : `bis ${f(ci[1])}°`;
   if (window.katex) $("ci-f").innerHTML = texBlock(dir === "two"
-    ? String.raw`\bar{x} \pm t_{\text{krit}} \cdot SE = ${dz(c.m, 1)} \pm ${dz(t2, 2)} \cdot ${dz(c.se, 2)} = [${dz(ci[0], 1)};\ ${dz(ci[1], 1)}]`
-    : dir === "right" ? String.raw`\bar{x} - t_{\text{krit}} \cdot SE = ${dz(c.m, 1)} - ${dz(t1, 2)} \cdot ${dz(c.se, 2)} = ${dz(ci[0], 1)}`
-    : String.raw`\bar{x} + t_{\text{krit}} \cdot SE = ${dz(c.m, 1)} + ${dz(t1, 2)} \cdot ${dz(c.se, 2)} = ${dz(ci[1], 1)}`);
+    ? String.raw`\begin{aligned} \text{KI} &= \bar{x} \pm t_{\text{krit}} \cdot SE \\[4pt] &= ${dz(c.m, 1)} \pm ${dz(t2, 2)} \cdot ${dz(c.se, 2)} \\[4pt] &= [${dz(ci[0], 1)};\ ${dz(ci[1], 1)}] \end{aligned}`
+    : dir === "right" ? String.raw`\begin{aligned} \text{Untergrenze} &= \bar{x} - t_{\text{krit}} \cdot SE \\[4pt] &= ${dz(c.m, 1)} - ${dz(t1, 2)} \cdot ${dz(c.se, 2)} \\[4pt] &= ${dz(ci[0], 1)} \end{aligned}`
+    : String.raw`\begin{aligned} \text{Obergrenze} &= \bar{x} + t_{\text{krit}} \cdot SE \\[4pt] &= ${dz(c.m, 1)} + ${dz(t1, 2)} \cdot ${dz(c.se, 2)} \\[4pt] &= ${dz(ci[1], 1)} \end{aligned}`);
   const pTxt = `p = ${fmtP(c.T.p)} ${c.T.rej ? "<" : "≥"} α = ${fmt(a, a < 0.05 ? 3 : 2)}`;
   const where = dir === "two" ? `${inside ? "<b>innerhalb</b>" : "<b>außerhalb</b>"} des Intervalls ${ciTxt}` : dir === "right" ? (inside ? `<b>oberhalb</b> der unteren Grenze ${f(ci[0])}°, also im Intervall` : `<b>unterhalb</b> der unteren Grenze ${f(ci[0])}°, also außerhalb`) : (inside ? `<b>unterhalb</b> der oberen Grenze ${f(ci[1])}°, also im Intervall` : `<b>oberhalb</b> der oberen Grenze ${f(ci[1])}°, also außerhalb`);
   let txt = `${pTxt}: ${c.T.rej ? "signifikant" : "nicht signifikant"}. Passend dazu liegt 90° ${where}.`;

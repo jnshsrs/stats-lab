@@ -1,7 +1,7 @@
 /* Stats Lab · gemeinsame Basis für alle Visualisierungen
    Layout: eine zentrierte Lesespalte, schmale Kopfzeile, ruhiger Footer.
    Farben und Schriften kommen ausschließlich aus theme.css. Hier stehen keine festen Farbwerte. */
-@import url("theme.css?v=202611231645");
+@import url("theme.css?v=202611231700");
 
 :root { --column: 960px; }
 
