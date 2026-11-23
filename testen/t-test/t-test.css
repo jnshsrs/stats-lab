@@ -139,3 +139,9 @@ input[type=range] { width: 100%; accent-color: var(--accent); margin: 4px 0 0; }
 .formula .katex-display > .katex { text-align: left; }
 .formula .katex { font-size: 1.15em; }
 .calc-steps .eq .katex { font-size: 1.08em; }
+/* Exkurs p-Wert oder Konfidenzintervall */
+.deep { border: 1px dashed var(--line); border-radius: 10px; padding: 0; margin-top: 16px; }
+.deep > summary { cursor: pointer; padding: 10px 14px; font-weight: 600; color: var(--accent); }
+.deep[open] > summary { border-bottom: 1px dashed var(--line); }
+.deep-body { padding: 12px 16px 16px; display: flex; flex-direction: column; gap: 10px; font-size: 15.5px; line-height: 1.55; }
+.deep-body p { margin: 0; max-width: 80ch; }

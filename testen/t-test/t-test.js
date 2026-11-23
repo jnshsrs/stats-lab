@@ -315,9 +315,41 @@ function drawTable(c) {
 }
 
 // ---------- Verdrahtung ----------
+
+// Exkurs: Konfidenzintervall und Test sind dieselbe Entscheidung
+function drawCI(c) {
+  const a = S.alpha, dir = S.dir, t2 = tinv(1 - a / 2, c.df), t1 = tinv(1 - a, c.df);
+  const two = [c.m - t2 * c.se, c.m + t2 * c.se];
+  const lvl = v => fmt((1 - v) * 100, 0) + "-%";
+  let ci, lab;
+  if (dir === "two") { ci = two; lab = `${lvl(a)}-Konfidenzintervall`; }
+  else if (dir === "right") { ci = [c.m - t1 * c.se, Infinity]; lab = `einseitige untere ${lvl(a)}-Grenze (= untere Grenze des ${lvl(2 * a)}-Intervalls)`; }
+  else { ci = [-Infinity, c.m + t1 * c.se]; lab = `einseitige obere ${lvl(a)}-Grenze (= obere Grenze des ${lvl(2 * a)}-Intervalls)`; }
+  const inside = MU0 >= ci[0] && MU0 <= ci[1];
+  const lo = Math.min(80, Math.floor(Math.min(two[0], c.m - 3 * c.se) - 2)), hi = Math.max(100, Math.ceil(Math.max(two[1], c.m + 3 * c.se) + 2));
+  const L = 40, R = 880, sx = v => L + (Math.max(lo, Math.min(hi, v)) - lo) / (hi - lo) * (R - L), y1 = 52, y2 = 96, base = 124;
+  let s = "";
+  for (let v = Math.ceil(lo / 5) * 5; v <= hi; v += 5) s += `<line x1="${sx(v)}" x2="${sx(v)}" y1="20" y2="${base}" stroke="var(--grid)"/><text x="${sx(v)}" y="${base + 18}" text-anchor="middle">${v}°</text>`;
+  s += `<line x1="${sx(MU0)}" x2="${sx(MU0)}" y1="14" y2="${base}" stroke="var(--alpha-ink)" stroke-width="2" stroke-dasharray="6 4"/><text x="${sx(MU0) + 6}" y="16" style="fill:var(--alpha-ink)" class="strong">μ₀ = 90°</text>`;
+  const bar = (iv, y, col, w, txt, dash) => `<line x1="${sx(iv[0])}" x2="${sx(iv[1])}" y1="${y}" y2="${y}" stroke="${col}" stroke-width="${w}" stroke-linecap="round"${dash ? ' stroke-dasharray="2 8"' : ""}/>` + (isFinite(iv[0]) ? "" : `<text x="${sx(iv[0]) - 4}" y="${y + 5}" text-anchor="end" style="fill:${col}">←</text>`) + (isFinite(iv[1]) ? "" : `<text x="${sx(iv[1]) + 4}" y="${y + 5}" style="fill:${col}">→</text>`) + `<circle cx="${sx(c.m)}" cy="${y}" r="6" fill="${col}"/><text x="${L}" y="${y - 12}" style="fill:${col};paint-order:stroke;stroke:var(--surface);stroke-width:5px" class="strong">${txt}</text>`;
+  s += bar(ci, y1, inside ? "var(--muted)" : "var(--therapie)", 7, lab);
+  if (dir !== "two") s += bar(two, y2, "var(--muted)", 3, `zum Vergleich: zweiseitiges ${lvl(a)}-Intervall`, false);
+  $("ci-line").innerHTML = s;
+  const f = v => fmt(v, 1);
+  const ciTxt = dir === "two" ? `[${f(ci[0])}°; ${f(ci[1])}°]` : dir === "right" ? `ab ${f(ci[0])}°` : `bis ${f(ci[1])}°`;
+  if (window.katex) $("ci-f").innerHTML = texBlock(dir === "two"
+    ? String.raw`\bar{x} \pm t_{\text{krit}} \cdot SE = ${dz(c.m, 1)} \pm ${dz(t2, 2)} \cdot ${dz(c.se, 2)} = [${dz(ci[0], 1)};\ ${dz(ci[1], 1)}]`
+    : dir === "right" ? String.raw`\bar{x} - t_{\text{krit}} \cdot SE = ${dz(c.m, 1)} - ${dz(t1, 2)} \cdot ${dz(c.se, 2)} = ${dz(ci[0], 1)}`
+    : String.raw`\bar{x} + t_{\text{krit}} \cdot SE = ${dz(c.m, 1)} + ${dz(t1, 2)} \cdot ${dz(c.se, 2)} = ${dz(ci[1], 1)}`);
+  const pTxt = `p = ${fmtP(c.T.p)} ${c.T.rej ? "<" : "≥"} α = ${fmt(a, a < 0.05 ? 3 : 2)}`;
+  const where = dir === "two" ? `${inside ? "<b>innerhalb</b>" : "<b>außerhalb</b>"} des Intervalls ${ciTxt}` : dir === "right" ? (inside ? `<b>oberhalb</b> der unteren Grenze ${f(ci[0])}°, also im Intervall` : `<b>unterhalb</b> der unteren Grenze ${f(ci[0])}°, also außerhalb`) : (inside ? `<b>unterhalb</b> der oberen Grenze ${f(ci[1])}°, also im Intervall` : `<b>oberhalb</b> der oberen Grenze ${f(ci[1])}°, also außerhalb`);
+  let txt = `${pTxt}: ${c.T.rej ? "signifikant" : "nicht signifikant"}. Passend dazu liegt 90° ${where}.`;
+  if (dir !== "two") { const in2 = MU0 >= two[0] && MU0 <= two[1]; if (in2 !== inside) txt += ` Achtung: Das zweiseitige ${lvl(a)}-Intervall ${in2 ? "enthält" : "enthält nicht"} die 90°. Wer es zum einseitigen Test heranzieht, kommt zu einem anderen Ergebnis.`; }
+  $("ci-text").innerHTML = txt;
+}
 function render() {
   $("mu-v").textContent = S.mu + "°"; $("sigma-v").textContent = S.sigma + "°"; $("n-v").textContent = `${S.n} (df ${S.n - 1})`;
-  const c = compute(); drawRaw(c); drawHyp(); drawRuler(c); drawH0(); drawTable(c); drawT(c); drawCdf(c);
+  const c = compute(); drawRaw(c); drawHyp(); drawRuler(c); drawH0(); drawTable(c); drawT(c); drawCdf(c); drawCI(c);
 }
 const syncInputs = () => { $("mu").value = S.mu; $("sigma").value = S.sigma; $("n").value = S.n; };
 [["mu", "mu"], ["sigma", "sigma"], ["n", "n"]].forEach(([id, k]) => $(id).addEventListener("input", e => { S[k] = +e.target.value; render(); }));

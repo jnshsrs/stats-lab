@@ -55,6 +55,10 @@ footer.before(nav);
    Ein Anker in der Adresse öffnet den passenden Abschnitt. */
 (() => {
 "use strict";
+// Anker auf aufklappbare Kästen (auch verschachtelt, auch ohne Akkordeon): öffnen und hinscrollen
+const openHash = () => { const id = decodeURIComponent(location.hash.slice(1)); const el = id && document.getElementById(id); if (!el) return; let d = el.closest("details"); if (!d || d.matches("details.acc")) return; while (d) { d.open = true; d = d.parentElement && d.parentElement.closest("details"); } el.scrollIntoView(); };
+if (document.readyState === "complete") setTimeout(openHash, 0); else window.addEventListener("load", () => setTimeout(openHash, 0));
+window.addEventListener("hashchange", openHash);
 const accs = [...document.querySelectorAll("details.acc")];
 if (!accs.length) return;
 const target = () => { const id = decodeURIComponent(location.hash.slice(1)); const el = id && document.getElementById(id); return el ? (el.matches("details.acc") ? el : el.closest("details.acc")) : null; };

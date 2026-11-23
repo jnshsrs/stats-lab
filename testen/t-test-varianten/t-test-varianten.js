@@ -160,13 +160,52 @@ function render3() {
     kasLi(S3.dir, T3, t);
   const v3 = { two: ["H0 verworfen: Die Schrittlänge unterscheidet sich zwischen den Gruppen.", "H0 beibehalten: Ein Unterschied ist nicht belegt."], right: ["H0 verworfen: Mit Rhythmus sind die Schritte länger.", "H0 beibehalten: Längere Schritte mit Rhythmus sind nicht belegt."], left: ["H0 verworfen: Mit Rhythmus sind die Schritte kürzer.", "H0 beibehalten: Kürzere Schritte mit Rhythmus sind nicht belegt."] }[S3.dir];
   $("v3").innerHTML = (rej ? v3[0] : v3[1]) + `<small>Differenz ${fmt(m1 - m2, 3)} m, ${ciTxt(m1 - m2, se, df, "m", 3)}.</small>`;
+  drawOverlap(m1, s1, n1, m2, s2, n2, se, df, a);
   $("welch3").innerHTML = `Welch-Variante (ohne Annahme gleicher Streuungen), ${DN[S3.dir]}: ${tex(String.raw`SE = \sqrt{s_1^2/n_1 + s_2^2/n_2} = ${dz(sew, 4)}\ \text{m}`)}, t = ${fmt(tw, 2)}, df = ${fmt(dfw, 1)}, p ${pTxt(testFor(S3.dir, tw, dfw, a).p)}. Bei gleich großen Gruppen und ähnlichen Streuungen liegen beide Varianten nah beieinander.`;
+}
+
+// Exkurs: überlappende Einzelintervalle gegen Intervall der Differenz (immer zweiseitig)
+function ovStats(m1, s1, n1, m2, s2, n2, se, df, a) {
+  const t1 = tinv(1 - a / 2, n1 - 1), t2 = tinv(1 - a / 2, n2 - 1), td = tinv(1 - a / 2, df);
+  const c1 = [m1 - t1 * s1 / Math.sqrt(n1), m1 + t1 * s1 / Math.sqrt(n1)], c2 = [m2 - t2 * s2 / Math.sqrt(n2), m2 + t2 * s2 / Math.sqrt(n2)], cd = [m1 - m2 - td * se, m1 - m2 + td * se];
+  const overlap = Math.min(c1[1], c2[1]) > Math.max(c1[0], c2[0]), sig = cd[0] > 0 || cd[1] < 0;
+  return { c1, c2, cd, overlap, sig };
+}
+function drawOverlap(m1, s1, n1, m2, s2, n2, se, df, a) {
+  const o = ovStats(m1, s1, n1, m2, s2, n2, se, df, a), lvl = fmt((1 - a) * 100, 0) + "-%";
+  const lo = Math.min(o.c1[0], o.c2[0]) - 0.02, hi = Math.max(o.c1[1], o.c2[1]) + 0.02, L = 170, R = 880, sx = v => L + (v - lo) / (hi - lo) * (R - L);
+  let g = "";
+  for (let v = Math.ceil(lo * 50) / 50; v <= hi + 1e-9; v += 0.02) g += `<line x1="${sx(v)}" x2="${sx(v)}" y1="8" y2="104" stroke="var(--grid)"/><text x="${sx(v)}" y="118" text-anchor="middle">${fmt(v, 2)}</text>`;
+  const bar = (c, m, y, col, lab) => `<text x="${L - 12}" y="${y + 5}" text-anchor="end" class="strong">${lab}</text><line x1="${sx(c[0])}" x2="${sx(c[1])}" y1="${y}" y2="${y}" stroke="${col}" stroke-width="7" stroke-linecap="round"/><circle cx="${sx(m)}" cy="${y}" r="6" fill="var(--surface)" stroke="${col}" stroke-width="3"/>`;
+  g += bar(o.c2, m2, 36, "var(--kontrolle)", "KG") + bar(o.c1, m1, 76, "var(--therapie)", "Rhythmus");
+  if (o.overlap) g += `<rect x="${sx(Math.max(o.c1[0], o.c2[0]))}" y="22" width="${sx(Math.min(o.c1[1], o.c2[1])) - sx(Math.max(o.c1[0], o.c2[0]))}" height="68" fill="var(--beta-ink)" fill-opacity=".12"/>`;
+  g += `<text x="${R}" y="134" text-anchor="end">Schrittlänge in m · ${lvl}-Intervalle der Gruppen</text>`;
+  const dlo = Math.min(-0.02, o.cd[0] - 0.02), dhi = Math.max(0.02, o.cd[1] + 0.02), dx = v => L + (v - dlo) / (dhi - dlo) * (R - L), y3 = 182, col = o.sig ? "var(--beta-ink)" : "var(--muted)";
+  for (let v = Math.ceil(dlo * 50) / 50; v <= dhi + 1e-9; v += 0.02) g += `<line x1="${dx(v)}" x2="${dx(v)}" y1="156" y2="196" stroke="var(--grid)"/><text x="${dx(v)}" y="208" text-anchor="middle" style="font-size:11px">${fmt(v, 2)}</text>`;
+  g += `<line x1="${dx(0)}" x2="${dx(0)}" y1="156" y2="200" stroke="var(--alpha-ink)" stroke-width="2" stroke-dasharray="6 4"/><text x="${dx(0) + 6}" y="160" style="fill:var(--alpha-ink)">kein Unterschied</text>`;
+  g += `<text x="${L - 12}" y="${y3 + 5}" text-anchor="end" class="strong">Differenz</text><line x1="${dx(o.cd[0])}" x2="${dx(o.cd[1])}" y1="${y3}" y2="${y3}" stroke="${col}" stroke-width="7" stroke-linecap="round"/><circle cx="${dx(m1 - m2)}" cy="${y3}" r="6" fill="var(--surface)" stroke="${col}" stroke-width="3"/>`;
+  g += `<text x="${R}" y="226" text-anchor="end">Differenz Rhythmus − KG in m · ${lvl}-Intervall</text>`;
+  $("ov-svg").innerHTML = g;
+  const f3 = v => fmt(v, 3);
+  $("ov-text").innerHTML = o.overlap && o.sig ? `<b>Genau der Fehlschluss-Fall:</b> Die Intervalle der Gruppen überlappen sich (violett), trotzdem schließt das Intervall der Differenz [${f3(o.cd[0])}; ${f3(o.cd[1])}] die Null aus. Der Unterschied ist signifikant.`
+    : o.overlap ? `Die Intervalle der Gruppen überlappen sich, und das Intervall der Differenz [${f3(o.cd[0])}; ${f3(o.cd[1])}] enthält die Null: nicht signifikant. Hier passen beide Eindrücke zusammen, aber nur zufällig. Suchen Sie mit dem Knopf eine Stichprobe, in der sie auseinanderfallen.`
+    : o.sig ? `Die Intervalle überlappen sich nicht, und das Intervall der Differenz [${f3(o.cd[0])}; ${f3(o.cd[1])}] schließt die Null aus: signifikant. Ohne Überlappung ist der Unterschied immer signifikant; der umgekehrte Schluss gilt nicht.`
+    : `Das Intervall der Differenz [${f3(o.cd[0])}; ${f3(o.cd[1])}] enthält die Null: nicht signifikant.`;
 }
 
 function renderAll() { render2(); render3(); }
 const bind = (id, obj, key, f) => $(id).addEventListener("input", e => { obj[key] = +e.target.value; f(); });
 bind("m2", S2, "m", render2); bind("s2", S2, "s", render2); bind("n2", S2, "n", render2);
 bind("m3", S3, "m", render3); bind("s3", S3, "s", render3); bind("n3", S3, "n", render3);
+$("ov-find").onclick = () => {
+  for (let k = 0; k < 5000; k++) {
+    const seed = newSeed(), za = zs(seed, 60), zb = zs(seed + 1, 60), r2 = v => Math.round(v * 100) / 100, n = 25;
+    const kg = za.slice(0, n).map(v => r2(0.45 + 0.1 * v)), ra = zb.slice(0, n).map(v => r2(0.45 + 0.06 + 0.1 * v));
+    const m1 = mean(ra), m2 = mean(kg), s1 = sd(ra, m1), s2 = sd(kg, m2), df = 2 * n - 2, sp = Math.sqrt((s1 * s1 + s2 * s2) / 2), se = sp * Math.sqrt(2 / n);
+    const o = ovStats(m1, s1, n, m2, s2, n, se, df, G.alpha);
+    if (o.overlap && o.sig && m1 > m2) { Object.assign(S3, { m: 0.06, s: 0.1, n: 25, seed, dir: "two" }); $("m3").value = 0.06; $("s3").value = 0.1; $("n3").value = 25; $("dir3").querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", b.dataset.d === "two")); render3(); return; }
+  }
+};
 $("new2").onclick = () => { S2.seed = newSeed(); render2(); };
 $("new3").onclick = () => { S3.seed = newSeed(); render3(); };
 segBind("dir2", S2, render2); segBind("dir3", S3, render3);

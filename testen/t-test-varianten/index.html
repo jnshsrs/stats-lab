@@ -6,9 +6,9 @@
 <title>Welcher t-Test? · Stats Lab</title>
 <meta name="description" content="Einstichproben-, gepaarter und ungepaarter t-Test an drei Beispielen aus der Physiotherapie, jeweils mit Hypothesen, Rechenweg, kritischem Wert und p-Wert.">
 <link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="../../assets/css/base.css?v=202611230022">
+<link rel="stylesheet" href="../../assets/css/base.css?v=202611231645">
 <link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
-<link rel="stylesheet" href="t-test-varianten.css?v=202611230022">
+<link rel="stylesheet" href="t-test-varianten.css?v=202611231645">
 </head>
 <body>
 <header class="site-header">
@@ -94,6 +94,16 @@
       <ol class="calc-steps" id="c3"></ol>
       <p class="verdict" id="v3"></p>
       <p class="note" id="welch3"></p>
+      <details class="deep" id="ov-exkurs">
+        <summary>Exkurs: Überlappende Konfidenzintervalle, trotzdem signifikant?</summary>
+        <div class="deep-body">
+          <p>Ein häufiger Fehlschluss: „Die Konfidenzintervalle der beiden Gruppen überlappen sich, also ist der Unterschied nicht signifikant.“ Das stimmt nicht. Über den Unterschied entscheidet allein das Konfidenzintervall der <b>Differenz</b>. Es ist schmaler als die Summe der beiden Einzelintervalle, denn die Standardfehler addieren sich nicht einfach, sondern im Quadrat: SE<sub>Differenz</sub> = √(SE₁² + SE₂²).</p>
+          <svg class="chart" id="ov-svg" viewBox="0 0 920 236" role="img" aria-label="Konfidenzintervalle beider Gruppen und der Differenz"></svg>
+          <p class="callout" id="ov-text"></p>
+          <div class="ctrl-row"><button class="btn" type="button" id="ov-find">Stichprobe mit Überlappung und signifikanter Differenz suchen</button></div>
+          <p class="note">Faustregel für zwei unabhängige, etwa gleich große Gruppen (Cumming &amp; Finch, 2005): Überlappen sich die 95-%-Intervalle um etwa die Hälfte der Fehlermarge (also der halben Intervallbreite), entspricht das ungefähr p = 0,05; bei weniger Überlappung ist der Unterschied signifikant. Sicher ist nur das Intervall der Differenz bzw. der t-Test, die immer zur selben Entscheidung führen.</p>
+        </div>
+      </details>
     </div>
   </details>
 
@@ -167,10 +177,10 @@
 </footer>
 <script src="../../assets/vendor/katex/katex.min.js"></script>
 <script src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
-<script src="../../assets/js/tex.js?v=202611230022"></script>
-<script src="daten/bizeps-uebung.js?v=202611230022"></script>
-<script src="bizeps-did.js?v=202611230022"></script>
-<script src="t-test-varianten.js?v=202611230022"></script>
-<script src="../../assets/js/path.js?v=202611230022"></script>
+<script src="../../assets/js/tex.js?v=202611231645"></script>
+<script src="daten/bizeps-uebung.js?v=202611231645"></script>
+<script src="bizeps-did.js?v=202611231645"></script>
+<script src="t-test-varianten.js?v=202611231645"></script>
+<script src="../../assets/js/path.js?v=202611231645"></script>
 </body>
 </html>

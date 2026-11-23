@@ -6,9 +6,9 @@
 <title>Die t-Test-Kaskade · Stats Lab</title>
 <meta name="description" content="Der Einstichproben-t-Test Schritt für Schritt: Hypothesen, Signal und Rauschen, t-Verteilung, kritischer Wert und p-Wert, zweiseitig und einseitig.">
 <link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="../../assets/css/base.css?v=202611230022">
+<link rel="stylesheet" href="../../assets/css/base.css?v=202611231645">
 <link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
-<link rel="stylesheet" href="t-test.css?v=202611230022">
+<link rel="stylesheet" href="t-test.css?v=202611231645">
 </head>
 <body>
 <header class="site-header">
@@ -138,6 +138,16 @@
     <h3 class="sub-h">Dasselbe t, drei Hypothesen</h3>
     <div class="table-wrap"><table class="dir-tab" id="dir-tab"></table></div>
     <p class="callout" id="dir-callout"></p>
+    <details class="deep" id="ci-exkurs">
+      <summary>Exkurs: p-Wert oder Konfidenzintervall?</summary>
+      <div class="deep-body">
+        <p>Statt mit dem p-Wert kann man auch mit dem Konfidenzintervall entscheiden: Liegt der Vergleichswert 90° außerhalb des Intervalls, ist das Ergebnis signifikant. Beide Wege nutzen denselben Mittelwert, denselben Standardfehler und denselben kritischen t-Wert. Deshalb führen sie <b>immer zur selben Entscheidung</b>. Das Konfidenzintervall ist genau die Menge aller Werte, die der Test nicht verwerfen würde.</p>
+        <svg class="chart" id="ci-line" viewBox="0 0 920 150" role="img" aria-label="Konfidenzintervall und Vergleichswert 90 Grad"></svg>
+        <div class="formula" id="ci-f"></div>
+        <p class="callout" id="ci-text"></p>
+        <p class="note">Wichtig bei einseitigen Tests: Zu einem einseitigen Test mit α = 5 % gehört nicht das 95-%-Intervall, sondern eine einseitige Grenze. Sie entspricht der passenden Grenze des zweiseitigen 90-%-Intervalls. Probieren Sie den Grenzfall in Schritt 1 mit „rechtsseitig“. Und wer zwei Gruppen vergleicht, muss das Intervall der Differenz betrachten, nicht die Überlappung zweier Einzelintervalle (siehe <a href="../t-test-varianten/#acc-2">ungepaarter t-Test</a>).</p>
+      </div>
+    </details>
   </section>
 
   <section class="step next-block" aria-labelledby="s5">
@@ -158,8 +168,8 @@
   </div>
 </footer>
 <script src="../../assets/vendor/katex/katex.min.js"></script>
-<script src="../../assets/js/tex.js?v=202611230022"></script>
-<script src="t-test.js?v=202611230022"></script>
-<script src="../../assets/js/path.js?v=202611230022"></script>
+<script src="../../assets/js/tex.js?v=202611231645"></script>
+<script src="t-test.js?v=202611231645"></script>
+<script src="../../assets/js/path.js?v=202611231645"></script>
 </body>
 </html>
