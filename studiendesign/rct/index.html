@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Das RCT Schritt für Schritt · Stats Lab</title>
+<meta name="description" content="Eine randomisierte kontrollierte Studie zum Durchklicken: Fragestellung, Screening, Einwilligung, Baseline, Blockrandomisierung, Verblindung, Messzeitpunkte, Drop-out und Auswertung nach Intention to treat und Per Protocol. Mit CONSORT-Flussdiagramm, PEDro-Kriterien und der Streptomycin-Studie von 1948.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../assets/css/base.css?v=202611231803">
+<link rel="stylesheet" href="../studiendesign.css?v=202611231803">
+<link rel="stylesheet" href="rct.css?v=202611231803">
+</head>
+<body>
+<header class="site-header">
+  <div class="column">
+    <a class="brand" href="../../">
+      <svg class="brand-mark" viewBox="0 0 22 22" aria-hidden="true"><path d="M1 19 C5 19 6 4 9 4 S13 19 17 19" fill="none" class="bm-a" stroke-width="2.2" stroke-linecap="round"/><path d="M5 19 C9 19 10 7 13 7 S17 19 21 19" fill="none" class="bm-b" stroke-width="2.2" stroke-linecap="round"/></svg>
+      Stats Lab
+    </a>
+    <nav class="site-nav" aria-label="Hauptnavigation">
+      <a href="../../">Visualisierungen</a>
+      <a href="../../glossar/">Glossar</a>
+      <a href="https://github.com/jnshsrs/stats-lab">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main class="column">
+  <section class="intro">
+    <a class="back" href="../../">← Alle Visualisierungen</a>
+    <h1>Das RCT Schritt für Schritt</h1>
+    <p class="byline">Dr. Jens Hüsers · Forschungsmethodik</p>
+    <p class="lede">Eine randomisierte kontrollierte Studie (RCT, randomized controlled trial) zum Durchklicken. Jeder Punkt ist ein Mensch mit Kniearthrose. Die Daten sind simuliert, deshalb kennen wir, was in echten Studien verborgen bleibt: die Motivation jeder Person und den wahren Effekt des Trainings. An jedem Schritt steht, welches Kriterium der <a href="#acc-3">PEDro-Skala</a> dort erfüllt wird.</p>
+  </section>
+
+  <details class="acc" id="acc-1" open>
+    <summary><span class="acc-no">1</span><span class="acc-title">Eine Studie in neun Schritten<span class="acc-teaser">Krafttraining gegen Informationsbroschüre bei Kniearthrose.</span></span></summary>
+    <div class="acc-body">
+      <div class="stepnav">
+        <button type="button" class="btn ghost" id="s-prev">← Zurück</button>
+        <div class="stepdots" id="s-dots" role="group" aria-label="Schritt wählen"></div>
+        <button type="button" class="btn" id="s-next">Weiter →</button>
+      </div>
+      <svg class="chart stage" id="stage" viewBox="0 0 900 480" role="img" aria-label="Teilnehmende als Punkte im Ablauf der Studie"><g id="bg"></g><g id="dots"></g></svg>
+      <div class="legend"><span><i style="background:var(--pal-3)"></i>gescreent</span><span><i style="background:var(--beta-ink)"></i>Training</span><span><i style="background:var(--therapie)"></i>Kontrolle</span><span><i style="background:transparent;border:2px solid var(--muted)"></i>Drop-out</span></div>
+      <div class="stepcard">
+        <h3 id="s-title"></h3>
+        <p id="s-text"></p>
+        <div id="s-pedro"></div>
+        <div id="s-ctrl"></div>
+      </div>
+      <div class="two-charts">
+        <figure><figcaption>Mittlerer Schmerz (NRS) im Verlauf</figcaption><svg class="chart" id="trend" viewBox="0 0 520 320" role="img" aria-label="Mittlerer Schmerz je Gruppe zu den Messzeitpunkten"></svg></figure>
+        <figure><figcaption>Flussdiagramm nach CONSORT</figcaption><div class="consort" id="consort"></div></figure>
+      </div>
+      <div id="s-extra"></div>
+    </div>
+  </details>
+
+  <details class="acc" id="acc-2" open>
+    <summary><span class="acc-no">2</span><span class="acc-title">Das erste RCT: Streptomycin, 1948<span class="acc-teaser">Echte Daten der Studie, mit der alles anfing.</span></span></summary>
+    <div class="acc-body">
+      <p class="text">Nach dem Zweiten Weltkrieg gab es in Großbritannien nur wenig Streptomycin, ein neues Antibiotikum gegen Tuberkulose. Der Medical Research Council nutzte den Mangel für die erste moderne randomisierte Studie: 107 junge Erwachsene mit Lungentuberkulose, 55 erhielten Streptomycin und Bettruhe, 52 nur Bettruhe. Die Zuteilung stand in versiegelten Umschlägen, die der Statistiker Austin Bradford Hill vorbereitet hatte. Die Röntgenbilder nach sechs Monaten bewerteten zwei Radiologen und ein Kliniker, ohne die Gruppe zu kennen.</p>
+      <div class="two-charts">
+        <div class="tab-wrap" style="align-self:start"><table class="cells" id="st-tab"></table></div>
+        <svg class="chart" id="st-ch" viewBox="0 0 520 330" role="img" aria-label="Röntgenbefund nach sechs Monaten je Gruppe"></svg>
+      </div>
+      <div class="legend"><span><i style="background:var(--beta-ink)"></i>Streptomycin und Bettruhe</span><span><i style="background:var(--therapie)"></i>nur Bettruhe</span></div>
+      <p class="callout" id="st-c"></p>
+      <p class="note">Was heute fehlen würde: Es gab weder eine Ethikkommission noch eine Einwilligung der Teilnehmenden, und kein vorab veröffentlichtes Studienprotokoll. Daten: Datensatz <code>strep_tb</code> aus dem R-Paket medicaldata (MIT-Lizenz), rekonstruiert aus der Originalpublikation. Download: <a href="../daten/strep_tb.csv">strep_tb.csv</a>.</p>
+    </div>
+  </details>
+
+  <details class="acc" id="acc-3" open>
+    <summary><span class="acc-no">3</span><span class="acc-title">Woran man ein gutes RCT erkennt<span class="acc-teaser">Die PEDro-Skala und die Schritte, zu denen sie gehört.</span></span></summary>
+    <div class="acc-body">
+      <p class="text">Die PEDro-Skala bewertet die methodische Qualität von RCTs in der Physiotherapie. Kriterium 1 betrifft die Übertragbarkeit und zählt nicht zur Punktzahl; die Kriterien 2 bis 11 ergeben bis zu 10 Punkte. Ein Klick auf den Schritt springt in die Animation.</p>
+      <div class="tab-wrap"><table class="when" id="pedro-tab"></table></div>
+      <p class="note">Die Punktzahl zeigt, wie anfällig eine Studie für Verzerrung ist, nicht, ob die Therapie wirkt oder ob der Effekt klinisch relevant ist. Verblindung von Teilnehmenden und Therapeutinnen ist bei Bewegungstherapie kaum möglich; viele gute Physiotherapie-Studien erreichen deshalb höchstens 8 von 10 Punkten.</p>
+    </div>
+  </details>
+
+  <section class="block refs" aria-labelledby="refs-h">
+    <h2 id="refs-h">Quellen und Daten</h2>
+    <ul><li>Hopewell, S. et al. (2025). CONSORT 2025 statement: updated guideline for reporting randomised trials. BMJ, 389, e081123.</li>
+    <li>Maher, C. G. et al. (2003). Reliability of the PEDro scale for rating quality of randomized controlled trials. Physical Therapy, 83(8), 713–721. PEDro-Skala: pedro.org.au.</li>
+    <li>Medical Research Council (1948). Streptomycin treatment of pulmonary tuberculosis. British Medical Journal, 2(4582), 769–782.</li>
+    <li>Higgins, P. (2021). medicaldata: Data Package for Medical Datasets. R-Paket, MIT-Lizenz.</li>
+    <li>Animation: simulierte Daten, angelehnt an Studien zu Krafttraining bei Kniearthrose.</li></ul>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="column">
+    <span>© 2026 Dr. Jens Hüsers · Lehrmaterial für Forschungsmethodik und Statistik</span>
+    <span class="footer-links"><a href="https://github.com/jnshsrs/stats-lab">Quellcode auf GitHub</a><span>Ohne Cookies und Tracking</span></span>
+  </div>
+</footer>
+<script src="../rct-sim.js?v=202611231803"></script>
+<script src="../daten/strep_tb.js?v=202611231803"></script>
+<script src="rct.js?v=202611231803"></script>
+<script src="../../assets/js/path.js?v=202611231803"></script>
+</body>
+</html>
