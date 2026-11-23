@@ -6,9 +6,9 @@
 <title>Der z-Test · Stats Lab</title>
 <meta name="description" content="Der z-Test als Brücke zwischen Binomialtest und t-Test: Normalapproximation für Anteile, z-Test für einen Mittelwert bei bekannter Standardabweichung, z gegen t bei kleinen Stichproben und wo z-Werte in der Praxis auftauchen.">
 <link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="../../assets/css/base.css?v=202611232118">
+<link rel="stylesheet" href="../../assets/css/base.css?v=202611232139">
 <link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
-<link rel="stylesheet" href="z-test.css?v=202611232118">
+<link rel="stylesheet" href="z-test.css?v=202611232139">
 </head>
 <body>
 <header class="site-header">
@@ -30,20 +30,21 @@
     <a class="back" href="../../">← Alle Visualisierungen</a>
     <h1>Der z-Test</h1>
     <p class="byline">Dr. Jens Hüsers · Forschungsmethodik</p>
-    <p class="lede">Der <a href="../../testen/binomialtest/">Binomialtest</a> rechnet exakt, aber nur für Zählungen. Der <a href="../../testen/t-test/">t-Test</a> prüft Mittelwerte. Dazwischen liegt der z-Test. Er nutzt, dass Anteile und Mittelwerte bei großen Stichproben annähernd normalverteilt sind (<a href="../../schaetzen/zgws/">zentraler Grenzwertsatz</a>), und misst den Abstand zur Nullhypothese in Standardfehlern. Dieser Abstand ist der z-Wert. Der t-Test ist im Kern ein z-Test, bei dem die Standardabweichung aus der Stichprobe geschätzt werden muss.</p>
+    <p class="lede">Der <a href="../../testen/binomialtest/">Binomialtest</a> rechnet exakt, aber nur für Zählungen und mit viel Rechenaufwand bei großen Stichproben. Der z-Test nutzt eine Abkürzung: Anteile und Mittelwerte sind bei großen Stichproben annähernd normalverteilt (<a href="../../schaetzen/zgws/">zentraler Grenzwertsatz</a>). Man misst dann einfach, wie viele Standardfehler das Ergebnis von der Nullhypothese entfernt liegt. Dieser Abstand ist der z-Wert. Dieselbe Idee steckt im t-Test, der als nächste Station folgt.</p>
     <div class="formula" id="z-gen"></div>
   </section>
 
   <details class="acc" id="acc-1" open>
     <summary><span class="acc-no">1</span><span class="acc-title">Vom Binomialtest zum z-Test<span class="acc-teaser">Der Palpationstest: exakt gezählt und mit der Normalverteilung genähert.</span></span></summary>
     <div class="acc-body">
-      <p class="text">Ein Therapeut behauptet, er erkenne mit einem Palpationstest die betroffene Seite. Raten hieße: Trefferwahrscheinlichkeit p<sub>0</sub> = 0,5. Die Balken zeigen die exakte Binomialverteilung unter H0, die Kurve die Normalverteilung mit demselben Mittelwert und derselben Streuung. Erhöhen Sie n und beobachten Sie, wie gut die Kurve die Balken trifft.</p>
+      <p class="text">Ein Therapeut behauptet, er erkenne mit einem Palpationstest die betroffene Seite. Raten hieße bei zwei Seiten: Trefferwahrscheinlichkeit p<sub>0</sub> = 0,5. Mit p<sub>0</sub> lässt sich auch eine andere Vergleichsgröße einstellen, etwa die Trefferquote eines etablierten Tests. Die Balken zeigen die exakte Binomialverteilung unter H0, die Kurve die Normalverteilung mit demselben Mittelwert und derselben Streuung. Erhöhen Sie n und beobachten Sie, wie gut die Kurve die Balken trifft. Liegt p<sub>0</sub> weit außen, wird die Verteilung schief und die Näherung schlechter.</p>
       <div class="controls"><div class="panel-grid" style="background:none;padding:0">
         <div class="ctrl"><div class="ctrl-head"><label for="bn">n · untersuchte Patientinnen und Patienten</label><output id="bn-v"></output></div><input id="bn" type="range" min="10" max="200" step="10" value="20"></div>
-        <div class="ctrl"><div class="ctrl-head"><label for="bq">beobachtete Trefferquote</label><output id="bq-v"></output></div><input id="bq" type="range" min="0.5" max="0.9" step="0.05" value="0.75"></div>
+        <div class="ctrl"><div class="ctrl-head"><label for="bp">p<sub>0</sub> · Trefferwahrscheinlichkeit unter H0</label><output id="bp-v"></output></div><input id="bp" type="range" min="0.1" max="0.9" step="0.05" value="0.5"></div>
+        <div class="ctrl"><div class="ctrl-head"><label for="bq">beobachtete Trefferquote</label><output id="bq-v"></output></div><input id="bq" type="range" min="0.05" max="0.95" step="0.05" value="0.75"></div>
       </div></div>
       <svg class="chart" id="b-ch" viewBox="0 0 900 340" role="img" aria-label="Binomialverteilung und Normalapproximation unter H0"></svg>
-      <div class="legend"><span><i style="background:var(--pal-3)"></i>exakte Binomialverteilung</span><span><i style="background:var(--therapie)"></i>so extrem oder extremer</span><span><i style="background:var(--beta-ink);height:3px"></i>Normalverteilung</span></div>
+      <div class="legend"><span><i style="background:var(--pal-3)"></i>exakte Binomialverteilung</span><span><i style="background:var(--therapie)"></i>so extrem oder extremer (beobachtete Seite; zweiseitig wird die Fläche verdoppelt, wie im Binomialtest)</span><span><i style="background:var(--beta-ink);height:3px"></i>Normalverteilung</span></div>
       <div class="formula" id="b-f"></div>
       <div class="readouts" id="b-r"></div>
       <p class="callout" id="b-c"></p>
@@ -71,7 +72,7 @@
   <details class="acc" id="acc-3" open>
     <summary><span class="acc-no">3</span><span class="acc-title">z oder t?<span class="acc-teaser">Was passiert, wenn man die Standardabweichung schätzen muss.</span></span></summary>
     <div class="acc-body">
-      <p class="text">Fast nie ist σ bekannt. Dann setzt man die Standardabweichung der Stichprobe s ein. Weil s selbst schwankt, schwankt die Prüfgröße stärker als z: Sie folgt der t-Verteilung mit n − 1 Freiheitsgraden, die dickere Ränder hat. Wer trotzdem mit der Grenze ±1,96 der Normalverteilung testet, verwirft H0 zu oft.</p>
+      <p class="text">Ein Ausblick auf die nächste Station: Fast nie ist σ bekannt. Dann setzt man die Standardabweichung der Stichprobe s ein. Weil s selbst schwankt, schwankt die Prüfgröße stärker als z: Sie folgt der t-Verteilung mit n − 1 Freiheitsgraden, die dickere Ränder hat. Wer trotzdem mit der Grenze ±1,96 der Normalverteilung testet, verwirft H0 zu oft.</p>
       <div class="controls"><div class="ctrl"><div class="ctrl-head"><label for="df">Freiheitsgrade df = n − 1</label><output id="df-v"></output></div><input id="df" type="range" min="1" max="60" step="1" value="4"></div></div>
       <svg class="chart" id="t-ch" viewBox="0 0 900 320" role="img" aria-label="Standardnormalverteilung und t-Verteilung"></svg>
       <div class="legend"><span><i style="background:var(--beta-ink);height:3px"></i>Standardnormalverteilung (z)</span><span><i style="background:var(--therapie);height:3px"></i>t-Verteilung</span><span><i style="background:var(--therapie);opacity:.35"></i>Fläche der t-Verteilung jenseits ±1,96</span></div>
@@ -108,8 +109,8 @@
 </footer>
 <script src="../../assets/vendor/katex/katex.min.js"></script>
 <script src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
-<script src="../../assets/js/tex.js?v=202611232118"></script>
-<script src="z-test.js?v=202611232118"></script>
-<script src="../../assets/js/path.js?v=202611232118"></script>
+<script src="../../assets/js/tex.js?v=202611232139"></script>
+<script src="z-test.js?v=202611232139"></script>
+<script src="../../assets/js/path.js?v=202611232139"></script>
 </body>
 </html>
