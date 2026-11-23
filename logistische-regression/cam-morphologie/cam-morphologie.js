@@ -98,11 +98,51 @@ function draw3() {
 }
 $("m3").addEventListener("click", e => { const b = pick(e, $("m3")); if (!b) return; m3 = +b.dataset.m; draw3(); });
 
-/* ---------- 4 Bericht ---------- */
+/* ---------- 4 Marginal Effects ---------- */
+const P2 = (a, sy) => 1 / (1 + Math.exp(-(M2.b[0] + M2.b[1] * a + M2.b[2] * sy)));
+const MC = logit(Y, [CAM, SY]), PC = (c, sy) => 1 / (1 + Math.exp(-(MC.b[0] + MC.b[1] * c + MC.b[2] * sy)));
+const AME10 = mean(AL.map((a, i) => P2(a + 10, SY[i]) - P2(a, SY[i])));
+const pAll = mean(AL.map((a, i) => P2(a, SY[i]))), pAll10 = mean(AL.map((a, i) => P2(a + 10, SY[i])));
+const mP1 = mean(SY.map(sy => PC(1, sy))), mP0 = mean(SY.map(sy => PC(0, sy)));
+const pp = x => fmt(x * 100, 1) + " Pp.", ppT = x => fmt(x * 100, 1) + " Prozentpunkte";
+function draw4() {
+  const a = +$("me-a").value; $("me-a-v").textContent = `${a}° → ${a + 10}°`;
+  $("or10").textContent = fmt(Math.exp(10 * M2.b[1]), 2);
+  const f = frame(900, 360, 38, 100, 0, 1, { xl: "Alpha-Winkel in Grad", yl: "Wahrscheinlichkeit Knorpeldefekt", nx: 6, fx: v => fmt(v, 0) + "°" });
+  let s = f.s;
+  [[1, "var(--beta-ink)"], [0, "var(--therapie)"]].forEach(([sy, col]) => {
+    s += `<path ${f.clip} d="${curve(f, x => P2(x, sy), 38, 100)}" fill="none" stroke="${col}" stroke-width="3"/>`;
+    const p0 = P2(a, sy), p1 = P2(a + 10, sy);
+    s += `<line x1="${f.sx(a)}" x2="${f.sx(a + 10)}" y1="${f.sy(p0)}" y2="${f.sy(p0)}" stroke="${col}" stroke-width="1.6" stroke-dasharray="4 3"/><line x1="${f.sx(a + 10)}" x2="${f.sx(a + 10)}" y1="${f.sy(p0)}" y2="${f.sy(p1)}" stroke="${col}" stroke-width="3"/>`;
+    s += `<circle cx="${f.sx(a)}" cy="${f.sy(p0)}" r="6" fill="${col}"/><circle cx="${f.sx(a + 10)}" cy="${f.sy(p1)}" r="6" fill="${col}"/>`;
+    s += `<text x="${f.sx(a + 10) + 10}" y="${f.sy((p0 + p1) / 2) + 5}" class="strong halo" style="fill:${col}">+${pp(p1 - p0)}</text>`;
+  });
+  $("c4").innerHTML = s;
+  const s0 = P2(a, 1), s1 = P2(a + 10, 1), f0 = P2(a, 0), f1 = P2(a + 10, 0);
+  $("r4").innerHTML = readout(`symptomatisch: ${a}° → ${a + 10}°`, `${pc(s0)} → ${pc(s1)}`) + readout("Zuwachs symptomatisch", pp(s1 - s0), "hl") + readout(`schmerzfrei: ${a}° → ${a + 10}°`, `${pc(f0)} → ${pc(f1)}`) + readout("Zuwachs schmerzfrei", pp(f1 - f0));
+  $("k4").innerHTML = `Dasselbe Odds Ratio, ${fmt(Math.exp(10 * M2.b[1]), 2)} pro 10 Grad, bedeutet je nach Ausgangslage einen anderen Zuwachs in Prozentpunkten: bei symptomatischen Spielern ${ppT(s1 - s0)}, bei schmerzfreien ${ppT(f1 - f0)}. Auf der S-Kurve ist der Zuwachs dort am größten, wo die Wahrscheinlichkeit nahe 50 % liegt. Deshalb nennt man vorhergesagte Wahrscheinlichkeiten immer zusammen mit den Werten, für die sie gelten. Nebenbei: Zentriert man den Alpha-Winkel auf ${a}°, ist der Achsenabschnitt genau der Logit an dieser Stelle; die Punkte links sind dieser Achsenabschnitt, zurückgerechnet in Wahrscheinlichkeiten.`;
+}
+$("me-a").addEventListener("input", draw4);
+function draw4b() {
+  $("f4").innerHTML = TS(String.raw`\text{AME} = \frac{1}{n} \sum_{i=1}^{n} \left[ \hat{p}_i(\alpha_i + 10) - \hat{p}_i(\alpha_i) \right] = ${tz(fmt(pAll10, 3))} - ${tz(fmt(pAll, 3))} = \mathbf{${tz(fmt(AME10, 3))}}`, `<span class="big">AME = ${fmt(AME10, 3)}</span>`);
+  $("k4b").innerHTML = `Für jeden der ${N} Spieler wird die Wahrscheinlichkeit zweimal vorhergesagt: mit seinem tatsächlichen Alpha-Winkel und mit 10 Grad mehr. Der Mittelwert der Differenzen ist der Average Marginal Effect: <b>10 Grad mehr Alpha-Winkel erhöhen die Wahrscheinlichkeit eines Knorpeldefekts im Mittel um ${ppT(AME10)}</b>. Diese eine Zahl fasst das Modell für genau diese Stichprobe zusammen und ist in einem Ergebnisteil viel leichter zu lesen als das Odds Ratio.`;
+  const W = 520, H = 300, L = 60, R = 20, T = 20, B = 50, sy = v => H - B - v / 0.6 * (H - T - B);
+  let s = "";
+  [0, 0.2, 0.4, 0.6].forEach(v => s += `<line x1="${L}" x2="${W - R}" y1="${sy(v)}" y2="${sy(v)}" stroke="var(--grid)"/><text x="${L - 8}" y="${sy(v) + 4}" text-anchor="end">${fmt(v * 100, 0)} %</text>`);
+  [["alle mit Cam", mP1, "var(--beta-ink)", 140], ["alle ohne Cam", mP0, "var(--therapie)", 340]].forEach(([l, v, col, x]) => s += `<rect x="${x}" y="${sy(v)}" width="110" height="${sy(0) - sy(v)}" rx="4" fill="${col}"/><text x="${x + 55}" y="${sy(v) - 8}" text-anchor="middle" class="strong">${pc(v)}</text><text x="${x + 55}" y="${H - B + 20}" text-anchor="middle">${l}</text>`);
+  $("c4b").innerHTML = s;
+  $("t4").innerHTML = `<thead><tr><th>Kennzahl, adjustiert für Schmerz</th><th>Wert</th></tr></thead><tbody>
+    <tr><td>Odds Ratio (aus dem Modell)</td><td>${fmt(Math.exp(MC.b[1]), 2)}</td></tr>
+    <tr class="hl"><td>relatives Risiko (marginal)</td><td>${fmt(mP1 / mP0, 2)}</td></tr>
+    <tr class="hl"><td>Risikodifferenz (marginal)</td><td>${ppT(mP1 - mP0)}</td></tr></tbody>`;
+  $("k4c").innerHTML = `Mit Cam-Morphologie als Ja-nein-Variable (Alpha-Winkel ≥ 60°) setzt man gedanklich alle ${N} Spieler einmal auf „Cam“ und einmal auf „keine Cam“, ihren Schmerzstatus lässt man, wie er ist, und mittelt die Vorhersagen (marginale Standardisierung): ${pc(mP1)} gegen ${pc(mP0)}. Das adjustierte relative Risiko ist <b>${fmt(mP1 / mP0, 2)}</b>, deutlich kleiner als das Odds Ratio von ${fmt(Math.exp(MC.b[1]), 2)}, weil Knorpeldefekte hier häufig sind (siehe <a href="../../grundlagen/risiko-odds/#acc-3">Wann OR und RR auseinanderlaufen</a>). So lässt sich ein Odds Ratio ohne Umrechnungsformel in die Sprache der Risiken übersetzen.`;
+}
+
+/* ---------- 5 Bericht ---------- */
 function report() {
   const c = ci(M2.b[1], M2.se[1], 10);
   $("rep").innerHTML = `<span><b>So könnte der Ergebnissatz lauten:</b> Pro 10 Grad größerem Alpha-Winkel waren die Odds eines Knorpeldefekts um den Faktor ${fmt(Math.exp(M2.b[1] * 10), 2)} höher (95-%-KI ${fmt(c[0], 2)} bis ${fmt(c[1], 2)}; p = ${fmt(M2.p[1], 3)}), adjustiert für den Symptomstatus. Bei einem Spieler mit 70 Grad lag die vorhergesagte Wahrscheinlichkeit bei ${pc(sig(M1.b[0], M1.b[1])(70), 0)}, bei 90 Grad bei ${pc(sig(M1.b[0], M1.b[1])(90), 0)}.</span><span class="dim">Zum Vergleich die Originalstudie: OR 1,03 (95-%-KI 1,01 bis 1,04) pro Grad, also etwa 1,34 pro 10 Grad.</span>`;
 }
 
-draw1(); draw2(); draw3();
+draw1(); draw2(); draw3(); draw4(); draw4b();
 })();
