@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Der z-Test · Stats Lab</title>
+<meta name="description" content="Der z-Test als Brücke zwischen Binomialtest und t-Test: Normalapproximation für Anteile, z-Test für einen Mittelwert bei bekannter Standardabweichung, z gegen t bei kleinen Stichproben und wo z-Werte in der Praxis auftauchen.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../assets/css/base.css?v=202611232118">
+<link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
+<link rel="stylesheet" href="z-test.css?v=202611232118">
+</head>
+<body>
+<header class="site-header">
+  <div class="column">
+    <a class="brand" href="../../">
+      <svg class="brand-mark" viewBox="0 0 22 22" aria-hidden="true"><path d="M1 19 C5 19 6 4 9 4 S13 19 17 19" fill="none" class="bm-a" stroke-width="2.2" stroke-linecap="round"/><path d="M5 19 C9 19 10 7 13 7 S17 19 21 19" fill="none" class="bm-b" stroke-width="2.2" stroke-linecap="round"/></svg>
+      Stats Lab
+    </a>
+    <nav class="site-nav" aria-label="Hauptnavigation">
+      <a href="../../">Visualisierungen</a>
+      <a href="../../glossar/">Glossar</a>
+      <a href="https://github.com/jnshsrs/stats-lab">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main class="column">
+  <section class="intro">
+    <a class="back" href="../../">← Alle Visualisierungen</a>
+    <h1>Der z-Test</h1>
+    <p class="byline">Dr. Jens Hüsers · Forschungsmethodik</p>
+    <p class="lede">Der <a href="../../testen/binomialtest/">Binomialtest</a> rechnet exakt, aber nur für Zählungen. Der <a href="../../testen/t-test/">t-Test</a> prüft Mittelwerte. Dazwischen liegt der z-Test. Er nutzt, dass Anteile und Mittelwerte bei großen Stichproben annähernd normalverteilt sind (<a href="../../schaetzen/zgws/">zentraler Grenzwertsatz</a>), und misst den Abstand zur Nullhypothese in Standardfehlern. Dieser Abstand ist der z-Wert. Der t-Test ist im Kern ein z-Test, bei dem die Standardabweichung aus der Stichprobe geschätzt werden muss.</p>
+    <div class="formula" id="z-gen"></div>
+  </section>
+
+  <details class="acc" id="acc-1" open>
+    <summary><span class="acc-no">1</span><span class="acc-title">Vom Binomialtest zum z-Test<span class="acc-teaser">Der Palpationstest: exakt gezählt und mit der Normalverteilung genähert.</span></span></summary>
+    <div class="acc-body">
+      <p class="text">Ein Therapeut behauptet, er erkenne mit einem Palpationstest die betroffene Seite. Raten hieße: Trefferwahrscheinlichkeit p<sub>0</sub> = 0,5. Die Balken zeigen die exakte Binomialverteilung unter H0, die Kurve die Normalverteilung mit demselben Mittelwert und derselben Streuung. Erhöhen Sie n und beobachten Sie, wie gut die Kurve die Balken trifft.</p>
+      <div class="controls"><div class="panel-grid" style="background:none;padding:0">
+        <div class="ctrl"><div class="ctrl-head"><label for="bn">n · untersuchte Patientinnen und Patienten</label><output id="bn-v"></output></div><input id="bn" type="range" min="10" max="200" step="10" value="20"></div>
+        <div class="ctrl"><div class="ctrl-head"><label for="bq">beobachtete Trefferquote</label><output id="bq-v"></output></div><input id="bq" type="range" min="0.5" max="0.9" step="0.05" value="0.75"></div>
+      </div></div>
+      <svg class="chart" id="b-ch" viewBox="0 0 900 340" role="img" aria-label="Binomialverteilung und Normalapproximation unter H0"></svg>
+      <div class="legend"><span><i style="background:var(--pal-3)"></i>exakte Binomialverteilung</span><span><i style="background:var(--therapie)"></i>so extrem oder extremer</span><span><i style="background:var(--beta-ink);height:3px"></i>Normalverteilung</span></div>
+      <div class="formula" id="b-f"></div>
+      <div class="readouts" id="b-r"></div>
+      <p class="callout" id="b-c"></p>
+    </div>
+  </details>
+
+  <details class="acc" id="acc-2" open>
+    <summary><span class="acc-no">2</span><span class="acc-title">z-Test für einen Mittelwert<span class="acc-teaser">Wenn die Streuung in der Population bekannt ist.</span></span></summary>
+    <div class="acc-body">
+      <p class="text">Haben Patientinnen zwölf Wochen nach einer distalen Radiusfraktur wieder eine normale Griffkraft? Aus einer großen Normstichprobe gleichaltriger Frauen sind Mittelwert und Standardabweichung bekannt: μ<sub>0</sub> = 30 kg, σ = 6 kg. Weil σ nicht geschätzt werden muss, ist die Prüfgröße unter H0 exakt standardnormalverteilt.</p>
+      <p class="fict">Fiktive Normwerte zur Veranschaulichung.</p>
+      <div class="controls"><div class="panel-grid" style="background:none;padding:0">
+        <div class="ctrl"><div class="ctrl-head"><label for="mn">n · Patientinnen</label><output id="mn-v"></output></div><input id="mn" type="range" min="4" max="60" step="1" value="16"></div>
+        <div class="ctrl"><div class="ctrl-head"><label for="mx">gemessener Mittelwert x̄</label><output id="mx-v"></output></div><input id="mx" type="range" min="24" max="34" step="0.5" value="27"></div>
+      </div></div>
+      <div class="two-charts">
+        <div class="formula" id="m-f"></div>
+        <svg class="chart" id="m-ch" viewBox="0 0 520 300" role="img" aria-label="Standardnormalverteilung mit Ablehnungsbereich und beobachtetem z"></svg>
+      </div>
+      <div class="readouts" id="m-r"></div>
+      <p class="callout" id="m-c"></p>
+    </div>
+  </details>
+
+  <details class="acc" id="acc-3" open>
+    <summary><span class="acc-no">3</span><span class="acc-title">z oder t?<span class="acc-teaser">Was passiert, wenn man die Standardabweichung schätzen muss.</span></span></summary>
+    <div class="acc-body">
+      <p class="text">Fast nie ist σ bekannt. Dann setzt man die Standardabweichung der Stichprobe s ein. Weil s selbst schwankt, schwankt die Prüfgröße stärker als z: Sie folgt der t-Verteilung mit n − 1 Freiheitsgraden, die dickere Ränder hat. Wer trotzdem mit der Grenze ±1,96 der Normalverteilung testet, verwirft H0 zu oft.</p>
+      <div class="controls"><div class="ctrl"><div class="ctrl-head"><label for="df">Freiheitsgrade df = n − 1</label><output id="df-v"></output></div><input id="df" type="range" min="1" max="60" step="1" value="4"></div></div>
+      <svg class="chart" id="t-ch" viewBox="0 0 900 320" role="img" aria-label="Standardnormalverteilung und t-Verteilung"></svg>
+      <div class="legend"><span><i style="background:var(--beta-ink);height:3px"></i>Standardnormalverteilung (z)</span><span><i style="background:var(--therapie);height:3px"></i>t-Verteilung</span><span><i style="background:var(--therapie);opacity:.35"></i>Fläche der t-Verteilung jenseits ±1,96</span></div>
+      <div class="readouts" id="t-r"></div>
+      <p class="callout" id="t-c"></p>
+    </div>
+  </details>
+
+  <details class="acc" id="acc-4" open>
+    <summary><span class="acc-no">4</span><span class="acc-title">Wo z-Werte auftauchen<span class="acc-teaser">Vom Konfidenzintervall bis zur Ausgabe der logistischen Regression.</span></span></summary>
+    <div class="acc-body">
+      <ol class="check">
+        <li><b>Die 1,96 im Konfidenzintervall.</b> Ein 95-%-Konfidenzintervall „Schätzer ± 1,96 Standardfehler“ ist ein umgedrehter z-Test: Es enthält alle Werte, die ein zweiseitiger z-Test bei α = 5 % nicht verwerfen würde. Bei kleinen Stichproben ersetzt t<sub>krit</sub> die 1,96, siehe <a href="../../schaetzen/zgws/">zentraler Grenzwertsatz</a>.</li>
+        <li><b>Anteile vergleichen.</b> Der Vergleich zweier Anteile, etwa Heilungsraten in zwei Gruppen, ist ein z-Test. Sein Quadrat ist genau der <a href="../../testen/chi-quadrat/">Chi-Quadrat-Test</a> der Vierfeldertafel: z² = χ².</li>
+        <li><b>Logistische Regression.</b> In der Ausgabe stehen zu jedem Koeffizienten z-Werte oder der Wald-Wert, z² (SPSS gibt den Wald-Wert aus). Geprüft wird: Wie viele Standardfehler liegt der Koeffizient von null entfernt? Siehe <a href="../../logistische-regression/cam-morphologie/">Cam-Morphologie</a>.</li>
+        <li><b>Rangtests bei großen Stichproben.</b> Mann-Whitney-U- und Wilcoxon-Test geben bei größerem n meist einen z-Wert aus, weil ihre Prüfgröße dann ebenfalls annähernd normalverteilt ist.</li>
+      </ol>
+      <div class="infobox"><p><b>Faustregel.</b> Anteile: z-Test, wenn n · p<sub>0</sub> und n · (1 − p<sub>0</sub>) jeweils mindestens 10 sind, sonst der exakte Binomialtest. Mittelwerte: t-Test, außer σ ist wirklich bekannt. Bei großen Stichproben liefern beide praktisch dasselbe.</p></div>
+    </div>
+  </details>
+
+  <section class="block refs" aria-labelledby="refs-h">
+    <h2 id="refs-h">Quellen</h2>
+    <ul><li>Agresti, A., &amp; Franklin, C. (2018). Statistics: The Art and Science of Learning from Data (4. Aufl.). Pearson. Kapitel 9.</li>
+    <li>Fiktive Beispiele zur Veranschaulichung.</li></ul>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="column">
+    <span>© 2026 Dr. Jens Hüsers · Lehrmaterial für Forschungsmethodik und Statistik</span>
+    <span class="footer-links"><a href="https://github.com/jnshsrs/stats-lab">Quellcode auf GitHub</a><span>Ohne Cookies und Tracking</span></span>
+  </div>
+</footer>
+<script src="../../assets/vendor/katex/katex.min.js"></script>
+<script src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
+<script src="../../assets/js/tex.js?v=202611232118"></script>
+<script src="z-test.js?v=202611232118"></script>
+<script src="../../assets/js/path.js?v=202611232118"></script>
+</body>
+</html>

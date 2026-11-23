@@ -6,9 +6,9 @@
 <title>Binomialtest · Stats Lab</title>
 <meta name="description" content="Annahme- und Ablehnungsbereich am Binomialtest mit einem fiktiven Medikament: Ergebnisse von außen nach innen sammeln, kritische Werte aus der Verteilungsfunktion, p-Wert als Summe extremer Ergebnisse.">
 <link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="../../assets/css/base.css?v=202611231806">
+<link rel="stylesheet" href="../../assets/css/base.css?v=202611232118">
 <link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
-<link rel="stylesheet" href="binomialtest.css?v=202611231806">
+<link rel="stylesheet" href="binomialtest.css?v=202611232118">
 </head>
 <body>
 <header class="site-header">
@@ -106,7 +106,7 @@
       <li><b>Gleiches p für alle:</b> Unter H0 hat jede Person dieselbe Erfolgswahrscheinlichkeit p<sub>0</sub>.</li>
       <li><b>p<sub>0</sub> vorab begründet:</b> aus Literatur, Standardtherapie oder Raten, festgelegt vor der Datenerhebung.</li>
     </ol>
-    <p class="note">Der exakte Binomialtest ist immer zulässig, auch bei kleinem n. Bei großem n (etwa n · p<sub>0</sub> und n · (1 − p<sub>0</sub>) jeweils mindestens 10) liefert die Normalverteilung eine gute Näherung, der sogenannte z-Test für Anteile.</p>
+    <p class="note">Der exakte Binomialtest ist immer zulässig, auch bei kleinem n. Bei großem n (etwa n · p<sub>0</sub> und n · (1 − p<sub>0</sub>) jeweils mindestens 10) liefert die Normalverteilung eine gute Näherung, der sogenannte <a href="../../testen/z-test/">z-Test für Anteile</a>.</p>
     <p class="note"><b>Test und Konfidenzintervall:</b> Beim t-Test führen p-Wert und Konfidenzintervall immer zur selben Entscheidung (siehe <a href="../t-test/#ci-exkurs">t-Test-Kaskade</a>). Bei Anteilen gilt das nur, wenn beide aus demselben Verfahren stammen. Der exakte Binomialtest und das einfache Näherungsintervall p̂ ± 1,96 · SE können bei kleinem n oder Anteilen nahe 0 oder 1 zu verschiedenen Ergebnissen kommen. Zum exakten Test passt das exakte Intervall nach Clopper-Pearson.</p>
   </section>
 
@@ -122,7 +122,7 @@
   </div>
 </footer>
 <script src="../../assets/vendor/katex/katex.min.js"></script>
-<script src="binomialtest.js?v=202611231806"></script>
-<script src="../../assets/js/path.js?v=202611231806"></script>
+<script src="binomialtest.js?v=202611232118"></script>
+<script src="../../assets/js/path.js?v=202611232118"></script>
 </body>
 </html>

@@ -6,7 +6,7 @@
 <title>Stats Lab</title>
 <meta name="description" content="Interaktive Visualisierungen für die Statistiklehre in Gesundheits- und Therapiewissenschaften.">
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="assets/css/base.css?v=202611231806">
+<link rel="stylesheet" href="assets/css/base.css?v=202611232118">
 <style>
   .hero { padding-block: 56px 40px; display: flex; flex-direction: column; gap: 16px; }
   .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; }
@@ -299,8 +299,18 @@
         <div class="tags"><span class="tag">Ablehnungsbereich</span><span class="tag">kritischer Wert</span><span class="tag">p-Wert</span></div>
       </div>
     </a>
-    <a class="card" href="testen/t-test/">
+    <a class="card" href="testen/z-test/">
       <div class="card-thumb"><span class="path-no">16</span>
+        <svg viewBox="0 0 320 180" aria-hidden="true"><line x1="30" x2="290" y1="150" y2="150" class="t-axis" stroke-width="2"/><rect x="100" y="90" width="18" height="60" class="t-up"/><rect x="122" y="55" width="18" height="95" class="t-up"/><rect x="144" y="40" width="18" height="110" class="t-up"/><rect x="166" y="55" width="18" height="95" class="t-up"/><rect x="188" y="90" width="18" height="60" class="t-up"/><path d="M40 148 C110 146 125 30 153 30 S196 146 266 148" class="t-curve" fill="none"/></svg>
+      </div>
+      <div class="card-body">
+        <h3>Der z-Test</h3>
+        <p>Die Brücke vom Binomialtest zum t-Test: Normalapproximation für Anteile, z-Test für einen Mittelwert bei bekanntem σ und warum kleine Stichproben den t-Test brauchen.</p>
+        <div class="tags"><span class="tag">z-Test</span><span class="tag">Normalapproximation</span><span class="tag">t-Verteilung</span></div>
+      </div>
+    </a>
+    <a class="card" href="testen/t-test/">
+      <div class="card-thumb"><span class="path-no">17</span>
         <svg viewBox="0 0 320 180" aria-hidden="true">
           <path d="M20 160 C 80 160 95 40 130 40 S 180 160 240 160" class="t-h0" stroke-width="3"/>
           <path d="M80 160 C 140 160 155 40 190 40 S 240 160 300 160" class="t-h1" stroke-width="3"/>
@@ -316,7 +326,7 @@
       </div>
     </a>
     <a class="card" href="testen/t-test-varianten/">
-      <div class="card-thumb"><span class="path-no">17</span>
+      <div class="card-thumb"><span class="path-no">18</span>
         <svg viewBox="0 0 320 180" aria-hidden="true">
           <line x1="60" x2="60" y1="40" y2="140" class="t-dash"/><circle cx="48" cy="80" r="5" class="t-bar"/><circle cx="70" cy="96" r="5" class="t-bar"/><circle cx="56" cy="110" r="5" class="t-bar"/>
           <line x1="120" x2="190" y1="120" y2="90" class="t-curve"/><line x1="120" x2="190" y1="100" y2="66" class="t-curve"/><line x1="120" x2="190" y1="80" y2="60" class="t-curve"/>
@@ -331,7 +341,7 @@
       </div>
     </a>
     <a class="card" href="testen/entscheidung/">
-      <div class="card-thumb"><span class="path-no">18</span>
+      <div class="card-thumb"><span class="path-no">19</span>
         <svg viewBox="0 0 320 180" aria-hidden="true">
           <path d="M40 150 C 85 150 95 50 125 50 S 165 150 210 150 Z" class="t-h0"/>
           <path d="M110 150 C 155 150 165 50 195 50 S 235 150 280 150 Z" class="t-h1"/>
@@ -347,7 +357,7 @@
       </div>
     </a>
     <a class="card" href="testen/fallzahl/">
-      <div class="card-thumb"><span class="path-no">19</span>
+      <div class="card-thumb"><span class="path-no">20</span>
         <svg viewBox="0 0 320 180" aria-hidden="true">
           <line x1="50" x2="280" y1="60" y2="60" class="t-dash"/>
           <path d="M50 150 C 90 120 110 70 160 60 S 240 46 280 44" fill="none" class="t-curve"/>
@@ -363,7 +373,7 @@
       </div>
     </a>
     <a class="card" href="testen/multiples-testen/">
-      <div class="card-thumb"><span class="path-no">20</span>
+      <div class="card-thumb"><span class="path-no">21</span>
         <svg viewBox="0 0 320 180" aria-hidden="true">
           <g><rect x="40" y="24" width="40" height="30" rx="5" class="t-bar"/><rect x="90" y="24" width="40" height="30" rx="5" class="t-bar"/><rect x="140" y="24" width="40" height="30" rx="5" class="t-bar"/><rect x="190" y="24" width="40" height="30" rx="5" class="t-bar"/><rect x="240" y="24" width="40" height="30" rx="5" class="t-bar"/><rect x="40" y="64" width="40" height="30" rx="5" class="t-bar"/><rect x="90" y="64" width="40" height="30" rx="5" class="t-bar"/><rect x="140" y="64" width="40" height="30" rx="5" class="t-bar"/><rect x="190" y="64" width="40" height="30" rx="5" class="t-strong"/><rect x="240" y="64" width="40" height="30" rx="5" class="t-bar"/><rect x="40" y="104" width="40" height="30" rx="5" class="t-bar"/><rect x="90" y="104" width="40" height="30" rx="5" class="t-bar"/><rect x="140" y="104" width="40" height="30" rx="5" class="t-bar"/><rect x="190" y="104" width="40" height="30" rx="5" class="t-bar"/><rect x="240" y="104" width="40" height="30" rx="5" class="t-bar"/></g>
           <line x1="30" x2="290" y1="150" y2="150" class="t-axis" stroke-width="2"/>
@@ -377,7 +387,7 @@
       </div>
     </a>
     <a class="card" href="testen/chi-quadrat/">
-      <div class="card-thumb"><span class="path-no">21</span>
+      <div class="card-thumb"><span class="path-no">22</span>
         <svg viewBox="0 0 320 180" aria-hidden="true">
           <rect x="70" y="30" width="90" height="80" class="t-strong"/><rect x="70" y="110" width="90" height="40" class="t-soft"/>
           <rect x="166" y="30" width="84" height="52" class="t-strong"/><rect x="166" y="82" width="84" height="68" class="t-soft"/>
@@ -397,7 +407,7 @@
     <div class="block-head"><span class="block-no">5</span><div><h2 id="block-hintergrund">Hintergrund</h2><p>Denkfallen und Wissenschaftstheorie: Regression zur Mitte, positive Befunde, Popper, Fisher, Neyman und Pearson.</p></div></div>
     <div class="grid">
     <a class="card" href="hintergrund/regression-mitte/">
-      <div class="card-thumb"><span class="path-no">22</span>
+      <div class="card-thumb"><span class="path-no">23</span>
         <svg viewBox="0 0 320 180" aria-hidden="true">
           <line x1="40" x2="290" y1="150" y2="30" class="t-dash"/>
           <line x1="40" x2="290" y1="128" y2="52" class="t-curve"/>
@@ -413,7 +423,7 @@
       </div>
     </a>
     <a class="card" href="hintergrund/mammografie/">
-      <div class="card-thumb"><span class="path-no">23</span>
+      <div class="card-thumb"><span class="path-no">24</span>
         <svg viewBox="0 0 320 180" aria-hidden="true">
           <rect x="30" y="76" width="56" height="28" rx="6" class="t-soft"/>
           <path d="M86 90 C 110 90, 110 50, 134 50 M86 90 C 110 90, 110 130, 134 130" fill="none" class="t-dash"/>
@@ -429,7 +439,7 @@
       </div>
     </a>
     <a class="card" href="hintergrund/klinische-tests/">
-      <div class="card-thumb"><span class="path-no">24</span>
+      <div class="card-thumb"><span class="path-no">25</span>
         <svg viewBox="0 0 320 180" aria-hidden="true">
           <rect x="40" y="30" width="110" height="60" class="t-strong"/><rect x="150" y="30" width="110" height="60" class="t-soft"/>
           <rect x="40" y="90" width="110" height="60" class="t-bar"/><rect x="150" y="90" width="110" height="60" class="t-band"/>
@@ -443,7 +453,7 @@
       </div>
     </a>
     <a class="card" href="hintergrund/inferenzzyklus/">
-      <div class="card-thumb"><span class="path-no">25</span>
+      <div class="card-thumb"><span class="path-no">26</span>
         <svg viewBox="0 0 320 180" aria-hidden="true">
           <rect x="0" y="0" width="320" height="80" class="t-band"/>
           <rect x="70" y="22" width="180" height="40" rx="10" class="t-hyp"/>
@@ -466,7 +476,7 @@
     <div class="block-head"><span class="block-no">6</span><div><h2 id="block-regression">Zusammenhänge und Regression</h2><p>Wie hängen zwei Messgrößen zusammen, und was bleibt, wenn man andere Einflüsse berücksichtigt? Durchgehend mit echten Lungenfunktionsdaten von 654 Kindern.</p></div></div>
     <div class="grid">
     <a class="card" href="regression/korrelation/">
-      <div class="card-thumb"><span class="path-no">26</span>
+      <div class="card-thumb"><span class="path-no">27</span>
         <svg viewBox="0 0 320 180" aria-hidden="true">
           <line x1="40" x2="290" y1="150" y2="150" class="t-axis" stroke-width="2"/><line x1="40" x2="40" y1="20" y2="150" class="t-axis" stroke-width="2"/>
           <circle cx="70" cy="132" r="6" class="t-strong"/><circle cx="95" cy="120" r="6" class="t-strong"/><circle cx="118" cy="124" r="6" class="t-strong"/><circle cx="140" cy="102" r="6" class="t-strong"/><circle cx="165" cy="96" r="6" class="t-strong"/><circle cx="188" cy="80" r="6" class="t-strong"/><circle cx="210" cy="84" r="6" class="t-strong"/><circle cx="232" cy="60" r="6" class="t-strong"/><circle cx="258" cy="48" r="6" class="t-strong"/><circle cx="270" cy="36" r="6" class="t-strong"/>
@@ -480,7 +490,7 @@
       </div>
     </a>
     <a class="card" href="regression/gerade/">
-      <div class="card-thumb"><span class="path-no">27</span>
+      <div class="card-thumb"><span class="path-no">28</span>
         <svg viewBox="0 0 320 180" aria-hidden="true">
           <line x1="40" x2="290" y1="150" y2="150" class="t-axis" stroke-width="2"/><line x1="40" x2="40" y1="20" y2="150" class="t-axis" stroke-width="2"/>
           <line x1="50" x2="285" y1="140" y2="38" class="t-dash"/>
@@ -495,7 +505,7 @@
       </div>
     </a>
     <a class="card" href="regression/normbereich/">
-      <div class="card-thumb"><span class="path-no">28</span>
+      <div class="card-thumb"><span class="path-no">29</span>
         <svg viewBox="0 0 320 180" aria-hidden="true">
           <line x1="40" x2="290" y1="150" y2="150" class="t-axis" stroke-width="2"/><line x1="40" x2="40" y1="20" y2="150" class="t-axis" stroke-width="2"/>
           <path d="M50 108 L285 10 L285 70 L50 168 Z" class="t-soft"/>
@@ -510,7 +520,7 @@
       </div>
     </a>
     <a class="card" href="regression/bestimmtheitsmass/">
-      <div class="card-thumb"><span class="path-no">29</span>
+      <div class="card-thumb"><span class="path-no">30</span>
         <svg viewBox="0 0 320 180" aria-hidden="true">
           <rect x="40" y="40" width="240" height="26" rx="4" class="t-strong"/>
           <rect x="40" y="96" width="180" height="26" rx="4" class="t-up"/>
@@ -525,7 +535,7 @@
       </div>
     </a>
     <a class="card" href="regression/diagnostik/">
-      <div class="card-thumb"><span class="path-no">30</span>
+      <div class="card-thumb"><span class="path-no">31</span>
         <svg viewBox="0 0 320 180" aria-hidden="true">
           <line x1="40" x2="290" y1="90" y2="90" class="t-dash"/>
           <path d="M50 84 L290 40 L290 140 L50 96 Z" class="t-soft"/>
@@ -539,7 +549,7 @@
       </div>
     </a>
     <a class="card" href="regression/multiple-regression/">
-      <div class="card-thumb"><span class="path-no">31</span>
+      <div class="card-thumb"><span class="path-no">32</span>
         <svg viewBox="0 0 320 180" aria-hidden="true">
           <line x1="40" x2="290" y1="150" y2="150" class="t-axis" stroke-width="2"/><line x1="40" x2="40" y1="20" y2="150" class="t-axis" stroke-width="2"/>
           <line x1="50" x2="285" y1="128" y2="58" class="t-curve"/>
@@ -554,7 +564,7 @@
       </div>
     </a>
     <a class="card" href="regression/drittvariablen/">
-      <div class="card-thumb"><span class="path-no">32</span>
+      <div class="card-thumb"><span class="path-no">33</span>
         <svg viewBox="0 0 320 180" aria-hidden="true">
           <rect x="128" y="22" width="64" height="30" rx="8" class="t-axis" fill="none" stroke-width="2"/>
           <rect x="34" y="122" width="64" height="30" rx="8" class="t-axis" fill="none" stroke-width="2"/>
@@ -570,7 +580,7 @@
       </div>
     </a>
     <a class="card" href="regression/wechselwirkungen/">
-      <div class="card-thumb"><span class="path-no">33</span>
+      <div class="card-thumb"><span class="path-no">34</span>
         <svg viewBox="0 0 320 180" aria-hidden="true">
           <line x1="40" x2="290" y1="150" y2="150" class="t-axis" stroke-width="2"/><line x1="40" x2="40" y1="20" y2="150" class="t-axis" stroke-width="2"/>
           <line x1="70" x2="270" y1="122" y2="90" class="t-curve"/><line x1="70" x2="270" y1="128" y2="34" class="t-dash"/>
@@ -590,7 +600,7 @@
     <div class="block-head"><span class="block-no">7</span><div><h2 id="block-logistische-regression">Logistische Regression</h2><p>Wenn die Zielgröße ja oder nein ist: von der Geraden zur S-Kurve, Odds Ratio pro Einheit und ein Praxisbeispiel zur Cam-Morphologie der Hüfte.</p></div></div>
     <div class="grid">
     <a class="card" href="logistische-regression/s-kurve/">
-      <div class="card-thumb"><span class="path-no">34</span>
+      <div class="card-thumb"><span class="path-no">35</span>
         <svg viewBox="0 0 320 180" aria-hidden="true">
           <line x1="40" x2="290" y1="150" y2="150" class="t-axis" stroke-width="2"/><line x1="40" x2="40" y1="20" y2="150" class="t-axis" stroke-width="2"/>
           <line x1="45" x2="285" y1="160" y2="40" class="t-dash"/>
@@ -604,7 +614,7 @@
       </div>
     </a>
     <a class="card" href="logistische-regression/cam-morphologie/">
-      <div class="card-thumb"><span class="path-no">35</span>
+      <div class="card-thumb"><span class="path-no">36</span>
         <svg viewBox="0 0 320 180" aria-hidden="true">
           <circle cx="150" cy="80" r="46" class="t-soft"/><path d="M150 34 A46 46 0 0 1 196 80 L212 92 L180 120 Z" class="t-strong"/>
           <line x1="150" x2="230" y1="80" y2="150" class="t-dash"/>
