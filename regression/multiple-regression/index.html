@@ -6,9 +6,9 @@
 <title>Mehrere Einflüsse zugleich · Stats Lab</title>
 <meta name="description" content="Multiple Regression mit den FEV-Daten: Adjustierung für Störgrößen am Beispiel Rauchen, Koeffizienten lesen, Wechselwirkung von Alter und Geschlecht mit Zentrierung, Ausblick auf logistische Regression und gemischte Modelle.">
 <link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="../../assets/css/base.css?v=202611231707">
+<link rel="stylesheet" href="../../assets/css/base.css?v=202611231722">
 <link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
-<link rel="stylesheet" href="multiple-regression.css?v=202611231707">
+<link rel="stylesheet" href="multiple-regression.css?v=202611231722">
 </head>
 <body>
 <header class="site-header">
@@ -69,7 +69,7 @@
       <ol class="check">
         <li><b>„Bei gleichen Werten der anderen“.</b> Jeder Koeffizient ist ein Vergleich zwischen Personen, die sich nur in dieser einen Größe unterscheiden. Diesen Satz gehört in jede Interpretation.</li>
         <li><b>Adjustieren entfernt nur gemessene Störgrößen.</b> Was nicht im Modell steht, kann den Effekt weiter verzerren. Ein Beobachtungsdatensatz bleibt ein Beobachtungsdatensatz.</li>
-        <li><b>Nicht für alles adjustieren.</b> Die Größe könnte selbst auf dem Weg vom Rauchen zur Lunge liegen (Rauchen hemmt Wachstum). Wer dafür adjustiert, rechnet einen Teil des Effekts heraus. Welche Variablen ins Modell gehören, ist eine inhaltliche Frage, keine statistische.</li>
+        <li><b>Nicht für alles adjustieren.</b> Die Größe könnte selbst auf dem Weg vom Rauchen zur Lunge liegen (Rauchen hemmt Wachstum). Wer dafür adjustiert, rechnet einen Teil des Effekts heraus. Welche Variablen ins Modell gehören, ist eine inhaltliche Frage, keine statistische. Wie man sie beantwortet, zeigt die Station <a href="../../regression/drittvariablen/">Drittvariablen</a>.</li>
         <li><b>Mit Wechselwirkung gelten Haupteffekte nur am Nullpunkt der anderen Größe.</b> Deshalb vorher zentrieren.</li>
         <li><b>Nicht signifikant heißt nicht kein Effekt.</b> In Modell D ist Rauchen nicht mehr signifikant, das Konfidenzintervall reicht aber bis −0,2 Liter. Klinisch relevant ist das allemal.</li>
       </ol>
@@ -96,10 +96,10 @@
 </footer>
 <script src="../../assets/vendor/katex/katex.min.js"></script>
 <script src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
-<script src="../../assets/js/tex.js?v=202611231707"></script>
-<script src="../../regression-daten/fev.js?v=202611231707"></script>
-<script src="../../assets/js/reg.js?v=202611231707"></script>
-<script src="multiple-regression.js?v=202611231707"></script>
-<script src="../../assets/js/path.js?v=202611231707"></script>
+<script src="../../assets/js/tex.js?v=202611231722"></script>
+<script src="../../regression-daten/fev.js?v=202611231722"></script>
+<script src="../../assets/js/reg.js?v=202611231722"></script>
+<script src="multiple-regression.js?v=202611231722"></script>
+<script src="../../assets/js/path.js?v=202611231722"></script>
 </body>
 </html>

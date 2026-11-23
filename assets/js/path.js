@@ -32,6 +32,7 @@ const PATH = [
   ["bestimmtheitsmass", "Wie viel erklärt die Gerade? R² und Streuungszerlegung", 4],
   ["diagnostik", "Passt das Modell? Residuen und Einfluss", 4],
   ["multiple-regression", "Mehrere Einflüsse zugleich: multiple Regression", 4],
+  ["drittvariablen", "Drittvariablen: Confounder, Mediator, Collider", 4],
   ["s-kurve", "Von der Geraden zur S-Kurve", 5],
   ["cam-morphologie", "Cam-Morphologie und Knorpeldefekt", 5]
 ];

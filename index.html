@@ -6,7 +6,7 @@
 <title>Stats Lab</title>
 <meta name="description" content="Interaktive Visualisierungen für die Statistiklehre in Gesundheits- und Therapiewissenschaften.">
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="assets/css/base.css?v=202611231707">
+<link rel="stylesheet" href="assets/css/base.css?v=202611231722">
 <style>
   .hero { padding-block: 56px 40px; display: flex; flex-direction: column; gap: 16px; }
   .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; }
@@ -507,6 +507,22 @@
         <div class="tags"><span class="tag">Adjustierung</span><span class="tag">Wechselwirkung</span><span class="tag">Störgröße</span></div>
       </div>
     </a>
+    <a class="card" href="regression/drittvariablen/">
+      <div class="card-thumb"><span class="path-no">28</span>
+        <svg viewBox="0 0 320 180" aria-hidden="true">
+          <rect x="128" y="22" width="64" height="30" rx="8" class="t-axis" fill="none" stroke-width="2"/>
+          <rect x="34" y="122" width="64" height="30" rx="8" class="t-axis" fill="none" stroke-width="2"/>
+          <rect x="222" y="122" width="64" height="30" rx="8" class="t-axis" fill="none" stroke-width="2"/>
+          <line x1="140" x2="84" y1="54" y2="118" class="t-curve"/><line x1="180" x2="236" y1="54" y2="118" class="t-curve"/>
+          <line x1="102" x2="216" y1="137" y2="137" class="t-dash"/>
+        </svg>
+      </div>
+      <div class="card-body">
+        <h3>Drittvariablen</h3>
+        <p>Confounder, Mediator, Collider: Mit Pfeildiagrammen entscheiden, wofür man adjustiert. Alter als Störgröße, Größe als Wirkweg und eine Sprechstunde, die einen Scheinzusammenhang erzeugt.</p>
+        <div class="tags"><span class="tag">Confounder</span><span class="tag">Mediation</span><span class="tag">Collider</span></div>
+      </div>
+    </a>
     </div>
   </section>
 
@@ -514,7 +530,7 @@
     <div class="block-head"><span class="block-no">6</span><div><h2 id="b6">Logistische Regression</h2><p>Wenn die Zielgröße ja oder nein ist: von der Geraden zur S-Kurve, Odds Ratio pro Einheit und ein Praxisbeispiel zur Cam-Morphologie der Hüfte.</p></div></div>
     <div class="grid">
     <a class="card" href="logistische-regression/s-kurve/">
-      <div class="card-thumb"><span class="path-no">28</span>
+      <div class="card-thumb"><span class="path-no">29</span>
         <svg viewBox="0 0 320 180" aria-hidden="true">
           <line x1="40" x2="290" y1="150" y2="150" class="t-axis" stroke-width="2"/><line x1="40" x2="40" y1="20" y2="150" class="t-axis" stroke-width="2"/>
           <line x1="45" x2="285" y1="160" y2="40" class="t-dash"/>
@@ -528,7 +544,7 @@
       </div>
     </a>
     <a class="card" href="logistische-regression/cam-morphologie/">
-      <div class="card-thumb"><span class="path-no">29</span>
+      <div class="card-thumb"><span class="path-no">30</span>
         <svg viewBox="0 0 320 180" aria-hidden="true">
           <circle cx="150" cy="80" r="46" class="t-soft"/><path d="M150 34 A46 46 0 0 1 196 80 L212 92 L180 120 Z" class="t-strong"/>
           <line x1="150" x2="230" y1="80" y2="150" class="t-dash"/>

@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Drittvariablen · Stats Lab</title>
+<meta name="description" content="Confounder, Mediator und Collider mit Pfeildiagrammen: wann man für eine dritte Variable adjustieren muss, wann man damit einen Effekt herausrechnet und wann man erst eine Verzerrung erzeugt. FEV-Daten und eine Simulation zur Cam-Morphologie.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../assets/css/base.css?v=202611231722">
+<link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
+<link rel="stylesheet" href="drittvariablen.css?v=202611231722">
+</head>
+<body>
+<header class="site-header">
+  <div class="column">
+    <a class="brand" href="../../">
+      <svg class="brand-mark" viewBox="0 0 22 22" aria-hidden="true"><path d="M1 19 C5 19 6 4 9 4 S13 19 17 19" fill="none" class="bm-a" stroke-width="2.2" stroke-linecap="round"/><path d="M5 19 C9 19 10 7 13 7 S17 19 21 19" fill="none" class="bm-b" stroke-width="2.2" stroke-linecap="round"/></svg>
+      Stats Lab
+    </a>
+    <nav class="site-nav" aria-label="Hauptnavigation">
+      <a href="../../">Visualisierungen</a>
+      <a href="../../glossar/">Glossar</a>
+      <a href="https://github.com/jnshsrs/stats-lab">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main class="column">
+  <section class="intro">
+    <a class="back" href="../../">← Alle Visualisierungen</a>
+    <h1>Drittvariablen: Confounder, Mediator, Collider</h1>
+    <p class="byline">Dr. Jens Hüsers · Forschungsmethodik</p>
+    <p class="lede">In der <a href="../../regression/multiple-regression/">multiplen Regression</a> hat sich der Rauch-Effekt gedreht, sobald das Alter im Modell war. Adjustieren kann also viel bewirken. Aber für welche Variablen? Die Antwort steht nicht in den Daten, sondern in der Frage, <b>wer wen beeinflusst</b>. Dafür zeichnet man vor der Auswertung ein Pfeildiagramm: Jeder Pfeil heißt „beeinflusst“. Drei Grundmuster reichen, um die meisten Fälle zu entscheiden.</p>
+    <div class="infobox">
+      <p><b>Lesehilfe.</b> X ist die Einflussgröße, deren Effekt uns interessiert, Y die Zielgröße. Z ist die dritte Variable. Ein gestrichelter Kasten heißt: Für Z wird adjustiert. Die Diagramme heißen in der Literatur DAG (directed acyclic graph, gerichteter Graph ohne Kreise).</p>
+    </div>
+  </section>
+
+  <details class="acc" id="acc-1" open>
+    <summary><span class="acc-no">1</span><span class="acc-title">Confounder: gemeinsame Ursache<span class="acc-teaser">Z wirkt auf X und auf Y. Adjustieren ist richtig.</span></span></summary>
+    <div class="acc-body">
+      <p class="text">Das Alter beeinflusst, ob ein Kind raucht, und es beeinflusst die <abbr title="Forciertes exspiratorisches Volumen in der ersten Sekunde">FEV</abbr> (forciertes exspiratorisches Volumen in der ersten Sekunde: die Luftmenge in Litern, die man in einer Sekunde kräftig ausatmen kann). Über das Alter läuft deshalb ein zweiter Weg von Rauchen zu FEV, der nichts mit Rauchen zu tun hat: Rauchen ← Alter → FEV. Man nennt ihn Hintertür. Der rohe Vergleich mischt beide Wege.</p>
+      <div class="seg two" role="group" aria-label="Vergleich" id="c-sw"><button type="button" data-k="0" aria-pressed="true">roh vergleichen</button><button type="button" data-k="1" aria-pressed="false">für Alter adjustieren</button></div>
+      <div class="two-charts">
+        <svg class="chart dag" id="c-dag" viewBox="0 0 520 300" role="img" aria-label="Pfeildiagramm Confounder"></svg>
+        <svg class="chart" id="c-ch" viewBox="0 0 520 300" role="img" aria-label="Rauch-Effekt roh, in Altersgruppen und adjustiert"></svg>
+      </div>
+      <p class="callout" id="c-c"></p>
+    </div>
+  </details>
+
+  <details class="acc" id="acc-2" open>
+    <summary><span class="acc-no">2</span><span class="acc-title">Mediator: der Wirkweg<span class="acc-teaser">X wirkt über Z auf Y. Adjustieren rechnet einen Teil des Effekts heraus.</span></span></summary>
+    <div class="acc-body">
+      <p class="text">Ältere Kinder haben mehr FEV. Ein großer Teil davon läuft über das Wachstum: Mit dem Alter steigt die Körpergröße, mit der Größe das Lungenvolumen. Die Größe liegt also <b>auf dem Weg</b> vom Alter zur FEV. Sie ist ein Mediator, keine Störgröße.</p>
+      <div class="seg two" role="group" aria-label="Effekt" id="m-sw"><button type="button" data-k="0" aria-pressed="true">totaler Effekt: nur Alter im Modell</button><button type="button" data-k="1" aria-pressed="false">direkter Effekt: Alter + Größe</button></div>
+      <div class="controls" id="m-ctrl" hidden><div class="ctrl"><div class="ctrl-head"><label for="mh">Kinder mit gleicher Größe: Fenster um</label><output id="mh-v"></output></div><input id="mh" type="range" min="130" max="175" step="5" value="155"></div></div>
+      <div class="two-charts">
+        <svg class="chart dag" id="m-dag" viewBox="0 0 520 300" role="img" aria-label="Pfeildiagramm Mediator mit Koeffizienten"></svg>
+        <svg class="chart" id="m-ch" viewBox="0 0 520 400" role="img" aria-label="FEV nach Alter"></svg>
+      </div>
+      <div class="formula" id="m-f"></div>
+      <p class="callout" id="m-c"></p>
+      <details class="deep" id="m-deep">
+        <summary>Vertiefung: Mediationsanalyse</summary>
+        <div class="deep-body">
+          <p>Die Zerlegung totaler Effekt = direkter Effekt + indirekter Effekt gilt in der linearen Regression exakt. Der indirekte Effekt ist das Produkt der beiden Pfeile über den Mediator, a · b. Für sein Konfidenzintervall nimmt man heute Bootstrap-Verfahren; das alte Vorgehen nach Baron und Kenny mit vier Signifikanztests gilt als überholt.</p>
+          <p>Drei Vorbehalte: Die Zerlegung ist nur dann kausal lesbar, wenn es zwischen Mediator und Zielgröße keine unbeobachtete Störgröße gibt. Mit Querschnittsdaten bleibt die Reihenfolge X vor Z vor Y eine Annahme. Und in der <a href="../../logistische-regression/s-kurve/">logistischen Regression</a> geht die einfache Addition nicht auf, weil sich Odds Ratios beim Hinzunehmen von Variablen auch ohne Mediation ändern.</p>
+        </div>
+      </details>
+    </div>
+  </details>
+
+  <details class="acc" id="acc-3" open>
+    <summary><span class="acc-no">3</span><span class="acc-title">Collider: gemeinsame Folge<span class="acc-teaser">X und Y wirken beide auf Z. Adjustieren oder Auswählen erzeugt einen Scheinzusammenhang.</span></span></summary>
+    <div class="acc-body">
+      <p class="text">Simulierte Daten von 500 Fußballspielern. Damit wir die Wahrheit kennen, sind Alpha-Winkel (Maß für die Cam-Morphologie in Grad) und Schmerz (NRS 0 bis 10) hier <b>völlig unabhängig</b>. In eine Spezialsprechstunde überwiesen wird, wer starke Schmerzen hat oder einen auffälligen Röntgenbefund, kurz: wessen Schmerz und Befund zusammen eine Schwelle überschreiten. Die Überweisung ist eine gemeinsame Folge beider Größen, ein Collider.</p>
+      <div class="seg wide" role="group" aria-label="Auswertung" id="k-sw"><button type="button" data-k="0" aria-pressed="true">alle Spieler</button><button type="button" data-k="1" aria-pressed="false">nur Sprechstunde</button><button type="button" data-k="2" aria-pressed="false">alle, adjustiert für Überweisung</button></div>
+      <div class="controls"><div class="ctrl"><div class="ctrl-head"><label for="kt">Wie streng überwiesen wird</label><output id="kt-v"></output></div><input id="kt" type="range" min="0" max="2.5" step="0.25" value="1.25"></div></div>
+      <div class="two-charts">
+        <svg class="chart dag" id="k-dag" viewBox="0 0 520 300" role="img" aria-label="Pfeildiagramm Collider"></svg>
+        <svg class="chart" id="k-ch" viewBox="0 0 520 400" role="img" aria-label="Schmerz nach Alpha-Winkel"></svg>
+      </div>
+      <div class="legend"><span><i style="background:var(--beta-ink)"></i>überwiesen</span><span><i style="background:var(--pal-3)"></i>nicht überwiesen</span></div>
+      <div class="readouts" id="k-r"></div>
+      <p class="callout" id="k-c"></p>
+      <p class="note">Dasselbe Muster heißt Berkson-Verzerrung oder Selektionsbias. Es steckt in jeder Stichprobe, die über eine gemeinsame Folge von X und Y ausgewählt wurde: Klinikpatientinnen und -patienten, Studienteilnehmende mit bestimmten Einschlusskriterien, Profikader. Auch Bildbefunde an der Wirbelsäule und Rückenschmerz hängen in der Allgemeinbevölkerung nur schwach zusammen; in einer Spezialambulanz kann der Zusammenhang ganz anders aussehen.</p>
+    </div>
+  </details>
+
+  <details class="acc" id="acc-4" open>
+    <summary><span class="acc-no">4</span><span class="acc-title">Adjustieren oder nicht?<span class="acc-teaser">Eine Tabelle für die Modellwahl und der Unterschied zum Moderator.</span></span></summary>
+    <div class="acc-body">
+      <div class="tab-wrap"><table class="when">
+        <thead><tr><th>Rolle von Z</th><th>Pfeilbild</th><th>Adjustieren?</th><th>Was sonst passiert</th></tr></thead>
+        <tbody>
+          <tr><td>Confounder</td><td>X ← Z → Y</td><td class="yes">ja</td><td>Ohne Adjustierung wird der Einfluss von Z dem X zugeschrieben. Beispiel: Alter bei Rauchen und FEV.</td></tr>
+          <tr><td>Mediator</td><td>X → Z → Y</td><td><span class="no">nein</span> für den totalen Effekt, <span class="yes">ja</span> nur für den direkten</td><td>Mit Adjustierung fehlt der Weg über Z. Beispiel: Größe bei Alter und FEV.</td></tr>
+          <tr><td>Collider</td><td>X → Z ← Y</td><td class="no">nein</td><td>Adjustieren oder Auswählen nach Z erzeugt einen Zusammenhang, den es nicht gibt. Beispiel: Überweisung bei Alpha-Winkel und Schmerz.</td></tr>
+          <tr><td>Nur Ursache von Y</td><td>Z → Y</td><td>kann man</td><td>Verzerrt nichts, macht die Schätzung aber genauer, weil die Reststreuung sinkt.</td></tr>
+        </tbody>
+      </table></div>
+      <ol class="check">
+        <li><b>Erst zeichnen, dann rechnen.</b> Welche Variablen ins Modell gehören, folgt aus dem Pfeildiagramm und damit aus Fachwissen. Ein Signifikanztest oder ein schrittweises Auswahlverfahren kann Confounder, Mediator und Collider nicht unterscheiden. In den Daten sehen alle drei gleich aus: Z hängt mit X und mit Y zusammen.</li>
+        <li><b>Die Frage legt fest, was richtig ist.</b> Beim Mediator sind beide Modelle korrekt, sie beantworten nur verschiedene Fragen: Wie stark wirkt X insgesamt? Wie stark wirkt X auf anderen Wegen als über Z?</li>
+        <li><b>Rauchen und Größe.</b> In der <a href="../../regression/multiple-regression/#acc-1">multiplen Regression</a> sank der Rauch-Effekt, als die Größe dazukam. Wenn Rauchen das Wachstum bremst, ist die Größe dort ein Mediator, und Modell C rechnet einen echten Schaden heraus.</li>
+        <li><b>Auswahl ist Adjustierung.</b> Wer nur Patientinnen und Patienten einer Sprechstunde untersucht, hat für die Überweisung „adjustiert“, auch ohne es im Modell zu sehen. Ein- und Ausschlusskriterien gehören deshalb ins Pfeildiagramm.</li>
+      </ol>
+      <div class="infobox">
+        <p><b>Mediator oder Moderator?</b> Die Begriffe klingen ähnlich, meinen aber verschiedenes. Ein <b>Mediator</b> liegt auf dem Weg: X verändert Z, und Z verändert Y. Ein <b>Moderator</b> verändert die Stärke des Effekts: Der Effekt von X auf Y ist für verschiedene Werte von Z unterschiedlich groß. Ein Moderator kommt nicht als Adjustierung ins Modell, sondern als <span id="mod-link">Wechselwirkung</span>.</p>
+      </div>
+    </div>
+  </details>
+
+  <section class="block refs" aria-labelledby="refs-h">
+    <h2 id="refs-h">Quellen und Daten</h2>
+    <ul><li>FEV-Daten von 654 Kindern aus East Boston (Tager et al., 1979; Kahn, 2005), siehe <a href="../../regression/korrelation/">Zusammenhang und Korrelation</a>. Download: <a href="../../regression-daten/fev.csv">fev.csv</a>.</li>
+    <li>Collider-Beispiel: simulierte Daten, Alpha-Winkel und Schmerz unabhängig erzeugt.</li>
+    <li>Hernán, M. A., &amp; Robins, J. M. (2020). Causal Inference: What If. Chapman &amp; Hall/CRC. Kapitel 6 bis 8.</li>
+    <li>Brinjikji, W. et al. (2015). Systematic literature review of imaging features of spinal degeneration in asymptomatic populations. American Journal of Neuroradiology, 36(4), 811–816.</li></ul>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="column">
+    <span>© 2026 Dr. Jens Hüsers · Lehrmaterial für Forschungsmethodik und Statistik</span>
+    <span class="footer-links"><a href="https://github.com/jnshsrs/stats-lab">Quellcode auf GitHub</a><span>Ohne Cookies und Tracking</span></span>
+  </div>
+</footer>
+<script src="../../assets/vendor/katex/katex.min.js"></script>
+<script src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
+<script src="../../assets/js/tex.js?v=202611231722"></script>
+<script src="../../regression-daten/fev.js?v=202611231722"></script>
+<script src="../../assets/js/reg.js?v=202611231722"></script>
+<script src="drittvariablen.js?v=202611231722"></script>
+<script src="../../assets/js/path.js?v=202611231722"></script>
+</body>
+</html>
