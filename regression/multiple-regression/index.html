@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Mehrere Einflüsse zugleich · Stats Lab</title>
-<meta name="description" content="Multiple Regression mit den FEV-Daten: Adjustierung für Störgrößen am Beispiel Rauchen, Koeffizienten lesen, Wechselwirkung von Alter und Geschlecht mit Zentrierung, Ausblick auf logistische Regression und gemischte Modelle.">
+<meta name="description" content="Multiple Regression mit den FEV-Daten: Adjustierung für Störgrößen am Beispiel Rauchen, Koeffizienten lesen, Ausblick auf Wechselwirkungen, auf logistische Regression und gemischte Modelle.">
 <link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="../../assets/css/base.css?v=202611231722">
+<link rel="stylesheet" href="../../assets/css/base.css?v=202611231726">
 <link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
-<link rel="stylesheet" href="multiple-regression.css?v=202611231722">
+<link rel="stylesheet" href="multiple-regression.css?v=202611231726">
 </head>
 <body>
 <header class="site-header">
@@ -50,16 +50,10 @@
   </details>
 
   <details class="acc" id="acc-2" open>
-    <summary><span class="acc-no">2</span><span class="acc-title">Wechselwirkung: Alter und Geschlecht<span class="acc-teaser">Wenn der Effekt einer Größe von einer anderen abhängt.</span></span></summary>
+    <summary><span class="acc-no">2</span><span class="acc-title">Wechselwirkung: ein Ausblick<span class="acc-teaser">Wenn der Effekt einer Größe von einer anderen abhängt.</span></span></summary>
     <div class="acc-body">
-      <p class="text">Ohne Wechselwirkung zwingt das Modell Mädchen und Jungen auf parallele Geraden: gleicher Zuwachs pro Jahr, nur ein fester Abstand. Mit Wechselwirkung darf jede Gruppe ihre eigene Steigung haben.</p>
-      <div class="seg wide" role="group" aria-label="Modell" id="ia"><button type="button" data-i="0" aria-pressed="false">ohne Wechselwirkung</button><button type="button" data-i="1" aria-pressed="true">mit Wechselwirkung Alter × Geschlecht</button></div>
-      <div class="controls"><div class="ctrl"><div class="ctrl-head"><label for="ac">Alter zentriert auf c (hier ist Alter* = 0)</label><output id="ac-v"></output></div><input id="ac" type="range" min="0" max="18" step="1" value="0"></div></div>
-      <div class="formula" id="i-eq"></div>
-      <svg class="chart" id="i1" viewBox="0 0 900 420" role="img" aria-label="FEV nach Alter getrennt nach Geschlecht"></svg>
-      <div class="legend"><span><i style="background:var(--therapie)"></i>Mädchen</span><span><i style="background:var(--beta-ink)"></i>Jungen</span></div>
-      <div class="tab-wrap"><table class="anova coef" id="i-tab"></table></div>
-      <p class="callout" id="i-c"></p>
+      <p class="text">Alle Modelle oben nehmen an, dass ein Effekt für alle gleich ist: Rauchen kostet bei 8-Jährigen so viel FEV wie bei 16-Jährigen, und Mädchen und Jungen legen pro Jahr gleich viel zu. Das stimmt nicht immer. Bei Jungen wächst die FEV ab der Pubertät deutlich schneller als bei Mädchen. Solche Wechselwirkungen kommen als Produkt zweier Variablen ins Modell, und dabei ändert sich die Bedeutung der übrigen Koeffizienten.</p>
+      <p class="text">Wie man das rechnet, liest und berichtet, zeigt die eigene Station <a href="../../regression/wechselwirkungen/">Wechselwirkungen</a>: zwei Gruppen mal zwei Gruppen, Alter × Geschlecht mit Zentrieren und zwei metrische Größen.</p>
     </div>
   </details>
 
@@ -70,7 +64,7 @@
         <li><b>„Bei gleichen Werten der anderen“.</b> Jeder Koeffizient ist ein Vergleich zwischen Personen, die sich nur in dieser einen Größe unterscheiden. Diesen Satz gehört in jede Interpretation.</li>
         <li><b>Adjustieren entfernt nur gemessene Störgrößen.</b> Was nicht im Modell steht, kann den Effekt weiter verzerren. Ein Beobachtungsdatensatz bleibt ein Beobachtungsdatensatz.</li>
         <li><b>Nicht für alles adjustieren.</b> Die Größe könnte selbst auf dem Weg vom Rauchen zur Lunge liegen (Rauchen hemmt Wachstum). Wer dafür adjustiert, rechnet einen Teil des Effekts heraus. Welche Variablen ins Modell gehören, ist eine inhaltliche Frage, keine statistische. Wie man sie beantwortet, zeigt die Station <a href="../../regression/drittvariablen/">Drittvariablen</a>.</li>
-        <li><b>Mit Wechselwirkung gelten Haupteffekte nur am Nullpunkt der anderen Größe.</b> Deshalb vorher zentrieren.</li>
+        <li><b>Mit Wechselwirkung gelten Haupteffekte nur am Nullpunkt der anderen Größe.</b> Deshalb vorher zentrieren, siehe <a href="../../regression/wechselwirkungen/#acc-2">Wechselwirkungen</a>.</li>
         <li><b>Nicht signifikant heißt nicht kein Effekt.</b> In Modell D ist Rauchen nicht mehr signifikant, das Konfidenzintervall reicht aber bis −0,2 Liter. Klinisch relevant ist das allemal.</li>
       </ol>
       <div class="infobox">
@@ -96,10 +90,10 @@
 </footer>
 <script src="../../assets/vendor/katex/katex.min.js"></script>
 <script src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
-<script src="../../assets/js/tex.js?v=202611231722"></script>
-<script src="../../regression-daten/fev.js?v=202611231722"></script>
-<script src="../../assets/js/reg.js?v=202611231722"></script>
-<script src="multiple-regression.js?v=202611231722"></script>
-<script src="../../assets/js/path.js?v=202611231722"></script>
+<script src="../../assets/js/tex.js?v=202611231726"></script>
+<script src="../../regression-daten/fev.js?v=202611231726"></script>
+<script src="../../assets/js/reg.js?v=202611231726"></script>
+<script src="multiple-regression.js?v=202611231726"></script>
+<script src="../../assets/js/path.js?v=202611231726"></script>
 </body>
 </html>

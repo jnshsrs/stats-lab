@@ -6,7 +6,7 @@
 <title>Stats Lab</title>
 <meta name="description" content="Interaktive Visualisierungen für die Statistiklehre in Gesundheits- und Therapiewissenschaften.">
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="assets/css/base.css?v=202611231722">
+<link rel="stylesheet" href="assets/css/base.css?v=202611231726">
 <style>
   .hero { padding-block: 56px 40px; display: flex; flex-direction: column; gap: 16px; }
   .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; }
@@ -503,8 +503,8 @@
       </div>
       <div class="card-body">
         <h3>Mehrere Einflüsse zugleich</h3>
-        <p>Rauchen erhöht die FEV, bis man für das Alter adjustiert: Fünf Modelle zeigen, wie sich der Effekt dreht. Dazu eine Wechselwirkung von Alter und Geschlecht und warum man vorher zentriert.</p>
-        <div class="tags"><span class="tag">Adjustierung</span><span class="tag">Wechselwirkung</span><span class="tag">Störgröße</span></div>
+        <p>Rauchen erhöht die FEV, bis man für das Alter adjustiert: Fünf Modelle zeigen, wie sich der Effekt dreht. Dazu ein Ausblick auf Wechselwirkungen.</p>
+        <div class="tags"><span class="tag">Adjustierung</span><span class="tag">Koeffizienten</span><span class="tag">Störgröße</span></div>
       </div>
     </a>
     <a class="card" href="regression/drittvariablen/">
@@ -523,6 +523,20 @@
         <div class="tags"><span class="tag">Confounder</span><span class="tag">Mediation</span><span class="tag">Collider</span></div>
       </div>
     </a>
+    <a class="card" href="regression/wechselwirkungen/">
+      <div class="card-thumb"><span class="path-no">29</span>
+        <svg viewBox="0 0 320 180" aria-hidden="true">
+          <line x1="40" x2="290" y1="150" y2="150" class="t-axis" stroke-width="2"/><line x1="40" x2="40" y1="20" y2="150" class="t-axis" stroke-width="2"/>
+          <line x1="70" x2="270" y1="122" y2="90" class="t-curve"/><line x1="70" x2="270" y1="128" y2="34" class="t-dash"/>
+          <circle cx="70" cy="122" r="6" class="t-strong"/><circle cx="270" cy="90" r="6" class="t-strong"/><circle cx="70" cy="128" r="6" class="t-up"/><circle cx="270" cy="34" r="6" class="t-up"/>
+        </svg>
+      </div>
+      <div class="card-body">
+        <h3>Wechselwirkungen</h3>
+        <p>Wenn der Effekt von einer dritten Größe abhängt: Differenz der Differenzen, eigene Steigungen für Mädchen und Jungen, bedingte Steigungen bei Alter und Größe. Mit Zentrieren und dem häufigsten Fehler.</p>
+        <div class="tags"><span class="tag">Interaktion</span><span class="tag">Moderator</span><span class="tag">Zentrieren</span></div>
+      </div>
+    </a>
     </div>
   </section>
 
@@ -530,7 +544,7 @@
     <div class="block-head"><span class="block-no">6</span><div><h2 id="b6">Logistische Regression</h2><p>Wenn die Zielgröße ja oder nein ist: von der Geraden zur S-Kurve, Odds Ratio pro Einheit und ein Praxisbeispiel zur Cam-Morphologie der Hüfte.</p></div></div>
     <div class="grid">
     <a class="card" href="logistische-regression/s-kurve/">
-      <div class="card-thumb"><span class="path-no">29</span>
+      <div class="card-thumb"><span class="path-no">30</span>
         <svg viewBox="0 0 320 180" aria-hidden="true">
           <line x1="40" x2="290" y1="150" y2="150" class="t-axis" stroke-width="2"/><line x1="40" x2="40" y1="20" y2="150" class="t-axis" stroke-width="2"/>
           <line x1="45" x2="285" y1="160" y2="40" class="t-dash"/>
@@ -544,7 +558,7 @@
       </div>
     </a>
     <a class="card" href="logistische-regression/cam-morphologie/">
-      <div class="card-thumb"><span class="path-no">30</span>
+      <div class="card-thumb"><span class="path-no">31</span>
         <svg viewBox="0 0 320 180" aria-hidden="true">
           <circle cx="150" cy="80" r="46" class="t-soft"/><path d="M150 34 A46 46 0 0 1 196 80 L212 92 L180 120 Z" class="t-strong"/>
           <line x1="150" x2="230" y1="80" y2="150" class="t-dash"/>

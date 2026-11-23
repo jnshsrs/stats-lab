@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wechselwirkungen · Stats Lab</title>
+<meta name="description" content="Wechselwirkungen (Interaktionen) in der Regression mit den FEV-Daten: zwei Gruppen mal zwei Gruppen und die Differenz der Differenzen, unterschiedliche Steigungen je Gruppe, bedingte Steigungen bei zwei metrischen Größen, Zentrieren, Lesen, Berichten und SPSS.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../assets/css/base.css?v=202611231726">
+<link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
+<link rel="stylesheet" href="wechselwirkungen.css?v=202611231726">
+</head>
+<body>
+<header class="site-header">
+  <div class="column">
+    <a class="brand" href="../../">
+      <svg class="brand-mark" viewBox="0 0 22 22" aria-hidden="true"><path d="M1 19 C5 19 6 4 9 4 S13 19 17 19" fill="none" class="bm-a" stroke-width="2.2" stroke-linecap="round"/><path d="M5 19 C9 19 10 7 13 7 S17 19 21 19" fill="none" class="bm-b" stroke-width="2.2" stroke-linecap="round"/></svg>
+      Stats Lab
+    </a>
+    <nav class="site-nav" aria-label="Hauptnavigation">
+      <a href="../../">Visualisierungen</a>
+      <a href="../../glossar/">Glossar</a>
+      <a href="https://github.com/jnshsrs/stats-lab">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main class="column">
+  <section class="intro">
+    <a class="back" href="../../">← Alle Visualisierungen</a>
+    <h1>Wechselwirkungen</h1>
+    <p class="byline">Dr. Jens Hüsers · Forschungsmethodik</p>
+    <p class="lede">Bisher hatte jede Einflussgröße einen festen Effekt: ein Jahr mehr, so und so viel Liter mehr <abbr title="Forciertes exspiratorisches Volumen in der ersten Sekunde">FEV</abbr> (forciertes exspiratorisches Volumen in der ersten Sekunde: die Luftmenge in Litern, die man in einer Sekunde kräftig ausatmen kann), für alle gleich. Oft stimmt das nicht. Eine <b>Wechselwirkung</b> (Interaktion) liegt vor, wenn der Effekt einer Größe vom Wert einer anderen abhängt. Die andere Größe heißt dann Moderator. Im Modell steht dafür das Produkt der beiden Variablen.</p>
+    <div class="infobox">
+      <p><b>Abgrenzung.</b> Ein Moderator verändert die Stärke eines Effekts. Ein Mediator liegt auf dem Wirkweg. Das ist eine andere Frage, siehe <a href="../../regression/drittvariablen/">Drittvariablen</a>.</p>
+    </div>
+  </section>
+
+  <details class="acc" id="acc-1" open>
+    <summary><span class="acc-no">1</span><span class="acc-title">Zwei Gruppen mal zwei Gruppen<span class="acc-teaser">Geschlecht und Altersgruppe: die Wechselwirkung als Differenz der Differenzen.</span></span></summary>
+    <div class="acc-body">
+      <p class="text">Die Kinder werden in jüngere (3 bis 10 Jahre) und ältere (11 bis 19 Jahre) geteilt. Wie viel mehr FEV haben die Älteren? Bei Mädchen und Jungen gleich viel? Das Diagramm heißt Interaktionsdiagramm: Parallele Linien bedeuten keine Wechselwirkung.</p>
+      <div class="seg two" role="group" aria-label="Modell" id="q-sw"><button type="button" data-k="0" aria-pressed="false">Modell ohne Wechselwirkung</button><button type="button" data-k="1" aria-pressed="true">Modell mit Wechselwirkung</button></div>
+      <div class="two-charts">
+        <svg class="chart" id="q-ch" viewBox="0 0 520 400" role="img" aria-label="Interaktionsdiagramm FEV nach Altersgruppe und Geschlecht"></svg>
+        <div class="tab-wrap" style="align-self:center"><table class="cells" id="q-tab"></table></div>
+      </div>
+      <div class="legend"><span><i style="background:var(--therapie)"></i>Mädchen</span><span><i style="background:var(--beta-ink)"></i>Jungen</span><span><i style="background:var(--fg);height:3px"></i>Mittelwerte als Punkte, Modell als Linie</span></div>
+      <div class="formula" id="q-f"></div>
+      <div class="tab-wrap"><table class="anova coef" id="q-coef"></table></div>
+      <p class="callout" id="q-c"></p>
+      <div class="infobox">
+        <p><b>Kennen Sie schon:</b> Die <a href="../../testen/t-test-varianten/#acc-3">Bizeps-Übung</a> ist dasselbe Muster. Der trainierte Arm legt 1,10 cm zu, der nicht trainierte 0,32 cm. Die Differenz der Differenzen, 0,78 cm, ist der Wechselwirkungsterm Arm × Zeitpunkt. Weil dort dieselben Personen zweimal gemessen werden, rechnet man ihn mit Differenzwerten und gepaartem t-Test statt mit dieser Regression.</p>
+      </div>
+    </div>
+  </details>
+
+  <details class="acc" id="acc-2" open>
+    <summary><span class="acc-no">2</span><span class="acc-title">Eine Gruppe, eine Messgröße<span class="acc-teaser">Alter und Geschlecht: jede Gruppe mit eigener Steigung, und warum man zentriert.</span></span></summary>
+    <div class="acc-body">
+      <p class="text">Jetzt bleibt das Alter metrisch. Ohne Wechselwirkung zwingt das Modell Mädchen und Jungen auf parallele Geraden: gleicher Zuwachs pro Jahr, nur ein fester Abstand. Mit Wechselwirkung darf jede Gruppe ihre eigene Steigung haben.</p>
+      <div class="seg two" role="group" aria-label="Modell" id="ia"><button type="button" data-i="0" aria-pressed="false">ohne Wechselwirkung</button><button type="button" data-i="1" aria-pressed="true">mit Wechselwirkung Alter × Geschlecht</button></div>
+      <div class="controls"><div class="ctrl"><div class="ctrl-head"><label for="ac">Alter zentriert auf c (hier ist Alter* = 0)</label><output id="ac-v"></output></div><input id="ac" type="range" min="0" max="18" step="1" value="0"></div></div>
+      <div class="formula" id="i-eq"></div>
+      <svg class="chart" id="i1" viewBox="0 0 900 420" role="img" aria-label="FEV nach Alter getrennt nach Geschlecht"></svg>
+      <div class="legend"><span><i style="background:var(--therapie)"></i>Mädchen</span><span><i style="background:var(--beta-ink)"></i>Jungen</span></div>
+      <div class="tab-wrap"><table class="anova coef" id="i-tab"></table></div>
+      <p class="callout" id="i-c"></p>
+    </div>
+  </details>
+
+  <details class="acc" id="acc-3" open>
+    <summary><span class="acc-no">3</span><span class="acc-title">Zwei Messgrößen<span class="acc-teaser">Alter und Körpergröße: Wie stark die Größe wirkt, hängt vom Alter ab.</span></span></summary>
+    <div class="acc-body">
+      <p class="text">Sind beide Größen metrisch, gibt es keine Gruppen mehr, deren Geraden man vergleichen könnte. Stattdessen fragt man: Wie steil ist die Gerade der Körpergröße <b>bei einem bestimmten Alter</b>? Diese bedingte Steigung (simple slope) ändert sich mit dem Alter gleichmäßig, und genau das misst der Wechselwirkungsterm.</p>
+      <div class="controls"><div class="ctrl"><div class="ctrl-head"><label for="ga">Steigung der Größe ablesen bei einem Alter von</label><output id="ga-v"></output></div><input id="ga" type="range" min="4" max="18" step="1" value="10"></div></div>
+      <div class="two-charts">
+        <svg class="chart" id="g-ch" viewBox="0 0 520 400" role="img" aria-label="FEV nach Körpergröße mit bedingter Geraden"></svg>
+        <svg class="chart" id="g-sl" viewBox="0 0 520 400" role="img" aria-label="Steigung der Größe in Abhängigkeit vom Alter"></svg>
+      </div>
+      <div class="formula" id="g-f"></div>
+      <div class="seg two" role="group" aria-label="Kodierung" id="g-sw"><button type="button" data-k="0" aria-pressed="true">Alter und Größe roh</button><button type="button" data-k="1" aria-pressed="false">zentriert: Alter − 10, Größe − 155 cm</button></div>
+      <div class="tab-wrap"><table class="anova coef" id="g-tab"></table></div>
+      <p class="callout" id="g-c"></p>
+    </div>
+  </details>
+
+  <details class="acc" id="acc-4" open>
+    <summary><span class="acc-no">4</span><span class="acc-title">Lesen, berichten, rechnen<span class="acc-teaser">Fünf Regeln, der häufigste Fehler und die Umsetzung in SPSS.</span></span></summary>
+    <div class="acc-body">
+      <ol class="check">
+        <li><b>Mit Wechselwirkung gibt es keinen „Effekt von X“ mehr, nur Effekte von X bei bestimmten Werten von Z.</b> Der Koeffizient von X allein gilt dort, wo Z gleich null ist. Deshalb vorher zentrieren und im Text den Bezugswert nennen: „bei 10-jährigen Kindern“.</li>
+        <li><b>Der Wechselwirkungsterm ändert sich beim Zentrieren nicht.</b> Er ist der Unterschied der Steigungen oder die Differenz der Differenzen, egal wo der Nullpunkt liegt.</li>
+        <li><b>Immer zeichnen.</b> Ein Interaktionsdiagramm oder bedingte Geraden sagen mehr als die Koeffiziententabelle. Berichten Sie die Effekte in den Gruppen oder bei typischen Werten, mit Konfidenzintervall.</li>
+        <li><b>Der häufigste Fehler: Subgruppen getrennt testen.</b> „Bei Jungen signifikant (p = 0,03), bei Mädchen nicht (p = 0,20), also wirkt es nur bei Jungen“ ist ein Fehlschluss. Ob sich zwei Effekte unterscheiden, prüft nur der Test des Wechselwirkungsterms. Ein signifikanter und ein nicht signifikanter Effekt können sich fast gleichen.</li>
+        <li><b>Wechselwirkungen brauchen viel Fallzahl.</b> Der Wechselwirkungsterm wird ungenauer geschätzt als ein Haupteffekt. Ist die Wechselwirkung halb so groß wie der Haupteffekt, braucht man grob die 16-fache Fallzahl für dieselbe Power. Nicht signifikant heißt deshalb selten „kein Unterschied“.</li>
+      </ol>
+      <div class="infobox">
+        <p><b>Die Skala zählt.</b> Ob eine Wechselwirkung vorliegt, hängt davon ab, worauf man rechnet. Parallele Geraden in Litern können auf der ln-Skala auseinanderlaufen und umgekehrt. In der logistischen Regression wird die Wechselwirkung auf der Logit-Skala geschätzt, siehe <a href="../../logistische-regression/cam-morphologie/#acc-3">Alpha × Schmerz bei der Cam-Morphologie</a>.</p>
+      </div>
+      <p class="note"><b>In SPSS:</b> Transformieren → Variable berechnen. Erst zentrieren, etwa alter_c = alter − 10, dann das Produkt bilden: alter_x_m = alter_c * maennlich. Anschließend Analysieren → Regression → Linear mit alter_c, maennlich und alter_x_m als unabhängigen Variablen. Für zwei kategoriale Faktoren geht es auch über Analysieren → Allgemeines lineares Modell → Univariat; dort enthält das Modell die Wechselwirkung automatisch, und unter „Diagramme“ lässt sich das Interaktionsdiagramm anfordern.</p>
+    </div>
+  </details>
+
+  <section class="block refs" aria-labelledby="refs-h">
+    <h2 id="refs-h">Quellen und Daten</h2>
+    <ul><li>FEV-Daten von 654 Kindern aus East Boston (Tager et al., 1979; Kahn, 2005), siehe <a href="../../regression/korrelation/">Zusammenhang und Korrelation</a>. Download: <a href="../../regression-daten/fev.csv">fev.csv</a>.</li>
+    <li>Gelman, A. (2018). You need 16 times the sample size to estimate an interaction than to estimate a main effect. Statistical Modeling, Causal Inference, and Social Science (Blog).</li>
+    <li>Gelman, A., &amp; Stern, H. (2006). The difference between „significant“ and „not significant“ is not itself statistically significant. The American Statistician, 60(4), 328–331.</li></ul>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="column">
+    <span>© 2026 Dr. Jens Hüsers · Lehrmaterial für Forschungsmethodik und Statistik</span>
+    <span class="footer-links"><a href="https://github.com/jnshsrs/stats-lab">Quellcode auf GitHub</a><span>Ohne Cookies und Tracking</span></span>
+  </div>
+</footer>
+<script src="../../assets/vendor/katex/katex.min.js"></script>
+<script src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
+<script src="../../assets/js/tex.js?v=202611231726"></script>
+<script src="../../regression-daten/fev.js?v=202611231726"></script>
+<script src="../../assets/js/reg.js?v=202611231726"></script>
+<script src="wechselwirkungen.js?v=202611231726"></script>
+<script src="../../assets/js/path.js?v=202611231726"></script>
+</body>
+</html>

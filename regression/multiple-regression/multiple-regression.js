@@ -1,5 +1,5 @@
 /* Mehrere Einflüsse zugleich · Stats Lab
-   Station „Mehrere Einflüsse zugleich“: Adjustierung (Rauchen), Wechselwirkung Alter × Geschlecht mit Zentrierung. */
+   Station „Mehrere Einflüsse zugleich“: Adjustierung (Rauchen). Wechselwirkungen haben eine eigene Station. */
 (() => {
 "use strict";
 const $ = id => document.getElementById(id);
@@ -89,36 +89,5 @@ function draw1() {
 }
 $("sm").addEventListener("click", e => { const b = pick(e, $("sm")); if (!b) return; sk = +b.dataset.k; draw1(); });
 
-/* ---------- 2 Wechselwirkung ---------- */
-let inter = 1;
-function draw2() {
-  const c = +$("ac").value; $("ac-v").textContent = c + " Jahre";
-  const Ac = A.map(a => a - c), cols = inter ? [Ac, M, Ac.map((a, i) => a * M[i])] : [Ac, M], m = ols(Y, cols);
-  const b = m.b, girl = a => b[0] + b[1] * (a - c), boy = a => b[0] + b[2] + (b[1] + (inter ? b[3] : 0)) * (a - c);
-  const aT = c === 0 ? "\\text{Alter}" : `(\\text{Alter} - ${c})`;
-  $("i-eq").innerHTML = TB(String.raw`\begin{aligned} \widehat{\text{FEV}} &= ${tz(fmt(b[0], 3))} + ${tz(fmt(b[1], 3))} \cdot ${aT} \\ &{} ${b[2] < 0 ? "-" : "+"} ${tz(fmt(Math.abs(b[2]), 3))} \cdot \text{männlich}${inter ? String.raw` \\ &{} + ${tz(fmt(b[3], 3))} \cdot ${aT} \cdot \text{männl.}` : ""} \end{aligned}`, "");
-  const f = frame(900, 420, 0, 20, -1, 6, { xl: "Alter in Jahren", nx: 10 });
-  let s = f.s;
-  A.forEach((a, i) => s += `<circle cx="${(f.sx(a) + (i % 7 - 3) * 1.3).toFixed(1)}" cy="${f.sy(Y[i]).toFixed(1)}" r="2.4" fill="${M[i] ? "var(--beta-ink)" : "var(--therapie)"}" fill-opacity=".38"/>`);
-  s += `<rect x="${f.sx(0)}" y="${f.P.T}" width="${f.sx(3) - f.sx(0)}" height="${f.sy(-1) - f.P.T}" fill="var(--highlight)"/><text x="${f.sx(1.5)}" y="${f.P.T + 16}" text-anchor="middle">keine Daten</text>`;
-  const L = (fn, col) => `<line ${f.clip} x1="${f.sx(0)}" x2="${f.sx(20)}" y1="${f.sy(fn(0))}" y2="${f.sy(fn(20))}" stroke="${col}" stroke-width="3"/>`;
-  s += L(girl, "var(--therapie)") + L(boy, "var(--beta-ink)");
-  s += `<line x1="${f.sx(c)}" x2="${f.sx(c)}" y1="${f.P.T}" y2="${f.sy(-1)}" stroke="var(--accent)" stroke-width="1.6" stroke-dasharray="5 4"/>`;
-  s += `<line x1="${f.sx(c)}" x2="${f.sx(c)}" y1="${f.sy(girl(c))}" y2="${f.sy(boy(c))}" stroke="var(--fg)" stroke-width="5"/><circle cx="${f.sx(c)}" cy="${f.sy(girl(c))}" r="6" fill="var(--therapie)"/><circle cx="${f.sx(c)}" cy="${f.sy(boy(c))}" r="6" fill="var(--beta-ink)"/>`;
-  const right = c < 14;
-  s += `<text x="${f.sx(c) + (right ? 12 : -12)}" y="${f.sy((girl(c) + boy(c)) / 2) + 5}" text-anchor="${right ? "start" : "end"}" class="strong halo">b(männlich) = ${fmt(b[2])} l</text>`;
-  $("i1").innerHTML = s;
-  const nm = ["Achsenabschnitt (Mädchen, " + (c === 0 ? "Alter 0" : c + " Jahre") + ")", "Alter" + (c ? " − " + c : "") + " (pro Jahr)", "Geschlecht (männlich = 1)"];
-  if (inter) nm.push("Alter × Geschlecht");
-  $("i-tab").innerHTML = coefTable(m, nm, 2, "");
-  const out = c < 3;
-  $("i-c").innerHTML = !inter
-    ? `Ohne Wechselwirkung sind die Geraden parallel: Jungen haben bei jedem Alter ${fmt(b[2])} l mehr, und Zentrieren ändert daran nichts. Das ist eine starke Annahme. Schalten Sie die Wechselwirkung ein: R² steigt von ${fmt(m.r2 * 100, 1)} auf ${fmt(ols(Y, [A, M, A.map((a, i) => a * M[i])]).r2 * 100, 1)} %, und der Wechselwirkungsterm ist hochsignifikant.`
-    : (out ? `<b>Vorsicht:</b> Mit Wechselwirkung ist der Geschlechtseffekt der Abstand der Geraden bei Alter* = 0, hier also bei ${c} Jahren. ${c === 0 ? `Der Wert ${fmt(b[2])} l würde bedeuten, dass neugeborene Jungen weniger FEV haben, und das liegt weit außerhalb der Daten (3 bis 19 Jahre).` : "Das liegt außerhalb der Daten."} Schieben Sie c auf 10 Jahre. ` : `Der Geschlechtseffekt ${fmt(b[2])} l ist jetzt der Unterschied zwischen Jungen und Mädchen <b>im Alter von ${c} Jahren</b>. `) +
-      `Mädchen legen ${fmt(b[1])} l pro Jahr zu, Jungen ${fmt(b[1])} + ${fmt(b[3])} = ${fmt(b[1] + b[3])} l. Der Wechselwirkungsterm ${fmt(b[3])} ist dieser Unterschied der Steigungen; er bleibt beim Zentrieren gleich, nur der Haupteffekt ändert seine Bedeutung. Dahinter steckt die Pubertät: Ab etwa 10 Jahren wachsen die Lungen der Jungen weiter, die der Mädchen kaum noch. Das Zentrieren kennen Sie aus <a href="../../regression/gerade/#acc-4">Die beste Gerade</a>.`;
-}
-$("ia").addEventListener("click", e => { const b = pick(e, $("ia")); if (!b) return; inter = +b.dataset.i; draw2(); });
-$("ac").addEventListener("input", draw2);
-
-draw1(); draw2();
+draw1();
 })();
