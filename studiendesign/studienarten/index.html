@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Beobachten oder eingreifen · Stats Lab</title>
+<meta name="description" content="Studiendesigns im Überblick: Querschnittsstudie, Kohortenstudie, Fall-Kontroll-Studie und randomisierte kontrollierte Studie auf einer Zeitachse, mit Kennzahlen, Stärken, Schwächen und einer Übung zur Designwahl.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../assets/css/base.css?v=202611231806">
+<link rel="stylesheet" href="../studiendesign.css?v=202611231806">
+</head>
+<body>
+<header class="site-header">
+  <div class="column">
+    <a class="brand" href="../../">
+      <svg class="brand-mark" viewBox="0 0 22 22" aria-hidden="true"><path d="M1 19 C5 19 6 4 9 4 S13 19 17 19" fill="none" class="bm-a" stroke-width="2.2" stroke-linecap="round"/><path d="M5 19 C9 19 10 7 13 7 S17 19 21 19" fill="none" class="bm-b" stroke-width="2.2" stroke-linecap="round"/></svg>
+      Stats Lab
+    </a>
+    <nav class="site-nav" aria-label="Hauptnavigation">
+      <a href="../../">Visualisierungen</a>
+      <a href="../../glossar/">Glossar</a>
+      <a href="https://github.com/jnshsrs/stats-lab">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main class="column">
+  <section class="intro">
+    <a class="back" href="../../">← Alle Visualisierungen</a>
+    <h1>Beobachten oder eingreifen</h1>
+    <p class="byline">Dr. Jens Hüsers · Forschungsmethodik</p>
+    <p class="lede">Bevor man rechnet, muss man wissen, woher die Daten kommen. Die wichtigste Unterscheidung: Bei einer <b>Beobachtungsstudie</b> schauen Forschende nur zu, wer welcher Einflussgröße ausgesetzt ist. Bei einer <b>Interventionsstudie</b> teilen sie die Einflussgröße selbst zu. Vier Grunddesigns decken den Großteil der Gesundheitsforschung ab. Sie unterscheiden sich darin, wo man startet und in welche Richtung man schaut.</p>
+  </section>
+
+  <details class="acc" id="acc-1" open>
+    <summary><span class="acc-no">1</span><span class="acc-title">Vier Designs auf einer Zeitachse<span class="acc-teaser">Wo die Studie beginnt und in welche Richtung sie blickt.</span></span></summary>
+    <div class="acc-body">
+      <div class="seg four" role="group" aria-label="Design" id="d-sw"><button type="button" data-k="0" aria-pressed="true">Querschnitt</button><button type="button" data-k="1" aria-pressed="false">Kohorte</button><button type="button" data-k="2" aria-pressed="false">Fall-Kontrolle</button><button type="button" data-k="3" aria-pressed="false">RCT</button></div>
+      <svg class="chart" id="d-ch" viewBox="0 0 900 360" role="img" aria-label="Zeitachse des gewählten Studiendesigns"></svg>
+      <div class="legend"><span><i style="background:var(--pal-3)"></i>Person</span><span><i style="background:transparent;border:2px solid var(--accent)"></i>exponiert (z. B. Training, Risikofaktor)</span><span><i style="background:var(--beta-ink)"></i>Outcome eingetreten (z. B. Schmerz, Erkrankung)</span></div>
+      <dl class="profile" id="d-prof"></dl>
+    </div>
+  </details>
+
+  <details class="acc" id="acc-2" open>
+    <summary><span class="acc-no">2</span><span class="acc-title">Die vier Designs im Vergleich<span class="acc-teaser">Kennzahlen, Stärken, Schwächen.</span></span></summary>
+    <div class="acc-body">
+      <div class="tab-wrap"><table class="when">
+        <thead><tr><th>Design</th><th>Wer bestimmt die Exposition?</th><th>Zeitrichtung</th><th>Typische Kennzahl</th><th>Gut für</th><th>Hauptproblem</th></tr></thead>
+        <tbody>
+          <tr><td>Querschnitt</td><td>niemand, wird gemessen</td><td>ein Zeitpunkt</td><td>Prävalenz, Prävalenz-OR</td><td>Häufigkeiten, Hypothesen</td><td>Was war zuerst da?</td></tr>
+          <tr><td>Kohorte</td><td>niemand, wird gemessen</td><td>vorwärts</td><td>Inzidenz, Risiko, <a href="../../grundlagen/risiko-odds/">RR</a></td><td>Risikofaktoren, Prognose, seltene Expositionen</td><td>Confounder, lange Dauer</td></tr>
+          <tr><td>Fall-Kontrolle</td><td>niemand, wird erfragt</td><td>rückwärts</td><td>nur <a href="../../grundlagen/risiko-odds/">Odds Ratio</a></td><td>seltene Erkrankungen</td><td>Erinnerung, Wahl der Kontrollen</td></tr>
+          <tr><td>RCT</td><td>der Zufall</td><td>vorwärts</td><td>Mittelwertdifferenz, RR, NNT</td><td>Wirksamkeit von Therapien</td><td>Aufwand, Übertragbarkeit</td></tr>
+        </tbody>
+      </table></div>
+      <ol class="check">
+        <li><b>Nur das RCT trennt Ursache und Begleitumstand zuverlässig.</b> Weil der Zufall zuteilt, sind bekannte und unbekannte Störgrößen im Mittel gleich verteilt. In Beobachtungsstudien muss man sie messen und <a href="../../regression/drittvariablen/">adjustieren</a>, und man erwischt nie alle.</li>
+        <li><b>Das RCT ist nicht immer möglich.</b> Niemand darf Kinder zum Rauchen oder Spieler zu einer Cam-Morphologie randomisieren. Für Schäden, seltene Ereignisse und lange Zeiträume sind Beobachtungsstudien oft die einzige Quelle.</li>
+        <li><b>Die Frage bestimmt das Design, nicht umgekehrt.</b> Für Häufigkeiten braucht man kein RCT, für die Wirksamkeit einer Therapie reicht kein Querschnitt.</li>
+      </ol>
+      <div class="infobox">
+        <p><b>Und die Evidenzpyramide?</b> Sie ordnet Designs nach ihrer Anfälligkeit für Verzerrung: oben systematische Übersichten von RCTs, dann RCTs, Kohorten, Fall-Kontroll-Studien, Fallserien. Für Therapiefragen passt das. Für Prognose oder Diagnostik gilt eine andere Reihenfolge, und ein schlecht gemachtes RCT schlägt keine gute Kohortenstudie. Wie gut ein RCT gemacht ist, prüft die <a href="../../studiendesign/rct/#acc-3">PEDro-Skala</a>.</p>
+      </div>
+    </div>
+  </details>
+
+  <details class="acc" id="acc-3" open>
+    <summary><span class="acc-no">3</span><span class="acc-title">Welches Design passt?<span class="acc-teaser">Fünf Forschungsfragen aus der Physiotherapie.</span></span></summary>
+    <div class="acc-body">
+      <p class="text">Wählen Sie für jede Frage das passende Design. Es kann mehr als eine vertretbare Antwort geben; die Rückmeldung nennt die beste.</p>
+      <div class="quiz" id="quiz"></div>
+    </div>
+  </details>
+
+  <section class="block refs" aria-labelledby="refs-h">
+    <h2 id="refs-h">Quellen</h2>
+    <ul><li>Mann, C. J. (2003). Observational research methods. Research design II: cohort, cross sectional, and case-control studies. Emergency Medicine Journal, 20(1), 54–60.</li>
+    <li>Grimes, D. A., &amp; Schulz, K. F. (2002). An overview of clinical research: the lay of the land. The Lancet, 359(9300), 57–61.</li></ul>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="column">
+    <span>© 2026 Dr. Jens Hüsers · Lehrmaterial für Forschungsmethodik und Statistik</span>
+    <span class="footer-links"><a href="https://github.com/jnshsrs/stats-lab">Quellcode auf GitHub</a><span>Ohne Cookies und Tracking</span></span>
+  </div>
+</footer>
+<script src="studienarten.js?v=202611231806"></script>
+<script src="../../assets/js/path.js?v=202611231806"></script>
+</body>
+</html>

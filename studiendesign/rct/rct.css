@@ -1,0 +1,32 @@
+/* Das RCT Schritt für Schritt */
+.stage .dot { transition: transform .9s cubic-bezier(.4, 0, .2, 1), fill .5s, fill-opacity .5s, stroke .5s; }
+.stage.noanim .dot { transition: none; }
+@media (prefers-reduced-motion: reduce) { .stage .dot { transition: none; } }
+.stage text { font-family: var(--font-mono); font-size: 13px; fill: var(--muted); }
+.stage .zl { font: 600 13.5px var(--font-sans); fill: var(--fg); }
+.stage .zone { fill: none; stroke: var(--line); stroke-width: 1.2; }
+.stage .zone.on { stroke: var(--accent-soft); stroke-width: 1.6; }
+.stepnav { display: flex; gap: 10px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+.stepdots { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; }
+.stepdots button { width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--line); background: var(--surface); color: var(--fg); font: 600 13px var(--font-mono); cursor: pointer; }
+.stepdots button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.stepdots button.done { border-color: var(--accent-soft); }
+.stepcard { border-left: 4px solid var(--accent); background: var(--highlight); border-radius: 0 10px 10px 0; padding: 12px 16px; display: flex; flex-direction: column; gap: 8px; }
+.stepcard h3 { margin: 0; font-size: 18px; }
+.stepcard p { margin: 0; max-width: 80ch; }
+.stepcard .ctrl { max-width: 520px; }
+.stepcard label.chk { display: inline-flex; gap: 8px; align-items: center; font-size: 15px; cursor: pointer; }
+.roles { display: flex; flex-wrap: wrap; gap: 8px; }
+.roles span { border: 1px solid var(--line); border-radius: 8px; padding: 4px 10px; font-size: 14px; background: var(--surface); }
+.roles span b { font-family: var(--font-mono); margin-right: 4px; }
+.roles .y b { color: var(--kontrolle); } .roles .n b { color: var(--beta-ink); }
+.consort { display: flex; flex-direction: column; gap: 6px; font-size: 14px; }
+.consort .cb { border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px; background: var(--surface); transition: opacity .4s; }
+.consort .cb.off { opacity: .25; }
+.consort .cb b { font-family: var(--font-mono); }
+.consort .cb small { display: block; color: var(--muted); font-size: 12.5px; }
+.consort .row2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+.consort .cb.i { border-left: 4px solid var(--beta-ink); } .consort .cb.k { border-left: 4px solid var(--therapie); }
+.consort .side { margin-left: 24px; }
+table.cells .hidden-var td { color: var(--beta-ink); }
+@media (max-width: 640px) { .stepdots button { width: 28px; height: 28px; font-size: 12px; } .stepnav { justify-content: center; } }

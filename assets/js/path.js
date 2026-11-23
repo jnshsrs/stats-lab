@@ -2,8 +2,8 @@
    Einzige Stelle für Reihenfolge und Blöcke. Die Startseite und die Vor/Zurück-Leiste jeder Seite lesen von hier. */
 (() => {
 "use strict";
-const BLOCKS = ["Grundlagen", "Schätzen", "Testen", "Hintergrund", "Zusammenhänge und Regression", "Logistische Regression"];
-const BLOCK_SLUGS = ["grundlagen", "schaetzen", "testen", "hintergrund", "regression", "logistische-regression"];
+const BLOCKS = ["Grundlagen", "Studiendesign", "Schätzen", "Testen", "Hintergrund", "Zusammenhänge und Regression", "Logistische Regression"];
+const BLOCK_SLUGS = ["grundlagen", "studiendesign", "schaetzen", "testen", "hintergrund", "regression", "logistische-regression"];
 const PATH = [
   ["skalenniveaus", "Skalenniveaus", 0],
   ["lage-streuung", "Lage und Streuung", 0],
@@ -12,30 +12,34 @@ const PATH = [
   ["binomial", "Pascal und die Binomialverteilung", 0],
   ["verteilungen", "Diskret und stetig", 0],
   ["effektgroessen", "Effektgrößen", 0],
-  ["stichprobe", "Stichprobe und Population", 1],
-  ["grosse-zahlen", "Große und kleine Zahlen", 1],
-  ["zgws", "Grenzwertsatz, Standardfehler, Konfidenzintervall", 1],
-  ["binomialtest", "Binomialtest: Annahme- und Ablehnungsbereich", 2],
-  ["t-test", "Die t-Test-Kaskade", 2],
-  ["t-test-varianten", "Welcher t-Test?", 2],
-  ["entscheidung", "Entscheidungstheorie", 2],
-  ["fallzahl", "Fallzahl und Power", 2],
-  ["multiples-testen", "Multiples Testen", 2],
-  ["chi-quadrat", "Chi-Quadrat-Test", 2],
-  ["regression-mitte", "Regression zur Mitte", 3],
-  ["mammografie", "Positiver Befund: Gigerenzers Mammografie-Aufgabe", 3],
-  ["klinische-tests", "Klinische Tests: Gütekriterien und Likelihood-Ratios", 3],
-  ["inferenzzyklus", "Induktion, Deduktion und der Signifikanztest", 3],
-  ["korrelation", "Zusammenhang und Korrelation", 4],
-  ["gerade", "Die beste Gerade: kleinste Quadrate", 4],
-  ["normbereich", "Wie sicher ist der Sollwert? Inferenz und Normgrenze", 4],
-  ["bestimmtheitsmass", "Wie viel erklärt die Gerade? R² und Streuungszerlegung", 4],
-  ["diagnostik", "Passt das Modell? Residuen und Einfluss", 4],
-  ["multiple-regression", "Mehrere Einflüsse zugleich: multiple Regression", 4],
-  ["drittvariablen", "Drittvariablen: Confounder, Mediator, Collider", 4],
-  ["wechselwirkungen", "Wechselwirkungen: wenn der Effekt von einer dritten Größe abhängt", 4],
-  ["s-kurve", "Von der Geraden zur S-Kurve", 5],
-  ["cam-morphologie", "Cam-Morphologie und Knorpeldefekt", 5]
+  ["studienarten", "Beobachten oder eingreifen: Studiendesigns im Überblick", 1],
+  ["fall-kontrolle", "Die Fall-Kontroll-Studie", 1],
+  ["rct", "Das RCT Schritt für Schritt", 1],
+  ["randomisierung", "Warum randomisieren? Praxis gegen Studie", 1],
+  ["stichprobe", "Stichprobe und Population", 2],
+  ["grosse-zahlen", "Große und kleine Zahlen", 2],
+  ["zgws", "Grenzwertsatz, Standardfehler, Konfidenzintervall", 2],
+  ["binomialtest", "Binomialtest: Annahme- und Ablehnungsbereich", 3],
+  ["t-test", "Die t-Test-Kaskade", 3],
+  ["t-test-varianten", "Welcher t-Test?", 3],
+  ["entscheidung", "Entscheidungstheorie", 3],
+  ["fallzahl", "Fallzahl und Power", 3],
+  ["multiples-testen", "Multiples Testen", 3],
+  ["chi-quadrat", "Chi-Quadrat-Test", 3],
+  ["regression-mitte", "Regression zur Mitte", 4],
+  ["mammografie", "Positiver Befund: Gigerenzers Mammografie-Aufgabe", 4],
+  ["klinische-tests", "Klinische Tests: Gütekriterien und Likelihood-Ratios", 4],
+  ["inferenzzyklus", "Induktion, Deduktion und der Signifikanztest", 4],
+  ["korrelation", "Zusammenhang und Korrelation", 5],
+  ["gerade", "Die beste Gerade: kleinste Quadrate", 5],
+  ["normbereich", "Wie sicher ist der Sollwert? Inferenz und Normgrenze", 5],
+  ["bestimmtheitsmass", "Wie viel erklärt die Gerade? R² und Streuungszerlegung", 5],
+  ["diagnostik", "Passt das Modell? Residuen und Einfluss", 5],
+  ["multiple-regression", "Mehrere Einflüsse zugleich: multiple Regression", 5],
+  ["drittvariablen", "Drittvariablen: Confounder, Mediator, Collider", 5],
+  ["wechselwirkungen", "Wechselwirkungen: wenn der Effekt von einer dritten Größe abhängt", 5],
+  ["s-kurve", "Von der Geraden zur S-Kurve", 6],
+  ["cam-morphologie", "Cam-Morphologie und Knorpeldefekt", 6]
 ];
 window.STATS_LAB_PATH = { BLOCKS, BLOCK_SLUGS, PATH };
 const url = p => `../../${BLOCK_SLUGS[p[2]]}/${p[0]}/`;
