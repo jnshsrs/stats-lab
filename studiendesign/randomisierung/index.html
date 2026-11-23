@@ -6,8 +6,8 @@
 <title>Warum randomisieren? · Stats Lab</title>
 <meta name="description" content="Dieselbe simulierte Population, drei Studien: ein Praxisvergleich, in dem die Therapeutin die Behandlung wählt, ein RCT und ein Vorher-nachher-Vergleich ohne Kontrollgruppe. 200 Wiederholungen zeigen Verzerrung durch Confounding by Indication, natürlichen Verlauf und Regression zur Mitte.">
 <link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="../../assets/css/base.css?v=202611232157">
-<link rel="stylesheet" href="../studiendesign.css?v=202611232157">
+<link rel="stylesheet" href="../../assets/css/base.css?v=202611232232">
+<link rel="stylesheet" href="../studiendesign.css?v=202611232232">
 </head>
 <body>
 <header class="site-header">
@@ -49,7 +49,21 @@
   </details>
 
   <details class="acc" id="acc-2" open>
-    <summary><span class="acc-no">2</span><span class="acc-title">Was im Vorher-nachher-Effekt steckt<span class="acc-teaser">Training, natürlicher Verlauf und Regression zur Mitte.</span></span></summary>
+    <summary><span class="acc-no">2</span><span class="acc-title">Gleicher t-Test, andere Aussage<span class="acc-teaser">Was ein signifikanter Unterschied im RCT und in der Beobachtungsstudie bedeutet.</span></span></summary>
+    <div class="acc-body">
+      <p class="text">Beide Studien werden am Ende gleich ausgewertet: ein ungepaarter t-Test auf die Schmerzänderung, Training gegen kein Training. Die Rechnung kennt das Design nicht. Was man aus dem Ergebnis schließen darf, hängt aber allein davon ab, wie die Gruppen entstanden sind.</p>
+      <div class="actions"><button type="button" class="btn" id="i-draw">Je eine Studie ziehen</button></div>
+      <div class="tab-wrap"><table class="cells" id="i-tab"></table></div>
+      <div class="two-charts">
+        <div class="infobox"><p><b>Beobachtungsstudie: ein Zusammenhang.</b> „Wer trainiert, hat nach 12 Wochen weniger Schmerz.“ Erlaubt ist eine Aussage über die Gruppen, wie sie in der Praxis vorkommen. Ob das Training die Ursache ist, bleibt offen: Wer trainiert, ist vielleicht motivierter, weniger schwer betroffen oder hat mehr Zeit. Solche Störgrößen kann man messen und adjustieren, aber nie alle.</p></div>
+        <div class="infobox"><p><b>RCT: eine Wirkung.</b> „Das Training senkt den Schmerz um so und so viel.“ Weil der Zufall entschieden hat, unterscheiden sich die Gruppen im Mittel nur durch das Training. Voraussetzung: Die Randomisierung war verdeckt, ausgewertet wurde nach Intention to treat, und es sind nicht zu viele Teilnehmende ausgefallen.</p></div>
+      </div>
+      <p class="callout" id="i-c"></p>
+    </div>
+  </details>
+
+  <details class="acc" id="acc-3" open>
+    <summary><span class="acc-no">3</span><span class="acc-title">Was im Vorher-nachher-Effekt steckt<span class="acc-teaser">Training, natürlicher Verlauf und Regression zur Mitte.</span></span></summary>
     <div class="acc-body">
       <p class="text">Ohne Kontrollgruppe misst man die gesamte Veränderung der Trainingsgruppe und schreibt sie dem Training zu. In der Simulation lässt sich zerlegen, woraus sie besteht.</p>
       <div class="meter" id="pp-m"></div>
@@ -58,8 +72,8 @@
     </div>
   </details>
 
-  <details class="acc" id="acc-3" open>
-    <summary><span class="acc-no">3</span><span class="acc-title">Und wenn kein RCT möglich ist?<span class="acc-teaser">Was Beobachtungsstudien leisten können und was nicht.</span></span></summary>
+  <details class="acc" id="acc-4" open>
+    <summary><span class="acc-no">4</span><span class="acc-title">Und wenn kein RCT möglich ist?<span class="acc-teaser">Was Beobachtungsstudien leisten können und was nicht.</span></span></summary>
     <div class="acc-body">
       <ol class="check">
         <li><b>Adjustieren hilft nur für Gemessenes.</b> Hätte die Praxis die Motivation erfasst, ließe sie sich als <a href="../../regression/drittvariablen/">Confounder</a> ins Modell nehmen. Für Ungemessenes gibt es keine Adjustierung. Genau das leistet der Zufall: Er verteilt auch das, was niemand kennt.</li>
@@ -84,8 +98,8 @@
     <span class="footer-links"><a href="https://github.com/jnshsrs/stats-lab">Quellcode auf GitHub</a><span>Ohne Cookies und Tracking</span></span>
   </div>
 </footer>
-<script src="../rct-sim.js?v=202611232157"></script>
-<script src="randomisierung.js?v=202611232157"></script>
-<script src="../../assets/js/path.js?v=202611232157"></script>
+<script src="../rct-sim.js?v=202611232232"></script>
+<script src="randomisierung.js?v=202611232232"></script>
+<script src="../../assets/js/path.js?v=202611232232"></script>
 </body>
 </html>
