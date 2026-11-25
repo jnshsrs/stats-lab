@@ -5,7 +5,8 @@
 "use strict";
 
 // Mikrozensus 2024, Erstergebnisse, Paare in Tausend (Statistisches Bundesamt 2025, Tabelle 12211-33)
-const MZ = { ehe0: 9401, ehe1: 7873, lg0: 2198, lg1: 1143 };
+// Mikrozensus 2024 (Tsd. Paare): 9.401, 7.873, 2.198, 1.143; für die Anschauung auf ganze Millionen gerundet
+const MZ = { ehe0: 9000, ehe1: 8000, lg0: 2000, lg1: 1000 };
 
 const S = { pA: 0.3, pB: 0.5, generic: false, dir5: "KgV", prev: 0.05, noSymZ: 0.40, noSymH: 0.85, dir6: "SgZ" };
 
@@ -262,7 +263,7 @@ function renderBedingt() {
   $("detail-bedingt").innerHTML = `
     <span class="kicker">Reiter 2 · Bedingte Wahrscheinlichkeit</span>
     <h2>Verheiratet und Kinder</h2>
-    <p>Alle Paare in Deutschland 2024, rund ${num(tot / 1000, 1)} Mio. Ein Kreis steht für die Ehepaare, einer für die Paare mit Kindern im Haushalt. Die dunkle Schnittfläche sind Ehepaare mit Kindern.</p>
+    <p>Alle Paare in Deutschland 2024, rund ${num(tot / 1000, 0)} Mio., gerundet auf ganze Millionen. Ein Kreis steht für die Ehepaare, einer für die Paare mit Kindern im Haushalt. Die dunkle Schnittfläche sind Ehepaare mit Kindern.</p>
     <p><b>So lesen Sie das Diagramm.</b> Alle Zahlen im Venn-Diagramm sind Anteile an <b>allen</b> Paaren, also unbedingte Wahrscheinlichkeiten. Über den Kreisen steht, wie groß jeder Kreis ist: P(verheiratet) und P(mit Kindern). In den Flächen steht, wie viel von allen Paaren in genau diesem Stück liegt, etwa die Schnittfläche P(verheiratet ∩ Kinder) = ${pct(pVK)}. Eine bedingte Wahrscheinlichkeit steht im Venn-Diagramm nirgends direkt.</p>
     <p>„Gegeben“ heißt: Die Welt schrumpft auf einen Kreis. Die bedingte Wahrscheinlichkeit ist der Anteil der Schnittfläche an <b>diesem</b> Kreis, nicht an allen. Die Leiste unter dem Diagramm zeigt genau diesen Schritt: Der gestrichelte Teil wird herausgenommen und auf 100 % gestreckt.</p>
     <div class="formula">${formula}</div>
@@ -275,9 +276,8 @@ function renderBedingt() {
       ["var(--area-b)", "nur Kinder (unverheiratet)", pct(pK - pVK)],
       ["var(--surface)", "weder noch", pct(1 - pV - pK + pVK)]
     ])}
-    <p class="note-warn"><b>Achtung, Zufall in den Daten:</b> Die Fläche „nur verheiratet“ ist ${pct(pV - pVK, 2)} von allen Paaren, und P(Kinder | verheiratet) ist ${pct(pKgV, 2)}. Gerundet stehen beide Male 45,6 %. Das sind zwei verschiedene Größen mit verschiedenem Bezug, die hier nur zufällig fast gleich groß sind.</p>
     <p class="callout">Gleicher Zähler, andere Bezugsfläche: P(Kinder | verheiratet) = ${pct(pKgV)}, aber P(verheiratet | Kinder) = ${pct(pVgK)}. Die Reihenfolge der Bedingung ist nicht egal.</p>
-    <p class="source">Quelle: Statistisches Bundesamt (2025), Mikrozensus 2024, Haushalte und Familien, Erstergebnisse, Tabelle 12211-33. Kinder = ledige Kinder jeden Alters im Haushalt; Paare, deren Kinder ausgezogen sind, zählen als „ohne Kinder“.</p>
+    <p class="source">Quelle: Statistisches Bundesamt (2025), Mikrozensus 2024, Haushalte und Familien, Erstergebnisse, Tabelle 12211-33. Kinder = ledige Kinder jeden Alters im Haushalt; Paare, deren Kinder ausgezogen sind, zählen als „ohne Kinder“. Für die Anschauung auf ganze Millionen gerundet; Originalwerte in Tausend: Ehepaare ohne Kinder 9.401, mit Kindern 7.873, unverheiratete Paare ohne Kinder 2.198, mit Kindern 1.143.</p>
     <button class="btn" type="button" id="to-bayes">Weiter zu Reiter 3: Satz von Bayes →</button>`;
   $("to-bayes").addEventListener("click", () => showTab("bayes", true));
 }
