@@ -2,8 +2,8 @@
    Einzige Stelle für Reihenfolge und Blöcke. Die Startseite und die Vor/Zurück-Leiste jeder Seite lesen von hier. */
 (() => {
 "use strict";
-const BLOCKS = ["Grundlagen", "Studiendesign", "Schätzen", "Testen", "Hintergrund", "Zusammenhänge und Regression", "Logistische Regression"];
-const BLOCK_SLUGS = ["grundlagen", "studiendesign", "schaetzen", "testen", "hintergrund", "regression", "logistische-regression"];
+const BLOCKS = ["Grundlagen", "Studiendesign", "Schätzen", "Testen", "Hintergrund", "Zusammenhänge und Regression", "Logistische Regression", "Gemischte Modelle"];
+const BLOCK_SLUGS = ["grundlagen", "studiendesign", "schaetzen", "testen", "hintergrund", "regression", "logistische-regression", "gemischte-modelle"];
 const PATH = [
   ["skalenniveaus", "Skalenniveaus", 0],
   ["lage-streuung", "Lage und Streuung", 0],
@@ -40,7 +40,10 @@ const PATH = [
   ["drittvariablen", "Drittvariablen: Confounder, Mediator, Collider", 5],
   ["wechselwirkungen", "Wechselwirkungen: wenn der Effekt von einer dritten Größe abhängt", 5],
   ["s-kurve", "Von der Geraden zur S-Kurve", 6],
-  ["cam-morphologie", "Cam-Morphologie und Knorpeldefekt", 6]
+  ["cam-morphologie", "Cam-Morphologie und Knorpeldefekt", 6],
+  ["abhaengige-daten", "Abhängige Daten: Praxen, Personen, Messwiederholungen", 7],
+  ["partial-pooling", "Partial Pooling: zwischen allen gleich und jeder für sich", 7],
+  ["random-slopes", "Jeder Verlauf ist anders: Random Slopes", 7]
 ];
 window.STATS_LAB_PATH = { BLOCKS, BLOCK_SLUGS, PATH };
 const url = p => `../../${BLOCK_SLUGS[p[2]]}/${p[0]}/`;

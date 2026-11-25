@@ -6,7 +6,7 @@
 <title>Stats Lab</title>
 <meta name="description" content="Interaktive Visualisierungen für die Statistiklehre in Gesundheits- und Therapiewissenschaften.">
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="assets/css/base.css?v=202611232239">
+<link rel="stylesheet" href="assets/css/base.css?v=202611251359">
 <style>
   .hero { padding-block: 56px 40px; display: flex; flex-direction: column; gap: 16px; }
   .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; }
@@ -626,6 +626,41 @@
         <h3>Cam-Morphologie und Knorpeldefekt</h3>
         <p>Logistische Regression in der Praxis: Alpha-Winkel und Knorpeldefekt bei Fußballspielern, OR pro 10 Grad, SPSS-Ausgabe lesen, adjustieren und berichten. Mit Datensatz zum Download.</p>
         <div class="tags"><span class="tag">SPSS</span><span class="tag">Hüfte</span><span class="tag">Exp(B)</span></div>
+      </div>
+    </a>
+    </div>
+  </section>
+  <section class="path-block" aria-labelledby="block-gemischte-modelle">
+    <div class="block-head"><span class="block-no">8</span><div><h2 id="block-gemischte-modelle">Gemischte Modelle</h2><p>Wenn Messungen nicht unabhängig sind: Patientinnen in Praxen, wiederholte Messungen derselben Person, Verläufe mit eigenem Niveau und eigener Steigung. Erste Version.</p></div></div>
+    <div class="grid">
+    <a class="card" href="gemischte-modelle/abhaengige-daten/">
+      <div class="card-thumb"><span class="path-no">37</span>
+        <svg viewBox="0 0 320 180" aria-hidden="true"><line x1="40" x2="290" y1="150" y2="150" class="t-axis" stroke-width="2"/><circle cx="70" cy="70" r="6" class="t-up"/><circle cx="80" cy="85" r="6" class="t-up"/><circle cx="66" cy="95" r="6" class="t-up"/><circle cx="150" cy="110" r="6" class="t-up"/><circle cx="160" cy="125" r="6" class="t-up"/><circle cx="145" cy="130" r="6" class="t-up"/><circle cx="230" cy="50" r="6" class="t-strong"/><circle cx="240" cy="65" r="6" class="t-strong"/><circle cx="226" cy="75" r="6" class="t-strong"/><line x1="50" x2="95" y1="83" y2="83" class="t-step"/><line x1="130" x2="175" y1="122" y2="122" class="t-step"/><line x1="210" x2="255" y1="63" y2="63" class="t-step"/></svg>
+      </div>
+      <div class="card-body">
+        <h3>Abhängige Daten</h3>
+        <p>Zehn Praxen in einem cluster-randomisierten RCT: Warum der naive t-Test viel zu oft signifikant wird, was die ICC misst und wie viel die Daten nach dem Designeffekt wirklich wert sind.</p>
+        <div class="tags"><span class="tag">ICC</span><span class="tag">Designeffekt</span><span class="tag">Cluster-RCT</span></div>
+      </div>
+    </a>
+    <a class="card" href="gemischte-modelle/partial-pooling/">
+      <div class="card-thumb"><span class="path-no">38</span>
+        <svg viewBox="0 0 320 180" aria-hidden="true"><line x1="40" x2="290" y1="150" y2="150" class="t-axis" stroke-width="2"/><line x1="165" x2="165" y1="20" y2="150" class="t-dash"/><circle cx="70" cy="45" r="7" class="t-hyp"/><circle cx="120" cy="45" r="7" class="t-strong"/><circle cx="260" cy="85" r="7" class="t-hyp"/><circle cx="215" cy="85" r="7" class="t-strong"/><circle cx="95" cy="125" r="7" class="t-hyp"/><circle cx="105" cy="125" r="7" class="t-strong"/></svg>
+      </div>
+      <div class="card-body">
+        <h3>Partial Pooling</h3>
+        <p>Sechzehn Schmerzverläufe mit einer bis sieben Messungen: alle gleich, jede für sich oder das gemischte Modell. Wer wenig gemessen wurde, wird zur Mitte gezogen.</p>
+        <div class="tags"><span class="tag">Random Intercept</span><span class="tag">Shrinkage</span><span class="tag">Messwiederholung</span></div>
+      </div>
+    </a>
+    <a class="card" href="gemischte-modelle/random-slopes/">
+      <div class="card-thumb"><span class="path-no">39</span>
+        <svg viewBox="0 0 320 180" aria-hidden="true"><line x1="40" x2="290" y1="150" y2="150" class="t-axis" stroke-width="2"/><line x1="50" x2="280" y1="50" y2="70" class="t-dash"/><line x1="50" x2="280" y1="60" y2="130" class="t-curve"/><line x1="50" x2="280" y1="40" y2="110" class="t-curve" opacity=".5"/><line x1="50" x2="280" y1="75" y2="140" class="t-curve" opacity=".5"/></svg>
+      </div>
+      <div class="card-body">
+        <h3>Jeder Verlauf ist anders</h3>
+        <p>Eigene Steigung je Person: warum ohne Random Slope die Standardfehler zu klein sind, und ein RCT mit sieben Messzeitpunkten, in dem der Effekt in der Wechselwirkung Gruppe mal Zeit steckt.</p>
+        <div class="tags"><span class="tag">Random Slope</span><span class="tag">Gruppe × Zeit</span><span class="tag">SPSS MIXED</span></div>
       </div>
     </a>
     </div>
