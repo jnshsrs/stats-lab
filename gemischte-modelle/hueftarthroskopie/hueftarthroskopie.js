@@ -74,9 +74,10 @@ function draw3() {
     const t = times[i - k - 2];
     return `So viel ${b < 0 ? "stärker sinkt" : "stärker steigt"} der Wert in der Reha-Gruppe bis ${TL[t]} als in der Kontrollgruppe: ${A(b)} ${U}. ${t === 2 ? "Das ist der Behandlungseffekt nach 14 Wochen, die Hauptfrage des RCT." : "Der Behandlungseffekt nach 4 Wochen."}`;
   };
-  $("t3").innerHTML = `<thead><tr><th></th><th>Fester Effekt und Bedeutung</th><th>b</th><th>SE</th><th>p</th><th>95-%-KI</th></tr></thead><tbody>` +
-    f.beta.map((b, i) => { const [l, h] = ci(b, f.se[i], df); return `<tr class="${i > k + 1 && times[i - k - 2] === 2 ? "hl" : ""}"><td class="sym">${sym[i]}</td><td>${names[i]}<span class="interp">${interp(i)}</span></td><td>${fmt(b, d)}</td><td>${fmt(f.se[i], d)}</td><td>${fp(pv(b, f.se[i], df))}</td><td>${fmt(l, d)} bis ${fmt(h, d)}</td></tr>`; }).join("") +
+  $("t3").innerHTML = `<thead><tr><th></th><th>Fester Effekt</th><th>b</th><th>SE</th><th>p</th><th>95-%-KI</th></tr></thead><tbody>` +
+    f.beta.map((b, i) => { const [l, h] = ci(b, f.se[i], df); return `<tr class="${i > k + 1 && times[i - k - 2] === 2 ? "hl" : ""}"><td class="sym">${sym[i]}</td><td>${names[i]}</td><td>${fmt(b, d)}</td><td>${fmt(f.se[i], d)}</td><td>${fp(pv(b, f.se[i], df))}</td><td>${fmt(l, d)} bis ${fmt(h, d)}</td></tr>`; }).join("") +
     `<tr class="tot"><td></td><td>Zufallseffekte</td><td colspan="4" style="text-align:left;font-family:var(--font-sans);font-weight:400;color:var(--muted)">SD zwischen Personen ${fmt(Math.sqrt(f.G[0][0]), m.d)}, SD innerhalb ${fmt(Math.sqrt(f.s2), m.d)}, ICC ${fmt(f.G[0][0] / (f.G[0][0] + f.s2), 2)} · ${M.n} Messungen von ${M.persons} Personen · REML, df = ${df}</td></tr></tbody>`;
+  $("t3k").innerHTML = `<p class="ck-h">So lesen Sie die Koeffizienten</p>` + f.beta.map((_, i) => `<div><dt>${sym[i]}</dt><dd>${interp(i)}</dd></div>`).join("");
   const j14 = times.indexOf(2), c = j => f.beta[j];
   const parts = [0, 1 + j14, k + 1, k + 2 + j14], val = parts.reduce((a, j) => a + c(j), 0);
   $("f3b").innerHTML = `<span class="dim">Mittelwerte zusammensetzen, Beispiel Reha-Gruppe in Woche 14 (alle Hilfsvariablen = 1):</span>` +
