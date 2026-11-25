@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Partial Pooling · Stats Lab</title>
+<meta name="description" content="Gemischte Modelle bei Messwiederholungen: Complete, No und Partial Pooling an sechzehn Schmerzverläufen mit unterschiedlich vielen Messungen, Schrumpfung zur Mitte, feste Effekte und Zufallseffekte, SPSS und R.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../assets/css/base.css?v=202611251359">
+<link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../gemischte-modelle.css?v=202611251359">
+</head>
+<body>
+<header class="site-header">
+  <div class="column">
+    <a class="brand" href="../../">
+      <svg class="brand-mark" viewBox="0 0 22 22" aria-hidden="true"><path d="M1 19 C5 19 6 4 9 4 S13 19 17 19" fill="none" class="bm-a" stroke-width="2.2" stroke-linecap="round"/><path d="M5 19 C9 19 10 7 13 7 S17 19 21 19" fill="none" class="bm-b" stroke-width="2.2" stroke-linecap="round"/></svg>
+      Stats Lab
+    </a>
+    <nav class="site-nav" aria-label="Hauptnavigation">
+      <a href="../../">Visualisierungen</a>
+      <a href="../../lernreisen/">Lernreisen</a>
+      <a href="../../glossar/">Glossar</a>
+      <a href="https://github.com/jnshsrs/stats-lab">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main class="column">
+  <section class="intro">
+    <a class="back" href="../../">← Alle Visualisierungen</a>
+    <h1>Partial Pooling</h1>
+    <p class="byline">Dr. Jens Hüsers · Forschungsmethodik</p>
+    <p class="lede">Sechzehn Patientinnen mit Kniearthrose geben alle zwei Wochen ihren Schmerz an. Manche kommen zu jedem Termin, manche nur ein- oder zweimal. Wie schätzt man den Verlauf einer Person, von der es nur eine Messung gibt? Man kann alle gleich behandeln, jede für sich auswerten oder den Mittelweg gehen. Den Mittelweg geht das gemischte Modell, und er heißt <b>Partial Pooling</b>.</p>
+  </section>
+
+  <details class="acc" id="acc-1" open>
+    <summary><span class="acc-no">1</span><span class="acc-title">Drei Arten, sechzehn Verläufe zu schätzen<span class="acc-teaser">Alle gleich, jede für sich, oder voneinander lernen.</span></span></summary>
+    <div class="acc-body">
+      <p class="text">Jedes Kästchen zeigt eine Patientin, sortiert nach der Zahl ihrer Messungen. Alle Verläufe haben hier dieselbe Steigung, es geht nur um das Niveau: Wie viel Schmerz hat diese Person grundsätzlich?</p>
+      <div class="seg three" role="group" aria-label="Schätzweg" id="pview"><button type="button" data-v="0" aria-pressed="false">Alle gleich (Complete Pooling)</button><button type="button" data-v="1" aria-pressed="false">Jede für sich (No Pooling)</button><button type="button" data-v="2" aria-pressed="true">Gemischtes Modell (Partial Pooling)</button></div>
+      <div class="panel-grid">
+        <div class="ctrl"><div class="ctrl-head"><label for="tau">Unterschied zwischen den Personen (τ)</label><output id="tau-v"></output></div><input id="tau" type="range" min="0.2" max="2.5" step="0.1" value="1.2"></div>
+        <div class="ctrl"><div class="ctrl-head"><label for="sig">Schwankung von Termin zu Termin (σ)</label><output id="sig-v"></output></div><input id="sig" type="range" min="0.3" max="2.5" step="0.1" value="1.2"></div>
+      </div>
+      <div class="actions"><button type="button" class="btn" id="draw">Neue Patientinnen ziehen</button></div>
+      <div class="mini-grid" id="mini"></div>
+      <div class="legend"><span><i style="background:var(--therapie)"></i>Messungen und geschätzter Verlauf der Person</span><span><i style="background:transparent;border-top:2px dashed var(--muted);height:0;border-radius:0"></i>mittlerer Verlauf aller Personen</span></div>
+      <p class="callout" id="cl1"></p>
+    </div>
+  </details>
+
+  <details class="acc" id="acc-2" open>
+    <summary><span class="acc-no">2</span><span class="acc-title">Schrumpfen zur Mitte<span class="acc-teaser">Wer wenig gemessen wurde, wird stärker zum Mittel gezogen.</span></span></summary>
+    <div class="acc-body">
+      <p class="text">Für jede Person zeigt der offene Kreis ihr eigenes Niveau zu Beginn, berechnet nur aus ihren Messungen. Der gefüllte Punkt ist die Schätzung des gemischten Modells. Der Pfeil zeigt, wie weit das Modell die Person zum Mittel aller zieht. Tippen Sie auf eine Zeile für die Rechnung.</p>
+      <svg class="chart" id="c2" viewBox="0 0 900 520" role="img" aria-label="Eigene Schätzung und Schätzung des gemischten Modells je Person"></svg>
+      <div class="formula" id="f2"></div>
+      <p class="callout" id="cl2"></p>
+      <div class="infobox"><p><b>Woher kennt man das?</b> Partial Pooling ist dieselbe Idee wie die <a href="../../hintergrund/regression-mitte/">Regression zur Mitte</a>, nur absichtlich genutzt: Ein extremer Wert aus wenigen Messungen ist zum Teil Zufall, also traut man ihm weniger. Wie viel weniger, rechnet das Modell aus den Daten selbst aus.</p></div>
+    </div>
+  </details>
+
+  <details class="acc" id="acc-3" open>
+    <summary><span class="acc-no">3</span><span class="acc-title">Was das Modell schätzt<span class="acc-teaser">Feste Effekte, Zufallseffekte und warum keine Messung verloren geht.</span></span></summary>
+    <div class="acc-body">
+      <div class="formula" id="f3"></div>
+      <div class="tab-wrap"><table class="anova" id="t3"></table></div>
+      <p class="callout" id="cl3"></p>
+      <ol class="check">
+        <li><b>Feste Effekte</b> gelten für alle: der mittlere Schmerz zu Beginn (β₀) und die mittlere Veränderung pro Woche (β₁). Sie stehen in der Ergebnistabelle wie bei der Regression, mit Standardfehler und Konfidenzintervall.</li>
+        <li><b>Zufallseffekte</b> beschreiben, wie stark sich die Personen unterscheiden. Das Modell schätzt nicht sechzehn freie Achsenabschnitte, sondern deren Streuung τ². Die Werte der einzelnen Personen (û) sind ein Nebenprodukt.</li>
+        <li><b>Keine Messung geht verloren.</b> Die Messwiederholungs-ANOVA braucht vollständige Daten und wirft jede Person mit einem fehlenden Termin hinaus. Das gemischte Modell nutzt jede vorhandene Messung, auch die Person mit nur einem Termin. Das ist gültig, solange das Fehlen mit den beobachteten Werten erklärt werden kann (missing at random).</li>
+        <li><b>Unterschiedliche Messzeitpunkte</b> sind kein Problem, die Zeit ist eine gewöhnliche metrische Variable.</li>
+      </ol>
+      <p class="note"><b>In SPSS</b> (Daten im langen Format, eine Zeile pro Messung):</p>
+      <pre class="syntax">MIXED schmerz WITH woche
+  /FIXED=woche
+  /RANDOM=INTERCEPT | SUBJECT(id)
+  /METHOD=REML
+  /PRINT=SOLUTION TESTCOV.</pre>
+      <p class="note"><b>In R:</b></p>
+      <pre class="syntax">lmer(schmerz ~ woche + (1 | id), data = d)</pre>
+    </div>
+  </details>
+
+  <section class="block refs" aria-labelledby="refs-h">
+    <h2 id="refs-h">Quellen</h2>
+    <ul><li>Simulation: eigenes Modell, Schmerz zu Beginn im Mittel 6,5, Abnahme 0,25 Punkte pro Woche, Streuungen über die Regler.</li>
+    <li>Gelman, A., &amp; Hill, J. (2007). Data Analysis Using Regression and Multilevel/Hierarchical Models. Cambridge University Press, Kapitel 12.</li>
+    <li>Efron, B., &amp; Morris, C. (1977). Stein's paradox in statistics. Scientific American, 236(5), 119–127.</li>
+</ul>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="column">
+    <span>© 2026 Dr. Jens Hüsers · Lehrmaterial für Forschungsmethodik und Statistik</span>
+    <span class="footer-links"><a href="https://github.com/jnshsrs/stats-lab">Quellcode auf GitHub</a><span>Ohne Cookies und Tracking</span></span>
+  </div>
+</footer>
+<script src="../../assets/vendor/katex/katex.min.js"></script>
+<script src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
+<script src="../../assets/js/tex.js?v=202611251359"></script>
+<script src="../../assets/js/reg.js?v=202611251359"></script>
+<script src="../gm-common.js?v=202611251359"></script>
+<script src="../lmm.js?v=202611251359"></script>
+<script src="partial-pooling.js?v=202611251359"></script>
+<script src="../../assets/js/path.js?v=202611251359"></script>
+</body>
+</html>
