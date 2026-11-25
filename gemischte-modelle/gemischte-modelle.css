@@ -219,3 +219,10 @@ select.sel { font: 500 14.5px var(--font-sans); padding: 7px 10px; border: 1px s
 .task details summary { cursor: pointer; color: var(--accent); font-weight: 600; font-size: 14.5px; }
 .task details div { margin-top: 8px; font-size: 15px; display: flex; flex-direction: column; gap: 6px; }
 @media (max-width: 560px) { .acc table.when.stack { min-width: 0; } .acc table.when.stack td:first-child { white-space: normal; } }
+.mini-key { display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 16px; align-items: start; background: var(--highlight); border-radius: 12px; padding: 12px 16px; }
+.mini-key svg { width: 100%; height: auto; background: var(--surface); border-radius: 8px; }
+.mini-key text { font-family: var(--font-mono); font-size: 11px; fill: var(--muted); }
+.mini-key text.strong { fill: var(--fg); font-weight: 600; }
+.mini-key-text { display: flex; flex-direction: column; gap: 8px; font-size: 15px; max-width: 70ch; }
+.mini-key-text p { margin: 0; }
+@media (max-width: 640px) { .mini-key { grid-template-columns: minmax(0, 1fr); } .mini-key svg { max-width: 300px; } }

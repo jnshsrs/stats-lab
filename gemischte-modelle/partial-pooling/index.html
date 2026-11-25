@@ -6,9 +6,9 @@
 <title>Partial Pooling · Stats Lab</title>
 <meta name="description" content="Gemischte Modelle bei Messwiederholungen: Complete, No und Partial Pooling an sechzehn Schmerzverläufen mit unterschiedlich vielen Messungen, Schrumpfung zur Mitte, feste Effekte und Zufallseffekte, SPSS und R.">
 <link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="../../assets/css/base.css?v=202611251447">
+<link rel="stylesheet" href="../../assets/css/base.css?v=202611251456">
 <link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
-<link rel="stylesheet" href="../gemischte-modelle.css?v=202611251447">
+<link rel="stylesheet" href="../gemischte-modelle.css?v=202611251456">
 </head>
 <body>
 <header class="site-header">
@@ -45,7 +45,14 @@
       </div>
       <div class="actions"><button type="button" class="btn" id="draw">Neue Patientinnen ziehen</button></div>
       <div class="mini-grid" id="mini"></div>
-      <div class="legend"><span><i style="background:var(--therapie)"></i>Messungen und geschätzter Verlauf der Person</span><span><i style="background:transparent;border-top:2px dashed var(--muted);height:0;border-radius:0"></i>mittlerer Verlauf aller Personen</span></div>
+      <div class="legend"><span><i style="background:var(--therapie);border-radius:50%;width:10px;height:10px"></i>Punkt: eine Schmerzmessung dieser Person</span><span><i style="background:var(--therapie);height:3px"></i>durchgezogene Linie: geschätzter Verlauf dieser Person, je nach gewähltem Schätzweg</span><span><i style="background:transparent;border-top:2px dashed var(--muted);height:0;border-radius:0"></i>gestrichelte Linie: mittlerer Verlauf aller 16 Personen (in jedem Kästchen gleich)</span></div>
+      <div class="mini-key" aria-hidden="true">
+        <svg viewBox="0 0 300 150" id="mini-key"></svg>
+        <div class="mini-key-text">
+          <p><b>So lesen Sie ein Kästchen.</b> Jedes Kästchen ist ein kleines Diagramm für eine Patientin. Waagerecht läuft die Zeit von Woche 0 bis Woche 12, senkrecht der Schmerz auf der NRS von 0 (unten) bis 10 (oben). Die feine graue Linie markiert NRS 5. Oben links steht die Patientin (P1 bis P16), oben rechts, wie viele Messungen es von ihr gibt.</p>
+          <p id="cap1"></p>
+        </div>
+      </div>
       <p class="callout" id="cl1"></p>
     </div>
   </details>
@@ -101,11 +108,11 @@
 </footer>
 <script src="../../assets/vendor/katex/katex.min.js"></script>
 <script src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
-<script src="../../assets/js/tex.js?v=202611251447"></script>
-<script src="../../assets/js/reg.js?v=202611251447"></script>
-<script src="../gm-common.js?v=202611251447"></script>
-<script src="../lmm.js?v=202611251447"></script>
-<script src="partial-pooling.js?v=202611251447"></script>
-<script src="../../assets/js/path.js?v=202611251447"></script>
+<script src="../../assets/js/tex.js?v=202611251456"></script>
+<script src="../../assets/js/reg.js?v=202611251456"></script>
+<script src="../gm-common.js?v=202611251456"></script>
+<script src="../lmm.js?v=202611251456"></script>
+<script src="partial-pooling.js?v=202611251456"></script>
+<script src="../../assets/js/path.js?v=202611251456"></script>
 </body>
 </html>
