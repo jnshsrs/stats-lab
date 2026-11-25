@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reha nach Hüftarthroskopie · Stats Lab</title>
+<meta name="description" content="Echte Daten für gemischte Modelle: RCT zur supervidierten Reha nach Hüftarthroskopie bei Cam-Impingement (Müller-Torrente et al. 2021, offene Daten), Aufbereitung, Verläufe, Gruppe mal Zeit, Vergleich mit dem t-Test des Artikels, Werkstatt mit SPSS und R.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../assets/css/base.css?v=202611251447">
+<link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../gemischte-modelle.css?v=202611251447">
+</head>
+<body>
+<header class="site-header">
+  <div class="column">
+    <a class="brand" href="../../">
+      <svg class="brand-mark" viewBox="0 0 22 22" aria-hidden="true"><path d="M1 19 C5 19 6 4 9 4 S13 19 17 19" fill="none" class="bm-a" stroke-width="2.2" stroke-linecap="round"/><path d="M5 19 C9 19 10 7 13 7 S17 19 21 19" fill="none" class="bm-b" stroke-width="2.2" stroke-linecap="round"/></svg>
+      Stats Lab
+    </a>
+    <nav class="site-nav" aria-label="Hauptnavigation">
+      <a href="../../">Visualisierungen</a>
+      <a href="../../lernreisen/">Lernreisen</a>
+      <a href="../../glossar/">Glossar</a>
+      <a href="https://github.com/jnshsrs/stats-lab">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main class="column">
+  <section class="intro">
+    <a class="back" href="../../">← Alle Visualisierungen</a>
+    <h1>Reha nach Hüftarthroskopie</h1>
+    <p class="byline">Dr. Jens Hüsers · Forschungsmethodik</p>
+    <p class="lede">Ein echtes RCT mit offenen Daten: 90 Patientinnen und Patienten mit Cam-Impingement (FAIS) werden arthroskopisch operiert und danach entweder supervidiert nach einem eigenen Reha-Protokoll oder mit der üblichen Standardversorgung behandelt. Gemessen wird vor der OP, nach 4 und nach 14 Wochen. Hier werten Sie den Datensatz selbst aus: aufbereiten, Verläufe ansehen, ein gemischtes Modell rechnen und mit der Auswertung im Artikel vergleichen.</p>
+  </section>
+
+  <details class="acc" id="acc-1" open>
+    <summary><span class="acc-no">1</span><span class="acc-title">Studie und Datensatz<span class="acc-teaser">Was gemessen wurde und was an den Rohdaten korrigiert werden musste.</span></span></summary>
+    <div class="acc-body">
+      <div class="tab-wrap"><table class="when stack">
+        <tbody>
+          <tr><td>Population</td><td>Erwachsene mit Cam-FAIS, Hüftarthroskopie in derselben Technik (Elche und Alicante, Spanien), 94 randomisiert, 90 ausgewertet</td></tr>
+          <tr><td>Intervention</td><td>spezifisches, von Physiotherapeuten supervidiertes Reha-Protokoll (Müller und Puig), Adhärenz per Tagebuch</td></tr>
+          <tr><td>Kontrolle</td><td>Standardversorgung nach der OP</td></tr>
+          <tr><td>Messzeitpunkte</td><td>vor der OP, 4 Wochen und 14 Wochen nach der OP; Untersucher verblindet</td></tr>
+          <tr><td>Endpunkte</td><td>Schmerz (VAS 0 bis 10), Bewegungsumfang der Hüfte in sechs Richtungen (Goniometer), FABER, FADIR, Ober-Test, modifizierter Harris Hip Score (nur vor der OP und Woche 14)</td></tr>
+          <tr><td>Auswertung im Artikel</td><td>t-Tests oder Mann-Whitney-U-Tests je Zeitpunkt, kein Modell für Messwiederholungen</td></tr>
+        </tbody>
+      </table></div>
+      <p class="text">Die Rohdaten liegen frei auf Zenodo. Bevor man rechnen kann, braucht es eine Aufbereitung. Jeder Schritt steht im Skript <a href="../daten/aufbereitung.py">aufbereitung.py</a>:</p>
+      <ol class="check">
+        <li><b>Es gibt keine Personen-ID.</b> Die Datei hat drei Blöcke, einen pro Zeitpunkt. Innerhalb jedes Blocks stehen die Personen in derselben Reihenfolge: Alter, Gewicht, Größe, BMI, Geschlecht und Sportstunden stimmen Zeile für Zeile überein. Daraus wurde die ID rekonstruiert (I01 bis I45, K01 bis K45). Ohne ID wäre kein Modell für Messwiederholungen möglich.</li>
+        <li><b>Größe und Gewicht vertauscht.</b> Bei 51 Personen steht die Größe in der Gewichtsspalte, bei drei davon in Metern. Bei drei Personen passt der BMI nicht zu Größe und Gewicht; er bleibt wie im Original.</li>
+        <li><b>Uneinheitliche Kodierungen.</b> „SI“, „S“ und „NO“, „N“ für positiv und negativ, ein Alter „43A“.</li>
+        <li><b>Zwei Personen mit fortgeschriebenen Werten.</b> Bei I44 und I45 sind Schmerz, alle Bewegungsumfänge und Tests in Woche 4 und Woche 14 exakt gleich wie vor der OP. Das spricht dafür, dass ihre letzten Werte fortgeschrieben wurden (last observation carried forward), vermutlich weil sie nicht nachuntersucht werden konnten. Die Mittelwerte im Artikel enthalten diese Werte. Hier sind sie markiert und lassen sich ausschließen.</li>
+      </ol>
+      <div class="actions"><span class="lbl">Daten herunterladen:</span><a class="btn ghost" href="../daten/fai_reha.csv" download>CSV (aufbereitet)</a><a class="btn ghost" href="../daten/fai_reha.sav" download>SPSS (.sav)</a><a class="btn ghost" href="../daten/fai_original.csv" download>Original</a></div>
+      <p class="note">Langes Format: eine Zeile pro Person und Zeitpunkt, 270 Zeilen. Die SPSS-Datei enthält Variablen- und Wertelabels.</p>
+    </div>
+  </details>
+
+  <details class="acc" id="acc-2" open>
+    <summary><span class="acc-no">2</span><span class="acc-title">Verläufe ansehen<span class="acc-teaser">90 Personen, drei Zeitpunkte, zwei Gruppen.</span></span></summary>
+    <div class="acc-body">
+      <div class="panel-grid">
+        <div class="ctrl"><div class="ctrl-head"><label for="var">Endpunkt</label></div>
+          <select id="var" class="sel">
+            <option value="schmerz_vas">Schmerz (VAS 0 bis 10)</option>
+            <option value="flexion">Flexion (Grad)</option>
+            <option value="extension">Extension (Grad)</option>
+            <option value="abduktion">Abduktion (Grad)</option>
+            <option value="adduktion">Adduktion (Grad)</option>
+            <option value="innenrotation">Innenrotation (Grad)</option>
+            <option value="aussenrotation">Außenrotation (Grad)</option>
+            <option value="mhhs">mHHS (0 bis 100)</option>
+          </select></div>
+        <div class="ctrl"><div class="ctrl-head"><span class="lbl">Fortgeschriebene Werte (I44, I45)</span></div>
+          <div class="seg" role="group" aria-label="Fortgeschriebene Werte" id="locf"><button type="button" data-l="0" aria-pressed="true">ausschließen</button><button type="button" data-l="1" aria-pressed="false">einschließen wie im Artikel</button></div></div>
+      </div>
+      <div class="two-charts">
+        <figure><figcaption>Standardversorgung</figcaption><svg class="chart" id="c2k" viewBox="0 0 520 400" role="img" aria-label="Verläufe Kontrollgruppe"></svg></figure>
+        <figure><figcaption>Supervidierte Reha</figcaption><svg class="chart" id="c2i" viewBox="0 0 520 400" role="img" aria-label="Verläufe Interventionsgruppe"></svg></figure>
+      </div>
+      <div class="legend"><span><i style="background:var(--pal-3)"></i>einzelne Person</span><span><i style="background:var(--fg);height:3px"></i>Mittelwert mit 95-%-KI</span><span><i style="background:transparent;border-top:2px dashed var(--beta-ink);height:0;border-radius:0"></i>fortgeschriebene Werte</span></div>
+      <div class="tab-wrap"><table class="cells" id="t2"></table></div>
+      <p class="callout" id="cl2"></p>
+    </div>
+  </details>
+
+  <details class="acc" id="acc-3" open>
+    <summary><span class="acc-no">3</span><span class="acc-title">Das gemischte Modell<span class="acc-teaser">Gruppe × Zeit mit Zufallsachsenabschnitt pro Person, verglichen mit dem t-Test des Artikels.</span></span></summary>
+    <div class="acc-body">
+      <p class="text">Das Modell schätzt für jede Kombination aus Gruppe und Zeitpunkt einen Mittelwert und berücksichtigt, dass dieselbe Person dreimal gemessen wurde. Die Zeit ist kategorial, Bezug ist „vor OP“ in der Kontrollgruppe. Die Frage des RCT steckt in der Wechselwirkung: Verändert sich die Interventionsgruppe stärker als die Kontrollgruppe?</p>
+      <div class="formula" id="f3"></div>
+      <div class="tab-wrap"><table class="anova coef" id="t3"></table></div>
+      <div class="tab-wrap"><table class="anova" id="t3b"></table></div>
+      <p class="callout" id="cl3"></p>
+      <div class="infobox"><p><b>Warum nicht einfach t-Tests je Zeitpunkt?</b> Ein t-Test in Woche 14 vergleicht nur die Endwerte. Unterscheiden sich die Gruppen schon vor der OP, landet dieser Unterschied im Ergebnis. Mehrere t-Tests nacheinander vervielfachen außerdem den Fehler 1. Art (<a href="../../testen/multiples-testen/">multiples Testen</a>) und werfen Personen mit fehlenden Werten hinaus. Gängige Alternative für zwei Zeitpunkte ist die ANCOVA: Endwert als Zielgröße, Ausgangswert als Kovariate.</p></div>
+    </div>
+  </details>
+
+  <details class="acc" id="acc-4" open>
+    <summary><span class="acc-no">4</span><span class="acc-title">Werkstatt<span class="acc-teaser">Fünf Aufgaben mit Lösungen, SPSS und R.</span></span></summary>
+    <div class="acc-body">
+      <p class="text">Laden Sie die aufbereitete Datei herunter und rechnen Sie in SPSS oder R. Die Lösungen beziehen sich auf den Schmerz (VAS), ohne die fortgeschriebenen Werte.</p>
+      <div id="tasks"></div>
+      <p class="note"><b>SPSS</b> (Zeit kategorial, Gruppe mal Zeit, Zufallsachsenabschnitt pro Person):</p>
+      <pre class="syntax">MIXED schmerz_vas BY gruppe zeit_nr
+  /FIXED=gruppe zeit_nr gruppe*zeit_nr
+  /RANDOM=INTERCEPT | SUBJECT(id)
+  /METHOD=REML
+  /PRINT=SOLUTION TESTCOV
+  /EMMEANS=TABLES(gruppe*zeit_nr) COMPARE(gruppe).</pre>
+      <p class="note">Vorher fortgeschriebene Werte ausschließen: Daten → Fälle auswählen → Falls fortgeschrieben = 0. SPSS nimmt die letzte Kategorie als Bezug; die Vorzeichen der Koeffizienten können daher abweichen, die geschätzten Mittelwerte (EMMEANS) sind gleich.</p>
+      <p class="note"><b>R</b>:</p>
+      <pre class="syntax">library(lmerTest)
+d &lt;- read.csv("fai_reha.csv")
+d &lt;- subset(d, fortgeschrieben == 0)
+d$gruppe &lt;- relevel(factor(d$gruppe), ref = "Kontrolle")
+d$zeit_nr &lt;- factor(d$zeit_nr)
+m &lt;- lmer(schmerz_vas ~ gruppe * zeit_nr + (1 | id), data = d)
+summary(m)
+confint(m)</pre>
+    </div>
+  </details>
+
+  <section class="block refs" aria-labelledby="refs-h">
+    <h2 id="refs-h">Quellen</h2>
+    <ul><li>Müller-Torrente, A., Puig-Torregrosa, J., Montero-Navarro, S., Sanz-Reig, J., Morera-Balaguer, J., Más-Martínez, J., Sánchez-Mas, J., &amp; Botella-Rico, J. M. (2021). Benefits of a specific and supervised rehabilitation program in femoroacetabular impingement patients undergoing hip arthroscopy: A randomized control trial. Journal of Clinical Medicine, 10(14), 3125. <a href="https://doi.org/10.3390/jcm10143125">doi:10.3390/jcm10143125</a></li>
+    <li>Daten: Zenodo, <a href="https://zenodo.org/records/22206659">doi:10.5281/zenodo.22206659</a>, Lizenz CC BY 4.0. Aufbereitung für das Stats Lab: <a href="../daten/aufbereitung.py">aufbereitung.py</a>; Mittelwerte stimmen mit Tabelle 3 des Artikels überein (VAS dort in mm).</li>
+    <li>Vickers, A. J., &amp; Altman, D. G. (2001). Analysing controlled trials with baseline and follow up measurements. BMJ, 323(7321), 1123–1124.</li>
+</ul>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="column">
+    <span>© 2026 Dr. Jens Hüsers · Lehrmaterial für Forschungsmethodik und Statistik</span>
+    <span class="footer-links"><a href="https://github.com/jnshsrs/stats-lab">Quellcode auf GitHub</a><span>Ohne Cookies und Tracking</span></span>
+  </div>
+</footer>
+<script src="../../assets/vendor/katex/katex.min.js"></script>
+<script src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
+<script src="../../assets/js/tex.js?v=202611251447"></script>
+<script src="../../assets/js/reg.js?v=202611251447"></script>
+<script src="../gm-common.js?v=202611251447"></script>
+<script src="../lmm.js?v=202611251447"></script>
+<script src="../daten/fai_reha.js?v=202611251447"></script>
+<script src="hueftarthroskopie.js?v=202611251447"></script>
+<script src="../../assets/js/path.js?v=202611251447"></script>
+</body>
+</html>
