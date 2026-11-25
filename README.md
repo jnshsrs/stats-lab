@@ -58,6 +58,10 @@ t-test/               Eine Visualisierung = ein Ordner mit index.html, CSS und J
 
 Keine Abhängigkeiten, kein Build-Schritt, keine externen Ressourcen. Die Seiten laufen direkt aus dem Repo, auch lokal per Doppelklick auf `index.html`.
 
+## Prompt für andere Projekte
+
+[`docs/prompt-lehrwebsite.md`](docs/prompt-lehrwebsite.md) beschreibt Arbeitsweise, Git-Workflow, didaktisches Muster und Design-System dieser Website als Prompt für einen Agenten, etwa für ein neues Lehrprojekt oder Folien im selben Design.
+
 ## Neue Visualisierung hinzufügen
 
 1. Ordner `t-test/` kopieren und umbenennen, zum Beispiel `konfidenzintervall/`.
