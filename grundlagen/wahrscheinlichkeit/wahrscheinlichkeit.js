@@ -183,7 +183,7 @@ function drawVenn(svgId, v) {
   s += `<circle cx="${cxB}" cy="${cy}" r="${rB}" fill="var(--therapie)" clip-path="url(#${svgId}-clipA)"/>`;
   s += `<circle cx="${cxA}" cy="${cy}" r="${rA}" fill="none" stroke="var(--fg)" stroke-width="1.5"/>`;
   const den = v.denom === "A" ? [cxA, rA] : [cxB, rB];
-  s += `<circle cx="${den[0]}" cy="${cy}" r="${Math.max(0, den[1] - 3)}" fill="none" stroke="var(--accent)" stroke-width="4" stroke-dasharray="10 7"/>`;
+  s += `<circle cx="${den[0]}" cy="${cy}" r="${Math.max(0, den[1] - 3)}" fill="none" stroke="var(--surface)" stroke-width="6"/><circle cx="${den[0]}" cy="${cy}" r="${Math.max(0, den[1] - 3)}" fill="none" stroke="var(--fg)" stroke-width="3" stroke-dasharray="10 7"/>`;
   const pAonly = v.pA - v.pAB, pBonly = v.pB - v.pAB;
   const label = (x, val, ink, minW) => minW >= 46 ? `<text class="v-val" x="${x}" y="${cy + 2}" text-anchor="middle" fill="${ink}">${pct(val)}</text><text class="v-of" x="${x}" y="${cy + 18}" text-anchor="middle" fill="${ink}">von allen</text>` : "";
   const aL = cxA - rA, aR = cxA + rA, bL = cxB - rB, bR = cxB + rB;
@@ -224,7 +224,7 @@ function drawZoom(svgId, z) {
     if (w > 52) s += `<text class="v-val" x="${x + w / 2}" y="${y1 + h / 2 + 5}" text-anchor="middle" fill="${g.ink || "var(--fg)"}">${pct(g.p)}</text>`;
     x += w; });
   const [a0] = pos[z.ref[0]], [b0, bw] = pos[z.ref[1]], rx0 = a0 > b0 ? b0 : a0, rx1 = Math.max(a0 + pos[z.ref[0]][1], b0 + bw);
-  s += `<rect x="${rx0 + 2}" y="${y1 + 2}" width="${rx1 - rx0 - 4}" height="${h - 4}" fill="none" stroke="var(--accent)" stroke-width="4" stroke-dasharray="10 7"/>`;
+  s += `<rect x="${rx0 + 2}" y="${y1 + 2}" width="${rx1 - rx0 - 4}" height="${h - 4}" fill="none" stroke="var(--surface)" stroke-width="6"/><rect x="${rx0 + 2}" y="${y1 + 2}" width="${rx1 - rx0 - 4}" height="${h - 4}" fill="none" stroke="var(--fg)" stroke-width="3" stroke-dasharray="10 7"/>`;
   s += `<path d="M${rx0} ${y1 + h + 8} L${X} ${y2 - 28} M${rx1} ${y1 + h + 8} L${X + W} ${y2 - 28}" stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="4 4" fill="none"/>`;
   s += `<text class="v-note" x="${X + W / 2}" y="${y2 - 34}" text-anchor="middle" fill="var(--accent)">${z.zoomText}</text>`;
   s += `<text class="v-name" x="${X}" y="${y2 - 12}">${z.refName} = 100 %</text>`;
