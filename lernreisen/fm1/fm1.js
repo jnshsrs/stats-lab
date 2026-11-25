@@ -74,7 +74,7 @@ const STOPS = [
     deep: [["grundlagen/verteilungen/#p-diskret", "Die Binomialverteilung als diskrete Verteilung"], ["testen/binomialtest/#s2", "Die Verteilungsfunktion im Binomialtest"]],
     qs: [{ type: "fig", label: "Abbildung ablesen", fig: () => figPmfCdf(10, 0.5), p: "Ein Palpationstest wird an 10 Personen geprüft, bei reinem Raten ist die Trefferwahrscheinlichkeit 0,5. Wie wahrscheinlich sind höchstens 3 Treffer?", o: ["etwa 17 %", "etwa 12 %", "etwa 50 %", "etwa 83 %"], right: 0,
       why: "„Höchstens 3“ heißt 0, 1, 2 oder 3 Treffer. Die Verteilungsfunktion zeigt diese Summe direkt: P(X ≤ 3) ≈ 0,17. Die 12 % sind P(X = 3) allein, die 83 % die Gegenwahrscheinlichkeit P(X ≥ 4)." }] },
-  { id: "verteilungen", kind: "pflicht", blk: "Grundlagen", t: "Diskret und stetig", href: "grundlagen/verteilungen/",
+  { id: "verteilungen", kind: "grundlage", blk: "Grundlagen", t: "Diskret und stetig", href: "grundlagen/verteilungen/",
     d: "Bei Zählungen ist die Wahrscheinlichkeit eine Balkenhöhe, bei Messwerten eine Fläche unter der Kurve.",
     can: "Wahrscheinlichkeiten stetiger Größen als Flächen unter der Kurve lesen.",
     deep: [["glossar/#verteilungen-quantil", "Glossar: Quantil"]],
