@@ -76,8 +76,8 @@ function draw2() {
     const y = top + (i + 0.5) * rh, own = f.beta[0] + p.rbar, bl = f.beta[0] + p.u;
     s += `<g class="row-hit" data-i="${i}"><rect class="bg${i === sel ? " sel" : ""}" x="0" y="${y - rh / 2}" width="${W}" height="${rh}" fill="transparent"/>`;
     s += `<text x="10" y="${y + 4}" class="${i === sel ? "strong" : ""}">P${p.id} · n = ${p.n}</text>`;
-    if (Math.abs(fr.sx(own) - fr.sx(bl)) > 9) s += `<line x1="${fr.sx(own)}" x2="${fr.sx(bl) + (own > bl ? 6 : -6)}" y1="${y}" y2="${y}" stroke="var(--therapie)" stroke-width="2" marker-end="url(#ar)"/>`;
-    s += `<circle cx="${fr.sx(own)}" cy="${y}" r="5.5" fill="var(--surface)" stroke="var(--therapie)" stroke-width="2"/><circle cx="${fr.sx(bl)}" cy="${y}" r="5.5" fill="var(--therapie)"/></g>`;
+    { const xo = fr.sx(own), xb = fr.sx(bl), dir = xb > xo ? 1 : -1; if (Math.abs(xb - xo) > 16) s += `<line x1="${xo + dir * 9}" x2="${xb - dir * 6}" y1="${y}" y2="${y}" stroke="var(--therapie)" stroke-width="2" marker-end="url(#ar)"/>`; }
+    s += `<circle cx="${fr.sx(bl)}" cy="${y}" r="4.5" fill="var(--therapie)"/><circle cx="${fr.sx(own)}" cy="${y}" r="8.5" fill="none" stroke="var(--fg)" stroke-width="1.8"/></g>`;
   });
   $("c2").innerHTML = s;
   $("c2").querySelectorAll(".row-hit").forEach(g => g.addEventListener("click", () => { sel = +g.dataset.i; draw2(); }));
@@ -87,7 +87,8 @@ function draw2() {
     TS(`\\hat u = \\lambda \\cdot \\bar r = ${d2(p.lam)} \\cdot (${d2(p.rbar)}) = ${d2(p.u)}`, `û = λ · r̄ = ${fmt(p.u, 2)}`) +
     `<span class="dim">r̄ ist die mittlere Abweichung der Person vom mittleren Verlauf. Das Modell übernimmt davon den Anteil λ: ${fmt(p.lam * 100, 0)} %.</span>`;
   const few = P.filter(q => q.n <= 2), many = P.filter(q => q.n >= 6);
-  $("cl2").innerHTML = few.length && many.length ? `Bei Personen mit ein oder zwei Messungen übernimmt das Modell im Mittel <b>${fmt(mean(few.map(q => q.lam)) * 100, 0)} %</b> ihrer eigenen Abweichung, bei sechs oder sieben Messungen <b>${fmt(mean(many.map(q => q.lam)) * 100, 0)} %</b>. Erhöhen Sie σ: Je unzuverlässiger die einzelne Messung, desto stärker schrumpft das Modell.` : "Je weniger Messungen eine Person hat, desto stärker zieht das Modell sie zum Mittel.";
+  const maxShift = Math.max(...P.map(q => Math.abs(q.rbar - q.u)));
+  $("cl2").innerHTML = (maxShift < 0.25 ? `<b>Bei dieser Einstellung schrumpft das Modell kaum:</b> Die Unterschiede zwischen den Personen (τ) sind groß im Vergleich zur Schwankung von Termin zu Termin (σ). Kreis und Punkt liegen deshalb fast aufeinander. Schieben Sie σ nach rechts oder τ nach links. ` : "") + (few.length && many.length ? `Bei Personen mit ein oder zwei Messungen übernimmt das Modell im Mittel <b>${fmt(mean(few.map(q => q.lam)) * 100, 0)} %</b> ihrer eigenen Abweichung, bei sechs oder sieben Messungen <b>${fmt(mean(many.map(q => q.lam)) * 100, 0)} %</b>. Erhöhen Sie σ: Je unzuverlässiger die einzelne Messung, desto stärker schrumpft das Modell.` : "Je weniger Messungen eine Person hat, desto stärker zieht das Modell sie zum Mittel.");
 }
 function draw3() {
   const { f, o, t2, s2, N } = D;
