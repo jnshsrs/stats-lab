@@ -6,9 +6,9 @@
 <title>Partial Pooling · Stats Lab</title>
 <meta name="description" content="Gemischte Modelle bei Messwiederholungen: Complete, No und Partial Pooling an sechzehn Schmerzverläufen mit unterschiedlich vielen Messungen, Schrumpfung zur Mitte, feste Effekte und Zufallseffekte, SPSS und R.">
 <link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="../../assets/css/base.css?v=202611252100">
+<link rel="stylesheet" href="../../assets/css/base.css?v=202611252108">
 <link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
-<link rel="stylesheet" href="../gemischte-modelle.css?v=202611252100">
+<link rel="stylesheet" href="../gemischte-modelle.css?v=202611252108">
 </head>
 <body>
 <header class="site-header">
@@ -60,8 +60,9 @@
   <details class="acc" id="acc-2" open>
     <summary><span class="acc-no">2</span><span class="acc-title">Schrumpfen zur Mitte<span class="acc-teaser">Wer wenig gemessen wurde, wird stärker zum Mittel gezogen.</span></span></summary>
     <div class="acc-body">
-      <p class="text">Für jede Person zeigt der offene Kreis ihr eigenes Niveau zu Beginn, berechnet nur aus ihren Messungen. Der gefüllte Punkt ist die Schätzung des gemischten Modells. Der Pfeil zeigt, wie weit das Modell die Person zum Mittel aller zieht. Tippen Sie auf eine Zeile für die Rechnung.</p>
+      <p class="text">Für jede Person zeigt der große offene Kreis ihr eigenes Niveau zu Beginn, berechnet nur aus ihren Messungen. Der kleine gefüllte Punkt ist die Schätzung des gemischten Modells. Der Pfeil zeigt, wie weit das Modell die Person zum Mittel aller zieht. Liegt der Punkt mitten im Kreis, hat das Modell die Person kaum verschoben. Tippen Sie auf eine Zeile für die Rechnung.</p>
       <svg class="chart" id="c2" viewBox="0 0 900 520" role="img" aria-label="Eigene Schätzung und Schätzung des gemischten Modells je Person"></svg>
+      <div class="legend"><span><i style="background:transparent;border:2px solid var(--fg);border-radius:50%;width:14px;height:14px"></i>offener Kreis: eigenes Niveau, nur aus den Messungen der Person</span><span><i style="background:var(--therapie);border-radius:50%;width:9px;height:9px"></i>gefüllter Punkt: Schätzung des gemischten Modells</span><span><i style="background:var(--therapie);height:2px"></i>Pfeil: Verschiebung zum Mittel</span></div>
       <div class="formula" id="f2"></div>
       <p class="callout" id="cl2"></p>
       <div class="infobox"><p><b>Woher kennt man das?</b> Partial Pooling ist dieselbe Idee wie die <a href="../../hintergrund/regression-mitte/">Regression zur Mitte</a>, nur absichtlich genutzt: Ein extremer Wert aus wenigen Messungen ist zum Teil Zufall, also traut man ihm weniger. Wie viel weniger, rechnet das Modell aus den Daten selbst aus.</p></div>
@@ -108,11 +109,11 @@
 </footer>
 <script src="../../assets/vendor/katex/katex.min.js"></script>
 <script src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
-<script src="../../assets/js/tex.js?v=202611252100"></script>
-<script src="../../assets/js/reg.js?v=202611252100"></script>
-<script src="../gm-common.js?v=202611252100"></script>
-<script src="../lmm.js?v=202611252100"></script>
-<script src="partial-pooling.js?v=202611252100"></script>
-<script src="../../assets/js/path.js?v=202611252100"></script>
+<script src="../../assets/js/tex.js?v=202611252108"></script>
+<script src="../../assets/js/reg.js?v=202611252108"></script>
+<script src="../gm-common.js?v=202611252108"></script>
+<script src="../lmm.js?v=202611252108"></script>
+<script src="partial-pooling.js?v=202611252108"></script>
+<script src="../../assets/js/path.js?v=202611252108"></script>
 </body>
 </html>
