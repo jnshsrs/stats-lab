@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jeder Verlauf ist anders · Stats Lab</title>
+<meta name="description" content="Random Slopes in gemischten Modellen: eigenes Niveau und eigene Steigung je Person, zu kleine Standardfehler ohne Random Slope, RCT mit sieben Messzeitpunkten und der Wechselwirkung Gruppe mal Zeit, Berichten, SPSS und R.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../assets/css/base.css?v=202611251359">
+<link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../gemischte-modelle.css?v=202611251359">
+</head>
+<body>
+<header class="site-header">
+  <div class="column">
+    <a class="brand" href="../../">
+      <svg class="brand-mark" viewBox="0 0 22 22" aria-hidden="true"><path d="M1 19 C5 19 6 4 9 4 S13 19 17 19" fill="none" class="bm-a" stroke-width="2.2" stroke-linecap="round"/><path d="M5 19 C9 19 10 7 13 7 S17 19 21 19" fill="none" class="bm-b" stroke-width="2.2" stroke-linecap="round"/></svg>
+      Stats Lab
+    </a>
+    <nav class="site-nav" aria-label="Hauptnavigation">
+      <a href="../../">Visualisierungen</a>
+      <a href="../../lernreisen/">Lernreisen</a>
+      <a href="../../glossar/">Glossar</a>
+      <a href="https://github.com/jnshsrs/stats-lab">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main class="column">
+  <section class="intro">
+    <a class="back" href="../../">← Alle Visualisierungen</a>
+    <h1>Jeder Verlauf ist anders</h1>
+    <p class="byline">Dr. Jens Hüsers · Forschungsmethodik</p>
+    <p class="lede">In der Station <a href="../../gemischte-modelle/partial-pooling/">Partial Pooling</a> hatte jede Person ihr eigenes Niveau, aber alle verbesserten sich gleich schnell. In der Praxis stimmt das nicht: Manche sprechen schnell auf die Therapie an, manche gar nicht. Ein <b>Random Slope</b> lässt jeder Person ihre eigene Steigung. Damit wird das gemischte Modell zum Standardwerkzeug für RCTs mit mehreren Messzeitpunkten.</p>
+  </section>
+
+  <details class="acc" id="acc-1" open>
+    <summary><span class="acc-no">1</span><span class="acc-title">Eigenes Niveau, eigene Steigung<span class="acc-teaser">Random Intercept gegen Random Intercept und Slope.</span></span></summary>
+    <div class="acc-body">
+      <p class="text">Zwanzig Patientinnen werden über 12 Wochen alle zwei Wochen gemessen. Im Mittel sinkt der Schmerz um 0,25 Punkte pro Woche. Wie stark die Personen davon abweichen, stellen Sie mit dem Regler ein.</p>
+      <div class="seg two" role="group" aria-label="Modell" id="rs-m"><button type="button" data-k="0" aria-pressed="false">Random Intercept: eigenes Niveau</button><button type="button" data-k="1" aria-pressed="true">Random Intercept und Slope: auch eigene Steigung</button></div>
+      <div class="panel-grid">
+        <div class="ctrl"><div class="ctrl-head"><label for="ts">Unterschiede in der Steigung zwischen Personen (SD pro Woche)</label><output id="ts-v"></output></div><input id="ts" type="range" min="0" max="0.3" step="0.02" value="0.16"></div>
+        <div class="actions"><button type="button" class="btn" id="draw1">Neue Patientinnen ziehen</button></div>
+      </div>
+      <div class="two-charts">
+        <figure><figcaption>Messwerte</figcaption><svg class="chart" id="c1a" viewBox="0 0 520 400" role="img" aria-label="Rohdaten aller Personen"></svg></figure>
+        <figure><figcaption id="c1b-cap">Verläufe laut Modell</figcaption><svg class="chart" id="c1b" viewBox="0 0 520 400" role="img" aria-label="Vom Modell geschätzte Verläufe"></svg></figure>
+      </div>
+      <div class="legend"><span><i style="background:var(--kontrolle)"></i>einzelne Person</span><span><i style="background:var(--fg);height:3px"></i>mittlerer Verlauf (fester Effekt)</span></div>
+      <div class="tab-wrap"><table class="anova" id="t1"></table></div>
+      <p class="callout" id="cl1"></p>
+    </div>
+  </details>
+
+  <details class="acc" id="acc-2" open>
+    <summary><span class="acc-no">2</span><span class="acc-title">Training gegen Kontrolle über die Zeit<span class="acc-teaser">Ein RCT mit sieben Messzeitpunkten: der Effekt steckt in der Wechselwirkung.</span></span></summary>
+    <div class="acc-body">
+      <p class="text">Jetzt werden 30 Patientinnen randomisiert: 15 trainieren, 15 erhalten die Standardbehandlung. Die Frage ist nicht, ob die Gruppen sich zu einem Zeitpunkt unterscheiden, sondern ob der Schmerz in der Trainingsgruppe <b>schneller</b> sinkt. Das ist eine <a href="../../regression/wechselwirkungen/">Wechselwirkung</a> von Gruppe und Zeit.</p>
+      <div class="panel-grid">
+        <div class="ctrl"><div class="ctrl-head"><label for="dd">Wahrer Zusatznutzen des Trainings pro Woche</label><output id="dd-v"></output></div><input id="dd" type="range" min="0" max="0.3" step="0.02" value="0.12"></div>
+        <div class="actions"><button type="button" class="btn" id="draw2">Neue Studie ziehen</button></div>
+      </div>
+      <svg class="chart" id="c2" viewBox="0 0 900 400" role="img" aria-label="Verläufe in Trainings- und Kontrollgruppe"></svg>
+      <div class="legend"><span><i style="background:var(--kontrolle)"></i>Standardbehandlung</span><span><i style="background:var(--therapie)"></i>Training</span><span><i style="background:var(--fg);height:3px"></i>mittlerer Verlauf der Gruppe</span></div>
+      <div class="formula" id="f2"></div>
+      <div class="tab-wrap"><table class="anova coef" id="t2"></table></div>
+      <p class="callout" id="cl2"></p>
+    </div>
+  </details>
+
+  <details class="acc" id="acc-3" open>
+    <summary><span class="acc-no">3</span><span class="acc-title">Gemischte Modelle rechnen und berichten<span class="acc-teaser">Sechs Regeln, SPSS und R.</span></span></summary>
+    <div class="acc-body">
+      <ol class="check">
+        <li><b>Daten im langen Format.</b> Eine Zeile pro Messung, mit Spalten für Person, Zeitpunkt, Gruppe und Ergebnis. Das breite Format (eine Zeile pro Person) braucht nur die Messwiederholungs-ANOVA.</li>
+        <li><b>Zeit sinnvoll kodieren.</b> Der Achsenabschnitt gilt bei Zeit = 0. Mit Wochen ab Studienbeginn ist er der Schmerz zu Beginn, und der Gruppen-Haupteffekt ist der Unterschied zu Beginn, im RCT also nahe null.</li>
+        <li><b>Random Slope aufnehmen, wenn Personen unterschiedlich schnell verlaufen.</b> Sonst ist der Standardfehler aller Zeiteffekte zu klein, auch der der Wechselwirkung, auf die es ankommt. Abschnitt 1 zeigt, wie stark.</li>
+        <li><b>Genug Gruppen.</b> Eine Streuung lässt sich erst ab etwa fünf bis zehn Gruppen schätzen. Mit drei Praxen ist die Praxis kein sinnvoller Zufallseffekt. Meldet die Software eine Varianz von null oder Konvergenzprobleme, ist das Modell oft zu komplex für die Daten.</li>
+        <li><b>Berichten:</b> feste Effekte mit 95-%-KI, die Varianzkomponenten, Schätzmethode (REML) und die Art der Freiheitsgrade (SPSS: Satterthwaite). Den Effekt in Einheiten übersetzen, die Kliniker verstehen: „nach 12 Wochen 1,4 Punkte weniger Schmerz als in der Kontrollgruppe“.</li>
+        <li><b>Das Modell ersetzt kein Design.</b> Ein gemischtes Modell rechnet Abhängigkeiten richtig heraus, Confounding nicht. Kausal deutbar ist die Wechselwirkung nur, weil randomisiert wurde, siehe <a href="../../studiendesign/randomisierung/#acc-2">gleicher t-Test, andere Aussage</a>.</li>
+      </ol>
+      <p class="note"><b>In SPSS:</b> Analysieren → Gemischte Modelle → Linear. Subjekt id, Faktor gruppe, Kovariate woche. Unter „Fest“ gruppe, woche und gruppe*woche, unter „Zufällig“ den konstanten Term und woche mit Kovarianztyp „Unstrukturiert“.</p>
+      <pre class="syntax">MIXED schmerz BY gruppe WITH woche
+  /FIXED=gruppe woche gruppe*woche
+  /RANDOM=INTERCEPT woche | SUBJECT(id) COVTYPE(UN)
+  /METHOD=REML
+  /PRINT=SOLUTION TESTCOV.</pre>
+      <p class="note"><b>In R</b> mit lme4 und lmerTest (Satterthwaite-Freiheitsgrade):</p>
+      <pre class="syntax">library(lmerTest)
+m &lt;- lmer(schmerz ~ gruppe * woche + (woche | id), data = d)
+summary(m)
+confint(m)</pre>
+    </div>
+  </details>
+
+  <section class="block refs" aria-labelledby="refs-h">
+    <h2 id="refs-h">Quellen</h2>
+    <ul><li>Simulation: eigenes Modell, Schmerz zu Beginn im Mittel 6,5 (SD 1,0 zwischen Personen), Messfehler SD 0,8, Steigungen über die Regler.</li>
+    <li>Twisk, J. W. R. (2013). Applied Longitudinal Data Analysis for Epidemiology. A Practical Guide (2. Aufl.). Cambridge University Press.</li>
+    <li>Barr, D. J., Levy, R., Scheepers, C., &amp; Tily, H. J. (2013). Random effects structure for confirmatory hypothesis testing: Keep it maximal. Journal of Memory and Language, 68(3), 255–278.</li>
+    <li>Bates, D., Mächler, M., Bolker, B., &amp; Walker, S. (2015). Fitting linear mixed-effects models using lme4. Journal of Statistical Software, 67(1), 1–48.</li>
+</ul>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="column">
+    <span>© 2026 Dr. Jens Hüsers · Lehrmaterial für Forschungsmethodik und Statistik</span>
+    <span class="footer-links"><a href="https://github.com/jnshsrs/stats-lab">Quellcode auf GitHub</a><span>Ohne Cookies und Tracking</span></span>
+  </div>
+</footer>
+<script src="../../assets/vendor/katex/katex.min.js"></script>
+<script src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
+<script src="../../assets/js/tex.js?v=202611251359"></script>
+<script src="../../assets/js/reg.js?v=202611251359"></script>
+<script src="../gm-common.js?v=202611251359"></script>
+<script src="../lmm.js?v=202611251359"></script>
+<script src="random-slopes.js?v=202611251359"></script>
+<script src="../../assets/js/path.js?v=202611251359"></script>
+</body>
+</html>
