@@ -28,7 +28,7 @@ function analyse(d) {
 function draw1() {
   data = simulate(seed, icc, m, eff);
   const res = analyse(data), xs = k => k + (k >= K / 2 ? 0.8 : 0);
-  const ys = data.map(r => r.y), lo = Math.min(-2, Math.floor(Math.min(...ys))), hi = Math.max(9, Math.ceil(Math.max(...ys)));
+  const lo = -5, hi = 12; // feste y-Achse, damit Studien vergleichbar bleiben (Mittel 3 bis 4, SD 2)
   const W = small() ? 520 : 900, H = small() ? 420 : 380;
   $("c1").setAttribute("viewBox", `0 0 ${W} ${H}`);
   const f = frame(W, H, -0.7, K - 1 + 0.8 + 0.7, lo, hi, { P: { L: small() ? 40 : 56, R: 8, T: 30, B: 40 }, nx: 0, yl: small() ? "" : "Verbesserung in NRS-Punkten" });
@@ -40,7 +40,7 @@ function draw1() {
   });
   for (let k = 0; k < K; k++) {
     const col = k >= K / 2 ? "var(--therapie)" : "var(--kontrolle)", pts = data.filter(r => r.k === k);
-    pts.forEach(r => s += `<circle cx="${f.sx(xs(k) + (r.j - 0.5) * 0.6)}" cy="${f.sy(r.y)}" r="${m > 25 ? 2.6 : 3.4}" fill="${col}" fill-opacity=".55"/>`);
+    pts.forEach(r => s += `<circle cx="${f.sx(xs(k) + (r.j - 0.5) * 0.6)}" cy="${f.sy(Math.max(lo, Math.min(hi, r.y)))}" r="${m > 25 ? 2.6 : 3.4}" fill="${col}" fill-opacity=".55"/>`);
     const pm = mean(pts.map(r => r.y));
     s += `<line x1="${f.sx(xs(k) - 0.36)}" x2="${f.sx(xs(k) + 0.36)}" y1="${f.sy(pm)}" y2="${f.sy(pm)}" stroke="var(--fg)" stroke-width="3.5"/>`;
     s += `<text x="${f.sx(xs(k))}" y="${H - 40 + 20}" text-anchor="middle">P${k + 1}</text>`;
