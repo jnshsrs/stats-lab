@@ -43,7 +43,8 @@ const PATH = [
   ["cam-morphologie", "Cam-Morphologie und Knorpeldefekt", 6],
   ["abhaengige-daten", "Abhängige Daten: Praxen, Personen, Messwiederholungen", 7],
   ["partial-pooling", "Partial Pooling: zwischen allen gleich und jeder für sich", 7],
-  ["random-slopes", "Jeder Verlauf ist anders: Random Slopes", 7]
+  ["random-slopes", "Jeder Verlauf ist anders: Random Slopes", 7],
+  ["hueftarthroskopie", "Reha nach Hüftarthroskopie: echte Daten mit Messwiederholung", 7]
 ];
 window.STATS_LAB_PATH = { BLOCKS, BLOCK_SLUGS, PATH };
 const url = p => `../../${BLOCK_SLUGS[p[2]]}/${p[0]}/`;
