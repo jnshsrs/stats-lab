@@ -35,7 +35,7 @@
 .legend::before { content: "Farben:"; font-family: var(--font-mono); font-size: 12px; letter-spacing: .04em; color: var(--muted); }
 .legend span { display: inline-flex; align-items: center; }
 .sw { display: inline-block; width: 22px; height: 12px; border-radius: 2px; margin-right: 6px; }
-.sw.outline { border: 2px dashed var(--fg); background: var(--surface); height: 14px; }
+.sw.outline { border: 1.5px dashed var(--fg); background: var(--surface); height: 14px; }
 
 .ctrls { display: flex; flex-direction: column; gap: 12px; border-top: 1px solid var(--line); padding-top: 14px; }
 .ctrl { display: flex; flex-direction: column; gap: 4px; }
