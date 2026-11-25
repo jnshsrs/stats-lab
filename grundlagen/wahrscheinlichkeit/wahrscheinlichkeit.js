@@ -185,7 +185,7 @@ function drawVenn(svgId, v) {
   const den = v.denom === "A" ? [cxA, rA] : [cxB, rB];
   s += `<circle cx="${den[0]}" cy="${cy}" r="${Math.max(0, den[1] - 3)}" fill="none" stroke="var(--accent)" stroke-width="4" stroke-dasharray="10 7"/>`;
   const pAonly = v.pA - v.pAB, pBonly = v.pB - v.pAB;
-  const label = (x, val, ink, minW) => minW >= 46 ? `<text class="v-val" x="${x}" y="${cy + 5}" text-anchor="middle" fill="${ink}">${pct(val)}</text>` : "";
+  const label = (x, val, ink, minW) => minW >= 46 ? `<text class="v-val" x="${x}" y="${cy + 2}" text-anchor="middle" fill="${ink}">${pct(val)}</text><text class="v-of" x="${x}" y="${cy + 18}" text-anchor="middle" fill="${ink}">von allen</text>` : "";
   const aL = cxA - rA, aR = cxA + rA, bL = cxB - rB, bR = cxB + rB;
   const inside = d + Math.min(rA, rB) <= Math.max(rA, rB) + 0.5;
   if (inside) {
@@ -197,14 +197,14 @@ function drawVenn(svgId, v) {
     s += label((aL + bL) / 2, pAonly, "var(--fg)", bL - aL);
     s += label((aR + bR) / 2, pBonly, "var(--fg)", bR - aR);
   }
-  const close = Math.abs(cxB - cxA) < 170;
-  [[cxA, rA, v.nameA, v.pA, close ? "end" : "middle", close ? -10 : 0], [cxB, rB, v.nameB, v.pB, close ? "start" : "middle", close ? 10 : 0]].forEach(([cx, r, name, p, anchor, dx]) => {
-    s += `<line x1="${cx}" x2="${cx + dx}" y1="${cy - r}" y2="44" stroke="var(--muted)" stroke-width="1"/>`;
-    s += `<text class="v-name" x="${cx + dx}" y="20" text-anchor="${anchor}">${name}</text>`;
-    s += `<text class="v-sub" x="${cx + dx}" y="38" text-anchor="${anchor}">${pct(p)}</text>`;
+  [[cxA, rA, v.nameA, v.pA, "start", box.x + 4], [cxB, rB, v.nameB, v.pB, "end", box.x + box.w - 4]].forEach(([cx, r, name, p, anchor, lx]) => {
+    s += `<line x1="${cx}" x2="${lx + (anchor === "start" ? 40 : -40)}" y1="${cy - r}" y2="52" stroke="var(--muted)" stroke-width="1"/>`;
+    s += `<text class="v-name" x="${lx}" y="16" text-anchor="${anchor}">${name}</text>`;
+    s += `<text class="v-sub" x="${lx}" y="33" text-anchor="${anchor}">P(${name}) = ${pct(p)}</text>`;
+    s += `<text class="v-of" x="${lx}" y="47" text-anchor="${anchor}" fill="var(--muted)">von allen</text>`;
   });
   s += `<text class="v-note" x="${box.x + box.w - 12}" y="${box.y + box.h - 12}" text-anchor="end">weder noch: ${pct(1 - v.pA - v.pB + v.pAB)}</text>`;
-  s += `<text class="v-note" x="${box.x}" y="${box.y + box.h + 22}">Kreise und Schnittfläche maßstabsgetreu zueinander, das Rechteck Ω nicht.</text>`;
+  s += `<text class="v-note" x="${box.x}" y="${box.y + box.h + 22}">Prozentzahlen: Anteil an allen (Ω). Kreise maßstabsgetreu.</text>`;
   $(svgId).innerHTML = s;
   $(svgId).setAttribute("aria-label", v.aria);
 }
@@ -212,6 +212,29 @@ function drawVenn(svgId, v) {
 function regionTable(rows) {
   return `<table class="regions"><tr><th>Fläche</th><th class="n">Anteil an allen</th></tr>${rows.map(r =>
     `<tr><td><i class="sw" style="background:${r[0]};border:1px solid var(--line)"></i>${r[1]}</td><td class="n">${r[2]}</td></tr>`).join("")}</table>`;
+}
+
+/* Zoom-Leiste: oben alle = 100 %, unten nur die Bezugsfläche = 100 % */
+function drawZoom(svgId, z) {
+  const X = 20, W = 520, y1 = 44, y2 = 170, h = 34, segs = z.segs, tot = segs.reduce((a, b) => a + b.p, 0);
+  let s = `<text class="v-name" x="${X}" y="${y1 - 12}">${z.allName} = 100 %</text>`, x = X;
+  const pos = [];
+  segs.forEach(g => { const w = g.p / tot * W; pos.push([x, w]);
+    s += `<rect x="${x}" y="${y1}" width="${w}" height="${h}" fill="${g.fill}" stroke="var(--fg)" stroke-width="1"/>`;
+    if (w > 52) s += `<text class="v-val" x="${x + w / 2}" y="${y1 + h / 2 + 5}" text-anchor="middle" fill="${g.ink || "var(--fg)"}">${pct(g.p)}</text>`;
+    x += w; });
+  const [a0] = pos[z.ref[0]], [b0, bw] = pos[z.ref[1]], rx0 = a0 > b0 ? b0 : a0, rx1 = Math.max(a0 + pos[z.ref[0]][1], b0 + bw);
+  s += `<rect x="${rx0 + 2}" y="${y1 + 2}" width="${rx1 - rx0 - 4}" height="${h - 4}" fill="none" stroke="var(--accent)" stroke-width="4" stroke-dasharray="10 7"/>`;
+  s += `<path d="M${rx0} ${y1 + h + 8} L${X} ${y2 - 28} M${rx1} ${y1 + h + 8} L${X + W} ${y2 - 28}" stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="4 4" fill="none"/>`;
+  s += `<text class="v-note" x="${X + W / 2}" y="${y2 - 34}" text-anchor="middle" fill="var(--accent)">${z.zoomText}</text>`;
+  s += `<text class="v-name" x="${X}" y="${y2 - 12}">${z.refName} = 100 %</text>`;
+  const wc = z.cond * W;
+  s += `<rect x="${X}" y="${y2}" width="${wc}" height="${h}" fill="var(--therapie)" stroke="var(--fg)"/><rect x="${X + wc}" y="${y2}" width="${W - wc}" height="${h}" fill="${z.restFill}" stroke="var(--fg)"/>`;
+  const seg = (cx, w, lab, val, ink) => w > 150 ? `<text class="v-val" x="${cx}" y="${y2 + h / 2 + 5}" text-anchor="middle" fill="${ink}">${lab} ${pct(val)}</text>` : w > 52 ? `<text class="v-val" x="${cx}" y="${y2 + h / 2 + 5}" text-anchor="middle" fill="${ink}">${pct(val)}</text>` : "";
+  s += seg(X + wc / 2, wc, z.condLab, z.cond, "var(--on-accent)") + seg(X + wc + (W - wc) / 2, W - wc, z.restLab, 1 - z.cond, "var(--fg)");
+  s += `<text class="v-cond" x="${X}" y="${y2 + h + 24}">${z.result}</text>`;
+  if (z.result2) s += `<text class="v-note" x="${X}" y="${y2 + h + 42}">${z.result2}</text>`;
+  $(svgId).innerHTML = s;
 }
 
 /* ----- Reiter 2: bedingte Wahrscheinlichkeit, Mikrozensus ----- */
@@ -224,6 +247,15 @@ function renderBedingt() {
     pA: pV, pB: pK, pAB: pVK, nameA: "verheiratet", nameB: "mit Kindern", denom: S.dir5 === "KgV" ? "A" : "B",
     aria: `Venn-Diagramm: verheiratet ${pct(pV)}, mit Kindern ${pct(pK)}, beides ${pct(pVK)}`
   });
+  const KgV = S.dir5 === "KgV";
+  drawZoom("zoom-bedingt", {
+    segs: [{ p: pV - pVK, fill: "var(--area-a)" }, { p: pVK, fill: "var(--therapie)", ink: "var(--on-accent)" }, { p: pK - pVK, fill: "var(--area-b)" }, { p: 1 - pV - pK + pVK, fill: "var(--surface)" }],
+    allName: "Alle Paare", ref: KgV ? [0, 1] : [1, 2], refName: KgV ? "Nur Ehepaare" : "Nur Paare mit Kindern",
+    zoomText: `nur diese ${pct(KgV ? pV : pK)} betrachten, auf 100 % strecken`,
+    cond: KgV ? pKgV : pVgK, condLab: KgV ? "mit Kindern" : "verheiratet", restLab: KgV ? "ohne Kinder" : "unverheiratet", restFill: KgV ? "var(--area-a)" : "var(--area-b)",
+    result: KgV ? `P(Kinder | verheiratet) = ${pct(pKgV)}` : `P(verheiratet | Kinder) = ${pct(pVgK)}`,
+    result2: KgV ? `= ${pct(pVK)} ÷ ${pct(pV)}, Anteil an den Ehepaaren` : `= ${pct(pVK)} ÷ ${pct(pK)}, Anteil an den Paaren mit Kindern`
+  });
   const formula = S.dir5 === "KgV"
     ? TB(String.raw`\begin{aligned}P(\text{Kinder} \mid \text{verh.}) &= \dfrac{P(\text{verh.} \cap \text{Kinder})}{P(\text{verh.})} \\ &= \dfrac{${tz(num(pVK))}}{${tz(num(pV))}} = ${tz(pct(pKgV))}\end{aligned}`, `<span class="big">P(Kinder | verheiratet) = ${pct(pKgV)}</span>`) + `<span>Bezugsfläche: der Kreis „verheiratet“</span>`
     : TB(String.raw`\begin{aligned}P(\text{verh.} \mid \text{Kinder}) &= \dfrac{P(\text{verh.} \cap \text{Kinder})}{P(\text{Kinder})} \\ &= \dfrac{${tz(num(pVK))}}{${tz(num(pK))}} = ${tz(pct(pVgK))}\end{aligned}`, `<span class="big">P(verheiratet | Kinder) = ${pct(pVgK)}</span>`) + `<span>Bezugsfläche: der Kreis „mit Kindern“</span>`;
@@ -231,7 +263,8 @@ function renderBedingt() {
     <span class="kicker">Reiter 2 · Bedingte Wahrscheinlichkeit</span>
     <h2>Verheiratet und Kinder</h2>
     <p>Alle Paare in Deutschland 2024, rund ${num(tot / 1000, 1)} Mio. Ein Kreis steht für die Ehepaare, einer für die Paare mit Kindern im Haushalt. Die dunkle Schnittfläche sind Ehepaare mit Kindern.</p>
-    <p>„Gegeben“ heißt: Die Welt schrumpft auf einen Kreis. Die bedingte Wahrscheinlichkeit ist der Anteil der Schnittfläche an <b>diesem</b> Kreis, nicht an allen.</p>
+    <p><b>So lesen Sie das Diagramm.</b> Alle Zahlen im Venn-Diagramm sind Anteile an <b>allen</b> Paaren, also unbedingte Wahrscheinlichkeiten. Über den Kreisen steht, wie groß jeder Kreis ist: P(verheiratet) und P(mit Kindern). In den Flächen steht, wie viel von allen Paaren in genau diesem Stück liegt, etwa die Schnittfläche P(verheiratet ∩ Kinder) = ${pct(pVK)}. Eine bedingte Wahrscheinlichkeit steht im Venn-Diagramm nirgends direkt.</p>
+    <p>„Gegeben“ heißt: Die Welt schrumpft auf einen Kreis. Die bedingte Wahrscheinlichkeit ist der Anteil der Schnittfläche an <b>diesem</b> Kreis, nicht an allen. Die Leiste unter dem Diagramm zeigt genau diesen Schritt: Der gestrichelte Teil wird herausgenommen und auf 100 % gestreckt.</p>
     <div class="formula">${formula}</div>
     <div class="legend"><span><i class="sw" style="background:var(--therapie)"></i>verheiratet und Kinder</span><span><i class="sw outline"></i>Bezugsfläche (das, was gegeben ist)</span></div>
     <p><b>Abhängig:</b> Unter Ehepaaren haben ${pct(pKgV)} Kinder im Haushalt, unter unverheirateten Paaren ${pct(pKgN)}, insgesamt ${pct(pK)}. Wären Ehe und Kinder unabhängig, läge die Schnittfläche bei P(verh.) · P(Kinder) = ${pct(pV * pK)} statt ${pct(pVK)}.</p>
@@ -242,6 +275,7 @@ function renderBedingt() {
       ["var(--area-b)", "nur Kinder (unverheiratet)", pct(pK - pVK)],
       ["var(--surface)", "weder noch", pct(1 - pV - pK + pVK)]
     ])}
+    <p class="note-warn"><b>Achtung, Zufall in den Daten:</b> Die Fläche „nur verheiratet“ ist ${pct(pV - pVK, 2)} von allen Paaren, und P(Kinder | verheiratet) ist ${pct(pKgV, 2)}. Gerundet stehen beide Male 45,6 %. Das sind zwei verschiedene Größen mit verschiedenem Bezug, die hier nur zufällig fast gleich groß sind.</p>
     <p class="callout">Gleicher Zähler, andere Bezugsfläche: P(Kinder | verheiratet) = ${pct(pKgV)}, aber P(verheiratet | Kinder) = ${pct(pVgK)}. Die Reihenfolge der Bedingung ist nicht egal.</p>
     <p class="source">Quelle: Statistisches Bundesamt (2025), Mikrozensus 2024, Haushalte und Familien, Erstergebnisse, Tabelle 12211-33. Kinder = ledige Kinder jeden Alters im Haushalt; Paare, deren Kinder ausgezogen sind, zählen als „ohne Kinder“.</p>
     <button class="btn" type="button" id="to-bayes">Weiter zu Reiter 3: Satz von Bayes →</button>`;
