@@ -84,3 +84,7 @@ input[type=range] { width: 100%; accent-color: var(--accent); }
 .formula .katex-display { margin: 2px 0; text-align: left; overflow-x: auto; overflow-y: hidden; }
 .formula .katex-display > .katex { text-align: left; }
 .detail .formula .katex { font-size: 1.02em; }
+.venn .v-of { font-family: var(--font-mono); font-size: 10.5px; opacity: .85; }
+.venn .v-cond { font-family: var(--font-mono); font-size: 14px; font-weight: 600; fill: var(--accent); }
+.venn.zoom { margin-top: 10px; }
+.note-warn { font-size: 15px; border: 1px dashed var(--beta-ink); border-radius: 10px; padding: 10px 14px; }
