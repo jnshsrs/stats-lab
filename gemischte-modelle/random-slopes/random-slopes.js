@@ -62,9 +62,14 @@ function draw2() {
   const b3 = f.beta[3], se3 = f.se[3];
   $("f2").innerHTML = TS(`\\Delta_{\\text{Woche 12}} = \\hat\\beta_2 + 12 \\cdot \\hat\\beta_3 = ${tz(fmt(f.beta[2], 2))} + 12 \\cdot (${tz(fmt(b3, 3))}) = ${tz(fmt(f.beta[2] + 12 * b3, 2))}`, `Δ Woche 12 = β₂ + 12 · β₃ = ${fmt(f.beta[2] + 12 * b3, 2)}`) + `<span class="dim">Δ: geschätzter Unterschied Training minus Standard in Woche 12.</span>`;
   const df = P.length - 2, tc = tinv(0.975, df), names = ["Achsenabschnitt (Standard, Woche 0)", "Woche (Steigung Standard)", "Gruppe Training (Unterschied in Woche 0)", "Woche × Training (Zusatz pro Woche)"];
-  $("t2").innerHTML = `<thead><tr><th>Fester Effekt</th><th>b</th><th>SE</th><th>t</th><th>p</th><th>95-%-KI</th></tr></thead><tbody>` +
-    f.beta.map((b, i) => { const t = b / f.se[i], p = 2 * (1 - tcdf(Math.abs(t), df)); return `<tr class="${i === 3 ? "hl" : ""}"><td>${names[i]}</td><td>${fmt(b, 3)}</td><td>${fmt(f.se[i], 3)}</td><td>${fmt(t, 2)}</td><td>${fp(p)}</td><td>${fmt(b - tc * f.se[i], 3)} bis ${fmt(b + tc * f.se[i], 3)}</td></tr>`; }).join("") +
-    `<tr class="tot"><td>Zufallseffekte</td><td colspan="5" style="text-align:left;font-family:inherit;font-weight:400;color:var(--muted)">SD Niveau ${fmt(Math.sqrt(f.G[0][0]), 2)}, SD Steigung ${fmt(Math.sqrt(f.G[1][1]), 3)}, SD Messfehler ${fmt(Math.sqrt(f.s2), 2)} · REML, df = ${df} (Personen − 2)</td></tr></tbody>`;
+  const sym = ["β₀", "β₁", "β₂", "β₃"], A = x => fmt(Math.abs(x), 3), interp = [
+    b => `Mittlerer Schmerz der Standardgruppe zu Beginn (Woche 0): ${fmt(b, 2)} Punkte.`,
+    b => `So viel ${b < 0 ? "sinkt" : "steigt"} der Schmerz in der Standardgruppe pro Woche: ${A(b)} Punkte.`,
+    b => `So viel ${b > 0 ? "höher" : "niedriger"} startet die Trainingsgruppe in Woche 0: ${A(b)} Punkte. Im RCT nur Zufall.`,
+    b => `So viel ${b < 0 ? "stärker sinkt" : "stärker steigt"} der Schmerz pro Woche in der Trainingsgruppe: ${A(b)} Punkte. Der Behandlungseffekt.`];
+  $("t2").innerHTML = `<thead><tr><th></th><th>Fester Effekt und Bedeutung</th><th>b</th><th>SE</th><th>t</th><th>p</th><th>95-%-KI</th></tr></thead><tbody>` +
+    f.beta.map((b, i) => { const t = b / f.se[i], p = 2 * (1 - tcdf(Math.abs(t), df)); return `<tr class="${i === 3 ? "hl" : ""}"><td class="sym">${sym[i]}</td><td>${names[i]}<span class="interp">${interp[i](b)}</span></td><td>${fmt(b, 3)}</td><td>${fmt(f.se[i], 3)}</td><td>${fmt(t, 2)}</td><td>${fp(p)}</td><td>${fmt(b - tc * f.se[i], 3)} bis ${fmt(b + tc * f.se[i], 3)}</td></tr>`; }).join("") +
+    `<tr class="tot"><td></td><td>Zufallseffekte</td><td colspan="5" style="text-align:left;font-family:var(--font-sans);font-weight:400;color:var(--muted)">SD Niveau ${fmt(Math.sqrt(f.G[0][0]), 2)}, SD Steigung ${fmt(Math.sqrt(f.G[1][1]), 3)}, SD Messfehler ${fmt(Math.sqrt(f.s2), 2)} · REML, df = ${df} (Personen − 2)</td></tr></tbody>`;
   const p3 = 2 * (1 - tcdf(Math.abs(b3 / se3), df));
   $("cl2").innerHTML = `Die entscheidende Zeile ist die Wechselwirkung: In der Trainingsgruppe sinkt der Schmerz pro Woche um <b>${fmt(-b3, 3)} Punkte</b> stärker (95-%-KI ${fmt(-(b3 + tc * se3), 3)} bis ${fmt(-(b3 - tc * se3), 3)}, p ${p3 < 0.001 ? "< 0,001" : "= " + fmt(p3, 3)}). Wahrer Wert: ${fmt(dd, 2)}. Der Gruppen-Haupteffekt beschreibt nur den Unterschied in Woche 0. Dank Randomisierung weicht er nur zufällig von null ab.` + (p3 >= 0.05 && dd > 0 ? " Nicht signifikant heißt hier nicht „kein Effekt“: Mit 30 Personen ist die Power für Wechselwirkungen gering." : "");
 }

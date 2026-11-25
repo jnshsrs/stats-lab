@@ -7,6 +7,7 @@ const $ = id => document.getElementById(id);
 const { fmt, fp, frame, pick, mean, sd, ttest, tz } = window.GM;
 const { tcdf, tinv } = window.REG;
 const TB = (t, fb) => window.katex ? texBlock(t) : fb;
+const TS = (t, fb) => window.katex ? texSteps(t) : fb;
 const C = window.FAI.cols, R = window.FAI.rows.map(r => Object.fromEntries(C.map((c, i) => [c, r[i]])));
 const IDS = [...new Set(R.map(r => r.id))];
 const TL = ["vor OP", "Woche 4", "Woche 14"];
@@ -59,10 +60,28 @@ function draw2() {
 
 function draw3() {
   const m = META[v], M = fitModel(v, locf), { f, times, k, df, names } = M, d = m.d;
-  $("f3").innerHTML = TB(`\\text{${tz(m.lab)}}_{ij} = \\beta_0 + \\beta_{\\text{Zeit}} + \\beta_{\\text{Gruppe}} + \\beta_{\\text{Gruppe}\\times\\text{Zeit}} + u_i + e_{ij}`, "y = β₀ + Zeit + Gruppe + Gruppe × Zeit + u_i + e_ij");
-  $("t3").innerHTML = `<thead><tr><th>Fester Effekt</th><th>b</th><th>SE</th><th>p</th><th>95-%-KI</th></tr></thead><tbody>` +
-    f.beta.map((b, i) => { const [l, h] = ci(b, f.se[i], df); return `<tr class="${i > k + 1 && times[i - k - 2] === 2 ? "hl" : ""}"><td>${names[i]}</td><td>${fmt(b, d)}</td><td>${fmt(f.se[i], d)}</td><td>${fp(pv(b, f.se[i], df))}</td><td>${fmt(l, d)} bis ${fmt(h, d)}</td></tr>`; }).join("") +
-    `<tr class="tot"><td>Zufallseffekte</td><td colspan="4" style="text-align:left;font-family:inherit;font-weight:400;color:var(--muted)">SD zwischen Personen ${fmt(Math.sqrt(f.G[0][0]), m.d)}, SD innerhalb ${fmt(Math.sqrt(f.s2), m.d)}, ICC ${fmt(f.G[0][0] / (f.G[0][0] + f.s2), 2)} · ${M.n} Messungen von ${M.persons} Personen · REML, df = ${df}</td></tr></tbody>`;
+  const W = t => t === 1 ? "W4" : "W14";
+  const terms = ["\\beta_0", ...times.map((t, j) => `\\beta_${j + 1}\\cdot \\text{${W(t)}}_{ij}`), `\\beta_${k + 1}\\cdot \\text{Int}_i`, ...times.map((t, j) => `\\beta_${k + 2 + j}\\cdot \\text{Int}_i \\cdot \\text{${W(t)}}_{ij}`)];
+  $("f3").innerHTML = TB(`\\text{${tz(m.lab)}}_{ij} = ${terms.join(" + ")} + u_i + e_{ij}`, "Modellgleichung") +
+    `<span class="dim">Hilfsvariablen (0 oder 1): ${times.map(t => `${W(t)} = 1 bei ${TL[t]}`).join(", ")}, sonst 0; Int = 1 in der Reha-Gruppe, 0 in der Kontrollgruppe. u<sub>i</sub>: Abweichung der Person i vom Mittel ihrer Gruppe, e<sub>ij</sub>: Rest der einzelnen Messung.</span>`;
+  const dir = b => b < 0 ? "sinkt" : "steigt", U = m.unit, A = x => fmt(Math.abs(x), d);
+  const sym = ["β₀", ...times.map((_, j) => "β" + "₁₂"[j]), "β" + "₁₂₃"[k], ...times.map((_, j) => "β" + "₃₄₅"[k - 1 + j])];
+  const interp = i => {
+    const b = f.beta[i];
+    if (i === 0) return `Mittelwert der Kontrollgruppe vor der OP: ${fmt(b, d)} ${U}. Alle anderen Koeffizienten sind Abweichungen davon.`;
+    if (i <= k) return `In der Kontrollgruppe ${dir(b)} der Wert bis ${TL[times[i - 1]]} um ${A(b)} ${U}. Das ist der Verlauf ohne Reha-Programm.`;
+    if (i === k + 1) return `Vor der OP liegt die Reha-Gruppe ${A(b)} ${U} ${b > 0 ? "höher" : "niedriger"}. Im RCT ein Zufallsunterschied, kein Effekt der Reha, die da noch nicht begonnen hat.`;
+    const t = times[i - k - 2];
+    return `So viel ${b < 0 ? "stärker sinkt" : "stärker steigt"} der Wert in der Reha-Gruppe bis ${TL[t]} als in der Kontrollgruppe: ${A(b)} ${U}. ${t === 2 ? "Das ist der Behandlungseffekt nach 14 Wochen, die Hauptfrage des RCT." : "Der Behandlungseffekt nach 4 Wochen."}`;
+  };
+  $("t3").innerHTML = `<thead><tr><th></th><th>Fester Effekt und Bedeutung</th><th>b</th><th>SE</th><th>p</th><th>95-%-KI</th></tr></thead><tbody>` +
+    f.beta.map((b, i) => { const [l, h] = ci(b, f.se[i], df); return `<tr class="${i > k + 1 && times[i - k - 2] === 2 ? "hl" : ""}"><td class="sym">${sym[i]}</td><td>${names[i]}<span class="interp">${interp(i)}</span></td><td>${fmt(b, d)}</td><td>${fmt(f.se[i], d)}</td><td>${fp(pv(b, f.se[i], df))}</td><td>${fmt(l, d)} bis ${fmt(h, d)}</td></tr>`; }).join("") +
+    `<tr class="tot"><td></td><td>Zufallseffekte</td><td colspan="4" style="text-align:left;font-family:var(--font-sans);font-weight:400;color:var(--muted)">SD zwischen Personen ${fmt(Math.sqrt(f.G[0][0]), m.d)}, SD innerhalb ${fmt(Math.sqrt(f.s2), m.d)}, ICC ${fmt(f.G[0][0] / (f.G[0][0] + f.s2), 2)} · ${M.n} Messungen von ${M.persons} Personen · REML, df = ${df}</td></tr></tbody>`;
+  const j14 = times.indexOf(2), c = j => f.beta[j];
+  const parts = [0, 1 + j14, k + 1, k + 2 + j14], val = parts.reduce((a, j) => a + c(j), 0);
+  $("f3b").innerHTML = `<span class="dim">Mittelwerte zusammensetzen, Beispiel Reha-Gruppe in Woche 14 (alle Hilfsvariablen = 1):</span>` +
+    TS(`\\hat y = \\beta_0 + \\beta_{${1 + j14}} + \\beta_{${k + 1}} + \\beta_{${k + 2 + j14}} = ${parts.map(j => tz(fmt(c(j), d))).join(" + ").replace(/\+ −/g, "− ").replace(/\+ -/g, "- ")} = ${tz(fmt(val, d))}`, `ŷ = ${fmt(val, d)}`) +
+    `<span class="dim">Kontrollgruppe in Woche 14: β₀ + β${"₁₂"[j14]} = ${fmt(c(0) + c(1 + j14), d)}. Der Abstand zwischen beiden ist nicht β${"₃₄₅"[k - 1 + j14]}, sondern β${"₁₂₃"[k]} + β${"₃₄₅"[k - 1 + j14]} = ${fmt(c(k + 1) + c(k + 2 + j14), d)}: Der Unterschied vor der OP steckt mit drin.</span>`;
   // Vergleich
   const iw = f.beta.length - 1, b14 = f.beta[iw], s14 = f.se[iw];
   const a = R.filter(r => r.zeit_nr === 2 && use(r)), tt = ttest(a.filter(r => r.gruppe === "Kontrolle").map(r => r[v]), a.filter(r => r.gruppe === "Intervention").map(r => r[v]));

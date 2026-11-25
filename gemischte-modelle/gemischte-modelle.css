@@ -226,3 +226,8 @@ select.sel { font: 500 14.5px var(--font-sans); padding: 7px 10px; border: 1px s
 .mini-key-text { display: flex; flex-direction: column; gap: 8px; font-size: 15px; max-width: 70ch; }
 .mini-key-text p { margin: 0; }
 @media (max-width: 640px) { .mini-key { grid-template-columns: minmax(0, 1fr); } .mini-key svg { max-width: 300px; } }
+table.coef td.sym { font-family: var(--font-mono); font-weight: 600; color: var(--accent); white-space: nowrap; padding-right: 4px; }
+table.coef td .interp { display: block; font-size: 13.5px; font-weight: 400; color: var(--muted); margin-top: 3px; line-height: 1.45; max-width: 52ch; }
+table.anova.coef th:nth-child(2), table.anova.coef td:nth-child(2) { text-align: left; font-family: var(--font-sans); }
+table.anova.coef td.sym { font-family: var(--font-mono); vertical-align: top; padding-top: 10px; }
+table.anova.coef td:last-child { white-space: nowrap; }
