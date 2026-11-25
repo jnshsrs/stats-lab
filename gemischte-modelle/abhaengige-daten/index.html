@@ -6,9 +6,9 @@
 <title>Abhängige Daten · Stats Lab</title>
 <meta name="description" content="Warum t-Test und Regression bei geschachtelten Daten zu oft signifikant werden: cluster-randomisiertes RCT mit zehn Praxen, Intraklassenkorrelation, Designeffekt, effektive Fallzahl und das gemischte Modell als Lösung.">
 <link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="../../assets/css/base.css?v=202611252055">
+<link rel="stylesheet" href="../../assets/css/base.css?v=202611252100">
 <link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
-<link rel="stylesheet" href="../gemischte-modelle.css?v=202611252055">
+<link rel="stylesheet" href="../gemischte-modelle.css?v=202611252100">
 </head>
 <body>
 <header class="site-header">
@@ -37,7 +37,7 @@
   <details class="acc" id="acc-1" open>
     <summary><span class="acc-no">1</span><span class="acc-title">Zehn Praxen, eine Studie<span class="acc-teaser">Ein cluster-randomisiertes RCT: Was der t-Test übersieht.</span></span></summary>
     <div class="acc-body">
-      <p class="text">Zehn Physiotherapiepraxen nehmen an einer Studie teil. Fünf bieten ein neues Übungsprogramm bei Kniearthrose an, fünf behandeln wie bisher. Gemessen wird, um wie viele Punkte auf der Schmerzskala (NRS 0 bis 10) sich der Schmerz nach 12 Wochen verbessert. Randomisiert werden die Praxen, nicht die Patientinnen. Jede Praxis hat ihre Eigenheiten: Ausstattung, Erfahrung, Klientel. Wie stark sich Patientinnen derselben Praxis ähneln, beschreibt die <b>Intraklassenkorrelation (ICC)</b>.</p>
+      <p class="text">Zehn Physiotherapiepraxen nehmen an einer Studie teil. Fünf bieten ein neues Übungsprogramm bei Kniearthrose an, fünf behandeln wie bisher. Gemessen wird, um wie viele Punkte auf der Schmerzskala (NRS 0 bis 10) sich der Schmerz nach 12 Wochen verändert hat: Schmerz zu Beginn minus Schmerz nach 12 Wochen. Plus 3 heißt also 3 Punkte weniger Schmerz, minus 1 heißt 1 Punkt mehr Schmerz als zu Beginn. Randomisiert werden die Praxen, nicht die Patientinnen. Jede Praxis hat ihre Eigenheiten: Ausstattung, Erfahrung, Klientel. Wie stark sich Patientinnen derselben Praxis ähneln, beschreibt die <b>Intraklassenkorrelation (ICC)</b>.</p>
       <div class="panel-grid">
         <div class="ctrl"><div class="ctrl-head"><label for="icc">Ähnlichkeit innerhalb der Praxis (ICC)</label><output id="icc-v"></output></div><input id="icc" type="range" min="0" max="0.5" step="0.05" value="0.1"></div>
         <div class="ctrl"><div class="ctrl-head"><label for="m">Patientinnen pro Praxis</label><output id="m-v"></output></div><input id="m" type="range" min="5" max="40" step="5" value="20"></div>
@@ -122,11 +122,11 @@
 </footer>
 <script src="../../assets/vendor/katex/katex.min.js"></script>
 <script src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
-<script src="../../assets/js/tex.js?v=202611252055"></script>
-<script src="../../assets/js/reg.js?v=202611252055"></script>
-<script src="../gm-common.js?v=202611252055"></script>
-<script src="../lmm.js?v=202611252055"></script>
-<script src="abhaengige-daten.js?v=202611252055"></script>
-<script src="../../assets/js/path.js?v=202611252055"></script>
+<script src="../../assets/js/tex.js?v=202611252100"></script>
+<script src="../../assets/js/reg.js?v=202611252100"></script>
+<script src="../gm-common.js?v=202611252100"></script>
+<script src="../lmm.js?v=202611252100"></script>
+<script src="abhaengige-daten.js?v=202611252100"></script>
+<script src="../../assets/js/path.js?v=202611252100"></script>
 </body>
 </html>

@@ -28,11 +28,13 @@ function analyse(d) {
 function draw1() {
   data = simulate(seed, icc, m, eff);
   const res = analyse(data), xs = k => k + (k >= K / 2 ? 0.8 : 0);
-  const lo = -5, hi = 12; // feste y-Achse, damit Studien vergleichbar bleiben (Mittel 3 bis 4, SD 2)
+  const lo = -4, hi = 10; // feste y-Achse: Veränderung, nach oben durch NRS 10 begrenzt
   const W = small() ? 520 : 900, H = small() ? 420 : 380;
   $("c1").setAttribute("viewBox", `0 0 ${W} ${H}`);
-  const f = frame(W, H, -0.7, K - 1 + 0.8 + 0.7, lo, hi, { P: { L: small() ? 40 : 56, R: 8, T: 30, B: 40 }, nx: 0, yl: small() ? "" : "Verbesserung in NRS-Punkten" });
-  let s = f.s;
+  const f = frame(W, H, -0.7, K - 1 + 0.8 + 0.7, lo, hi, { P: { L: small() ? 40 : 56, R: small() ? 92 : 110, T: 30, B: 40 }, nx: 0, ny: 7, yl: small() ? "" : "Veränderung in NRS-Punkten" });
+  let s = f.s + `<rect x="${f.P.L}" y="${f.sy(0)}" width="${W - f.P.L - f.P.R}" height="${f.sy(lo) - f.sy(0)}" fill="var(--grid)" fill-opacity=".7"/>` +
+    `<line x1="${f.P.L}" x2="${W - f.P.R}" y1="${f.sy(0)}" y2="${f.sy(0)}" stroke="var(--muted)" stroke-width="1.5"/>` +
+    `<text x="${W - f.P.R + 8}" y="${f.sy(0) - 8}">↑ besser</text><text x="${W - f.P.R + 8}" y="${f.sy(0) + 18}">↓ schlechter</text>`;
   [0, 1].forEach(arm => {
     const ks = [...Array(K / 2)].map((_, i) => i + arm * K / 2), am = mean(data.filter(r => r.arm === arm).map(r => r.y));
     s += `<line x1="${f.sx(xs(ks[0]) - 0.45)}" x2="${f.sx(xs(ks[4]) + 0.45)}" y1="${f.sy(am)}" y2="${f.sy(am)}" stroke="var(--fg)" stroke-width="2" stroke-dasharray="6 5"/>`;
