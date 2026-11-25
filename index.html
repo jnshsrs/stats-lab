@@ -6,7 +6,7 @@
 <title>Stats Lab</title>
 <meta name="description" content="Interaktive Visualisierungen für die Statistiklehre in Gesundheits- und Therapiewissenschaften.">
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="assets/css/base.css?v=202611251359">
+<link rel="stylesheet" href="assets/css/base.css?v=202611251447">
 <style>
   .hero { padding-block: 56px 40px; display: flex; flex-direction: column; gap: 16px; }
   .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; }
@@ -631,7 +631,7 @@
     </div>
   </section>
   <section class="path-block" aria-labelledby="block-gemischte-modelle">
-    <div class="block-head"><span class="block-no">8</span><div><h2 id="block-gemischte-modelle">Gemischte Modelle</h2><p>Wenn Messungen nicht unabhängig sind: Patientinnen in Praxen, wiederholte Messungen derselben Person, Verläufe mit eigenem Niveau und eigener Steigung. Erste Version.</p></div></div>
+    <div class="block-head"><span class="block-no">8</span><div><h2 id="block-gemischte-modelle">Gemischte Modelle</h2><p>Wenn Messungen nicht unabhängig sind: Patientinnen in Praxen, wiederholte Messungen derselben Person, Verläufe mit eigenem Niveau und eigener Steigung, und ein RCT mit offenen Daten zum Selbstrechnen.</p></div></div>
     <div class="grid">
     <a class="card" href="gemischte-modelle/abhaengige-daten/">
       <div class="card-thumb"><span class="path-no">37</span>
@@ -661,6 +661,16 @@
         <h3>Jeder Verlauf ist anders</h3>
         <p>Eigene Steigung je Person: warum ohne Random Slope die Standardfehler zu klein sind, und ein RCT mit sieben Messzeitpunkten, in dem der Effekt in der Wechselwirkung Gruppe mal Zeit steckt.</p>
         <div class="tags"><span class="tag">Random Slope</span><span class="tag">Gruppe × Zeit</span><span class="tag">SPSS MIXED</span></div>
+      </div>
+    </a>
+    <a class="card" href="gemischte-modelle/hueftarthroskopie/">
+      <div class="card-thumb"><span class="path-no">40</span>
+        <svg viewBox="0 0 320 180" aria-hidden="true"><line x1="40" x2="290" y1="150" y2="150" class="t-axis" stroke-width="2"/><polyline points="60,60 165,90 270,105" fill="none" class="t-dash"/><polyline points="60,45 165,95 270,140" fill="none" class="t-curve"/><circle cx="60" cy="45" r="6" class="t-strong"/><circle cx="165" cy="95" r="6" class="t-strong"/><circle cx="270" cy="140" r="6" class="t-strong"/></svg>
+      </div>
+      <div class="card-body">
+        <h3>Reha nach Hüftarthroskopie</h3>
+        <p>Offene Daten eines RCT bei Cam-Impingement: 90 Personen, drei Messzeitpunkte. Aufbereiten, Verläufe ansehen, Gruppe × Zeit im gemischten Modell und Vergleich mit dem t-Test des Artikels. Mit Werkstatt.</p>
+        <div class="tags"><span class="tag">Echte Daten</span><span class="tag">Cam-FAIS</span><span class="tag">Werkstatt</span></div>
       </div>
     </a>
     </div>
