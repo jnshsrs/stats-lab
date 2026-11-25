@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Abhängige Daten · Stats Lab</title>
+<meta name="description" content="Warum t-Test und Regression bei geschachtelten Daten zu oft signifikant werden: cluster-randomisiertes RCT mit zehn Praxen, Intraklassenkorrelation, Designeffekt, effektive Fallzahl und das gemischte Modell als Lösung.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../assets/css/base.css?v=202611251359">
+<link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../gemischte-modelle.css?v=202611251359">
+</head>
+<body>
+<header class="site-header">
+  <div class="column">
+    <a class="brand" href="../../">
+      <svg class="brand-mark" viewBox="0 0 22 22" aria-hidden="true"><path d="M1 19 C5 19 6 4 9 4 S13 19 17 19" fill="none" class="bm-a" stroke-width="2.2" stroke-linecap="round"/><path d="M5 19 C9 19 10 7 13 7 S17 19 21 19" fill="none" class="bm-b" stroke-width="2.2" stroke-linecap="round"/></svg>
+      Stats Lab
+    </a>
+    <nav class="site-nav" aria-label="Hauptnavigation">
+      <a href="../../">Visualisierungen</a>
+      <a href="../../lernreisen/">Lernreisen</a>
+      <a href="../../glossar/">Glossar</a>
+      <a href="https://github.com/jnshsrs/stats-lab">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main class="column">
+  <section class="intro">
+    <a class="back" href="../../">← Alle Visualisierungen</a>
+    <h1>Abhängige Daten</h1>
+    <p class="byline">Dr. Jens Hüsers · Forschungsmethodik</p>
+    <p class="lede">t-Test und Regression setzen voraus, dass jede Messung eine eigene, unabhängige Information liefert. In der Versorgung stimmt das selten: Patientinnen derselben Praxis ähneln sich, und wer mehrmals gemessen wird, ähnelt vor allem sich selbst. Diese Station zeigt, was dann schiefgeht, wie man die Ähnlichkeit misst und was ein gemischtes Modell anders macht.</p>
+  </section>
+
+  <details class="acc" id="acc-1" open>
+    <summary><span class="acc-no">1</span><span class="acc-title">Zehn Praxen, eine Studie<span class="acc-teaser">Ein cluster-randomisiertes RCT: Was der t-Test übersieht.</span></span></summary>
+    <div class="acc-body">
+      <p class="text">Zehn Physiotherapiepraxen nehmen an einer Studie teil. Fünf bieten ein neues Übungsprogramm bei Kniearthrose an, fünf behandeln wie bisher. Gemessen wird, um wie viele Punkte auf der Schmerzskala (NRS 0 bis 10) sich der Schmerz nach 12 Wochen verbessert. Randomisiert werden die Praxen, nicht die Patientinnen. Jede Praxis hat ihre Eigenheiten: Ausstattung, Erfahrung, Klientel. Wie stark sich Patientinnen derselben Praxis ähneln, beschreibt die <b>Intraklassenkorrelation (ICC)</b>.</p>
+      <div class="panel-grid">
+        <div class="ctrl"><div class="ctrl-head"><label for="icc">Ähnlichkeit innerhalb der Praxis (ICC)</label><output id="icc-v"></output></div><input id="icc" type="range" min="0" max="0.5" step="0.05" value="0.1"></div>
+        <div class="ctrl"><div class="ctrl-head"><label for="m">Patientinnen pro Praxis</label><output id="m-v"></output></div><input id="m" type="range" min="5" max="40" step="5" value="20"></div>
+      </div>
+      <div class="actions"><div class="seg" role="group" aria-label="Wahrer Effekt" id="eff"><button type="button" data-e="0" aria-pressed="true">kein Effekt</button><button type="button" data-e="1" aria-pressed="false">wahrer Effekt 1 Punkt</button></div><button type="button" class="btn" id="draw">Neue Studie ziehen</button></div>
+      <svg class="chart" id="c1" viewBox="0 0 900 380" role="img" aria-label="Schmerzverbesserung aller Patientinnen nach Praxis"></svg>
+      <div class="legend"><span><i style="background:var(--kontrolle)"></i>Praxen mit Standardbehandlung</span><span><i style="background:var(--therapie)"></i>Praxen mit Übungsprogramm</span><span><i style="background:var(--fg);height:3px"></i>Praxis-Mittelwert</span><span><i style="background:transparent;border-top:2px dashed var(--fg);height:0;border-radius:0"></i>Mittelwert des Studienarms</span></div>
+      <div class="tab-wrap"><table class="anova" id="t1"></table></div>
+      <p class="callout" id="cl1"></p>
+    </div>
+  </details>
+
+  <details class="acc" id="acc-2" open>
+    <summary><span class="acc-no">2</span><span class="acc-title">Wie oft irrt der naive t-Test?<span class="acc-teaser">1.000 Studien ohne Effekt und der Designeffekt.</span></span></summary>
+    <div class="acc-body">
+      <p class="text">Eine einzelne Studie kann Glück oder Pech haben. Deshalb wird die Studie aus Abschnitt 1 jetzt 1.000-mal wiederholt, und zwar ohne wahren Effekt. Ein korrekter Test darf dann in etwa 5 % der Studien signifikant werden, genau das ist α. ICC und Praxisgröße kommen aus den Reglern oben.</p>
+      <div class="actions"><button type="button" class="btn" id="sim">1.000 Studien ohne Effekt simulieren</button><span class="count" id="sim-n"></span></div>
+      <div class="meter" id="mt"></div>
+      <p class="callout" id="cl2"></p>
+      <p class="text">Warum das so ist, sagt der <b>Designeffekt</b>. Er gibt an, um welchen Faktor die Varianz eines Mittelwerts größer ist, als der naive t-Test annimmt. Teilt man die Zahl der Patientinnen durch ihn, erhält man die <b>effektive Fallzahl</b>: so viele unabhängige Personen sind die Daten wert.</p>
+      <div class="formula" id="f2"></div>
+      <div class="tab-wrap"><table class="cells" id="t2"></table></div>
+      <p class="note">Näherung für den naiven t-Test bei großer Fallzahl: Die Prüfgröße ist um den Faktor √DE zu groß, der tatsächliche Fehler 1. Art ist also 2 · (1 − Φ(1,96 / √DE)).</p>
+    </div>
+  </details>
+
+  <details class="acc" id="acc-3" open>
+    <summary><span class="acc-no">3</span><span class="acc-title">Die ICC: wie ähnlich sich eine Gruppe ist<span class="acc-teaser">Streuung zwischen den Gruppen und innerhalb der Gruppen.</span></span></summary>
+    <div class="acc-body">
+      <p class="text">Jede Messung setzt sich aus zwei Teilen zusammen: dem Teil, den alle in derselben Gruppe teilen (die Praxis, die Person), und dem individuellen Rest. Die ICC ist der Anteil der gesamten Streuung, der auf die Gruppen entfällt.</p>
+      <div class="formula" id="f3"></div>
+      <div class="two-charts" id="c3"></div>
+      <p class="callout">Bei ICC = 0 sagt die Gruppe nichts über eine Messung aus. Bei ICC nahe 1 liefert die zweite Messung derselben Gruppe kaum neue Information. Es ist dieselbe Kennzahl wie bei der <a href="../../hintergrund/klinische-tests/">Reliabilität klinischer Tests</a>: Dort ist die Gruppe die Person, und eine hohe ICC ist erwünscht.</p>
+      <div class="tab-wrap"><table class="when">
+        <thead><tr><th>Gruppe (Ebene 2)</th><th>Messung (Ebene 1)</th><th>Typische ICC</th></tr></thead>
+        <tbody>
+          <tr><td>Praxis, Klinik, Therapeutin</td><td>Patientin</td><td>meist klein, unter 0,05, wirkt aber bei vielen Personen pro Gruppe stark</td></tr>
+          <tr><td>Mannschaft, Schulklasse</td><td>Spieler, Kind</td><td>klein bis mittel</td></tr>
+          <tr><td>Person</td><td>linkes und rechtes Knie</td><td>mittel bis groß</td></tr>
+          <tr><td>Person</td><td>wiederholte Messung über die Zeit</td><td>groß, oft 0,5 bis 0,9</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </details>
+
+  <details class="acc" id="acc-4" open>
+    <summary><span class="acc-no">4</span><span class="acc-title">Was man tun kann<span class="acc-teaser">Aggregieren, gemischtes Modell, und was Sie schon kennen.</span></span></summary>
+    <div class="acc-body">
+      <ol class="check">
+        <li><b>Sie kennen schon ein Modell für abhängige Daten: den gepaarten t-Test.</b> Er rechnet mit Differenzen pro Person und nimmt so das heraus, was eine Person mit sich selbst teilt. Das gemischte Modell verallgemeinert diese Idee auf beliebig viele Messungen pro Person und auf Gruppen wie Praxen.</li>
+        <li><b>Aggregieren.</b> Man bildet pro Praxis einen Mittelwert und vergleicht die zehn Mittelwerte mit einem t-Test. Das ist korrekt, solange alle Praxen etwa gleich viele Patientinnen haben. Merkmale der einzelnen Patientin, etwa Alter oder Schmerz zu Beginn, lassen sich so aber nicht mehr berücksichtigen.</li>
+        <li><b>Gemischtes Modell.</b> Es schätzt neben den festen Effekten (Behandlung, Alter, Zeit) die Streuung zwischen den Praxen als eigenen Parameter, den <b>Zufallseffekt</b>. Bei gleich großen Praxen liefert es für die Behandlung dasselbe Ergebnis wie der t-Test auf die Praxis-Mittelwerte. Es kann aber mehr: ungleich große Gruppen, Merkmale auf beiden Ebenen, fehlende Messungen.</li>
+        <li><b>Die Randomisierungseinheit bestimmt die Fallzahl.</b> Wer Praxen randomisiert, hat im Kern zehn Beobachtungen, nicht zweihundert. Die Fallzahlplanung multipliziert deshalb die Fallzahl eines individuell randomisierten RCT mit dem Designeffekt.</li>
+        <li><b>Weitere Patientinnen pro Praxis helfen nur begrenzt.</b> Ab einer gewissen Größe bringen weitere Praxen viel mehr als weitere Patientinnen pro Praxis. Probieren Sie es oben aus: Bei ICC = 0,2 ändert sich die effektive Fallzahl zwischen 20 und 40 Patientinnen pro Praxis kaum.</li>
+      </ol>
+      <p class="note"><b>In SPSS:</b> Analysieren → Gemischte Modelle → Linear. Praxis als Subjekt, Gruppe als Faktor, unter „Zufällig“ den konstanten Term mit Subjekt Praxis aufnehmen. Als Syntax:</p>
+      <pre class="syntax">MIXED verbesserung BY gruppe
+  /FIXED=gruppe
+  /RANDOM=INTERCEPT | SUBJECT(praxis)
+  /METHOD=REML
+  /PRINT=SOLUTION TESTCOV.</pre>
+      <p class="note"><b>In R</b> mit den Paketen lme4 und lmerTest:</p>
+      <pre class="syntax">lmer(verbesserung ~ gruppe + (1 | praxis), data = d)</pre>
+    </div>
+  </details>
+
+  <section class="block refs" aria-labelledby="refs-h">
+    <h2 id="refs-h">Quellen</h2>
+    <ul><li>Simulation: eigenes Modell mit zehn Praxen, Gesamtstreuung 2 NRS-Punkte, aufgeteilt nach der eingestellten ICC.</li>
+    <li>Adams, G., Gulliford, M. C., Ukoumunne, O. C., Eldridge, S., Chinn, S., &amp; Campbell, M. J. (2004). Patterns of intra-cluster correlation from primary care research to inform study design and analysis. Journal of Clinical Epidemiology, 57(8), 785–794.</li>
+    <li>Campbell, M. K., Piaggio, G., Elbourne, D. R., &amp; Altman, D. G. (2012). Consort 2010 statement: extension to cluster randomised trials. BMJ, 345, e5661.</li>
+    <li>Kreft, I., &amp; de Leeuw, J. (1998). Introducing Multilevel Modeling. Sage.</li>
+</ul>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="column">
+    <span>© 2026 Dr. Jens Hüsers · Lehrmaterial für Forschungsmethodik und Statistik</span>
+    <span class="footer-links"><a href="https://github.com/jnshsrs/stats-lab">Quellcode auf GitHub</a><span>Ohne Cookies und Tracking</span></span>
+  </div>
+</footer>
+<script src="../../assets/vendor/katex/katex.min.js"></script>
+<script src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
+<script src="../../assets/js/tex.js?v=202611251359"></script>
+<script src="../../assets/js/reg.js?v=202611251359"></script>
+<script src="../gm-common.js?v=202611251359"></script>
+<script src="../lmm.js?v=202611251359"></script>
+<script src="abhaengige-daten.js?v=202611251359"></script>
+<script src="../../assets/js/path.js?v=202611251359"></script>
+</body>
+</html>
