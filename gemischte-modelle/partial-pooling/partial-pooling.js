@@ -43,11 +43,27 @@ function draw1() {
     s += `<text x="8" y="15" class="strong">P${p.id}</text><text x="212" y="15" text-anchor="end">${p.n} Messung${p.n > 1 ? "en" : ""}</text>`;
     return `<svg viewBox="0 0 220 150" role="img" aria-label="Patientin ${p.id}">${s}</svg>`;
   }).join("");
+  $("cap1").innerHTML = ["<b>Alle gleich:</b> Die durchgezogene Linie ist in allen 16 Kästchen dieselbe Gerade, eine gewöhnliche Regression über alle Messungen. Wie die einzelne Person liegt, spielt keine Rolle.",
+    "<b>Jede für sich:</b> Die durchgezogene Linie ist so hoch, wie es die eigenen Punkte der Person verlangen. Die Steigung ist für alle gleich, das Niveau stammt nur aus den eigenen Messungen.",
+    "<b>Gemischtes Modell:</b> Die durchgezogene Linie liegt zwischen den eigenen Punkten und der gestrichelten Linie. Je weniger Punkte, desto näher an der gestrichelten Linie."][view];
+  drawKey();
   const one = D.P.find(p => p.n === 1);
   $("cl1").innerHTML = [
     "<b>Alle gleich:</b> Eine einzige Gerade für alle. Die Unterschiede zwischen den Personen werden ignoriert, die Gerade passt zu kaum jemandem.",
     `<b>Jede für sich:</b> Jede Person bekommt ihr eigenes Niveau, berechnet nur aus ihren eigenen Messungen.${one ? ` Bei P${one.id} mit nur einer Messung geht die Linie genau durch diesen einen Wert, auch wenn er ein Ausreißer an einem schlechten Tag war.` : ""}`,
     `<b>Gemischtes Modell:</b> Jede Person bekommt ihr eigenes Niveau, aber es wird umso stärker zum Mittel gezogen, je weniger Messungen sie hat und je stärker es von Termin zu Termin schwankt. Personen mit sieben Messungen behalten fast ihr eigenes Niveau.`][view];
+}
+function drawKey() {
+  const f = frame(300, 150, -1, 13, 0, 10, { P: { L: 34, R: 10, T: 22, B: 26 }, nx: 0, ny: 0 });
+  let s = f.s + `<rect x="${f.P.L}" y="${f.P.T}" width="${300 - f.P.L - f.P.R}" height="${150 - f.P.T - f.P.B}" fill="none" stroke="var(--line)"/>`;
+  s += `<line x1="${f.sx(-1)}" x2="${f.sx(13)}" y1="${f.sy(5)}" y2="${f.sy(5)}" stroke="var(--grid)" stroke-width="2"/>`;
+  [0, 5, 10].forEach(v => s += `<text x="${f.P.L - 6}" y="${f.sy(v) + 4}" text-anchor="end">${v}</text>`);
+  [0, 6, 12].forEach(v => s += `<text x="${f.sx(v)}" y="${150 - 8}" text-anchor="middle">${v}</text>`);
+  s += `<text x="${f.P.L}" y="14" class="strong">Schmerz (NRS)</text><text x="290" y="14" text-anchor="end">Woche →</text>`;
+  s += `<line x1="${f.sx(0)}" x2="${f.sx(12)}" y1="${f.sy(6.5)}" y2="${f.sy(3.5)}" stroke="var(--muted)" stroke-width="1.4" stroke-dasharray="4 4"/>`;
+  s += `<line x1="${f.sx(0)}" x2="${f.sx(12)}" y1="${f.sy(7.6)}" y2="${f.sy(4.6)}" stroke="var(--therapie)" stroke-width="2.6"/>`;
+  [[0, 8.2], [2, 7.1], [4, 7.4]].forEach(([t, y]) => s += `<circle cx="${f.sx(t)}" cy="${f.sy(y)}" r="4" fill="var(--therapie)" fill-opacity=".75"/>`);
+  $("mini-key").innerHTML = s;
 }
 function draw2() {
   const { P, f } = D, rows = P.length, sm = window.innerWidth < 640, W = sm ? 480 : 900, H = sm ? 600 : 520, top = 36, rh = (H - top - 40) / rows;
