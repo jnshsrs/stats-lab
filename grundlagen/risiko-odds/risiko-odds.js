@@ -60,12 +60,20 @@ function draw2() {
   $("bars").innerHTML = `<text x="${L}" y="18" style="fill:var(--muted)">Risiko, verletzt zu werden</text>` + bar(36, r1, "Programm", "var(--therapie)") + bar(100, r0, "Kontrolle", "var(--fg)") + `<line x1="${L}" x2="${L}" y1="30" y2="146" stroke="var(--fg)"/>`;
   const nnt = Math.abs(RD) > 1e-9 ? Math.ceil(1 / Math.abs(RD) - 1e-9) : Infinity;
   $("t-r").innerHTML = readout("Risikodifferenz", isFinite(RD) ? (RD > 0 ? "+" : "") + fmt(RD * 100, 1) + " %-Punkte" : "–") + readout(RD < 0 ? "NNT" : "NNH", isFinite(nnt) ? String(nnt) : "–") + readout("relatives Risiko RR", ok ? fmt(RR, 2) : "–", "r-decision") + readout("Odds Ratio OR", ok ? fmt(OR, 2) : "–", "r-decision");
-  if (!ok) { $("t-f").innerHTML = ""; $("t-c").innerHTML = "Für RR und OR darf keine Zelle null sein."; return; }
+  if (!ok) { $("t-f").innerHTML = ""; $("t-c").innerHTML = "Für RR und OR darf keine Zelle null sein."; $("t-rep").innerHTML = ""; return; }
   $("t-f").innerHTML = TB(String.raw`\begin{aligned} \text{RD} &= \tfrac{a}{a+b} - \tfrac{c}{c+d} \\ &= ${tz(fmt(r1, 3))} - ${tz(fmt(r0, 3))} = ${tz(fmt(RD, 3))} \\ \text{NNT} &= 1 / |\text{RD}| = ${tz(fmt(1 / Math.abs(RD), 1))} \approx ${nnt} \\ \text{RR} &= \dfrac{a/(a+b)}{c/(c+d)} = \dfrac{${tz(fmt(r1, 3))}}{${tz(fmt(r0, 3))}} = ${tz(fmt(RR, 2))} \\ \text{OR} &= \dfrac{a/b}{c/d} = \dfrac{a \cdot d}{b \cdot c} \\ &= \dfrac{${a} \cdot ${d}}{${b} \cdot ${c}} = ${tz(fmt(OR, 2))} \end{aligned}`, "");
   const lower = RR < 1;
   $("t-c").innerHTML = Math.abs(RR - 1) < 1e-9
     ? `Beide Gruppen haben dasselbe Risiko: RD = 0, RR = 1 und OR = 1. „Kein Effekt“ heißt bei Differenzen 0, bei Verhältnissen 1.`
     : `Mit Programm verletzen sich ${pct(r1)}, ohne ${pct(r0)}. <b>Absolut</b> sind das ${fmt(Math.abs(RD) * 100, 1)} Prozentpunkte ${lower ? "weniger" : "mehr"}: ${nnt} Spielerinnen müssen das Programm machen, damit ${lower ? "eine Verletzung weniger" : "eine Verletzung mehr"} auftritt (${lower ? "number needed to treat" : "number needed to harm"}). <b>Relativ</b> ${lower ? "sinkt" : "steigt"} das Risiko auf das ${fmt(RR, 2)}-Fache, ${lower ? "eine relative Risikoreduktion" : "eine Erhöhung"} um ${fmt(Math.abs(1 - RR) * 100, 0)} %. Die <b>Odds</b> ${lower ? "sinken" : "steigen"} auf das ${fmt(OR, 2)}-Fache. Das OR liegt weiter von 1 entfernt als das RR; wie weit, hängt von der Häufigkeit ab (Abschnitt 3).`;
+  const lw = RR < 1, same = Math.abs(RR - 1) < 1e-9;
+  const item = (k, satz, hinweis) => `<div><dt>${k}</dt><dd><q>${satz}</q> ${hinweis}</dd></div>`;
+  $("t-rep").innerHTML = same ? "" : `<p class="rep-h">So berichten und lesen Sie die Kennzahlen</p>` +
+    item("Risikodifferenz", `Mit Programm verletzten sich ${pct(r1)}, ohne ${pct(r0)}, ein Unterschied von ${fmt(Math.abs(RD) * 100, 1)} Prozentpunkten.`, "Immer in Prozentpunkten und zusammen mit beiden Risiken angeben. Das ist der Effekt, der für die einzelne Person zählt.") +
+    item(lw ? "NNT" : "NNH", lw ? `${nnt} Spielerinnen müssen eine Saison lang das Programm absolvieren, damit eine Verletzung weniger auftritt.` : `Auf ${nnt} Spielerinnen mit Programm kommt in einer Saison eine zusätzliche Verletzung.`, "Immer mit Zeitraum und Ereignis nennen und auf eine ganze Zahl aufrunden. " + (lw ? "Je kleiner, desto wirksamer." : "Je kleiner, desto schädlicher.")) +
+    item("Relatives Risiko", `Das Verletzungsrisiko war mit Programm ${fmt(RR, 2)}-mal so hoch wie ohne, ${lw ? "eine relative Risikoreduktion" : "eine relative Risikoerhöhung"} um ${fmt(Math.abs(1 - RR) * 100, 0)} %.`, "Nie ohne das Ausgangsrisiko berichten: Dieselben " + fmt(Math.abs(1 - RR) * 100, 0) + " % können bei einem seltenen Ereignis praktisch bedeutungslos sein.") +
+    item("Odds Ratio", `Die Odds, sich zu verletzen, waren mit Programm ${fmt(OR, 2)}-mal so hoch wie ohne.`, `Nicht als „Risiko ${fmt(OR, 2)}-mal so hoch“ lesen. Das stimmt nur näherungsweise, wenn das Ereignis selten ist; hier liegt das RR bei ${fmt(RR, 2)}.`) +
+    `<p class="rep-note">Zu jeder Kennzahl gehört in einer Arbeit ein 95-%-Konfidenzintervall. Kein Effekt heißt: RD = 0, RR = 1, OR = 1.</p>`;
 }
 ["a", "b", "c", "d"].forEach(id => $(id).addEventListener("input", draw2));
 $("pre2").addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; b.dataset.t.split(",").forEach((v, i) => $("abcd"[i]).value = v); draw2(); });
