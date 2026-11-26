@@ -6,9 +6,9 @@
 <title>Die t-Test-Kaskade · Stats Lab</title>
 <meta name="description" content="Der Einstichproben-t-Test Schritt für Schritt: Hypothesen, Signal und Rauschen, t-Verteilung, kritischer Wert und p-Wert, zweiseitig und einseitig.">
 <link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="../../assets/css/base.css?v=202611261848">
+<link rel="stylesheet" href="../../assets/css/base.css?v=202611262257">
 <link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
-<link rel="stylesheet" href="t-test.css?v=202611261848">
+<link rel="stylesheet" href="t-test.css?v=202611262257">
 </head>
 <body>
 <header class="site-header">
@@ -31,7 +31,7 @@
     <a class="back" href="../../">← Alle Visualisierungen</a>
     <h1>Die t-Test-Kaskade</h1>
     <p class="byline">Dr. Jens Hüsers · Forschungsmethodik</p>
-    <p class="lede">Erfüllt eine Klinik das Kriterium? Nach Knie-TEP sollen Patientinnen und Patienten am dritten Tag im Mittel 90° Flexion erreichen. Am einfachsten t-Test, dem Einstichproben-t-Test, verfolgen wir in vier Schritten, wie aus Messwerten eine Entscheidung wird. Mit dem Schalter oben wechseln Sie jederzeit zwischen zweiseitiger und einseitiger Hypothese.</p>
+    <p class="lede">Erfüllt eine Klinik das Kriterium? Nach Knie-TEP sollen Patientinnen und Patienten am dritten Tag im Mittel <span class="mu0v">90°</span> Flexion erreichen. Am einfachsten t-Test, dem Einstichproben-t-Test, verfolgen wir in vier Schritten, wie aus Messwerten eine Entscheidung wird. Mit dem Schalter oben wechseln Sie jederzeit zwischen zweiseitiger und einseitiger Hypothese.</p>
     <p class="fict">Das Kriterium ist fiktiv und dient nur als Beispiel. Die Daten sind simuliert.</p>
   </section>
 
@@ -39,18 +39,23 @@
     <div class="ctrl ctrl-dir">
       <span class="lbl" id="dir-lbl">Hypothese</span>
       <div class="seg seg-dir" role="group" aria-labelledby="dir-lbl" id="dir">
-        <button type="button" data-dir="two" aria-pressed="true"><b>zweiseitig</b><small>H1: μ ≠ 90°</small></button>
-        <button type="button" data-dir="right" aria-pressed="false"><b>rechtsseitig</b><small>H1: μ &gt; 90°</small></button>
-        <button type="button" data-dir="left" aria-pressed="false"><b>linksseitig</b><small>H1: μ &lt; 90°</small></button>
+        <button type="button" data-dir="two" aria-pressed="true"><b>zweiseitig</b><small>H1: μ ≠ <span class="mu0v">90°</span></small></button>
+        <button type="button" data-dir="right" aria-pressed="false"><b>rechtsseitig</b><small>H1: μ &gt; <span class="mu0v">90°</span></small></button>
+        <button type="button" data-dir="left" aria-pressed="false"><b>linksseitig</b><small>H1: μ &lt; <span class="mu0v">90°</span></small></button>
       </div>
     </div>
+    <p class="mu-key"><b>μ₀</b> ist der Wert, den die Klinik laut Kriterium erreichen soll. Er steht in der Hypothese und wird vorher festgelegt. <b><span class="xb">x</span></b> ist der Mittelwert, den die Station bei ihren Patientinnen und Patienten tatsächlich gemessen hat. Der t-Test prüft, ob der Abstand zwischen beiden größer ist, als der Zufall erklären kann.</p>
     <div class="ctrl-grid">
       <div class="ctrl">
-        <div class="ctrl-head"><label for="mu">μ · Populationswert (eigentlich unbekannt)</label><output id="mu-v" class="num"></output></div>
-        <input id="mu" type="range" min="80" max="100" step="1" value="94">
+        <div class="ctrl-head"><label for="mu0">μ₀ · Vergleichswert aus H0 (Kriterium)</label><output id="mu0-v" class="num"></output></div>
+        <input id="mu0" type="range" min="80" max="100" step="1" value="90">
       </div>
       <div class="ctrl">
-        <div class="ctrl-head"><label for="sigma">σ · Streuung in der Population</label><output id="sigma-v" class="num"></output></div>
+        <div class="ctrl-head"><label for="xbar"><span class="xb">x</span> · in der Station gemessener Mittelwert</label><output id="xbar-v" class="num"></output></div>
+        <input id="xbar" type="range" min="80" max="100" step="0.1" value="94.3">
+      </div>
+      <div class="ctrl">
+        <div class="ctrl-head"><label for="sigma">s · Streuung der Messwerte in der Station</label><output id="sigma-v" class="num"></output></div>
         <input id="sigma" type="range" min="4" max="20" step="1" value="10">
       </div>
       <div class="ctrl">
@@ -67,18 +72,18 @@
       </div>
     </div>
     <div class="ctrl-row">
-      <button class="btn" type="button" id="resample">Neue Stichprobe ziehen</button>
+      <button class="btn" type="button" id="resample">Andere Einzelwerte, gleiches <span class="xb">x</span> und s</button>
       <span class="presets-lbl">Szenarien:</span>
-      <button class="chip" type="button" data-preset="h0">H0 stimmt: μ = 90°</button>
+      <button class="chip" type="button" data-preset="h0">Kein Unterschied: <span class="xb">x</span> = μ₀</button>
       <button class="chip" type="button" data-preset="edge">Grenzfall</button>
-      <button class="chip" type="button" data-preset="bad">Klinik verfehlt: μ = 86°</button>
+      <button class="chip" type="button" data-preset="bad">Klinik verfehlt: <span class="xb">x</span> = μ₀ − 4°</button>
     </div>
   </section>
 
   <section class="step" aria-labelledby="s1">
     <span class="eyebrow">Schritt 1 von 4 · Rohdaten</span>
     <h2 id="s1">Eine Stichprobe, ein Sollwert</h2>
-    <p class="text">Jeder Punkt ist eine Person. Die gestrichelte Linie ist der Sollwert μ₀ = 90°. Darunter der Mittelwert der Stichprobe mit ± einer Standardabweichung. Die Regler stellen die Population ein, die man in echten Studien nicht kennt. Sichtbar ist nur die Stichprobe.</p>
+    <p class="text">Jeder Punkt ist eine gemessene Person der Station. Die gestrichelte Linie ist der Vergleichswert μ₀ = <span class="mu0v">90°</span> aus der Hypothese. Darunter der gemessene Mittelwert x̄ mit ± einer Standardabweichung s. Beides stellen Sie oben ein.</p>
     <svg class="chart" id="raw" viewBox="0 0 920 250" role="img"></svg>
     <div class="readouts" id="raw-stats"></div>
   </section>
@@ -96,7 +101,7 @@
   <section class="step" aria-labelledby="s3" id="krit">
     <span class="eyebrow">Schritt 3 von 4 · Der kritische Wert</span>
     <h2 id="s3">Woher kommt der kritische Wert?</h2>
-    <p class="text">Stellen wir uns viele Kliniken vor, die das Kriterium genau erreichen: In der Population liegt μ bei 90°, H0 stimmt also. Jede misst n Personen und rechnet ihr t aus. Allein durch Zufall streuen diese t-Werte um null. Simulieren Sie ein paar Kliniken und sehen Sie zu, wie die t-Verteilung entsteht.</p>
+    <p class="text">Stellen wir uns viele Kliniken vor, die das Kriterium genau erreichen: In der Population liegt μ genau bei <span class="mu0v">90°</span>, H0 stimmt also. Jede misst n Personen und rechnet ihr t aus. Allein durch Zufall streuen diese t-Werte um null. Simulieren Sie ein paar Kliniken und sehen Sie zu, wie die t-Verteilung entsteht.</p>
     <div class="sim-row">
       <button class="btn" type="button" id="h0-1">1 Klinik</button>
       <button class="btn" type="button" id="h0-100">100 Kliniken</button>
@@ -129,7 +134,7 @@
   <section class="step" aria-labelledby="s4">
     <span class="eyebrow">Schritt 4 von 4 · Einordnen</span>
     <h2 id="s4">Wo liegt dieses t, wenn H0 stimmt?</h2>
-    <p class="text">Die t-Verteilung zeigt, welche t-Werte allein durch Zufall entstehen, wenn die Klinik genau 90° erreicht. Der Ablehnungsbereich kommt aus Schritt 3. Jetzt kommt das beobachtete t dazu. Der p-Wert ist die Fläche ab dem beobachteten t in Richtung von H1.</p>
+    <p class="text">Die t-Verteilung zeigt, welche t-Werte allein durch Zufall entstehen, wenn die Klinik genau <span class="mu0v">90°</span> erreicht. Der Ablehnungsbereich kommt aus Schritt 3. Jetzt kommt das beobachtete t dazu. Der p-Wert ist die Fläche ab dem beobachteten t in Richtung von H1.</p>
     <div class="chart-tools">
       <label class="check"><input type="checkbox" id="shownormal"> Standardnormalverteilung zum Vergleich</label>
       <div class="legend"><span><i class="sw" style="background:var(--alpha-fill)"></i>Ablehnungsbereich α</span><span><i class="sw" style="background:var(--pval)"></i>p-Wert</span></div>
@@ -142,8 +147,8 @@
     <details class="deep" id="ci-exkurs">
       <summary>Exkurs: p-Wert oder Konfidenzintervall?</summary>
       <div class="deep-body">
-        <p>Statt mit dem p-Wert kann man auch mit dem Konfidenzintervall entscheiden: Liegt der Vergleichswert 90° außerhalb des Intervalls, ist das Ergebnis signifikant. Beide Wege nutzen denselben Mittelwert, denselben Standardfehler und denselben kritischen t-Wert. Deshalb führen sie <b>immer zur selben Entscheidung</b>. Das Konfidenzintervall ist genau die Menge aller Werte, die der Test nicht verwerfen würde.</p>
-        <svg class="chart" id="ci-line" viewBox="0 0 920 150" role="img" aria-label="Konfidenzintervall und Vergleichswert 90 Grad"></svg>
+        <p>Statt mit dem p-Wert kann man auch mit dem Konfidenzintervall entscheiden: Liegt der Vergleichswert μ₀ = <span class="mu0v">90°</span> außerhalb des Intervalls, ist das Ergebnis signifikant. Beide Wege nutzen denselben Mittelwert, denselben Standardfehler und denselben kritischen t-Wert. Deshalb führen sie <b>immer zur selben Entscheidung</b>. Das Konfidenzintervall ist genau die Menge aller Werte, die der Test nicht verwerfen würde.</p>
+        <svg class="chart" id="ci-line" viewBox="0 0 920 150" role="img" aria-label="Konfidenzintervall und Vergleichswert"></svg>
         <div class="formula" id="ci-f"></div>
         <p class="callout" id="ci-text"></p>
         <p class="note">Wichtig bei einseitigen Tests: Zu einem einseitigen Test mit α = 5 % gehört nicht das 95-%-Intervall, sondern eine einseitige Grenze. Sie entspricht der passenden Grenze des zweiseitigen 90-%-Intervalls. Probieren Sie den Grenzfall in Schritt 1 mit „rechtsseitig“. Und wer zwei Gruppen vergleicht, muss das Intervall der Differenz betrachten, nicht die Überlappung zweier Einzelintervalle (siehe <a href="../t-test-varianten/#acc-2">ungepaarter t-Test</a>).</p>
@@ -169,8 +174,8 @@
   </div>
 </footer>
 <script src="../../assets/vendor/katex/katex.min.js"></script>
-<script src="../../assets/js/tex.js?v=202611261848"></script>
-<script src="t-test.js?v=202611261848"></script>
-<script src="../../assets/js/path.js?v=202611261848"></script>
+<script src="../../assets/js/tex.js?v=202611262257"></script>
+<script src="t-test.js?v=202611262257"></script>
+<script src="../../assets/js/path.js?v=202611262257"></script>
 </body>
 </html>

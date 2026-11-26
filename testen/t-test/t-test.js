@@ -1,5 +1,5 @@
 /* t-Test-Kaskade · Stats Lab
-   Einstichproben-t-Test am Beispiel Knie-TEP (fiktives Kriterium 90° Flexion).
+   Einstichproben-t-Test am Beispiel Knie-TEP (fiktives Kriterium, Vergleichswert μ₀ und gemessener Mittelwert x̄ einstellbar).
    Hypothese zweiseitig, rechtsseitig oder linksseitig umschaltbar; alles im Browser gerechnet. */
 (() => {
 "use strict";
@@ -44,33 +44,29 @@ function mulberry32(a) { return function () { a |= 0; a = a + 0x6D2B79F5 | 0; le
 function zs(seed, n) { const r = mulberry32(seed), o = []; while (o.length < n) { let u = 0; while (!u) u = r(); const v = r(), m = Math.sqrt(-2 * Math.log(u)); o.push(m * Math.cos(2 * Math.PI * v), m * Math.sin(2 * Math.PI * v)); } return o.slice(0, n); }
 
 // ---------- Zustand ----------
-const MU0 = 90, NMAX = 60;
-const S = { mu: 94, sigma: 10, n: 20, alpha: 0.05, dir: "two", seed: 1, showNormal: false };
+const NMAX = 60;
+const S = { mu0: 90, xbar: 94.3, sigma: 10, n: 20, alpha: 0.05, dir: "two", seed: 1, showNormal: false };
 const $ = id => document.getElementById(id);
 const fmt = (x, d = 1) => x.toLocaleString("de-DE", { minimumFractionDigits: d, maximumFractionDigits: d }).replace("-", "−");
 const fmtP = p => p < 0.001 ? "< 0,001" : fmt(p, 3);
 const pEq = p => p < 0.001 ? "< 0,001" : "= " + fmt(p, 3);
 const mean = a => a.reduce((s, x) => s + x, 0) / a.length;
 const sdv = (a, m) => Math.sqrt(a.reduce((s, x) => s + (x - m) ** 2, 0) / (a.length - 1));
-const DIRS = {
-  two: { name: "zweiseitig", h0: "μ = 90°", h1: "μ ≠ 90°", who: "Neutrale Frage: Weicht die Klinik vom Kriterium ab, egal in welche Richtung?", h0s: "Die Klinik liegt genau beim Kriterium.", h1s: "Die Klinik weicht ab, nach oben oder unten." },
-  right: { name: "rechtsseitig", h0: "μ ≤ 90°", h1: "μ > 90°", who: "Die Klinik will zeigen, dass sie das Kriterium erfüllt.", h0s: "Die Klinik erfüllt das Kriterium nicht.", h1s: "Die Klinik erfüllt das Kriterium." },
-  left: { name: "linksseitig", h0: "μ ≥ 90°", h1: "μ < 90°", who: "Eine Prüfstelle will zeigen, dass die Klinik das Kriterium verfehlt.", h0s: "Die Klinik erfüllt das Kriterium.", h1s: "Die Klinik verfehlt das Kriterium." }
-};
+const dirsFor = m => ({
+  two: { name: "zweiseitig", h0: `μ = ${m}°`, h1: `μ ≠ ${m}°`, who: "Neutrale Frage: Weicht die Klinik vom Kriterium ab, egal in welche Richtung?", h0s: "Die Klinik liegt genau beim Kriterium.", h1s: "Die Klinik weicht ab, nach oben oder unten." },
+  right: { name: "rechtsseitig", h0: `μ ≤ ${m}°`, h1: `μ > ${m}°`, who: "Die Klinik will zeigen, dass sie das Kriterium erfüllt.", h0s: "Die Klinik erfüllt das Kriterium nicht.", h1s: "Die Klinik erfüllt das Kriterium." },
+  left: { name: "linksseitig", h0: `μ ≥ ${m}°`, h1: `μ < ${m}°`, who: "Eine Prüfstelle will zeigen, dass die Klinik das Kriterium verfehlt.", h0s: "Die Klinik erfüllt das Kriterium.", h1s: "Die Klinik verfehlt das Kriterium." }
+});
 // je Richtung: kritische Werte und p-Wert
 function testFor(dir, t, df, a) {
   if (dir === "two") { const c = tinv(1 - a / 2, df); return { crit: [-c, c], p: 2 * (1 - tcdf(Math.abs(t), df)), rej: Math.abs(t) > c, critTxt: "±" + fmt(c, 2) }; }
   if (dir === "right") { const c = tinv(1 - a, df); return { crit: [c], p: 1 - tcdf(t, df), rej: t > c, critTxt: fmt(c, 2) }; }
   const c = tinv(a, df); return { crit: [c], p: tcdf(t, df), rej: t < c, critTxt: fmt(c, 2) };
 }
-function sample(seed = S.seed, mu = S.mu, sigma = S.sigma, n = S.n) { return zs(seed, NMAX).slice(0, n).map(z => Math.round(mu + sigma * z)); }
+function sample(seed = S.seed, xbar = S.xbar, s = S.sigma, n = S.n) { const z = zs(seed, NMAX).slice(0, n), m = mean(z), sd = sdv(z, m); return z.map(v => xbar + s * (v - m) / sd); }
 function compute() {
-  const x = sample(), n = x.length, m = mean(x), s = sdv(x, m), se = s / Math.sqrt(n), df = n - 1, t = (m - MU0) / se;
-  return { x, n, m, s, se, df, t, diff: m - MU0, T: testFor(S.dir, t, df, S.alpha) };
-}
-function findSeed(ok, mu = S.mu, sigma = S.sigma, n = S.n) {
-  for (let sd = 1; sd < 20000; sd++) { const x = sample(sd, mu, sigma, n), m = mean(x), se = sdv(x, m) / Math.sqrt(n), t = (m - MU0) / se; if (ok(t, n - 1, m)) return sd; }
-  return 1;
+  const x = sample(), n = x.length, m = mean(x), s = sdv(x, m), se = s / Math.sqrt(n), df = n - 1, t = (m - S.mu0) / se;
+  return { x, n, m, s, se, df, t, diff: m - S.mu0, T: testFor(S.dir, t, df, S.alpha) };
 }
 
 // ---------- SVG-Helfer ----------
@@ -89,7 +85,7 @@ function drawRaw(c) {
   const lo = 40, hi = 140, sx = v => L + (v - lo) / (hi - lo) * (R - L), base = 168;
   let s = "";
   for (const v of ticks(lo, hi, 10)) s += `<line x1="${sx(v)}" x2="${sx(v)}" y1="10" y2="${base + 4}" stroke="var(--grid)"/><text x="${sx(v)}" y="${base + 66}" text-anchor="middle">${v}°</text>`;
-  s += `<line x1="${sx(MU0)}" x2="${sx(MU0)}" y1="6" y2="${base + 48}" stroke="var(--alpha-ink)" stroke-width="2" stroke-dasharray="6 4"/><text x="${sx(MU0) - 8}" y="18" text-anchor="end" style="fill:var(--alpha-ink)">Sollwert μ₀ = 90°</text>`;
+  s += `<line x1="${sx(S.mu0)}" x2="${sx(S.mu0)}" y1="6" y2="${base + 48}" stroke="var(--alpha-ink)" stroke-width="2" stroke-dasharray="6 4"/><text x="${sx(S.mu0) - 8}" y="18" text-anchor="end" style="fill:var(--alpha-ink)">Vergleichswert μ₀ = ${S.mu0}°</text>`;
   const seen = {}, step = c.n > 40 ? 7 : 9;
   c.x.forEach(v => { const k = seen[v] = (seen[v] ?? -1) + 1; s += `<circle cx="${sx(Math.max(lo, Math.min(hi, v)))}" cy="${base - 6 - k * step}" r="${c.n > 40 ? 3.6 : 4.6}" fill="var(--pal-4)" fill-opacity=".85"/>`; });
   s += `<line x1="${L}" x2="${R}" y1="${base}" y2="${base}" stroke="var(--line)"/>`;
@@ -98,32 +94,32 @@ function drawRaw(c) {
   [c.m - c.s, c.m + c.s].forEach(v => s += `<line x1="${sx(v)}" x2="${sx(v)}" y1="${y - 5}" y2="${y + 5}" stroke="var(--therapie)" stroke-width="3"/>`);
   s += `<circle cx="${sx(c.m)}" cy="${y}" r="7" fill="var(--therapie)"/><text class="strong" x="${sx(c.m + c.s) + 10}" y="${y + 5}">x̄ = ${fmt(c.m)}° · s = ${fmt(c.s)}°</text>`;
   $("raw").innerHTML = s;
-  $("raw").setAttribute("aria-label", `${c.n} Messwerte, Mittelwert ${fmt(c.m)} Grad, Sollwert 90 Grad`);
-  $("raw-stats").innerHTML = readout("Mittelwert x̄", fmt(c.m) + "°", "r-therapie") + readout("Standardabweichung s", fmt(c.s) + "°") +
-    readout("Stichprobengröße n", String(c.n)) + readout("Abstand x̄ − 90°", (c.diff >= 0 ? "+" : "") + fmt(c.diff) + "°", "r-therapie");
+  $("raw").setAttribute("aria-label", `${c.n} Messwerte, Mittelwert ${fmt(c.m)} Grad, Vergleichswert ${S.mu0} Grad`);
+  $("raw-stats").innerHTML = readout("gemessener Mittelwert x̄", fmt(c.m) + "°", "r-therapie") + readout("Standardabweichung s", fmt(c.s) + "°") +
+    readout("Stichprobengröße n", String(c.n)) + readout(`Abstand x̄ − μ₀ (${S.mu0}°)`, (c.diff >= 0 ? "+" : "") + fmt(c.diff) + "°", "r-therapie");
 }
 
 // ---------- 2 Hypothesen und t ----------
 function drawHyp() {
-  const d = DIRS[S.dir];
+  const d = dirsFor(S.mu0)[S.dir];
   $("hyp").innerHTML = `<p class="who">${d.who}</p><div class="hyp-grid"><div><span class="k">H0</span><div class="v">${d.h0}</div><span class="s">${d.h0s}</span></div><div><span class="k">H1, soll gezeigt werden</span><div class="v">${d.h1}</div><span class="s">${d.h1s}</span></div></div>`;
 }
 function drawRuler(c) {
   const fbF = `t = (<span class="ink-therapie"><b>x̄ − μ₀</b></span>) / (<span class="ink-kontrolle"><b>s / √n</b></span>)` +
-    ` = (<span class="ink-therapie">${fmt(c.m)} − 90</span>) / (<span class="ink-kontrolle">${fmt(c.s)} / √${c.n}</span>)` +
+    ` = (<span class="ink-therapie">${fmt(c.m)} − ${S.mu0}</span>) / (<span class="ink-kontrolle">${fmt(c.s)} / √${c.n}</span>)` +
     ` = <span class="ink-therapie">${fmt(c.diff)}</span> / <span class="ink-kontrolle">${fmt(c.se, 2)}</span> = <b>${fmt(c.t, 2)}</b><br><span class="df-line">Freiheitsgrade: df = n − 1 = ${c.df}</span>`;
-  $("formula").innerHTML = window.katex ? texBlock(String.raw`\begin{aligned} t &= \dfrac{\bar{x} - \mu_0}{s / \sqrt{n}} && \textcolor{gray}{\small\text{Formel}} \\[6pt] &= \dfrac{${dz(c.m, 1)} - 90}{${dz(c.s, 1)} / \sqrt{${c.n}}} && \textcolor{gray}{\small\text{Werte einsetzen}} \\[6pt] &= \dfrac{${dz(c.diff, 1)}}{${dz(c.se, 2)}} && \textcolor{gray}{\small\text{Differenz durch SE}} \\[6pt] &= \mathbf{${dz(c.t, 2)}} \end{aligned}`) + `<span class="df-line">${tex(String.raw`df = n - 1 = ${c.df}`)}</span>` : fbF;
-  const lo = Math.min(MU0, c.m), hi = Math.max(MU0, c.m);
+  $("formula").innerHTML = window.katex ? texBlock(String.raw`\begin{aligned} t &= \dfrac{\bar{x} - \mu_0}{s / \sqrt{n}} && \textcolor{gray}{\small\text{Formel}} \\[6pt] &= \dfrac{${dz(c.m, 1)} - ${S.mu0}}{${dz(c.s, 1)} / \sqrt{${c.n}}} && \textcolor{gray}{\small\text{Werte einsetzen}} \\[6pt] &= \dfrac{${dz(c.diff, 1)}}{${dz(c.se, 2)}} && \textcolor{gray}{\small\text{Differenz durch SE}} \\[6pt] &= \mathbf{${dz(c.t, 2)}} \end{aligned}`) + `<span class="df-line">${tex(String.raw`df = n - 1 = ${c.df}`)}</span>` : fbF;
+  const lo = Math.min(S.mu0, c.m), hi = Math.max(S.mu0, c.m);
   const span = Math.max(hi - lo, c.se * 2, 4), pad = span * 0.25, a = lo - pad, b = lo + span + pad;
   const sx = v => L + (v - a) / (b - a) * (R - L);
   let s = "";
   for (const v of ticks(a, b, 10)) s += `<line x1="${sx(v)}" x2="${sx(v)}" y1="14" y2="96" stroke="var(--grid)"/><text x="${sx(v)}" y="116" text-anchor="middle">${fmt(v, v % 1 ? 1 : 0)}°</text>`;
   const y = 34;
-  s += `<line x1="${sx(MU0)}" x2="${sx(c.m)}" y1="${y}" y2="${y}" stroke="var(--therapie)" stroke-width="4"/>`;
-  s += `<circle cx="${sx(MU0)}" cy="${y}" r="7" fill="var(--alpha-ink)"/><circle cx="${sx(c.m)}" cy="${y}" r="7" fill="var(--therapie)"/>`;
-  s += `<text x="${(sx(MU0) + sx(c.m)) / 2}" y="${y - 13}" text-anchor="middle" class="strong">Signal ${fmt(c.diff)}°</text>`;
+  s += `<line x1="${sx(S.mu0)}" x2="${sx(c.m)}" y1="${y}" y2="${y}" stroke="var(--therapie)" stroke-width="4"/>`;
+  s += `<circle cx="${sx(S.mu0)}" cy="${y}" r="7" fill="var(--alpha-ink)"/><circle cx="${sx(c.m)}" cy="${y}" r="7" fill="var(--therapie)"/>`;
+  s += `<text x="${(sx(S.mu0) + sx(c.m)) / 2}" y="${y - 13}" text-anchor="middle" class="strong">Signal ${fmt(c.diff)}°</text>`;
   const dir = c.diff >= 0 ? 1 : -1, full = Math.floor(Math.abs(c.t)), y2 = 56, h = 20;
-  let x0 = MU0;
+  let x0 = S.mu0;
   for (let i = 0; i < full && i < 80; i++) { const x1 = x0 + dir * c.se; s += `<rect x="${Math.min(sx(x0), sx(x1))}" y="${y2}" width="${Math.abs(sx(x1) - sx(x0))}" height="${h}" fill="var(--accent-soft)" fill-opacity="${i % 2 ? .45 : .8}"/>`; x0 = x1; }
   const rest = Math.abs(c.t) - full;
   if (rest > 0.01) { const x1 = x0 + dir * c.se * rest; s += `<rect x="${Math.min(sx(x0), sx(x1))}" y="${y2}" width="${Math.abs(sx(x1) - sx(x0))}" height="${h}" fill="none" stroke="var(--accent-soft)" stroke-dasharray="3 2"/>`; }
@@ -165,11 +161,11 @@ function drawT(c) {
   if (S.showNormal) s += `<text x="${L}" y="${top + 12}">gestrichelt: Standardnormalverteilung</text>`;
   s += `<text x="${R}" y="${base + 38}" text-anchor="end">t-Wert · df = ${c.df}</text>`;
   $("tdist").innerHTML = s;
-  $("tdist").setAttribute("aria-label", `t-Verteilung mit ${c.df} Freiheitsgraden, ${DIRS[S.dir].name}, beobachtetes t ${fmt(c.t, 2)}, p ${fmtP(T.p)}`);
-  $("t-stats").innerHTML = readout("t-Wert", fmt(c.t, 2)) + readout("kritisches t", T.critTxt, "r-alpha") + readout(`p-Wert (${DIRS[S.dir].name})`, fmtP(T.p), "r-p") +
+  $("tdist").setAttribute("aria-label", `t-Verteilung mit ${c.df} Freiheitsgraden, ${dirsFor(S.mu0)[S.dir].name}, beobachtetes t ${fmt(c.t, 2)}, p ${fmtP(T.p)}`);
+  $("t-stats").innerHTML = readout("t-Wert", fmt(c.t, 2)) + readout("kritisches t", T.critTxt, "r-alpha") + readout(`p-Wert (${dirsFor(S.mu0)[S.dir].name})`, fmtP(T.p), "r-p") +
     readout(`Entscheidung bei α = ${fmt(S.alpha, 2)}`, T.rej ? "H0 verwerfen" : "H0 beibehalten", "r-decision" + (T.rej ? " sig" : ""));
   // Vergleich der drei Richtungen
-  const rows = ["two", "right", "left"].map(k => { const r = testFor(k, c.t, c.df, S.alpha); return `<tr class="${k === S.dir ? "cur" : ""}"><td><b>${DIRS[k].name}</b><br><span class="muted">H1: ${DIRS[k].h1}</span></td><td>${r.critTxt}</td><td>${k === "two" ? tex("2\\,\\bigl(1 - F(|t|)\\bigr)", "2 · (1 − F(|t|))") : k === "right" ? tex("1 - F(t)", "1 − F(t)") : tex("F(t)", "F(t)")}</td><td>${fmtP(r.p)}</td><td>${r.rej ? "<b>H0 verwerfen</b>" : "H0 beibehalten"}</td></tr>`; });
+  const rows = ["two", "right", "left"].map(k => { const r = testFor(k, c.t, c.df, S.alpha); return `<tr class="${k === S.dir ? "cur" : ""}"><td><b>${dirsFor(S.mu0)[k].name}</b><br><span class="muted">H1: ${dirsFor(S.mu0)[k].h1}</span></td><td>${r.critTxt}</td><td>${k === "two" ? tex("2\\,\\bigl(1 - F(|t|)\\bigr)", "2 · (1 − F(|t|))") : k === "right" ? tex("1 - F(t)", "1 − F(t)") : tex("F(t)", "F(t)")}</td><td>${fmtP(r.p)}</td><td>${r.rej ? "<b>H0 verwerfen</b>" : "H0 beibehalten"}</td></tr>`; });
   $("dir-tab").innerHTML = `<thead><tr><th>Hypothese</th><th>kritisches t</th><th>Formel für p</th><th>p-Wert</th><th>Entscheidung</th></tr></thead><tbody>${rows.join("")}</tbody>`;
   const r2 = testFor("two", c.t, c.df, S.alpha), rR = testFor("right", c.t, c.df, S.alpha), rL = testFor("left", c.t, c.df, S.alpha);
   const good = c.t >= 0 ? rR : rL, wrong = c.t >= 0 ? rL : rR, goodName = c.t >= 0 ? "rechtsseitig" : "linksseitig", wrongName = c.t >= 0 ? "linksseitig" : "rechtsseitig";
@@ -207,7 +203,7 @@ function drawCdf(c) {
   s += `<text x="${(accL + accR) / 2}" y="${dir === "left" ? base - 30 : top + 46}" text-anchor="middle">Annahmebereich</text>`;
   s += `<text x="${PR}" y="${base + 52}" text-anchor="end">t-Wert · df = ${c.df}</text><text x="18" y="${(top + base) / 2}" transform="rotate(-90 18 ${(top + base) / 2})" text-anchor="middle">F(t)</text>`;
   $("tcdf").innerHTML = s;
-  $("tcdf").setAttribute("aria-label", `Verteilungsfunktion der t-Verteilung, ${DIRS[dir].name}, kritisches t ${T.critTxt}, p ${fmtP(T.p)}`);
+  $("tcdf").setAttribute("aria-label", `Verteilungsfunktion der t-Verteilung, ${dirsFor(S.mu0)[dir].name}, kritisches t ${T.critTxt}, p ${fmtP(T.p)}`);
   const pe = pEq(T.p), dec = T.rej ? "H0 verwerfen" : "H0 beibehalten", cmp = T.p < a0 ? "<" : "≥";
   let st;
   const tp = T.p < 0.001 ? "< 0{,}001" : "= " + dz(T.p, 3), cmpT = T.p < a0 ? "<" : "\\ge", decT = `\\text{${dec}}`;
@@ -219,13 +215,13 @@ function drawCdf(c) {
     ["p-Wert vorwärts ablesen.", "Vom beobachteten |t| hinauf zur Kurve. Was rechts übrig bleibt, zählt doppelt, weil beide Ränder zählen.", String.raw`p = 2 \cdot \bigl(1 - F(|t|)\bigr) = 2 \cdot (1 - ${dz(Ft, 4)}) ${tp}`],
     ["Entscheiden.", "Beide Wege führen zum selben Ergebnis.", String.raw`|t| = ${dz(tObs, 2)} ${T.rej ? ">" : "\\le"} ${c2} \ \text{und}\ p ${tp} ${cmpT} \alpha = ${dz(a0, 2)} \;\Rightarrow\; ${decT}`]];
   else if (dir === "right") st = [
-    ["Annahmebereich festlegen.", "H1 sagt μ > 90° voraus. Das ganze α kommt deshalb an den rechten Rand, links gibt es keinen Ablehnungsbereich.", String.raw`F(t) \le ${dz(1 - a0, 3)}`],
+    ["Annahmebereich festlegen.", `H1 sagt μ > ${S.mu0}° voraus. Das ganze α kommt deshalb an den rechten Rand, links gibt es keinen Ablehnungsbereich.`, String.raw`F(t) \le ${dz(1 - a0, 3)}`],
     ["Kritischen Wert rückwärts ablesen.", "Er liegt näher an der Mitte als zweiseitig, weil α nicht geteilt wird.", String.raw`t_{\text{krit}} = F^{-1}\!\left(${dz(1 - a0, 3)};\ df = ${c.df}\right) = ${c3}`],
     ["Bereiche benennen.", "", String.raw`\text{Annahme: } t \le ${c2} \qquad \text{Ablehnung: } t > ${c2}`],
     ["p-Wert vorwärts ablesen.", "Nur die Fläche rechts vom beobachteten t zählt, ohne Faktor 2.", String.raw`p = 1 - F(t) = 1 - F(${dz(c.t, 2)}) = 1 - ${dz(Ft, 4)} ${tp}`],
     ["Entscheiden.", "", String.raw`t = ${dz(c.t, 2)} ${T.rej ? ">" : "\\le"} ${c2} \ \text{und}\ p ${tp} ${cmpT} \alpha = ${dz(a0, 2)} \;\Rightarrow\; ${decT}`]];
   else st = [
-    ["Annahmebereich festlegen.", "H1 sagt μ < 90° voraus. Das ganze α kommt deshalb an den linken Rand, rechts gibt es keinen Ablehnungsbereich.", String.raw`F(t) \ge ${dz(a0, 3)}`],
+    ["Annahmebereich festlegen.", `H1 sagt μ < ${S.mu0}° voraus. Das ganze α kommt deshalb an den linken Rand, rechts gibt es keinen Ablehnungsbereich.`, String.raw`F(t) \ge ${dz(a0, 3)}`],
     ["Kritischen Wert rückwärts ablesen.", "Gesucht ist das t, bei dem F(t) erst α erreicht. Er ist negativ.", String.raw`t_{\text{krit}} = F^{-1}\!\left(${dz(a0, 3)};\ df = ${c.df}\right) = ${c3}`],
     ["Bereiche benennen.", "", String.raw`\text{Annahme: } t \ge ${c2} \qquad \text{Ablehnung: } t < ${c2}`],
     ["p-Wert vorwärts ablesen.", "Nur die Fläche links vom beobachteten t zählt: Das ist F(t) selbst.", String.raw`p = F(t) = F(${dz(c.t, 2)}) ${tp}`],
@@ -240,7 +236,7 @@ const randn = () => { let u = 0, v = 0; while (!u) u = Math.random(); while (!v)
 S.crit = 1.2;
 function simH0(k) {
   const n = S.n;
-  for (let j = 0; j < k; j++) { let sm = 0, q = 0; for (let i = 0; i < n; i++) { const x = MU0 + S.sigma * randn(); sm += x; q += x * x; } const m = sm / n, sd = Math.sqrt((q - n * m * m) / (n - 1)); H.last = (m - MU0) / (sd / Math.sqrt(n)); H.ts.push(H.last); }
+  for (let j = 0; j < k; j++) { let sm = 0, q = 0; for (let i = 0; i < n; i++) { const x = S.mu0 + S.sigma * randn(); sm += x; q += x * x; } const m = sm / n, sd = Math.sqrt((q - n * m * m) / (n - 1)); H.last = (m - S.mu0) / (sd / Math.sqrt(n)); H.ts.push(H.last); }
   drawH0();
 }
 const tailArea = (c, df) => S.dir === "two" ? 2 * (1 - tcdf(c, df)) : 1 - tcdf(c, df);
@@ -272,7 +268,7 @@ function drawH0() {
     g += `<text x="${x + (v > 0 ? 12 : -12)}" y="${top + 4}" text-anchor="${v > 0 ? "start" : "end"}" style="fill:var(--alpha-ink)" class="strong">${fmt(v, 2)}</text>`;
     g += `<text x="${x + (v > 0 ? 12 : -12)}" y="${top + 22}" text-anchor="${v > 0 ? "start" : "end"}" style="fill:var(--alpha-ink)">Fläche ${fmt(each * 100, 1)} %</text>`;
   });
-  g += `<text x="${r}" y="${base + 40}" text-anchor="end">t-Werte der Kliniken mit μ = 90° · df = ${df}</text>`;
+  g += `<text x="${r}" y="${base + 40}" text-anchor="end">t-Werte der Kliniken mit μ = ${S.mu0}° · df = ${df}</text>`;
   if (!N) g += `<text x="${sx(0)}" y="${top + 60}" text-anchor="middle">Noch keine Klinik simuliert. Die Kurve zeigt, was herauskommen wird.</text>`;
   $("h0sim").innerHTML = g;
   // Kennzahlen
@@ -309,7 +305,7 @@ function drawTable(c) {
   h += `<tr class="inf"><th>∞</th>${TAB_A2.map((v, i) => { const z = tinv(1 - v / 2, 100000); return `<td class="${i === col ? "hc" : ""}">${fmt(z, 3)}</td>`; }).join("")}</tr></tbody>`;
   $("ttab").innerHTML = h;
   const val = tinv(1 - colA2 / 2, df);
-  $("ttab-note").innerHTML = `Ihr Fall: df = ${df}, α = ${fmt(S.alpha, 2)} ${DIRS[S.dir].name} → Spalte „${S.dir === "two" ? "zweiseitig" : "einseitig"} ${fmt(S.alpha, 2)}“ → <b>${S.dir === "two" ? "±" : S.dir === "left" ? "−" : ""}${fmt(val, 3)}</b>.${S.dir === "left" ? " Die Tabelle listet nur positive Werte, linksseitig nimmt man das Minus dazu." : ""}${df > 30 && ![40, 50, 60, 100].includes(df) ? " In gedruckten Tabellen fehlt diese Zeile oft, dann nimmt man die nächstkleinere (strenger)." : ""}`;
+  $("ttab-note").innerHTML = `Ihr Fall: df = ${df}, α = ${fmt(S.alpha, 2)} ${dirsFor(S.mu0)[S.dir].name} → Spalte „${S.dir === "two" ? "zweiseitig" : "einseitig"} ${fmt(S.alpha, 2)}“ → <b>${S.dir === "two" ? "±" : S.dir === "left" ? "−" : ""}${fmt(val, 3)}</b>.${S.dir === "left" ? " Die Tabelle listet nur positive Werte, linksseitig nimmt man das Minus dazu." : ""}${df > 30 && ![40, 50, 60, 100].includes(df) ? " In gedruckten Tabellen fehlt diese Zeile oft, dann nimmt man die nächstkleinere (strenger)." : ""}`;
   const wrap = $("ttab-wrap"), row = wrap.querySelector("tr.hr");
   if (row && wrap.offsetParent) wrap.scrollTop = row.offsetTop - wrap.clientHeight / 2;
 }
@@ -325,12 +321,12 @@ function drawCI(c) {
   if (dir === "two") { ci = two; lab = `${lvl(a)}-Konfidenzintervall`; }
   else if (dir === "right") { ci = [c.m - t1 * c.se, Infinity]; lab = `einseitige untere ${lvl(a)}-Grenze (= untere Grenze des ${lvl(2 * a)}-Intervalls)`; }
   else { ci = [-Infinity, c.m + t1 * c.se]; lab = `einseitige obere ${lvl(a)}-Grenze (= obere Grenze des ${lvl(2 * a)}-Intervalls)`; }
-  const inside = MU0 >= ci[0] && MU0 <= ci[1];
-  const lo = Math.min(80, Math.floor(Math.min(two[0], c.m - 3 * c.se) - 2)), hi = Math.max(100, Math.ceil(Math.max(two[1], c.m + 3 * c.se) + 2));
+  const inside = S.mu0 >= ci[0] && S.mu0 <= ci[1];
+  const lo = Math.min(S.mu0 - 10, Math.floor(Math.min(two[0], c.m - 3 * c.se) - 2)), hi = Math.max(S.mu0 + 10, Math.ceil(Math.max(two[1], c.m + 3 * c.se) + 2));
   const L = 40, R = 880, sx = v => L + (Math.max(lo, Math.min(hi, v)) - lo) / (hi - lo) * (R - L), y1 = 52, y2 = 96, base = 124;
   let s = "";
   for (let v = Math.ceil(lo / 5) * 5; v <= hi; v += 5) s += `<line x1="${sx(v)}" x2="${sx(v)}" y1="20" y2="${base}" stroke="var(--grid)"/><text x="${sx(v)}" y="${base + 18}" text-anchor="middle">${v}°</text>`;
-  s += `<line x1="${sx(MU0)}" x2="${sx(MU0)}" y1="14" y2="${base}" stroke="var(--alpha-ink)" stroke-width="2" stroke-dasharray="6 4"/><text x="${sx(MU0) + 6}" y="16" style="fill:var(--alpha-ink)" class="strong">μ₀ = 90°</text>`;
+  s += `<line x1="${sx(S.mu0)}" x2="${sx(S.mu0)}" y1="14" y2="${base}" stroke="var(--alpha-ink)" stroke-width="2" stroke-dasharray="6 4"/><text x="${sx(S.mu0) + 6}" y="16" style="fill:var(--alpha-ink)" class="strong">μ₀ = ${S.mu0}°</text>`;
   const bar = (iv, y, col, w, txt, dash) => `<line x1="${sx(iv[0])}" x2="${sx(iv[1])}" y1="${y}" y2="${y}" stroke="${col}" stroke-width="${w}" stroke-linecap="round"${dash ? ' stroke-dasharray="2 8"' : ""}/>` + (isFinite(iv[0]) ? "" : `<text x="${sx(iv[0]) - 4}" y="${y + 5}" text-anchor="end" style="fill:${col}">←</text>`) + (isFinite(iv[1]) ? "" : `<text x="${sx(iv[1]) + 4}" y="${y + 5}" style="fill:${col}">→</text>`) + `<circle cx="${sx(c.m)}" cy="${y}" r="6" fill="${col}"/><text x="${L}" y="${y - 12}" style="fill:${col};paint-order:stroke;stroke:var(--surface);stroke-width:5px" class="strong">${txt}</text>`;
   s += bar(ci, y1, inside ? "var(--muted)" : "var(--therapie)", 7, lab);
   if (dir !== "two") s += bar(two, y2, "var(--muted)", 3, `zum Vergleich: zweiseitiges ${lvl(a)}-Intervall`, false);
@@ -343,30 +339,29 @@ function drawCI(c) {
     : String.raw`\begin{aligned} \text{Obergrenze} &= \bar{x} + t_{\text{krit}} \cdot SE \\[4pt] &= ${dz(c.m, 1)} + ${dz(t1, 2)} \cdot ${dz(c.se, 2)} \\[4pt] &= ${dz(ci[1], 1)} \end{aligned}`);
   const pTxt = `p = ${fmtP(c.T.p)} ${c.T.rej ? "<" : "≥"} α = ${fmt(a, a < 0.05 ? 3 : 2)}`;
   const where = dir === "two" ? `${inside ? "<b>innerhalb</b>" : "<b>außerhalb</b>"} des Intervalls ${ciTxt}` : dir === "right" ? (inside ? `<b>oberhalb</b> der unteren Grenze ${f(ci[0])}°, also im Intervall` : `<b>unterhalb</b> der unteren Grenze ${f(ci[0])}°, also außerhalb`) : (inside ? `<b>unterhalb</b> der oberen Grenze ${f(ci[1])}°, also im Intervall` : `<b>oberhalb</b> der oberen Grenze ${f(ci[1])}°, also außerhalb`);
-  let txt = `${pTxt}: ${c.T.rej ? "signifikant" : "nicht signifikant"}. Passend dazu liegt 90° ${where}.`;
-  if (dir !== "two") { const in2 = MU0 >= two[0] && MU0 <= two[1]; if (in2 !== inside) txt += ` Achtung: Das zweiseitige ${lvl(a)}-Intervall ${in2 ? "enthält" : "enthält nicht"} die 90°. Wer es zum einseitigen Test heranzieht, kommt zu einem anderen Ergebnis.`; }
+  let txt = `${pTxt}: ${c.T.rej ? "signifikant" : "nicht signifikant"}. Passend dazu liegt μ₀ = ${S.mu0}° ${where}.`;
+  if (dir !== "two") { const in2 = S.mu0 >= two[0] && S.mu0 <= two[1]; if (in2 !== inside) txt += ` Achtung: Das zweiseitige ${lvl(a)}-Intervall ${in2 ? "enthält" : "enthält nicht"} μ₀ = ${S.mu0}°. Wer es zum einseitigen Test heranzieht, kommt zu einem anderen Ergebnis.`; }
   $("ci-text").innerHTML = txt;
 }
 function render() {
-  $("mu-v").textContent = S.mu + "°"; $("sigma-v").textContent = S.sigma + "°"; $("n-v").textContent = `${S.n} (df ${S.n - 1})`;
+  $("mu0-v").textContent = S.mu0 + "°"; $("xbar-v").textContent = fmt(S.xbar) + "°"; document.querySelectorAll(".mu0v").forEach(e => e.textContent = S.mu0 + "°"); $("sigma-v").textContent = S.sigma + "°"; $("n-v").textContent = `${S.n} (df ${S.n - 1})`;
   const c = compute(); drawRaw(c); drawHyp(); drawRuler(c); drawH0(); drawTable(c); drawT(c); drawCdf(c); drawCI(c);
 }
-const syncInputs = () => { $("mu").value = S.mu; $("sigma").value = S.sigma; $("n").value = S.n; };
-[["mu", "mu"], ["sigma", "sigma"], ["n", "n"]].forEach(([id, k]) => $(id).addEventListener("input", e => { S[k] = +e.target.value; render(); }));
+const syncInputs = () => { $("mu0").value = S.mu0; $("xbar").value = S.xbar; $("sigma").value = S.sigma; $("n").value = S.n; };
+[["mu0", "mu0"], ["xbar", "xbar"], ["sigma", "sigma"], ["n", "n"]].forEach(([id, k]) => $(id).addEventListener("input", e => { S[k] = +e.target.value; render(); }));
 document.querySelectorAll("[data-alpha]").forEach(b => b.addEventListener("click", () => { S.alpha = +b.dataset.alpha; document.querySelectorAll("[data-alpha]").forEach(x => x.setAttribute("aria-pressed", x === b)); render(); }));
 document.querySelectorAll("[data-dir]").forEach(b => b.addEventListener("click", () => { S.dir = b.dataset.dir; document.querySelectorAll("[data-dir]").forEach(x => x.setAttribute("aria-pressed", x === b)); render(); }));
 $("shownormal").addEventListener("change", e => { S.showNormal = e.target.checked; render(); });
 $("resample").addEventListener("click", () => { S.seed = (Math.random() * 2 ** 31) | 0; render(); });
-// Grenzfall: einseitig signifikant, zweiseitig nicht (bei α = 0,05)
-const edgeOk = (t, df) => { const p1 = 1 - tcdf(t, df); return p1 > 0.012 && p1 < 0.045 && 2 * p1 > 0.05; };
+// Szenarien setzen x̄ relativ zum Vergleichswert; Grenzfall: einseitig signifikant, zweiseitig nicht (t ≈ 1,9 bei α = 0,05)
 document.querySelectorAll("[data-preset]").forEach(b => b.addEventListener("click", () => {
-  const k = b.dataset.preset;
-  if (k === "h0") { Object.assign(S, { mu: 90, sigma: 10, n: 20 }); S.seed = (Math.random() * 2 ** 31) | 0; }
-  if (k === "edge") { Object.assign(S, { mu: 94, sigma: 10, n: 20 }); S.seed = findSeed(edgeOk); }
-  if (k === "bad") { Object.assign(S, { mu: 86, sigma: 10, n: 20 }); S.seed = (Math.random() * 2 ** 31) | 0; }
+  const k = b.dataset.preset, se = S.sigma / Math.sqrt(S.n);
+  if (k === "h0") S.xbar = S.mu0;
+  if (k === "edge") S.xbar = Math.round((S.mu0 + 1.9 * se) * 10) / 10;
+  if (k === "bad") S.xbar = S.mu0 - 4;
+  S.xbar = Math.max(80, Math.min(100, S.xbar));
   syncInputs(); render();
 }));
-S.seed = findSeed(edgeOk);
 render();
 $("h0-1").onclick = () => simH0(1); $("h0-100").onclick = () => simH0(100); $("h0-1000").onclick = () => simH0(1000);
 $("h0-reset").onclick = () => { H.ts = []; H.last = null; drawH0(); };
