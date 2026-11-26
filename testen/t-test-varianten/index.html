@@ -6,9 +6,9 @@
 <title>Welcher t-Test? · Stats Lab</title>
 <meta name="description" content="Einstichproben-, gepaarter und ungepaarter t-Test an drei Beispielen aus der Physiotherapie, jeweils mit Hypothesen, Rechenweg, kritischem Wert und p-Wert.">
 <link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="../../assets/css/base.css?v=202611261043">
+<link rel="stylesheet" href="../../assets/css/base.css?v=202611261517">
 <link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
-<link rel="stylesheet" href="t-test-varianten.css?v=202611261043">
+<link rel="stylesheet" href="t-test-varianten.css?v=202611261517">
 </head>
 <body>
 <header class="site-header">
@@ -155,6 +155,77 @@
     </div>
   </details>
 
+  <details class="acc" id="acc-4" open>
+    <summary><span class="acc-no">4</span><span class="acc-title">Demonstrationslabor: Reha nach Hüftarthroskopie<span class="acc-teaser">Alle drei t-Tests und Cohen's d an echten Daten eines RCT.</span></span></summary>
+    <div class="acc-body">
+      <p class="text">90 Patientinnen und Patienten mit Cam-Impingement wurden an der Hüfte arthroskopisch operiert und danach randomisiert: 45 erhielten ein supervidiertes Reha-Programm, 45 die Standardversorgung. Gemessen wurde vor der OP, nach 4 und nach 14 Wochen, unter anderem Schmerz (VAS 0 bis 10) und Hüftflexion in Grad. Die Daten sind offen verfügbar (CC BY 4.0).</p>
+      <p class="note">Originalstudie: Müller-Torrente, A. et al. (2021). Benefits of a specific and supervised rehabilitation program in femoroacetabular impingement patients undergoing hip arthroscopy: A randomized control trial. Journal of Clinical Medicine, 10(14), 3125. <a href="https://doi.org/10.3390/jcm10143125">Artikel (frei zugänglich)</a> · <a href="https://zenodo.org/records/22206659">Daten auf Zenodo</a></p>
+      <div class="dl-bar"><span>Für die t-Tests, eine Zeile pro Person:</span><a class="btn ghost" href="../../gemischte-modelle/daten/fai_reha_breit.sav" download>SPSS (.sav)</a><a class="btn ghost" href="../../gemischte-modelle/daten/fai_reha_breit.csv" download>CSV</a></div>
+      <div class="dl-bar"><span>Langes Format für gemischte Modelle:</span><a class="btn ghost" href="../../gemischte-modelle/daten/fai_reha.sav" download>SPSS (.sav)</a><a class="btn ghost" href="../../gemischte-modelle/daten/fai_reha.csv" download>CSV</a></div>
+      <p class="note">Wichtige Variablen im breiten Format: id, gruppe (Intervention oder Kontrolle), schmerz_prae, schmerz_w4, schmerz_w14, flexion_prae, flexion_w14. Wie die Rohdaten aufbereitet wurden, zeigt die Station <a href="../../gemischte-modelle/hueftarthroskopie/">Reha nach Hüftarthroskopie</a>. Wir rechnen hier wie im Artikel mit allen Daten; bei zwei Personen (Variable fortgeschrieben) sind die Werte nach der OP vermutlich fortgeschrieben.</p>
+      <p class="text">Formulieren Sie vor jedem Test die Fragestellung, H0 und H1 (gerichtet oder ungerichtet) und das Signifikanzniveau. Hier überall zweiseitig, α = 5 %.</p>
+
+      <h3 class="ex-h"><span class="ex-no">1</span>Daten ansehen</h3>
+      <p class="text">Wie viele Personen gibt es je Gruppe? Berechnen Sie Mittelwert und Standardabweichung von Schmerz und Flexion je Gruppe und Zeitpunkt.</p>
+      <p class="note">SPSS: Analysieren → Mittelwerte vergleichen → Mittelwerte, abhängige Variablen schmerz_prae, schmerz_w4, schmerz_w14, flexion_prae, flexion_w14, unabhängige Variable gruppe.</p>
+      <details class="sol"><summary>Lösung anzeigen</summary><div class="sol-body">
+        <div class="table-wrap"><table class="cmp-tab"><thead><tr><th>Mittelwert (SD)</th><th>Schmerz vor OP</th><th>Schmerz Woche 4</th><th>Schmerz Woche 14</th><th>Flexion vor OP</th><th>Flexion Woche 14</th></tr></thead>
+        <tbody><tr><td>Reha (n = 45)</td><td>6,80 (2,12)</td><td>4,69 (1,33)</td><td>1,38 (1,61)</td><td>84,6 (14,4)</td><td>99,6 (12,2)</td></tr>
+        <tr><td>Kontrolle (n = 45)</td><td>5,60 (2,26)</td><td>4,96 (1,66)</td><td>3,49 (1,63)</td><td>85,5 (9,4)</td><td>89,6 (4,5)</td></tr></tbody></table></div>
+        <p>Beide Gruppen verbessern sich, die Reha-Gruppe deutlich stärker. Auffällig: Trotz Randomisierung hatte die Reha-Gruppe vor der OP 1,2 Punkte mehr Schmerz.</p>
+      </div></details>
+
+      <h3 class="ex-h"><span class="ex-no">2</span>Einstichproben-t-Test: Erreicht die Reha-Gruppe 95° Flexion?</h3>
+      <p class="text">Als Zielwert nach 14 Wochen nehmen wir 95° Hüftflexion an. Unterscheidet sich die mittlere Flexion der Reha-Gruppe in Woche 14 von 95°?</p>
+      <p class="note">SPSS: Daten → Fälle auswählen → Falls gruppe = "Intervention". Dann Analysieren → Mittelwerte vergleichen → t-Test bei einer Stichprobe, Variable flexion_w14, Testwert 95.</p>
+      <details class="sol"><summary>Lösung anzeigen</summary><div class="sol-body">
+        <p>H0: μ = 95°, H1: μ ≠ 95°. Mittelwert 99,56°, SD 12,22°, n = 45.</p>
+        <p class="rech">SE = 12,22 / √45 = 1,82<br>t = (99,56 − 95) / 1,82 = 2,50<br>df = 44, kritischer Wert 2,015, p = 0,016<br>95-%-KI des Mittelwerts: 95,9° bis 103,2°</p>
+        <p>H0 wird verworfen: Die Reha-Gruppe liegt im Mittel 4,6° über dem Zielwert, das KI schließt 95° aus. Mit einem Zielwert von 100° wäre das Ergebnis nicht signifikant (t = −0,24, p = 0,81). Der Testwert ist eine inhaltliche Entscheidung und muss vor der Auswertung feststehen.</p>
+      </div></details>
+
+      <h3 class="ex-h"><span class="ex-no">3</span>Gepaarter t-Test: Sinkt der Schmerz in der Reha-Gruppe?</h3>
+      <p class="text">Vergleichen Sie in der Reha-Gruppe den Schmerz vor der OP mit Woche 14.</p>
+      <p class="note">SPSS: Fallauswahl wie oben. Analysieren → Mittelwerte vergleichen → t-Test bei gepaarten Stichproben, Paar schmerz_prae und schmerz_w14.</p>
+      <details class="sol"><summary>Lösung anzeigen</summary><div class="sol-body">
+        <p>H0: μ<sub>d</sub> = 0, H1: μ<sub>d</sub> ≠ 0, mit d = Schmerz vor OP minus Schmerz Woche 14.</p>
+        <p class="rech">mittlere Differenz 5,42 Punkte, SD der Differenzen 2,20, n = 45<br>SE = 2,20 / √45 = 0,33<br>t = 5,42 / 0,33 = 16,53, df = 44, p &lt; 0,001<br>95-%-KI der Differenz: 4,76 bis 6,08 Punkte</p>
+        <p>Der Schmerz sinkt hochsignifikant und um mehr als 5 Punkte. Aber: Ohne Vergleichsgruppe wissen wir nicht, wie viel davon die OP, der natürliche Verlauf oder die Regression zur Mitte bewirkt hat. Das beantwortet erst Schritt 4.</p>
+      </div></details>
+
+      <h3 class="ex-h"><span class="ex-no">4</span>Ungepaarter t-Test: Reha gegen Kontrolle in Woche 14</h3>
+      <p class="text">Unterscheiden sich die beiden Gruppen im Schmerz nach 14 Wochen? So hat es der Artikel ausgewertet.</p>
+      <p class="note">SPSS: alle Fälle auswählen. Analysieren → Mittelwerte vergleichen → t-Test bei unabhängigen Stichproben, Testvariable schmerz_w14, Gruppenvariable gruppe.</p>
+      <details class="sol"><summary>Lösung anzeigen</summary><div class="sol-body">
+        <p>H0: μ<sub>Kontrolle</sub> = μ<sub>Reha</sub>, H1: μ<sub>Kontrolle</sub> ≠ μ<sub>Reha</sub>.</p>
+        <p class="rech">Kontrolle 3,49 (SD 1,63), Reha 1,38 (SD 1,61), Differenz 2,11 Punkte<br>gepoolte SD s<sub>p</sub> = 1,62<br>SE = 1,62 · √(1/45 + 1/45) = 0,34<br>t = 2,11 / 0,34 = 6,17, df = 88, p &lt; 0,001<br>95-%-KI der Differenz: 1,43 bis 2,79 Punkte</p>
+        <p>Die Streuungen sind fast gleich (Levene p = 0,93), die Welch-Variante liefert dasselbe Ergebnis. Die Reha-Gruppe hat nach 14 Wochen im Mittel gut 2 Punkte weniger Schmerz.</p>
+      </div></details>
+
+      <h3 class="ex-h"><span class="ex-no">5</span>Effektgröße: Ist der Unterschied relevant?</h3>
+      <p class="text">Berechnen Sie Cohen's d für den Vergleich aus Schritt 4 und ordnen Sie ihn ein.</p>
+      <p class="note">SPSS ab Version 27 gibt Effektgrößen beim t-Test mit aus (Häkchen „Effektgrößen schätzen“). Von Hand: Differenz geteilt durch die gepoolte SD.</p>
+      <details class="sol"><summary>Lösung anzeigen</summary><div class="sol-body">
+        <p class="rech">d = 2,11 / 1,62 = 1,30</p>
+        <p>Nach Cohens Faustregel ein großer Effekt. Klinisch zählt aber der Unterschied in der Einheit des Instruments: 2,1 Punkte auf der VAS liegen über den Schwellen, die für eine spürbare Schmerzänderung meist genannt werden (etwa 1 bis 2 Punkte). Signifikant und relevant fallen hier zusammen. Mehr dazu in der Station <a href="../../grundlagen/effektgroessen/">Effektgrößen</a>.</p>
+      </div></details>
+
+      <h3 class="ex-h"><span class="ex-no">6</span>Konfidenzintervalle: einzeln oder Differenz?</h3>
+      <p class="text">Berechnen Sie das 95-%-KI des Schmerzes in Woche 14 für jede Gruppe einzeln und vergleichen Sie es mit dem KI der Differenz aus Schritt 4.</p>
+      <details class="sol"><summary>Lösung anzeigen</summary><div class="sol-body">
+        <p class="rech">Kontrolle: 3,00 bis 3,98<br>Reha: 0,89 bis 1,86<br>Differenz: 1,43 bis 2,79</p>
+        <p>Hier überlappen sich die Einzelintervalle nicht, und das KI der Differenz schließt 0 aus. Bei kleineren Unterschieden können sich die Einzelintervalle überlappen, obwohl die Differenz signifikant ist (Exkurs in <a href="#acc-2">Abschnitt 2</a>). Entscheidend ist immer das KI der Differenz.</p>
+      </div></details>
+
+      <details class="deep">
+        <summary>Ausblick: Was der t-Test der Endwerte nicht sieht</summary>
+        <div class="deep-body">
+          <p>Die Reha-Gruppe startete mit 6,80 Punkten, die Kontrollgruppe mit 5,60. Der t-Test in Woche 14 vergleicht nur Endwerte und rechnet diesen Rückstand nicht heraus, der Vorteil der Reha wird dadurch unterschätzt. Wer die Veränderung beider Gruppen vergleicht, findet etwa 3,3 Punkte statt 2,1: Die Reha-Gruppe verbessert sich um 5,42 Punkte, die Kontrollgruppe um 2,11. Wie das mit allen drei Messzeitpunkten geht, zeigt die Station <a href="../../gemischte-modelle/hueftarthroskopie/">Reha nach Hüftarthroskopie</a> mit einem gemischten Modell.</p>
+        </div>
+      </details>
+    </div>
+  </details>
+
   <section class="block" aria-labelledby="dec-h">
     <span class="eyebrow">Entscheidungshilfe</span>
     <h2 id="dec-h">Welcher t-Test passt?</h2>
@@ -178,10 +249,10 @@
 </footer>
 <script src="../../assets/vendor/katex/katex.min.js"></script>
 <script src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
-<script src="../../assets/js/tex.js?v=202611261043"></script>
-<script src="daten/bizeps-uebung.js?v=202611261043"></script>
-<script src="bizeps-did.js?v=202611261043"></script>
-<script src="t-test-varianten.js?v=202611261043"></script>
-<script src="../../assets/js/path.js?v=202611261043"></script>
+<script src="../../assets/js/tex.js?v=202611261517"></script>
+<script src="daten/bizeps-uebung.js?v=202611261517"></script>
+<script src="bizeps-did.js?v=202611261517"></script>
+<script src="t-test-varianten.js?v=202611261517"></script>
+<script src="../../assets/js/path.js?v=202611261517"></script>
 </body>
 </html>
