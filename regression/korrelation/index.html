@@ -6,10 +6,10 @@
 <title>Zusammenhang und Korrelation · Stats Lab</title>
 <meta name="description" content="Streudiagramm, Kovarianz und Korrelationskoeffizient r an echten Lungenfunktionsdaten von 654 Kindern, mit Ausreißern und Drittvariablen.">
 <link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="../../assets/css/base.css?v=202611261517">
+<link rel="stylesheet" href="../../assets/css/base.css?v=202611261530">
 <link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
 <link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
-<link rel="stylesheet" href="korrelation.css?v=202611261517">
+<link rel="stylesheet" href="korrelation.css?v=202611261530">
 </head>
 <body>
 <header class="site-header">
@@ -68,6 +68,18 @@
       <svg class="chart" id="rsim" viewBox="0 0 900 340" role="img" aria-label="Simulierte Punktwolke"></svg>
       <div class="readouts" id="rsim-r"></div>
       <p class="callout" id="rsim-c"></p>
+      <details class="deep" id="ci-r">
+        <summary>Exkurs: Konfidenzintervall für r</summary>
+        <div class="deep-body">
+          <p>Auch ein Korrelationskoeffizient aus einer Stichprobe ist nur eine Schätzung. Wie beim t-Test gibt das 95-%-Konfidenzintervall an, in welchem Bereich die Korrelation in der Population plausibel liegt. Der neutrale Wert ist hier <b>0</b>, also kein linearer Zusammenhang: Schließt das Intervall die 0 aus, ist die Korrelation auf dem 5-%-Niveau signifikant.</p>
+          <p>Die Korrelation kommt aus dem Regler oben, die Stichprobengröße wählen Sie hier.</p>
+          <div class="seg" role="group" aria-label="Stichprobengröße" id="ci-n"><button type="button" data-n="10" aria-pressed="false">n = 10</button><button type="button" data-n="20" aria-pressed="false">n = 20</button><button type="button" data-n="50" aria-pressed="true">n = 50</button><button type="button" data-n="100" aria-pressed="false">n = 100</button><button type="button" data-n="500" aria-pressed="false">n = 500</button></div>
+          <svg class="chart" id="ci-svg" viewBox="0 0 900 130" role="img" aria-label="Korrelation mit 95-%-Konfidenzintervall"></svg>
+          <div class="readouts" id="ci-rd"></div>
+          <p class="callout" id="ci-c"></p>
+          <p class="note">Methode: Das Intervall wird über eine Transformation von r berechnet (Fisher-z). Deshalb liegt es nicht symmetrisch um r und bleibt immer zwischen −1 und +1.</p>
+        </div>
+      </details>
     </div>
   </details>
 
@@ -101,13 +113,13 @@
 </footer>
 <script src="../../assets/vendor/katex/katex.min.js"></script>
 <script src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
-<script src="../../assets/js/tex.js?v=202611261517"></script>
+<script src="../../assets/js/tex.js?v=202611261530"></script>
 <script src="../../assets/vendor/katex/katex.min.js"></script>
 <script src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
-<script src="../../assets/js/tex.js?v=202611261517"></script>
-<script src="../../regression-daten/fev.js?v=202611261517"></script>
-<script src="../../assets/js/reg.js?v=202611261517"></script>
-<script src="korrelation.js?v=202611261517"></script>
-<script src="../../assets/js/path.js?v=202611261517"></script>
+<script src="../../assets/js/tex.js?v=202611261530"></script>
+<script src="../../regression-daten/fev.js?v=202611261530"></script>
+<script src="../../assets/js/reg.js?v=202611261530"></script>
+<script src="korrelation.js?v=202611261530"></script>
+<script src="../../assets/js/path.js?v=202611261530"></script>
 </body>
 </html>

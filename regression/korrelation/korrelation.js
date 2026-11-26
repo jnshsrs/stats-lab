@@ -94,7 +94,27 @@ function draw3() {
     ` r² = ${fmt(re * re)} heißt: ${Math.round(re * re * 100)} % der Unterschiede in y gehen mit Unterschieden in x einher. r misst nur <b>lineare</b> Zusammenhänge: Eine U-Form kann r = 0 haben und trotzdem einen starken Zusammenhang zeigen.`;
 }
 $("rr").addEventListener("input", draw3);
-$("rr-new").onclick = () => { seed3++; draw3(); };
+
+/* ---------- Exkurs: Konfidenzintervall für r ---------- */
+let nCI = 50;
+function drawCI() {
+  const rr = +$("rr").value, rnd = mulberry32(seed3 * 31 + nCI), xs = [], ys = [];
+  for (let i = 0; i < nCI; i++) { let u = 0; while (!u) u = rnd(); const v = rnd(), m = Math.sqrt(-2 * Math.log(u)), z1 = m * Math.cos(2 * Math.PI * v), z2 = m * Math.sin(2 * Math.PI * v); xs.push(z1); ys.push(rr * z1 + Math.sqrt(Math.max(0, 1 - rr * rr)) * z2); }
+  const r = Math.max(-0.9999, Math.min(0.9999, cor(xs, ys))), z = Math.atanh(r), se = 1 / Math.sqrt(nCI - 3), lo = Math.tanh(z - 1.96 * se), hi = Math.tanh(z + 1.96 * se);
+  const W = 900, L = 40, Rr = 40, sx = v => L + (v + 1) / 2 * (W - L - Rr), y = 62;
+  let s = `<line x1="${sx(-1)}" x2="${sx(1)}" y1="${y}" y2="${y}" stroke="var(--line)" stroke-width="2"/>`;
+  [-1, -0.5, 0, 0.5, 1].forEach(v => s += `<line x1="${sx(v)}" x2="${sx(v)}" y1="${y - 6}" y2="${y + 6}" stroke="var(--muted)"/><text x="${sx(v)}" y="${y + 30}" text-anchor="middle">${fmt(v, 1)}</text>`);
+  s += `<line x1="${sx(0)}" x2="${sx(0)}" y1="14" y2="${y + 14}" stroke="var(--fg)" stroke-width="1.6" stroke-dasharray="5 4"/><text x="${sx(0)}" y="11" text-anchor="middle" class="strong">kein Zusammenhang</text>`;
+  const ex = lo > 0 || hi < 0;
+  s += `<line x1="${sx(lo)}" x2="${sx(hi)}" y1="${y}" y2="${y}" stroke="${ex ? "var(--therapie)" : "var(--kontrolle)"}" stroke-width="8" stroke-linecap="round"/><circle cx="${sx(r)}" cy="${y}" r="9" fill="var(--fg)" stroke="var(--surface)" stroke-width="2"/>`;
+  $("ci-svg").innerHTML = s;
+  $("ci-rd").innerHTML = readout(`r in der Stichprobe (n = ${nCI})`, fmt(r), "r-decision") + readout("95-%-KI", `${fmt(lo)} bis ${fmt(hi)}`) + readout("schließt 0 aus?", ex ? "ja" : "nein");
+  $("ci-c").innerHTML = (ex ? `Das Intervall liegt vollständig ${lo > 0 ? "über" : "unter"} 0: Die Korrelation ist signifikant von 0 verschieden. ` : `Das Intervall enthält die 0: Die Daten sind mit „kein linearer Zusammenhang“ vereinbar, die Korrelation ist nicht signifikant. `) +
+    (nCI <= 20 ? "Bei so wenigen Personen ist das Intervall sehr breit. Erhöhen Sie n und beobachten Sie, wie es schmaler wird." : Math.abs(rr) < 0.2 && nCI >= 100 ? "Bei großem n wird auch eine schwache Korrelation signifikant. Signifikant heißt nicht stark: Schauen Sie auf r selbst." : "Je größer n, desto schmaler das Intervall, genau wie beim Mittelwert.");
+}
+$("ci-n").addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; nCI = +b.dataset.n; $("ci-n").querySelectorAll("button").forEach(z => z.setAttribute("aria-pressed", z === b)); drawCI(); });
+$("rr").addEventListener("input", drawCI);
+$("rr-new").onclick = () => { seed3++; draw3(); drawCI(); };
 
 /* ---------- 4 Störgröße Alter ---------- */
 function draw4() {
@@ -117,5 +137,5 @@ function draw4() {
   $("conf-r").innerHTML = readout("FEV Rauchende", fmt(f1) + " l", "r-decision") + readout("FEV Nichtrauchende", fmt(f0) + " l") + readout("Alter Rauchende", fmt(a1, 1) + " J.") + readout("Alter Nichtrauchende", fmt(a0, 1) + " J.");
 }
 
-draw1(); setPts(seed2); draw3(); draw4();
+draw1(); setPts(seed2); draw3(); drawCI(); draw4();
 })();
