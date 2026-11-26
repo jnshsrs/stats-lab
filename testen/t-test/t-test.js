@@ -102,7 +102,7 @@ function drawRaw(c) {
 // ---------- 2 Hypothesen und t ----------
 function drawHyp() {
   const d = dirsFor(S.mu0)[S.dir];
-  $("hyp").innerHTML = `<p class="who">${d.who}</p><div class="hyp-grid"><div><span class="k">H0</span><div class="v">${d.h0}</div><span class="s">${d.h0s}</span></div><div><span class="k">H1, soll gezeigt werden</span><div class="v">${d.h1}</div><span class="s">${d.h1s}</span></div></div>`;
+  $("hyp").innerHTML = `<p class="who">${d.who}</p><div class="hyp-grid"><div><span class="k">H0</span><div class="v">${d.h0}</div><span class="s">${d.h0s}</span></div><div><span class="k">H1, soll gezeigt werden</span><div class="v">${d.h1}</div><span class="s">${d.h1s}</span></div></div><p class="mu-note">μ ist hier die mittlere Flexion <b>aller</b> Patientinnen und Patienten der Klinik, also der unbekannte Populationswert. μ₀ = ${S.mu0}° ist der Vergleichswert aus dem Kriterium. Der gemessene Mittelwert <span class="xb">x</span> = ${fmt(S.xbar)}° steht nicht in der Hypothese: Er ist bekannt und dient als Schätzung für μ. Getestet wird, ob er so weit von μ₀ entfernt liegt, dass μ = μ₀ unplausibel wird.</p>`;
 }
 function drawRuler(c) {
   const fbF = `t = (<span class="ink-therapie"><b>x̄ − μ₀</b></span>) / (<span class="ink-kontrolle"><b>s / √n</b></span>)` +
