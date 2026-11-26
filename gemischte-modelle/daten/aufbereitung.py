@@ -84,3 +84,24 @@ with open("fai_reha.js", "w") as f:
     f.write("/* Reha nach Hüftarthroskopie bei Cam-FAIS: Müller-Torrente et al. (2021), J Clin Med 10:3125. Daten: Zenodo 10.5281/zenodo.22206659, CC BY 4.0. Aufbereitet mit aufbereitung.py. */\n")
     f.write("window.FAI = " + json.dumps({"cols": cols, "rows": rows}, ensure_ascii=False, separators=(",", ":")) + ";\n")
 print(len(out), "Zeilen,", out.id.nunique(), "Personen; vertauscht:", int(swap.sum() / 3), "Personen")
+
+# Breites Format für t-Tests in SPSS (eine Zeile pro Person, Messzeitpunkte als Spalten)
+suf = {0: "prae", 1: "w4", 2: "w14"}
+mess = ["schmerz_vas", "flexion", "extension", "abduktion", "adduktion", "innenrotation", "aussenrotation", "mhhs", "adhaerenz"]
+br = out.pivot(index="id", columns="zeit_nr", values=mess)
+br.columns = [f"{v.replace('schmerz_vas', 'schmerz')}_{suf[t]}" for v, t in br.columns]
+br = br.dropna(axis=1, how="all")
+pers = out.groupby("id")[["gruppe", "alter", "geschlecht", "gewicht_kg", "groesse_cm", "bmi", "sport_h_woche"]].first()
+pers["fortgeschrieben"] = out.groupby("id")["fortgeschrieben"].max()
+breit = pers.join(br).reset_index()
+breit = breit.sort_values(["gruppe", "id"]).reset_index(drop=True)
+breit.to_csv("fai_reha_breit.csv", index=False)
+lab_b = {"id": labels["id"], "gruppe": labels["gruppe"], "alter": labels["alter"], "geschlecht": labels["geschlecht"], "gewicht_kg": labels["gewicht_kg"],
+         "groesse_cm": labels["groesse_cm"], "bmi": labels["bmi"], "sport_h_woche": labels["sport_h_woche"], "fortgeschrieben": "Werte nach der OP vermutlich fortgeschrieben (I44, I45)"}
+zl = {"prae": "vor OP", "w4": "Woche 4", "w14": "Woche 14"}
+for c in breit.columns:
+    if c not in lab_b:
+        v, t = c.rsplit("_", 1); base = labels.get("schmerz_vas" if v == "schmerz" else v, v)
+        lab_b[c] = f"{base}, {zl[t]}"
+pyreadstat.write_sav(breit, "fai_reha_breit.sav", column_labels=lab_b, variable_value_labels={"fortgeschrieben": {0: "nein", 1: "ja"}})
+print(len(breit), "Personen im breiten Format,", len(breit.columns), "Spalten")
