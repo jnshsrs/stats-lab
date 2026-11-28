@@ -6,9 +6,9 @@
 <title>Warum gemischte Modelle? · Stats Lab</title>
 <meta name="description" content="Warum gemischte Modelle: vier Auswertungswege für dasselbe RCT mit Messwiederholung, Zerlegung einer Messung in festen Teil, Zufallseffekt der Person und Rest, Begriffe und Synonyme.">
 <link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="../../assets/css/base.css?v=202611281045">
+<link rel="stylesheet" href="../../assets/css/base.css?v=202611281114">
 <link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
-<link rel="stylesheet" href="../gemischte-modelle.css?v=202611281045">
+<link rel="stylesheet" href="../gemischte-modelle.css?v=202611281114">
 </head>
 <body>
 <header class="site-header">
@@ -56,7 +56,8 @@
         <div class="ctrl"><div class="ctrl-head"><label for="pers">Person</label></div><select class="sel" id="pers"></select></div>
         <div class="ctrl"><span class="lbl-plain">Termin</span><div class="seg" role="group" aria-label="Termin" id="tt"><button type="button" data-t="0" aria-pressed="false">vor OP</button><button type="button" data-t="1" aria-pressed="false">Woche 4</button><button type="button" data-t="2" aria-pressed="true">Woche 14</button></div></div>
       </div>
-      <svg class="chart" id="c2" viewBox="0 0 900 380" role="img" aria-label="Zerlegung einer Messung in festen Teil, Personenabweichung und Rest"></svg>
+      <svg class="chart" id="c2" viewBox="0 0 900 400" role="img" aria-label="Zerlegung einer Messung in festen Teil, Personenabweichung und Rest"></svg>
+      <div class="legend"><span><i style="background:var(--therapie)"></i>fester Effekt (β)</span><span><i style="background:var(--therapie);opacity:.35;outline:2px solid var(--therapie);outline-offset:-2px"></i>Zwischenergebnis: fester Teil</span><span><i style="background:var(--beta-ink)"></i>Zufallseffekt der Person (u₀ᵢ)</span><span><i style="background:repeating-linear-gradient(45deg,var(--muted) 0 2px,transparent 2px 5px);outline:1px solid var(--muted)"></i>Rest der Messung (eᵢⱼ)</span><span><i style="background:var(--fg)"></i>gemessener Wert</span></div>
       <div class="formula" id="f2"></div>
       <p class="callout" id="cl2"></p>
       <div class="fz-row">
@@ -117,12 +118,12 @@
 </footer>
 <script src="../../assets/vendor/katex/katex.min.js"></script>
 <script src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
-<script src="../../assets/js/tex.js?v=202611281045"></script>
-<script src="../../assets/js/reg.js?v=202611281045"></script>
-<script src="../gm-common.js?v=202611281045"></script>
-<script src="../lmm.js?v=202611281045"></script>
-<script src="../daten/fai_reha.js?v=202611281045"></script>
-<script src="warum.js?v=202611281045"></script>
-<script src="../../assets/js/path.js?v=202611281045"></script>
+<script src="../../assets/js/tex.js?v=202611281114"></script>
+<script src="../../assets/js/reg.js?v=202611281114"></script>
+<script src="../gm-common.js?v=202611281114"></script>
+<script src="../lmm.js?v=202611281114"></script>
+<script src="../daten/fai_reha.js?v=202611281114"></script>
+<script src="warum.js?v=202611281114"></script>
+<script src="../../assets/js/path.js?v=202611281114"></script>
 </body>
 </html>
