@@ -252,7 +252,7 @@ table.anova.coef tr.tot td:last-child { white-space: normal; } table.anova.coef 
 /* Station Warum: Zerlegung einer Messung */
 .fz-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
 @media (max-width: 700px) { .fz-row { grid-template-columns: minmax(0, 1fr); } }
-.explain-box.fest b { color: var(--therapie); } .explain-box.zuf b { color: var(--kontrolle-ink); }
+.explain-box.fest b { color: var(--therapie); } .explain-box.zuf b { color: var(--beta-ink); }
 .explain-box ul { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 4px; }
 table.vgl td.prob { font-family: var(--font-sans); text-align: left; white-space: normal; min-width: 16em; font-size: 13.5px; color: var(--muted); }
 table.vgl th:last-child { text-align: left; }

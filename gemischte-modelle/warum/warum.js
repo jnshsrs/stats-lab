@@ -82,26 +82,37 @@ function draw2() {
   const time = tt === 1 ? b[1] : tt === 2 ? b[2] : 0, grp = iv ? b[3] + (tt === 1 ? b[4] : tt === 2 ? b[5] : 0) : 0;
   const fix = b[0] + time + grp, u = U[pid], y = val(pid, tt), e = y - fix - u;
   const sb = n => "₀₁₂₃₄₅"[n];
+  // Farbkodierung: fest = Therapie-Blau, Zufallseffekt der Person = Violett, Rest = grau schraffiert, Summen als Ergebnisbalken
   const steps = [
-    ["Kontrolle vor OP", "β₀", 0, b[0], "var(--therapie)", "fest"],
-    ["Zeit", tt ? `β${sb(tt)}` : "", b[0], b[0] + time, "var(--therapie)", "fest"],
-    ["Gruppe", iv ? (tt ? `β₃ + β${sb(tt + 3)}` : "β₃") : "", b[0] + time, fix, "var(--therapie)", "fest"],
-    ["fester Teil", "Gruppenmittel", 0, fix, "var(--pal-6)", "sum"],
-    ["Person", "u₀ᵢ", fix, fix + u, "var(--kontrolle)", "zuf"],
-    ["Rest", "eᵢⱼ", fix + u, y, "var(--beta-ink)", "rest"],
-    ["gemessen", "yᵢⱼ", 0, y, "var(--fg)", "sum"]
+    ["Kontrolle vor OP", "β₀", 0, b[0], "fest"],
+    ["Zeit", tt ? `β${sb(tt)}` : "", b[0], b[0] + time, "fest"],
+    ["Gruppe", iv ? (tt ? `β₃ + β${sb(tt + 3)}` : "β₃") : "", b[0] + time, fix, "fest"],
+    ["= fester Teil", "Zwischenergebnis", 0, fix, "zw"],
+    ["Person", "u₀ᵢ", fix, fix + u, "zuf"],
+    ["Rest", "eᵢⱼ", fix + u, y, "rest"],
+    ["= gemessen", "yᵢⱼ", 0, y, "end"]
   ];
-  const f = frame(900, 380, -0.6, steps.length - 0.4, 0, 10, { P: { L: 46, R: 14, T: 16, B: 56 }, nx: 0, yl: "Schmerz (VAS)" });
-  let s = f.s; const bw = 70;
-  steps.forEach(([lab, sym, a, z, col, k], i) => {
-    const x = f.sx(i), y1 = f.sy(Math.max(a, z)), y2 = f.sy(Math.min(a, z)), h = Math.max(1.5, y2 - y1), d = z - a;
-    s += `<rect x="${x - bw / 2}" y="${y1}" width="${bw}" height="${h}" rx="3" fill="${col}" ${k === "sum" ? 'fill-opacity=".85"' : ""}/>`;
+  const H2 = 400, f = frame(900, H2, -0.6, steps.length - 0.4, 0, 10, { P: { L: 46, R: 14, T: 44, B: 56 }, nx: 0, yl: "Schmerz (VAS)" });
+  const zone = (i0, i1, lab, col) => `<rect x="${f.sx(i0) - 52}" y="6" width="${f.sx(i1) - f.sx(i0) + 104}" height="${H2 - 56 - 6}" rx="8" fill="${col}" fill-opacity=".07"/><text x="${(f.sx(i0) + f.sx(i1)) / 2}" y="26" text-anchor="middle" class="strong" style="fill:${col}">${lab}</text>`;
+  let s = `<defs><pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="6" height="6" fill="var(--surface)"/><line x1="0" y1="0" x2="0" y2="6" stroke="var(--muted)" stroke-width="3"/></pattern></defs>`;
+  s += zone(0, 3, "fester Teil: für alle in der Gruppe gleich", "var(--therapie)") + zone(4, 5, "individuell: nur diese Person", "var(--beta-ink)") + f.s;
+  const bw = 70, ST = {
+    fest: 'fill="var(--therapie)"',
+    zw: 'fill="var(--therapie)" fill-opacity=".18" stroke="var(--therapie)" stroke-width="2.5"',
+    zuf: 'fill="var(--beta-ink)"',
+    rest: 'fill="url(#hatch)" stroke="var(--muted)" stroke-width="1.5"',
+    end: 'fill="var(--fg)"'
+  };
+  steps.forEach(([lab, sym, a, z, k], i) => {
+    const x = f.sx(i), y1 = f.sy(Math.max(a, z)), y2 = f.sy(Math.min(a, z)), h = Math.max(2, y2 - y1), d = z - a, sum = k === "zw" || k === "end";
+    s += `<rect x="${x - bw / 2}" y="${y1}" width="${bw}" height="${h}" rx="3" ${ST[k]}/>`;
     if (i < steps.length - 1) s += `<line x1="${x + bw / 2}" x2="${f.sx(i + 1) - bw / 2}" y1="${f.sy(z)}" y2="${f.sy(z)}" stroke="var(--muted)" stroke-dasharray="3 3"/>`;
-    s += `<text x="${x}" y="${y1 - 7}" text-anchor="middle" class="strong">${k === "sum" || i === 0 ? fmt(z, 2) : (d >= 0 ? "+" : "") + fmt(d, 2)}</text>`;
-    s += `<text x="${x}" y="${380 - 56 + 18}" text-anchor="middle" class="strong">${lab}</text><text x="${x}" y="${380 - 56 + 34}" text-anchor="middle">${sym}</text>`;
+    s += `<text x="${x}" y="${y1 - 7}" text-anchor="middle" class="strong">${sum || i === 0 ? fmt(z, 2) : (d >= 0 ? "+" : "") + fmt(d, 2)}</text>`;
+    s += `<text x="${x}" y="${H2 - 56 + 18}" text-anchor="middle" class="strong">${lab}</text><text x="${x}" y="${H2 - 56 + 34}" text-anchor="middle">${sym}</text>`;
   });
   $("c2").innerHTML = s;
-  $("f2").innerHTML = TS(String.raw`y_{ij} = \underbrace{${tz(fmt(fix, 2))}}_{\text{fest}} ${u < 0 ? "-" : "+"} \underbrace{${tz(fmt(Math.abs(u), 2))}}_{u_{0i}\text{: Person}} ${e < 0 ? "-" : "+"} \underbrace{${tz(fmt(Math.abs(e), 2))}}_{e_{ij}\text{: Rest}} = ${tz(fmt(y, 2))}`, `y = ${fmt(fix, 2)} + ${fmt(u, 2)} + ${fmt(e, 2)} = ${fmt(y, 2)}`);
+  const C1 = "\\color{#045A8D}", C2 = "\\color{#57528F}", C3 = "\\color{#5B6475}";
+  $("f2").innerHTML = TS(String.raw`y_{ij} = ${C1}\underbrace{${tz(fmt(fix, 2))}}_{\text{fest}} \color{#1B2433} ${u < 0 ? "-" : "+"} ${C2}\underbrace{${tz(fmt(Math.abs(u), 2))}}_{u_{0i}\text{: Person}} \color{#1B2433} ${e < 0 ? "-" : "+"} ${C3}\underbrace{${tz(fmt(Math.abs(e), 2))}}_{e_{ij}\text{: Rest}} \color{#1B2433} = ${tz(fmt(y, 2))}`, `y = ${fmt(fix, 2)} + ${fmt(u, 2)} + ${fmt(e, 2)} = ${fmt(y, 2)}`);
   $("cl2").innerHTML = `Der <b>feste Teil</b> (${fmt(fix, 2)}) ist für alle Personen der ${iv ? "Reha-Gruppe" : "Kontrollgruppe"} zu diesem Termin gleich. <b>Person ${pid}</b> liegt ${u >= 0 ? "über" : "unter"} diesem Mittel, um ${fmt(Math.abs(u), 2)} Punkte, und zwar an allen drei Terminen gleich: Das ist ihr Zufallseffekt u<sub>0i</sub>. Genau diese gemeinsame Abweichung macht die Messungen einer Person ähnlich, und genau sie fehlte der Regression in Weg 3. Der <b>Rest</b> (${fmt(e, 2)}) ist das, was an diesem Termin zusätzlich schwankt.`;
   // Verteilung der Personenabweichungen
   const g = frame(900, 190, -4, 4, 0, 1, { P: { L: 30, R: 20, T: 14, B: 40 }, ny: 0, nx: 8, xl: "Abweichung der Person vom Gruppenmittel (Punkte)", fx: v => (v > 0 ? "+" : "") + fmt(v, 0) });
