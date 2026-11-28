@@ -2,8 +2,8 @@
    Einzige Stelle für Reihenfolge und Blöcke. Die Startseite und die Vor/Zurück-Leiste jeder Seite lesen von hier. */
 (() => {
 "use strict";
-const BLOCKS = ["Grundlagen", "Studiendesign", "Schätzen", "Testen", "Hintergrund", "Zusammenhänge und Regression", "Logistische Regression", "Gemischte Modelle"];
-const BLOCK_SLUGS = ["grundlagen", "studiendesign", "schaetzen", "testen", "hintergrund", "regression", "logistische-regression", "gemischte-modelle"];
+const BLOCKS = ["Grundlagen", "Studiendesign", "Schätzen", "Testen", "Hintergrund", "Zusammenhänge und Regression", "Logistische Regression", "Gemischte Modelle", "Auswertung planen und berichten"];
+const BLOCK_SLUGS = ["grundlagen", "studiendesign", "schaetzen", "testen", "hintergrund", "regression", "logistische-regression", "gemischte-modelle", "auswertung"];
 const PATH = [
   ["skalenniveaus", "Skalenniveaus", 0],
   ["lage-streuung", "Lage und Streuung", 0],
@@ -44,7 +44,9 @@ const PATH = [
   ["abhaengige-daten", "Abhängige Daten: Praxen, Personen, Messwiederholungen", 7],
   ["partial-pooling", "Partial Pooling: zwischen allen gleich und jeder für sich", 7],
   ["random-slopes", "Jeder Verlauf ist anders: Random Slopes", 7],
-  ["hueftarthroskopie", "Reha nach Hüftarthroskopie: echte Daten mit Messwiederholung", 7]
+  ["hueftarthroskopie", "Reha nach Hüftarthroskopie: echte Daten mit Messwiederholung", 7],
+  ["verfahrenswahl", "Welches Verfahren passt? Der Entscheidungsweg", 8],
+  ["ergebnisse-berichten", "Ergebnisse berichten: Ergebnissatz, Output, Checkliste", 8]
 ];
 window.STATS_LAB_PATH = { BLOCKS, BLOCK_SLUGS, PATH };
 const url = p => `../../${BLOCK_SLUGS[p[2]]}/${p[0]}/`;

@@ -66,3 +66,15 @@ svg.qfig.wide { max-width: 640px; }
 svg.qfig .strong { fill: var(--fg); font-weight: 600; }
 .qleg { font-size: 13px; color: var(--muted); display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
 .qleg i { width: 12px; height: 12px; display: inline-block; border-radius: 2px; }
+/* Tagesabschnitte (FM3) */
+ol.journey > li.day { display: block; padding: 4px 0 18px; }
+ol.journey > li.day::before { display: none; }
+li.day h3 { margin: 0; font: 600 13px var(--font-mono); color: var(--accent); text-transform: uppercase; letter-spacing: .05em; border-bottom: 1px solid var(--line); padding-bottom: 6px; }
+li.day p { margin: 6px 0 0; font-size: 14.5px; color: var(--muted); max-width: 72ch; }
+/* Ausgaben in Fragen */
+.qout-wrap { overflow-x: auto; }
+table.qout { border-collapse: collapse; font: 500 12.5px var(--font-mono); min-width: 420px; }
+table.qout caption { caption-side: top; text-align: left; color: var(--muted); padding-bottom: 4px; }
+table.qout th, table.qout td { padding: 5px 8px; border-bottom: 1px solid var(--line); text-align: right; white-space: nowrap; }
+table.qout th:first-child, table.qout td:first-child { text-align: left; font-family: var(--font-sans); }
+table.qout thead th { color: var(--muted); font-weight: 500; }

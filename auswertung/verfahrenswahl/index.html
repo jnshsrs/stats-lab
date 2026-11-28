@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Welches Verfahren passt? · Stats Lab</title>
+<meta name="description" content="Entscheidungsweg zur Wahl des statistischen Verfahrens: Zielgröße, Datenstruktur und Vergleich, mit SPSS-Menü, R-Aufruf, acht Fallbeispielen aus der Physiotherapie und typischen Fehlern.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../assets/css/base.css?v=202611280940">
+<link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../auswertung.css?v=202611280940">
+</head>
+<body>
+<header class="site-header">
+  <div class="column">
+    <a class="brand" href="../../">
+      <svg class="brand-mark" viewBox="0 0 22 22" aria-hidden="true"><path d="M1 19 C5 19 6 4 9 4 S13 19 17 19" fill="none" class="bm-a" stroke-width="2.2" stroke-linecap="round"/><path d="M5 19 C9 19 10 7 13 7 S17 19 21 19" fill="none" class="bm-b" stroke-width="2.2" stroke-linecap="round"/></svg>
+      Stats Lab
+    </a>
+    <nav class="site-nav" aria-label="Hauptnavigation">
+      <a href="../../">Visualisierungen</a>
+      <a href="../../lernreisen/">Lernreisen</a>
+      <a href="../../glossar/">Glossar</a>
+      <a href="https://github.com/jnshsrs/stats-lab">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main class="column">
+  <section class="intro">
+    <a class="back" href="../../">← Alle Visualisierungen</a>
+    <h1>Welches Verfahren passt?</h1>
+    <p class="byline">Dr. Jens Hüsers · Forschungsmethodik</p>
+    <p class="lede">Vor jeder Auswertung stehen drei Fragen: Was wird gemessen, wie hängen die Messungen zusammen und was genau soll verglichen werden? Wer sie beantwortet, landet fast immer bei einem der Verfahren aus dem Stats Lab. Diese Station führt durch den Entscheidungsweg, übt ihn an Studien aus der Physiotherapie und sammelt die typischen Fehler.</p>
+  </section>
+
+  <details class="acc" id="acc-1" open>
+    <summary><span class="acc-no">1</span><span class="acc-title">Der Entscheidungsweg<span class="acc-teaser">Drei Fragen bis zum Verfahren, mit Begründung, SPSS-Menü und Station.</span></span></summary>
+    <div class="acc-body">
+      <p class="text">Beantworten Sie die Fragen für Ihre eigene Studie oder für eine Studie, die Sie gerade lesen. Jede Antwort lässt sich nachträglich ändern; der Weg passt sich an. Am Ende steht das Verfahren mit einer Skizze, wie die Daten aussehen, der Kennzahl, die Sie berichten, und dem Weg in SPSS und R.</p>
+      <div class="tree" id="tree"></div>
+      <div id="res"></div>
+      <p class="note">Der Weg deckt die Verfahren ab, die in Forschungsmethodik 1 bis 3 vorkommen. Für Zeit bis zum Ereignis (Überlebenszeitanalyse), Zählwerte und ordinale Skalen mit wenigen Stufen gibt es eigene Verfahren; sie stehen am Ende der Übersicht in Abschnitt 3.</p>
+    </div>
+  </details>
+
+  <details class="acc" id="acc-2" open>
+    <summary><span class="acc-no">2</span><span class="acc-title">Fallbeispiele zuordnen<span class="acc-teaser">Acht Studien aus der Physiotherapie: Welches Verfahren, und warum?</span></span></summary>
+    <div class="acc-body">
+      <p class="text">Lesen Sie jede Studienbeschreibung und wählen Sie das Verfahren, das die Forschungsfrage beantwortet. Achten Sie auf die drei Fragen aus Abschnitt 1: Zielgröße, Datenstruktur, Vergleich. Die Begründung erscheint nach der Wahl, mit einem Link zur passenden Station.</p>
+      <p class="case-score" id="score"></p>
+      <div id="cases" style="display:flex;flex-direction:column;gap:12px"></div>
+    </div>
+  </details>
+
+  <details class="acc" id="acc-3" open>
+    <summary><span class="acc-no">3</span><span class="acc-title">Die Übersicht<span class="acc-teaser">Zielgröße und Datenstruktur auf einen Blick.</span></span></summary>
+    <div class="acc-body">
+      <p class="text">Dieselben Entscheidungen als Tabelle zum Nachschlagen. Die Zeilen folgen der Zielgröße, innerhalb der Zeilen geht es von unabhängigen zu abhängigen Daten.</p>
+      <div class="tab-wrap"><table class="when stack" id="ov"></table></div>
+      <p class="callout">Eine Faustregel trägt durch die ganze Tabelle: <b>Die Zielgröße bestimmt die Modellfamilie</b> (linear oder logistisch), <b>die Datenstruktur bestimmt, ob ein Zufallseffekt hinzukommt</b>. Ein gemischtes Modell ist kein eigenes Verfahren, sondern eine Regression, die weiß, welche Messungen zusammengehören.</p>
+    </div>
+  </details>
+
+  <details class="acc" id="acc-4" open>
+    <summary><span class="acc-no">4</span><span class="acc-title">Typische Fehler bei der Wahl<span class="acc-teaser">Sieben Fallen, die in Hausarbeiten und Publikationen immer wieder auftauchen.</span></span></summary>
+    <div class="acc-body">
+      <ol class="check">
+        <li><b>Messungen als Personen zählen.</b> Drei Messzeitpunkte von 30 Personen sind keine 90 unabhängigen Beobachtungen, beide Knie einer Person keine zwei Patientinnen. Der Standardfehler wird zu klein, der p-Wert zu optimistisch. Wie stark, zeigt der <a href="../../gemischte-modelle/abhaengige-daten/#acc-2">Designeffekt</a>.</li>
+        <li><b>Zwei getrennte Tests statt eines Vergleichs.</b> „In der Trainingsgruppe signifikant, in der Kontrollgruppe nicht“ ist kein Nachweis eines Unterschieds. Im <a href="../../testen/t-test-varianten/#praktikum">Messpraktikum</a> ist der Trainingsarm mit p = 0,012 signifikant, der Kontrollarm mit p = 0,34 nicht, der direkte Vergleich der Veränderungen aber mit p = 0,12 ebenfalls nicht.</li>
+        <li><b>Endwerte vergleichen, Ausgangswerte ignorieren.</b> Starten die Gruppen unterschiedlich, verzerrt ein t-Test der Endwerte den Effekt. Im <a href="../../gemischte-modelle/hueftarthroskopie/#acc-4">Hüftarthroskopie-RCT</a> lag die Reha-Gruppe vor der OP 1,2 Punkte höher; der Endwertvergleich unterschätzt den Effekt deshalb.</li>
+        <li><b>Eine metrische Zielgröße dichotomisieren.</b> Aus „Alpha-Winkel in Grad“ wird „Cam ja oder nein“, aus der Schmerzskala „Responder ja oder nein“. Das wirft Information weg und kostet Power. Siehe <a href="../../logistische-regression/cam-morphologie/#acc-5">Cam-Morphologie</a>.</li>
+        <li><b>Das Odds Ratio als Risikoverhältnis lesen.</b> Bei häufigem Ereignis liegt das OR deutlich weiter von 1 entfernt als das RR. In einer Fall-Kontroll-Studie lässt sich nur das OR schätzen. Siehe <a href="../../grundlagen/risiko-odds/">Risiko, Odds und Odds Ratio</a> und <a href="../../studiendesign/fall-kontrolle/">Fall-Kontroll-Studie</a>.</li>
+        <li><b>Fehlende Werte stillschweigend entfernen oder fortschreiben.</b> Wer nur vollständige Fälle auswertet oder den letzten Wert fortschreibt (LOCF), verzerrt Verläufe. Das gemischte Modell nutzt alle vorhandenen Messungen. Siehe <a href="../../gemischte-modelle/hueftarthroskopie/#acc-1">Aufbereitung der Hüftarthroskopie-Daten</a>.</li>
+        <li><b>Das Verfahren nach dem Ergebnis wählen.</b> Erst t-Test, dann Mann-Whitney, dann mit Adjustierung, bis p unter 0,05 liegt: Das erhöht den α-Fehler unbemerkt. Verfahren, Zielgröße und Adjustierung gehören vor der Datenerhebung in den Analyseplan. Siehe <a href="../../testen/multiples-testen/">Multiples Testen</a>.</li>
+      </ol>
+    </div>
+  </details>
+
+  <section class="block refs" aria-labelledby="refs-h">
+    <h2 id="refs-h">Quellen</h2>
+    <ul><li>Vickers, A. J., &amp; Altman, D. G. (2001). Analysing controlled trials with baseline and follow up measurements. BMJ, 323(7321), 1123–1124. <a href="https://doi.org/10.1136/bmj.323.7321.1123">doi:10.1136/bmj.323.7321.1123</a></li>
+    <li>Bland, J. M., &amp; Altman, D. G. (2011). Comparisons against baseline within randomised groups are often used and can be highly misleading. Trials, 12, 264. <a href="https://doi.org/10.1186/1745-6215-12-264">doi:10.1186/1745-6215-12-264</a></li>
+    <li>Gelman, A., &amp; Stern, H. (2006). The difference between “significant” and “not significant” is not itself statistically significant. The American Statistician, 60(4), 328–331. <a href="https://doi.org/10.1198/000313006X152649">doi:10.1198/000313006X152649</a></li>
+    <li>Müller-Torrente, A. et al. (2021). Benefits of a specific and supervised rehabilitation program in femoroacetabular impingement patients undergoing hip arthroscopy: A randomized control trial. Journal of Clinical Medicine, 10(14), 3125. <a href="https://doi.org/10.3390/jcm10143125">doi:10.3390/jcm10143125</a></li>
+</ul>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="column">
+    <span>© 2026 Dr. Jens Hüsers · Lehrmaterial für Forschungsmethodik und Statistik</span>
+    <span class="footer-links"><a href="https://github.com/jnshsrs/stats-lab">Quellcode auf GitHub</a><span>Ohne Cookies und Tracking</span></span>
+  </div>
+</footer>
+<script src="../../assets/vendor/katex/katex.min.js"></script>
+<script src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
+<script src="../../assets/js/tex.js?v=202611280940"></script>
+<script src="../../assets/js/reg.js?v=202611280940"></script>
+<script src="../../gemischte-modelle/gm-common.js?v=202611280940"></script>
+<script src="verfahrenswahl.js?v=202611280940"></script>
+<script src="../../assets/js/path.js?v=202611280940"></script>
+</body>
+</html>

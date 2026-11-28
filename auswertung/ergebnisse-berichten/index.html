@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ergebnisse berichten · Stats Lab</title>
+<meta name="description" content="Ergebnisse vollständig berichten: sechs Bausteine eines Ergebnissatzes, SPSS-Ausgaben der logistischen Regression und des gemischten Modells lesen, Checkliste für die Hausarbeit nach CONSORT und STROBE.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../assets/css/base.css?v=202611280940">
+<link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../auswertung.css?v=202611280940">
+</head>
+<body>
+<header class="site-header">
+  <div class="column">
+    <a class="brand" href="../../">
+      <svg class="brand-mark" viewBox="0 0 22 22" aria-hidden="true"><path d="M1 19 C5 19 6 4 9 4 S13 19 17 19" fill="none" class="bm-a" stroke-width="2.2" stroke-linecap="round"/><path d="M5 19 C9 19 10 7 13 7 S17 19 21 19" fill="none" class="bm-b" stroke-width="2.2" stroke-linecap="round"/></svg>
+      Stats Lab
+    </a>
+    <nav class="site-nav" aria-label="Hauptnavigation">
+      <a href="../../">Visualisierungen</a>
+      <a href="../../lernreisen/">Lernreisen</a>
+      <a href="../../glossar/">Glossar</a>
+      <a href="https://github.com/jnshsrs/stats-lab">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main class="column">
+  <section class="intro">
+    <a class="back" href="../../">← Alle Visualisierungen</a>
+    <h1>Ergebnisse berichten</h1>
+    <p class="byline">Dr. Jens Hüsers · Forschungsmethodik</p>
+    <p class="lede">Ein gutes Ergebnis ist erst dann etwas wert, wenn andere es lesen und prüfen können. Diese Station zerlegt den Ergebnissatz in seine Bausteine, übt das Lesen von SPSS-Ausgaben für die logistische Regression und das gemischte Modell und endet mit einer Checkliste für Methoden- und Ergebnisteil der Hausarbeit. Die Zahlen stammen aus den Stationen des Stats Lab.</p>
+  </section>
+
+  <details class="acc" id="acc-1" open>
+    <summary><span class="acc-no">1</span><span class="acc-title">Die Bausteine eines Ergebnissatzes<span class="acc-teaser">Sechs Teile, und was fehlt, wenn einer wegfällt.</span></span></summary>
+    <div class="acc-body">
+      <p class="text">Ein vollständiger Ergebnissatz beantwortet sechs Fragen: Was wird verglichen, wie groß ist der Effekt in welcher Einheit, wie sicher ist die Schätzung, was sagt der Test, mit welchem Verfahren und welchen Daten, und was bedeutet das klinisch. Wählen Sie ein Beispiel und nehmen Sie Bausteine heraus.</p>
+      <div class="seg three" role="group" aria-label="Beispiel" id="ex"><button type="button" data-e="mp" aria-pressed="false">t-Test: Messpraktikum Bizeps</button><button type="button" data-e="cam" aria-pressed="true">Logistisch: Cam-Morphologie</button><button type="button" data-e="hip" aria-pressed="false">Gemischt: Hüftarthroskopie</button></div>
+      <p class="sentence" id="sent"></p>
+      <div class="bblocks" id="bb"></div>
+      <p class="missing" id="miss"></p>
+      <svg class="chart" id="ci" viewBox="0 0 900 150" role="img" aria-label="Effekt mit 95-%-Konfidenzintervall"></svg>
+      <div class="legend"><span><i style="background:var(--therapie)"></i>Schätzung mit 95-%-Konfidenzintervall</span><span><i style="background:transparent;border-top:2px dashed var(--fg);height:0;border-radius:0"></i>kein Unterschied</span></div>
+      <p class="callout" id="cl1"></p>
+    </div>
+  </details>
+
+  <details class="acc" id="acc-2" open>
+    <summary><span class="acc-no">2</span><span class="acc-title">Output lesen: logistische Regression<span class="acc-teaser">Welche Zelle gehört in den Text, und welche nicht?</span></span></summary>
+    <div class="acc-body">
+      <p class="text">Die Tabelle zeigt die SPSS-Ausgabe „Variablen in der Gleichung“ für den Datensatz der <a href="../../logistische-regression/cam-morphologie/">Cam-Station</a>: Knorpeldefekt (ja oder nein) in Abhängigkeit vom Alpha-Winkel, adjustiert für Hüftschmerz. Klicken Sie auf die markierten Zellen.</p>
+      <div class="tab-wrap"><table class="anova out" id="o1"></table></div>
+      <p class="reveal outexp" id="o1x">Klicken Sie auf eine markierte Zelle.</p>
+      <div class="two-col">
+        <div class="explain-box"><b>Methodenteil</b><span id="m1"></span></div>
+        <div class="explain-box"><b>Ergebnisteil</b><span id="r1"></span></div>
+      </div>
+    </div>
+  </details>
+
+  <details class="acc" id="acc-3" open>
+    <summary><span class="acc-no">3</span><span class="acc-title">Output lesen: gemischtes Modell<span class="acc-teaser">Feste Effekte, Varianzkomponenten und der eine Koeffizient, der die Frage beantwortet.</span></span></summary>
+    <div class="acc-body">
+      <p class="text">Das Modell aus der <a href="../../gemischte-modelle/hueftarthroskopie/#acc-3">Hüftarthroskopie-Station</a>: Schmerz (VAS 0 bis 10) mit Gruppe, Messzeitpunkt und ihrer Wechselwirkung als festen Effekten und einem zufälligen Achsenabschnitt je Person, ohne die beiden fortgeschriebenen Personen. SPSS gibt zwei Tabellen aus. Klicken Sie auf die markierten Zellen.</p>
+      <div class="tab-wrap"><table class="anova out" id="o2"></table></div>
+      <div class="tab-wrap"><table class="anova out" id="o3"></table></div>
+      <p class="reveal outexp" id="o2x">Klicken Sie auf eine markierte Zelle.</p>
+      <p class="note">Die Parameter folgen der Kodierung der Station: Kontrolle und „vor OP“ sind die Referenz. SPSS wählt standardmäßig die letzte Kategorie als Referenz; dann ändern sich Vorzeichen und Bedeutung der Haupteffekte, die Wechselwirkung für Woche 14 bleibt inhaltlich dieselbe. Die Freiheitsgrade schätzt SPSS nach Satterthwaite; hier wird vereinfacht mit 88 gerechnet (90 Personen minus 2).</p>
+      <div class="two-col">
+        <div class="explain-box"><b>Methodenteil</b><span id="m2"></span></div>
+        <div class="explain-box"><b>Ergebnisteil</b><span id="r2"></span></div>
+      </div>
+    </div>
+  </details>
+
+  <details class="acc" id="acc-4" open>
+    <summary><span class="acc-no">4</span><span class="acc-title">Checkliste für die Hausarbeit<span class="acc-teaser">Methoden- und Ergebnisteil nach CONSORT und STROBE, zum Abhaken.</span></span></summary>
+    <div class="acc-body">
+      <p class="text">Die Liste fasst die Punkte aus CONSORT (randomisierte Studien) und STROBE (Beobachtungsstudien) zusammen, die für die Auswertung zählen. Für eine Publikation gilt die vollständige Checkliste des jeweiligen Statements. Ihre Haken bleiben in diesem Browser gespeichert.</p>
+      <p class="chk-bar" id="chkbar"></p>
+      <div id="chk"></div>
+      <div class="actions"><button type="button" class="btn ghost" id="chkreset">Haken zurücksetzen</button></div>
+    </div>
+  </details>
+
+  <section class="block refs" aria-labelledby="refs-h">
+    <h2 id="refs-h">Quellen</h2>
+    <ul><li>Hopewell, S., Chan, A.-W., Collins, G. S. et al. (2025). CONSORT 2025 statement: updated guideline for reporting randomised trials. BMJ, 389, e081123. <a href="https://pubmed.ncbi.nlm.nih.gov/40228833/">PubMed 40228833</a></li>
+    <li>von Elm, E., Altman, D. G., Egger, M. et al. (2007). The Strengthening the Reporting of Observational Studies in Epidemiology (STROBE) statement: guidelines for reporting observational studies. Lancet, 370(9596), 1453–1457. <a href="https://doi.org/10.1016/S0140-6736(07)61602-X">doi:10.1016/S0140-6736(07)61602-X</a></li>
+    <li>Lang, T. A., &amp; Altman, D. G. (2015). Basic statistical reporting for articles published in biomedical journals: the SAMPL guidelines. International Journal of Nursing Studies, 52(1), 5–9. <a href="https://doi.org/10.1016/j.ijnurstu.2014.09.006">doi:10.1016/j.ijnurstu.2014.09.006</a></li>
+    <li>Heerey, J. J. et al. (2021). Cam morphology is associated with MRI-defined cartilage defects and labral tears: a case–control study of 237 young adult football players with and without hip and groin pain. BMJ Open Sport &amp; Exercise Medicine, 7, e001199. Grundlage des simulierten Cam-Datensatzes.</li>
+    <li>Müller-Torrente, A. et al. (2021). Benefits of a specific and supervised rehabilitation program in femoroacetabular impingement patients undergoing hip arthroscopy: A randomized control trial. Journal of Clinical Medicine, 10(14), 3125. <a href="https://doi.org/10.3390/jcm10143125">doi:10.3390/jcm10143125</a>; Daten CC BY 4.0, <a href="https://zenodo.org/records/22206659">Zenodo</a>.</li>
+</ul>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="column">
+    <span>© 2026 Dr. Jens Hüsers · Lehrmaterial für Forschungsmethodik und Statistik</span>
+    <span class="footer-links"><a href="https://github.com/jnshsrs/stats-lab">Quellcode auf GitHub</a><span>Ohne Cookies und Tracking</span></span>
+  </div>
+</footer>
+<script src="../../assets/vendor/katex/katex.min.js"></script>
+<script src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
+<script src="../../assets/js/tex.js?v=202611280940"></script>
+<script src="../../assets/js/reg.js?v=202611280940"></script>
+<script src="../../gemischte-modelle/gm-common.js?v=202611280940"></script>
+<script src="../../logistische-regression/daten/cam.js?v=202611280940"></script>
+<script src="../../gemischte-modelle/daten/fai_reha.js?v=202611280940"></script>
+<script src="../../gemischte-modelle/lmm.js?v=202611280940"></script>
+<script src="ergebnisse-berichten.js?v=202611280940"></script>
+<script src="../../assets/js/path.js?v=202611280940"></script>
+</body>
+</html>
