@@ -15,14 +15,14 @@ const figMixed = () => tab("Schätzungen fester Parameter (Schmerz, VAS 0 bis 10
 /* ---------- Stationen ---------- */
 const AB = ["Ausschließlich Aussage A ist richtig.", "Ausschließlich Aussage B ist richtig.", "Beide Aussagen sind richtig.", "Keine der beiden Aussagen ist richtig."];
 const STOPS = [
-  { day: "Zum Einstieg", dd: "Vor dem ersten Präsenztag: die Landkarte der Verfahren." },
+  { day: "Zum Einstieg", dd: "Vor dem Start: die Landkarte der Verfahren." },
   { id: "verfahrenswahl-start", kind: "pflicht", blk: "Auswertung planen und berichten", t: "Welches Verfahren passt? Der Entscheidungsweg", href: "auswertung/verfahrenswahl/#acc-1",
     d: "Drei Fragen führen zum Verfahren: Was wird gemessen, wie hängen die Messungen zusammen, was wird verglichen? Der Entscheidungsweg zeigt, wo die Stationen dieser Reise auf der Landkarte liegen.",
     can: "Für eine Studie Zielgröße, Datenstruktur und Vergleich benennen und daraus die Modellfamilie ableiten.",
     deep: [["auswertung/verfahrenswahl/#acc-3", "Die Übersicht: Zielgröße und Datenstruktur auf einen Blick"], ["testen/t-test-varianten/", "Welcher t-Test? Die Verfahren aus FM1"]],
     qs: [{ type: "ab", a: "Ob die Zielgröße metrisch oder binär ist, entscheidet, ob ein lineares oder ein logistisches Modell passt.", b: "Ob Messungen zusammenhängen, spielt bei großer Stichprobe keine Rolle mehr.", right: 0,
       why: "A stimmt: Die Zielgröße bestimmt die Modellfamilie. B ist falsch: Abhängige Messungen verkleinern den Standardfehler fälschlich, gleich wie groß n ist. Bei vielen Patientinnen pro Praxis wird das Problem sogar größer." }] },
-  { day: "Freitag: Logistische Regression", dd: "Wenn das Ergebnis ja oder nein lautet: Odds, S-Kurve und eine Werkstatt zur Cam-Morphologie." },
+  { day: "Teil 1: Logistische Regression", dd: "Wenn das Ergebnis ja oder nein lautet: Odds, S-Kurve und eine Werkstatt zur Cam-Morphologie." },
   { id: "risiko-odds", kind: "grundlage", blk: "Grundlagen", t: "Risiko, Odds und Odds Ratio", href: "grundlagen/risiko-odds/",
     d: "Zwei Sprachen für dasselbe: Risiko ist der Anteil der Betroffenen, Odds das Verhältnis von Betroffenen zu Nichtbetroffenen. Aus der Vierfeldertafel folgen Risikodifferenz, NNT, Risikoverhältnis und Odds Ratio.",
     can: "Aus einer Vierfeldertafel RD, NNT, RR und OR berechnen und sagen, wann OR und RR auseinanderlaufen.",
@@ -47,7 +47,7 @@ const STOPS = [
     deep: [["logistische-regression/cam-morphologie/#acc-4", "Vom Odds Ratio zu Prozentpunkten"], ["auswertung/ergebnisse-berichten/#acc-2", "Output lesen: logistische Regression"]],
     qs: [{ type: "fig", label: "Output lesen", fig: figLogit, p: "Knorpeldefekt (ja oder nein) in Abhängigkeit vom Alpha-Winkel in Grad, adjustiert für Schmerz. Welcher Satz gibt das Ergebnis für den Alpha-Winkel richtig wieder?", o: ["Pro Grad Alpha-Winkel steigen die Odds eines Knorpeldefekts um den Faktor 1,03 (95-%-KI 1,01 bis 1,05).", "Pro Grad Alpha-Winkel steigt die Wahrscheinlichkeit eines Knorpeldefekts um 2,8 Prozentpunkte.", "Pro Grad Alpha-Winkel steigt das Risiko eines Knorpeldefekts um das 1,03-Fache.", "Der Alpha-Winkel ist ohne Bedeutung, weil Exp(B) fast 1 ist."], right: 0,
       why: "Exp(B) ist das Odds Ratio pro Grad. B ist kein Prozentpunktwert, sondern eine Änderung der Log-Odds, und ein OR ist kein Risikoverhältnis. Klein wirkt das OR nur wegen der Einheit: Pro 10 Grad sind es 1,03¹⁰ ≈ 1,33." }] },
-  { day: "Samstag: Gemischte Modelle", dd: "Wenn Messungen zusammenhängen: Praxen, Personen, Verläufe und eine Werkstatt mit offenen RCT-Daten." },
+  { day: "Teil 2: Gemischte Modelle", dd: "Wenn Messungen zusammenhängen: Praxen, Personen, Verläufe und eine Werkstatt mit offenen RCT-Daten." },
   { id: "abhaengige-daten", kind: "pflicht", blk: "Gemischte Modelle", t: "Abhängige Daten: Praxen, Personen, Messwiederholungen", href: "gemischte-modelle/abhaengige-daten/",
     d: "In einem cluster-randomisierten RCT wird der naive t-Test viel zu oft signifikant. Die ICC misst, wie ähnlich sich Messungen derselben Gruppe sind, der Designeffekt, wie viel die Daten wirklich wert sind.",
     can: "ICC und Designeffekt erklären und die effektive Fallzahl einer geschachtelten Studie abschätzen.",
