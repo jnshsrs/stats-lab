@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rangtests: wenn Mittelwerte nicht passen · Stats Lab</title>
+<meta name="description" content="Mann-Whitney-U, Wilcoxon und Kruskal-Wallis an Beispielen aus der Versorgungsforschung: Zufriedenheit im Wochenbett, Schluckfähigkeit nach logopädischer Therapie, Ergotherapie in drei Settings. Ränge, Bindungen, Effektstärken, SPSS und R.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../assets/css/base.css?v=202611281147">
+<link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
+<link rel="stylesheet" href="rangtests.css?v=202611281147">
+</head>
+<body>
+<header class="site-header">
+  <div class="column">
+    <a class="brand" href="../../">
+      <svg class="brand-mark" viewBox="0 0 22 22" aria-hidden="true"><path d="M1 19 C5 19 6 4 9 4 S13 19 17 19" fill="none" class="bm-a" stroke-width="2.2" stroke-linecap="round"/><path d="M5 19 C9 19 10 7 13 7 S17 19 21 19" fill="none" class="bm-b" stroke-width="2.2" stroke-linecap="round"/></svg>
+      Stats Lab
+    </a>
+    <nav class="site-nav" aria-label="Hauptnavigation">
+      <a href="../../">Visualisierungen</a>
+      <a href="../../lernreisen/">Lernreisen</a>
+      <a href="../../glossar/">Glossar</a>
+      <a href="https://github.com/jnshsrs/stats-lab">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main class="column">
+  <section class="intro">
+    <a class="back" href="../../">← Alle Visualisierungen</a>
+    <h1>Rangtests: wenn Mittelwerte nicht passen</h1>
+    <p class="byline">Dr. Jens Hüsers · Forschungsmethodik</p>
+    <p class="lede">Zufriedenheit auf einer Skala von 1 bis 5, Schweregrad einer Schluckstörung in sieben Stufen, Schmerz als „kein, leicht, mittel, stark“: In der Versorgungsforschung sind viele Zielgrößen ordinal. Die Abstände zwischen den Stufen sind nicht gleich, ein Mittelwert ist dann schwer zu deuten. Rangtests rechnen deshalb nicht mit den Werten, sondern mit ihrer Reihenfolge. Diese Station zeigt die drei wichtigsten: Mann-Whitney-U für zwei Gruppen, Wilcoxon für gepaarte Messungen und Kruskal-Wallis für mehr als zwei Gruppen.</p>
+  </section>
+
+  <details class="acc" id="acc-1" open>
+    <summary><span class="acc-no">1</span><span class="acc-title">Zwei Gruppen: Mann-Whitney-U-Test<span class="acc-teaser">Zufriedenheit mit der Wochenbettbetreuung, aus Werten werden Ränge.</span></span></summary>
+    <div class="acc-body">
+      <p class="text">Eine Studie vergleicht Frauen, die im Wochenbett aufsuchend von einer Hebamme betreut wurden, mit Frauen ohne diese Betreuung. Gefragt wird nach der Zufriedenheit mit der Versorgung nach der Geburt, von 1 (sehr unzufrieden) bis 5 (sehr zufrieden). Die Daten sind simuliert. Wählen Sie, wie groß der Unterschied in der Population ist, und ziehen Sie neue Stichproben.</p>
+      <div class="actions"><div class="seg" role="group" aria-label="Unterschied in der Population" id="e1"><button type="button" data-e="0" aria-pressed="false">kein Unterschied</button><button type="button" data-e="0.5" aria-pressed="false">kleiner Unterschied</button><button type="button" data-e="1" aria-pressed="true">deutlicher Unterschied</button></div><button type="button" class="btn" id="d1">Neue Stichprobe</button></div>
+      <svg class="chart" id="c1" viewBox="0 0 900 300" role="img" aria-label="Antworten beider Gruppen je Stufe"></svg>
+      <p class="text"><b>Schritt 1: alle Antworten in eine Reihe.</b> Beide Gruppen werden zusammengeworfen und von der niedrigsten zur höchsten Antwort sortiert. Wer dieselbe Stufe angekreuzt hat, teilt sich den mittleren Rang dieser Stufe (Bindungen).</p>
+      <svg class="chart" id="c1r" viewBox="0 0 900 170" role="img" aria-label="Ränge aller Antworten"></svg>
+      <div class="legend"><span><i style="background:var(--therapie)"></i>mit Hebammenbetreuung</span><span><i style="background:var(--kontrolle)"></i>ohne Hebammenbetreuung</span><span><i style="background:var(--highlight);outline:1px solid var(--line)"></i>Block gleicher Antworten mit mittlerem Rang</span></div>
+      <p class="text"><b>Schritt 2: Rangsummen vergleichen.</b> Gibt es keinen Unterschied, sollten beide Gruppen im Mittel ähnliche Ränge haben. U zählt, wie oft eine Antwort der einen Gruppe höher liegt als eine der anderen.</p>
+      <div class="formula" id="f1"></div>
+      <div class="tab-wrap"><table class="anova" id="t1"></table></div>
+      <p class="callout" id="cl1"></p>
+    </div>
+  </details>
+
+  <details class="acc" id="acc-2" open>
+    <summary><span class="acc-no">2</span><span class="acc-title">Vorher und nachher: Wilcoxon-Test<span class="acc-teaser">Schluckfähigkeit nach logopädischer Therapie, Ränge der Differenzen.</span></span></summary>
+    <div class="acc-body">
+      <p class="text">14 Personen mit Dysphagie nach Schlaganfall erhalten sechs Wochen Schlucktherapie. Vorher und nachher wird die Functional Oral Intake Scale (FOIS) erhoben: 1 heißt nichts über den Mund, 7 heißt volle orale Kost ohne Einschränkung. Die Stufen sind geordnet, aber ungleich weit voneinander entfernt. Wie beim gepaarten t-Test zählt die Differenz pro Person; der Wilcoxon-Test bildet aus ihren Beträgen Ränge und gibt jedem Rang das Vorzeichen zurück.</p>
+      <div class="actions"><div class="seg" role="group" aria-label="Wirkung in der Population" id="e2"><button type="button" data-e="0" aria-pressed="false">keine Wirkung</button><button type="button" data-e="0.6" aria-pressed="true">kleine Wirkung</button><button type="button" data-e="1.2" aria-pressed="false">deutliche Wirkung</button></div><button type="button" class="btn" id="d2">Neue Stichprobe</button></div>
+      <svg class="chart" id="c2" viewBox="0 0 900 340" role="img" aria-label="Differenzen nachher minus vorher mit Rängen"></svg>
+      <div class="legend"><span><i style="background:var(--therapie)"></i>verbessert (positiver Rang)</span><span><i style="background:var(--beta-ink)"></i>verschlechtert (negativer Rang)</span><span><i style="background:var(--pal-2)"></i>keine Veränderung, fällt heraus</span></div>
+      <div class="formula" id="f2"></div>
+      <div class="tab-wrap"><table class="anova" id="t2"></table></div>
+      <p class="callout" id="cl2"></p>
+    </div>
+  </details>
+
+  <details class="acc" id="acc-3" open>
+    <summary><span class="acc-no">3</span><span class="acc-title">Mehr als zwei Gruppen: Kruskal-Wallis-Test<span class="acc-teaser">Zufriedenheit mit Ergotherapie in Praxis, Hausbesuch und Teletherapie.</span></span></summary>
+    <div class="acc-body">
+      <p class="text">Ergotherapeutische Versorgung findet in der Praxis, als Hausbesuch oder per Video statt. Je 15 Patientinnen geben ihre Zufriedenheit von 1 bis 5 an (simuliert). Der Kruskal-Wallis-Test ist das Gegenstück zur <a href="../anova/">einfaktoriellen ANOVA</a>: Er prüft, ob sich die mittleren Ränge der Gruppen unterscheiden.</p>
+      <div class="actions"><div class="seg" role="group" aria-label="Unterschied in der Population" id="e3"><button type="button" data-e="0" aria-pressed="false">kein Unterschied</button><button type="button" data-e="0.5" aria-pressed="false">kleiner Unterschied</button><button type="button" data-e="1" aria-pressed="true">deutlicher Unterschied</button></div><button type="button" class="btn" id="d3">Neue Stichprobe</button></div>
+      <svg class="chart" id="c3" viewBox="0 0 900 360" role="img" aria-label="Antworten der drei Settings"></svg>
+      <div class="formula" id="f3"></div>
+      <div class="tab-wrap"><table class="anova" id="t3"></table></div>
+      <p class="callout" id="cl3"></p>
+      <p class="text">Ein signifikantes H sagt nur, dass sich mindestens zwei Settings unterscheiden. Welche, zeigen paarweise Vergleiche (in SPSS Dunn-Bonferroni), mit korrigiertem α wie bei <a href="../multiples-testen/">multiplem Testen</a>.</p>
+    </div>
+  </details>
+
+  <details class="acc" id="acc-4" open>
+    <summary><span class="acc-no">4</span><span class="acc-title">Welcher Test, was er prüft und wie man berichtet<span class="acc-teaser">Gegenstücke, Voraussetzungen, SPSS und R.</span></span></summary>
+    <div class="acc-body">
+      <div class="tab-wrap"><table class="when stack">
+        <thead><tr><th>Situation</th><th>Metrisch, etwa normalverteilt</th><th>Ordinal oder stark schief</th><th>Effektgröße</th></tr></thead>
+        <tbody>
+          <tr><td>zwei unabhängige Gruppen</td><td><a href="../t-test-varianten/#acc-2">ungepaarter t-Test</a></td><td>Mann-Whitney-U-Test</td><td>r = z ÷ √N</td></tr>
+          <tr><td>zwei Messungen derselben Personen</td><td><a href="../t-test-varianten/#acc-1">gepaarter t-Test</a></td><td>Wilcoxon-Vorzeichen-Rang-Test</td><td>r = z ÷ √n</td></tr>
+          <tr><td>mehr als zwei unabhängige Gruppen</td><td><a href="../anova/">einfaktorielle ANOVA</a></td><td>Kruskal-Wallis-Test</td><td>η²<sub>H</sub> = (H − k + 1) ÷ (N − k)</td></tr>
+          <tr><td>kategorial, nicht geordnet</td><td colspan="2"><a href="../chi-quadrat/">Chi-Quadrat-Test</a></td><td>RD, RR, OR, Cramérs V</td></tr>
+        </tbody>
+      </table></div>
+      <ol class="check">
+        <li><b>Was ein Rangtest prüft.</b> Mann-Whitney fragt im Kern: Liegt eine zufällig gezogene Person der einen Gruppe eher höher als eine der anderen? Ein Unterschied der Mediane ist das nur, wenn beide Verteilungen dieselbe Form haben. Berichten Sie deshalb Median und Interquartilsabstand, und sprechen Sie von „höheren Werten“ statt von „höherem Median“.</li>
+        <li><b>Keine Normalverteilung nötig, aber nicht voraussetzungsfrei.</b> Die Beobachtungen müssen unabhängig sein (beim Wilcoxon: die Paare), und viele Bindungen kosten Power. Bei sehr wenigen Stufen, etwa ja/nein/vielleicht, ist der <a href="../chi-quadrat/">Chi-Quadrat-Test</a> oft passender.</li>
+        <li><b>Wann trotzdem der t-Test?</b> Bei größeren Stichproben und Summenscores aus vielen Items (etwa ein Fragebogen mit zehn Fragen) ist der t-Test robust und gut zu deuten. Bei einem einzelnen Likert-Item, kleinen Gruppen oder Ausreißern sind Rangtests die sichere Wahl. Entscheiden Sie vorab, nicht nach dem Blick auf den p-Wert.</li>
+        <li><b>So berichten</b> (Werte aus Abschnitt 1): <span id="rep1"></span></li>
+      </ol>
+      <p class="note"><b>In SPSS:</b> Analysieren → Nicht parametrische Tests → Alte Dialogfelder → 2 unabhängige Stichproben (Mann-Whitney-U), 2 verbundene Stichproben (Wilcoxon) oder K unabhängige Stichproben (Kruskal-Wallis-H). SPSS gibt den asymptotischen p-Wert aus, bei kleinen Gruppen zusätzlich den exakten. <b>In R:</b> <code>wilcox.test(zufr ~ gruppe, data = d)</code>, <code>wilcox.test(d$nach, d$vor, paired = TRUE)</code>, <code>kruskal.test(zufr ~ setting, data = d)</code>.</p>
+    </div>
+  </details>
+
+  <section class="block refs" aria-labelledby="refs-h">
+    <h2 id="refs-h">Quellen</h2>
+    <ul><li>Crary, M. A., Carnaby Mann, G. D., &amp; Groher, M. E. (2005). Initial psychometric assessment of a functional oral intake scale for dysphagia in stroke patients. Archives of Physical Medicine and Rehabilitation, 86(8), 1516–1520. <a href="https://doi.org/10.1016/j.apmr.2004.11.049">doi:10.1016/j.apmr.2004.11.049</a></li>
+    <li>Field, A. (2018). Discovering Statistics Using IBM SPSS Statistics (5. Aufl.), Kapitel zu nichtparametrischen Verfahren. Sage.</li>
+    <li>Bortz, J., &amp; Schuster, C. (2010). Statistik für Human- und Sozialwissenschaftler (7. Aufl.). Springer.</li>
+    <li>Fagerland, M. W. (2012). t-tests, non-parametric tests, and large studies: a paradox of statistical practice? BMC Medical Research Methodology, 12, 78. <a href="https://doi.org/10.1186/1471-2288-12-78">doi:10.1186/1471-2288-12-78</a></li>
+</ul>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="column">
+    <span>© 2026 Dr. Jens Hüsers · Lehrmaterial für Forschungsmethodik und Statistik</span>
+    <span class="footer-links"><a href="https://github.com/jnshsrs/stats-lab">Quellcode auf GitHub</a><span>Ohne Cookies und Tracking</span></span>
+  </div>
+</footer>
+<script src="../../assets/vendor/katex/katex.min.js"></script>
+<script src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
+<script src="../../assets/js/tex.js?v=202611281147"></script>
+<script src="../../assets/js/reg.js?v=202611281147"></script>
+<script src="../../gemischte-modelle/gm-common.js?v=202611281147"></script>
+<script src="rangtests.js?v=202611281147"></script>
+<script src="../../assets/js/path.js?v=202611281147"></script>
+</body>
+</html>

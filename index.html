@@ -6,7 +6,7 @@
 <title>Stats Lab</title>
 <meta name="description" content="Interaktive Visualisierungen für die Statistiklehre in Gesundheits- und Therapiewissenschaften.">
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="assets/css/base.css?v=202611281037">
+<link rel="stylesheet" href="assets/css/base.css?v=202611281147">
 <style>
   .hero { padding-block: 56px 40px; display: flex; flex-direction: column; gap: 16px; }
   .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; }
@@ -387,8 +387,28 @@
         <div class="tags"><span class="tag">FWER</span><span class="tag">Bonferroni</span><span class="tag">Subgruppen</span></div>
       </div>
     </a>
-    <a class="card" href="testen/chi-quadrat/">
+    <a class="card" href="testen/anova/">
       <div class="card-thumb"><span class="path-no">22</span>
+        <svg viewBox="0 0 320 180" aria-hidden="true"><line x1="30" x2="290" y1="150" y2="150" class="t-axis" stroke-width="2"/><line x1="30" x2="290" y1="85" y2="85" class="t-dash"/><line x1="50" x2="110" y1="60" y2="60" class="t-curve"/><line x1="130" x2="190" y1="88" y2="88" class="t-curve"/><line x1="210" x2="270" y1="115" y2="115" class="t-curve"/><circle cx="70" cy="45" r="5" class="t-strong"/><circle cx="95" cy="72" r="5" class="t-strong"/><circle cx="150" cy="100" r="5" class="t-hyp"/><circle cx="170" cy="76" r="5" class="t-hyp"/><circle cx="230" cy="130" r="5" class="t-up"/><circle cx="255" cy="104" r="5" class="t-up"/></svg>
+      </div>
+      <div class="card-body">
+        <h3>Einfaktorielle ANOVA</h3>
+        <p>Belastung pflegender Angehöriger in drei Versorgungsformen: warum nicht drei t-Tests, wie die Streuung in „zwischen“ und „innerhalb“ zerfällt, die F-Verteilung und Bonferroni-Paarvergleiche.</p>
+        <div class="tags"><span class="tag">F-Test</span><span class="tag">η²</span><span class="tag">Post hoc</span></div>
+      </div>
+    </a>
+    <a class="card" href="testen/rangtests/">
+      <div class="card-thumb"><span class="path-no">23</span>
+        <svg viewBox="0 0 320 180" aria-hidden="true"><line x1="30" x2="290" y1="150" y2="150" class="t-axis" stroke-width="2"/><rect x="40" y="60" width="70" height="60" rx="6" class="t-bar" opacity=".35"/><rect x="120" y="60" width="80" height="60" rx="6" class="t-bar" opacity=".35"/><rect x="210" y="60" width="70" height="60" rx="6" class="t-bar" opacity=".35"/><circle cx="58" cy="78" r="6" class="t-strong"/><circle cx="90" cy="102" r="6" class="t-up"/><circle cx="140" cy="78" r="6" class="t-strong"/><circle cx="160" cy="102" r="6" class="t-up"/><circle cx="182" cy="78" r="6" class="t-strong"/><circle cx="230" cy="78" r="6" class="t-strong"/><circle cx="260" cy="78" r="6" class="t-strong"/><text x="40" y="172" font-size="14" class="t-euro">1 2 3 … Ränge</text></svg>
+      </div>
+      <div class="card-body">
+        <h3>Rangtests</h3>
+        <p>Ordinale Zielgrößen aus der Versorgungsforschung: Mann-Whitney-U (Wochenbett), Wilcoxon (Schluckfähigkeit nach Logopädie) und Kruskal-Wallis (Ergotherapie in drei Settings), mit Rängen, Bindungen und Effektstärken.</p>
+        <div class="tags"><span class="tag">ordinal</span><span class="tag">Mann-Whitney</span><span class="tag">Kruskal-Wallis</span></div>
+      </div>
+    </a>
+    <a class="card" href="testen/chi-quadrat/">
+      <div class="card-thumb"><span class="path-no">24</span>
         <svg viewBox="0 0 320 180" aria-hidden="true">
           <rect x="70" y="30" width="90" height="80" class="t-strong"/><rect x="70" y="110" width="90" height="40" class="t-soft"/>
           <rect x="166" y="30" width="84" height="52" class="t-strong"/><rect x="166" y="82" width="84" height="68" class="t-soft"/>
@@ -408,7 +428,7 @@
     <div class="block-head"><span class="block-no">5</span><div><h2 id="block-hintergrund">Hintergrund</h2><p>Denkfallen und Wissenschaftstheorie: Regression zur Mitte, positive Befunde, Popper, Fisher, Neyman und Pearson.</p></div></div>
     <div class="grid">
     <a class="card" href="hintergrund/regression-mitte/">
-      <div class="card-thumb"><span class="path-no">23</span>
+      <div class="card-thumb"><span class="path-no">25</span>
         <svg viewBox="0 0 320 180" aria-hidden="true">
           <line x1="40" x2="290" y1="150" y2="30" class="t-dash"/>
           <line x1="40" x2="290" y1="128" y2="52" class="t-curve"/>
@@ -424,7 +444,7 @@
       </div>
     </a>
     <a class="card" href="hintergrund/mammografie/">
-      <div class="card-thumb"><span class="path-no">24</span>
+      <div class="card-thumb"><span class="path-no">26</span>
         <svg viewBox="0 0 320 180" aria-hidden="true">
           <rect x="30" y="76" width="56" height="28" rx="6" class="t-soft"/>
           <path d="M86 90 C 110 90, 110 50, 134 50 M86 90 C 110 90, 110 130, 134 130" fill="none" class="t-dash"/>
@@ -440,7 +460,7 @@
       </div>
     </a>
     <a class="card" href="hintergrund/klinische-tests/">
-      <div class="card-thumb"><span class="path-no">25</span>
+      <div class="card-thumb"><span class="path-no">27</span>
         <svg viewBox="0 0 320 180" aria-hidden="true">
           <rect x="40" y="30" width="110" height="60" class="t-strong"/><rect x="150" y="30" width="110" height="60" class="t-soft"/>
           <rect x="40" y="90" width="110" height="60" class="t-bar"/><rect x="150" y="90" width="110" height="60" class="t-band"/>
@@ -454,7 +474,7 @@
       </div>
     </a>
     <a class="card" href="hintergrund/inferenzzyklus/">
-      <div class="card-thumb"><span class="path-no">26</span>
+      <div class="card-thumb"><span class="path-no">28</span>
         <svg viewBox="0 0 320 180" aria-hidden="true">
           <rect x="0" y="0" width="320" height="80" class="t-band"/>
           <rect x="70" y="22" width="180" height="40" rx="10" class="t-hyp"/>
@@ -477,7 +497,7 @@
     <div class="block-head"><span class="block-no">6</span><div><h2 id="block-regression">Zusammenhänge und Regression</h2><p>Wie hängen zwei Messgrößen zusammen, und was bleibt, wenn man andere Einflüsse berücksichtigt? Durchgehend mit echten Lungenfunktionsdaten von 654 Kindern.</p></div></div>
     <div class="grid">
     <a class="card" href="regression/korrelation/">
-      <div class="card-thumb"><span class="path-no">27</span>
+      <div class="card-thumb"><span class="path-no">29</span>
         <svg viewBox="0 0 320 180" aria-hidden="true">
           <line x1="40" x2="290" y1="150" y2="150" class="t-axis" stroke-width="2"/><line x1="40" x2="40" y1="20" y2="150" class="t-axis" stroke-width="2"/>
           <circle cx="70" cy="132" r="6" class="t-strong"/><circle cx="95" cy="120" r="6" class="t-strong"/><circle cx="118" cy="124" r="6" class="t-strong"/><circle cx="140" cy="102" r="6" class="t-strong"/><circle cx="165" cy="96" r="6" class="t-strong"/><circle cx="188" cy="80" r="6" class="t-strong"/><circle cx="210" cy="84" r="6" class="t-strong"/><circle cx="232" cy="60" r="6" class="t-strong"/><circle cx="258" cy="48" r="6" class="t-strong"/><circle cx="270" cy="36" r="6" class="t-strong"/>
@@ -491,7 +511,7 @@
       </div>
     </a>
     <a class="card" href="regression/gerade/">
-      <div class="card-thumb"><span class="path-no">28</span>
+      <div class="card-thumb"><span class="path-no">30</span>
         <svg viewBox="0 0 320 180" aria-hidden="true">
           <line x1="40" x2="290" y1="150" y2="150" class="t-axis" stroke-width="2"/><line x1="40" x2="40" y1="20" y2="150" class="t-axis" stroke-width="2"/>
           <line x1="50" x2="285" y1="140" y2="38" class="t-dash"/>
@@ -506,7 +526,7 @@
       </div>
     </a>
     <a class="card" href="regression/normbereich/">
-      <div class="card-thumb"><span class="path-no">29</span>
+      <div class="card-thumb"><span class="path-no">31</span>
         <svg viewBox="0 0 320 180" aria-hidden="true">
           <line x1="40" x2="290" y1="150" y2="150" class="t-axis" stroke-width="2"/><line x1="40" x2="40" y1="20" y2="150" class="t-axis" stroke-width="2"/>
           <path d="M50 108 L285 10 L285 70 L50 168 Z" class="t-soft"/>
@@ -521,7 +541,7 @@
       </div>
     </a>
     <a class="card" href="regression/bestimmtheitsmass/">
-      <div class="card-thumb"><span class="path-no">30</span>
+      <div class="card-thumb"><span class="path-no">32</span>
         <svg viewBox="0 0 320 180" aria-hidden="true">
           <rect x="40" y="40" width="240" height="26" rx="4" class="t-strong"/>
           <rect x="40" y="96" width="180" height="26" rx="4" class="t-up"/>
@@ -536,7 +556,7 @@
       </div>
     </a>
     <a class="card" href="regression/diagnostik/">
-      <div class="card-thumb"><span class="path-no">31</span>
+      <div class="card-thumb"><span class="path-no">33</span>
         <svg viewBox="0 0 320 180" aria-hidden="true">
           <line x1="40" x2="290" y1="90" y2="90" class="t-dash"/>
           <path d="M50 84 L290 40 L290 140 L50 96 Z" class="t-soft"/>
@@ -550,7 +570,7 @@
       </div>
     </a>
     <a class="card" href="regression/multiple-regression/">
-      <div class="card-thumb"><span class="path-no">32</span>
+      <div class="card-thumb"><span class="path-no">34</span>
         <svg viewBox="0 0 320 180" aria-hidden="true">
           <line x1="40" x2="290" y1="150" y2="150" class="t-axis" stroke-width="2"/><line x1="40" x2="40" y1="20" y2="150" class="t-axis" stroke-width="2"/>
           <line x1="50" x2="285" y1="128" y2="58" class="t-curve"/>
@@ -565,7 +585,7 @@
       </div>
     </a>
     <a class="card" href="regression/drittvariablen/">
-      <div class="card-thumb"><span class="path-no">33</span>
+      <div class="card-thumb"><span class="path-no">35</span>
         <svg viewBox="0 0 320 180" aria-hidden="true">
           <rect x="128" y="22" width="64" height="30" rx="8" class="t-axis" fill="none" stroke-width="2"/>
           <rect x="34" y="122" width="64" height="30" rx="8" class="t-axis" fill="none" stroke-width="2"/>
@@ -581,7 +601,7 @@
       </div>
     </a>
     <a class="card" href="regression/wechselwirkungen/">
-      <div class="card-thumb"><span class="path-no">34</span>
+      <div class="card-thumb"><span class="path-no">36</span>
         <svg viewBox="0 0 320 180" aria-hidden="true">
           <line x1="40" x2="290" y1="150" y2="150" class="t-axis" stroke-width="2"/><line x1="40" x2="40" y1="20" y2="150" class="t-axis" stroke-width="2"/>
           <line x1="70" x2="270" y1="122" y2="90" class="t-curve"/><line x1="70" x2="270" y1="128" y2="34" class="t-dash"/>
@@ -601,7 +621,7 @@
     <div class="block-head"><span class="block-no">7</span><div><h2 id="block-logistische-regression">Logistische Regression</h2><p>Wenn die Zielgröße ja oder nein ist: von der Geraden zur S-Kurve, Odds Ratio pro Einheit und ein Praxisbeispiel zur Cam-Morphologie der Hüfte.</p></div></div>
     <div class="grid">
     <a class="card" href="logistische-regression/s-kurve/">
-      <div class="card-thumb"><span class="path-no">35</span>
+      <div class="card-thumb"><span class="path-no">37</span>
         <svg viewBox="0 0 320 180" aria-hidden="true">
           <line x1="40" x2="290" y1="150" y2="150" class="t-axis" stroke-width="2"/><line x1="40" x2="40" y1="20" y2="150" class="t-axis" stroke-width="2"/>
           <line x1="45" x2="285" y1="160" y2="40" class="t-dash"/>
@@ -615,7 +635,7 @@
       </div>
     </a>
     <a class="card" href="logistische-regression/cam-morphologie/">
-      <div class="card-thumb"><span class="path-no">36</span>
+      <div class="card-thumb"><span class="path-no">38</span>
         <svg viewBox="0 0 320 180" aria-hidden="true">
           <circle cx="150" cy="80" r="46" class="t-soft"/><path d="M150 34 A46 46 0 0 1 196 80 L212 92 L180 120 Z" class="t-strong"/>
           <line x1="150" x2="230" y1="80" y2="150" class="t-dash"/>
@@ -634,7 +654,7 @@
     <div class="block-head"><span class="block-no">8</span><div><h2 id="block-gemischte-modelle">Gemischte Modelle</h2><p>Wenn Messungen nicht unabhängig sind: warum die bekannten Werkzeuge dann nicht reichen, was feste und zufällige Effekte sind, Patientinnen in Praxen, Verläufe mit eigenem Niveau und eigener Steigung, und ein RCT mit offenen Daten zum Selbstrechnen.</p></div></div>
     <div class="grid">
     <a class="card" href="gemischte-modelle/warum/">
-      <div class="card-thumb"><span class="path-no">37</span>
+      <div class="card-thumb"><span class="path-no">39</span>
         <svg viewBox="0 0 320 180" aria-hidden="true"><line x1="40" x2="290" y1="150" y2="150" class="t-axis" stroke-width="2"/><rect x="60" y="80" width="44" height="70" class="t-strong"/><rect x="134" y="55" width="44" height="25" class="t-hyp"/><rect x="208" y="55" width="44" height="12" class="t-up"/><line x1="104" x2="134" y1="80" y2="80" class="t-dash"/><line x1="178" x2="208" y1="55" y2="55" class="t-dash"/></svg>
       </div>
       <div class="card-body">
@@ -644,7 +664,7 @@
       </div>
     </a>
     <a class="card" href="gemischte-modelle/abhaengige-daten/">
-      <div class="card-thumb"><span class="path-no">38</span>
+      <div class="card-thumb"><span class="path-no">40</span>
         <svg viewBox="0 0 320 180" aria-hidden="true"><line x1="40" x2="290" y1="150" y2="150" class="t-axis" stroke-width="2"/><circle cx="70" cy="70" r="6" class="t-up"/><circle cx="80" cy="85" r="6" class="t-up"/><circle cx="66" cy="95" r="6" class="t-up"/><circle cx="150" cy="110" r="6" class="t-up"/><circle cx="160" cy="125" r="6" class="t-up"/><circle cx="145" cy="130" r="6" class="t-up"/><circle cx="230" cy="50" r="6" class="t-strong"/><circle cx="240" cy="65" r="6" class="t-strong"/><circle cx="226" cy="75" r="6" class="t-strong"/><line x1="50" x2="95" y1="83" y2="83" class="t-step"/><line x1="130" x2="175" y1="122" y2="122" class="t-step"/><line x1="210" x2="255" y1="63" y2="63" class="t-step"/></svg>
       </div>
       <div class="card-body">
@@ -654,7 +674,7 @@
       </div>
     </a>
     <a class="card" href="gemischte-modelle/partial-pooling/">
-      <div class="card-thumb"><span class="path-no">39</span>
+      <div class="card-thumb"><span class="path-no">41</span>
         <svg viewBox="0 0 320 180" aria-hidden="true"><line x1="40" x2="290" y1="150" y2="150" class="t-axis" stroke-width="2"/><line x1="165" x2="165" y1="20" y2="150" class="t-dash"/><circle cx="70" cy="45" r="7" class="t-hyp"/><circle cx="120" cy="45" r="7" class="t-strong"/><circle cx="260" cy="85" r="7" class="t-hyp"/><circle cx="215" cy="85" r="7" class="t-strong"/><circle cx="95" cy="125" r="7" class="t-hyp"/><circle cx="105" cy="125" r="7" class="t-strong"/></svg>
       </div>
       <div class="card-body">
@@ -664,7 +684,7 @@
       </div>
     </a>
     <a class="card" href="gemischte-modelle/random-slopes/">
-      <div class="card-thumb"><span class="path-no">40</span>
+      <div class="card-thumb"><span class="path-no">42</span>
         <svg viewBox="0 0 320 180" aria-hidden="true"><line x1="40" x2="290" y1="150" y2="150" class="t-axis" stroke-width="2"/><line x1="50" x2="280" y1="50" y2="70" class="t-dash"/><line x1="50" x2="280" y1="60" y2="130" class="t-curve"/><line x1="50" x2="280" y1="40" y2="110" class="t-curve" opacity=".5"/><line x1="50" x2="280" y1="75" y2="140" class="t-curve" opacity=".5"/></svg>
       </div>
       <div class="card-body">
@@ -674,7 +694,7 @@
       </div>
     </a>
     <a class="card" href="gemischte-modelle/hueftarthroskopie/">
-      <div class="card-thumb"><span class="path-no">41</span>
+      <div class="card-thumb"><span class="path-no">43</span>
         <svg viewBox="0 0 320 180" aria-hidden="true"><line x1="40" x2="290" y1="150" y2="150" class="t-axis" stroke-width="2"/><polyline points="60,60 165,90 270,105" fill="none" class="t-dash"/><polyline points="60,45 165,95 270,140" fill="none" class="t-curve"/><circle cx="60" cy="45" r="6" class="t-strong"/><circle cx="165" cy="95" r="6" class="t-strong"/><circle cx="270" cy="140" r="6" class="t-strong"/></svg>
       </div>
       <div class="card-body">
@@ -689,7 +709,7 @@
     <div class="block-head"><span class="block-no">9</span><div><h2 id="block-auswertung">Auswertung planen und berichten</h2><p>Vom Design zum passenden Verfahren und vom Output zum Ergebnissatz: ein Entscheidungsweg mit Fallbeispielen, SPSS-Ausgaben lesen und eine Checkliste für die Hausarbeit.</p></div></div>
     <div class="grid">
     <a class="card" href="auswertung/verfahrenswahl/">
-      <div class="card-thumb"><span class="path-no">42</span>
+      <div class="card-thumb"><span class="path-no">44</span>
         <svg viewBox="0 0 320 180" aria-hidden="true"><circle cx="60" cy="90" r="9" class="t-strong"/><line x1="69" x2="150" y1="90" y2="50" class="t-curve"/><line x1="69" x2="150" y1="90" y2="130" class="t-dash"/><circle cx="160" cy="50" r="9" class="t-strong"/><circle cx="160" cy="130" r="9" class="t-hyp"/><line x1="169" x2="255" y1="50" y2="30" class="t-curve"/><line x1="169" x2="255" y1="50" y2="75" class="t-dash"/><rect x="258" y="18" width="34" height="24" rx="5" class="t-strong"/><circle cx="265" cy="75" r="8" class="t-hyp"/></svg>
       </div>
       <div class="card-body">
@@ -699,7 +719,7 @@
       </div>
     </a>
     <a class="card" href="auswertung/ergebnisse-berichten/">
-      <div class="card-thumb"><span class="path-no">43</span>
+      <div class="card-thumb"><span class="path-no">45</span>
         <svg viewBox="0 0 320 180" aria-hidden="true"><line x1="40" x2="290" y1="150" y2="150" class="t-axis" stroke-width="2"/><line x1="110" x2="110" y1="30" y2="150" class="t-dash"/><line x1="150" x2="260" y1="90" y2="90" class="t-curve"/><circle cx="200" cy="90" r="9" class="t-strong"/><line x1="150" x2="150" y1="78" y2="102" class="t-curve"/><line x1="260" x2="260" y1="78" y2="102" class="t-curve"/></svg>
       </div>
       <div class="card-body">
