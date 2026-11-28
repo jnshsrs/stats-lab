@@ -237,3 +237,26 @@ table.anova.coef td:last-child { white-space: nowrap; }
 .coef-key dt { font-family: var(--font-mono); font-weight: 600; color: var(--accent); }
 .coef-key dd { margin: 0; }
 table.anova.coef tr.tot td:last-child { white-space: normal; } table.anova.coef td:nth-child(2) { min-width: 15em; }
+/* Modellkarte (roter Faden des Blocks) */
+.mcard { border: 1px solid var(--line); border-radius: 12px; padding: 12px 16px; display: flex; flex-direction: column; gap: 8px; max-width: 900px; background: var(--surface); }
+.mc-lab { font: 500 12.5px var(--font-mono); color: var(--muted); }
+.mc-eq { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 6px 8px; font-size: 19px; }
+.mc-y, .mc-plus { padding-top: 6px; }
+.mc-t { display: flex; flex-direction: column; align-items: center; gap: 4px; border-radius: 8px; padding: 6px 10px; border: 1.5px dashed var(--line); color: var(--muted); }
+.mc-t small { font-size: 11.5px; font-family: var(--font-mono); white-space: nowrap; }
+.mc-t.on { border: 2px solid var(--accent); background: var(--highlight); color: var(--fg); }
+.mc-t.on small { color: var(--accent); font-weight: 600; }
+.mc-f { white-space: nowrap; }
+.mc-note { margin: 0; font-size: 15px; max-width: 80ch; }
+@media (max-width: 560px) { .mc-eq { font-size: 16px; } .mc-t { padding: 4px 6px; } }
+/* Station Warum: Zerlegung einer Messung */
+.fz-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+@media (max-width: 700px) { .fz-row { grid-template-columns: minmax(0, 1fr); } }
+.explain-box.fest b { color: var(--therapie); } .explain-box.zuf b { color: var(--kontrolle-ink); }
+.explain-box ul { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 4px; }
+table.vgl td.prob { font-family: var(--font-sans); text-align: left; white-space: normal; min-width: 16em; font-size: 13.5px; color: var(--muted); }
+table.vgl th:last-child { text-align: left; }
+table.vgl tr.hl td { background: var(--highlight); }
+table.vgl td:nth-child(6) { white-space: nowrap; }
+.seg.wide.four { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+@media (max-width: 640px) { .seg.wide.four { grid-template-columns: minmax(0, 1fr); } }

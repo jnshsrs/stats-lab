@@ -92,7 +92,7 @@ function draw2() {
 }
 function draw3() {
   const { f, o, t2, s2, N } = D;
-  $("f3").innerHTML = TB(`\\text{Schmerz}_{ij} = \\underbrace{\\beta_0 + \\beta_1 \\cdot \\text{Woche}_{ij}}_{\\text{fest: für alle gleich}} + \\underbrace{u_i}_{\\text{Person } i} + \\underbrace{e_{ij}}_{\\text{Termin } j}, \\quad u_i \\sim N(0, \\tau^2),\\; e_{ij} \\sim N(0, \\sigma^2)`, "Schmerz = β₀ + β₁ · Woche + u_i + e_ij");
+  $("f3").innerHTML = TB(`\\text{Schmerz}_{ij} = \\underbrace{\\beta_0 + \\beta_1 \\cdot \\text{Woche}_{ij}}_{\\text{fest: für alle gleich}} + \\underbrace{u_{0i}}_{\\text{Person } i} + \\underbrace{e_{ij}}_{\\text{Termin } j}, \\quad u_{0i} \\sim N(0, \\tau^2),\\; e_{ij} \\sim N(0, \\sigma^2)`, "Schmerz = β₀ + β₁ · Woche + u_i + e_ij");
   const r = (lab, b, se, d) => { const tc = tinv(0.975, d); return `<tr><td>${lab}</td><td>${fmt(b, 3)}</td><td>${fmt(se, 3)}</td><td>${fmt(b - tc * se, 3)} bis ${fmt(b + tc * se, 3)}</td></tr>`; };
   $("t3").innerHTML = `<thead><tr><th>Steigung pro Woche</th><th>b</th><th>SE</th><th>95-%-KI</th></tr></thead><tbody>` +
     r("Lineare Regression, alle Messungen unabhängig", o.b[1], o.se[1], N - 2) + r("Gemischtes Modell", f.beta[1], f.se[1], N - 2) +

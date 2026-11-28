@@ -6,9 +6,9 @@
 <title>Abhängige Daten · Stats Lab</title>
 <meta name="description" content="Warum t-Test und Regression bei geschachtelten Daten zu oft signifikant werden: cluster-randomisiertes RCT mit zehn Praxen, Intraklassenkorrelation, Designeffekt, effektive Fallzahl und das gemischte Modell als Lösung.">
 <link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="../../assets/css/base.css?v=202611280940">
+<link rel="stylesheet" href="../../assets/css/base.css?v=202611281037">
 <link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
-<link rel="stylesheet" href="../gemischte-modelle.css?v=202611280940">
+<link rel="stylesheet" href="../gemischte-modelle.css?v=202611281037">
 </head>
 <body>
 <header class="site-header">
@@ -31,7 +31,8 @@
     <a class="back" href="../../">← Alle Visualisierungen</a>
     <h1>Abhängige Daten</h1>
     <p class="byline">Dr. Jens Hüsers · Forschungsmethodik</p>
-    <p class="lede">t-Test und Regression setzen voraus, dass jede Messung eine eigene, unabhängige Information liefert. In der Versorgung stimmt das selten: Patientinnen derselben Praxis ähneln sich, und wer mehrmals gemessen wird, ähnelt vor allem sich selbst. Diese Station zeigt, was dann schiefgeht, wie man die Ähnlichkeit misst und was ein gemischtes Modell anders macht.</p>
+    <p class="lede">t-Test und Regression setzen voraus, dass jede Messung eine eigene, unabhängige Information liefert. In der Versorgung stimmt das selten: Patientinnen derselben Praxis ähneln sich, und wer mehrmals gemessen wird, ähnelt vor allem sich selbst. In der Station <a href="../warum/">Warum gemischte Modelle?</a> war die Gruppe die Person. Hier ist es die Praxis, und die Frage lautet: Wie viel ist die Ähnlichkeit wert? Wie oft irrt der naive t-Test, wie misst man die Ähnlichkeit, und wie viele unabhängige Patientinnen stecken wirklich in den Daten?</p>
+    <div class="mcard" data-on="u0,e" data-note="Hier geht es um das Verhältnis von u<sub>0i</sub> zu e<sub>ij</sub>, wobei i die Praxis ist: Je größer die Streuung zwischen den Praxen im Vergleich zur Streuung innerhalb, desto ähnlicher sind sich Patientinnen derselben Praxis. Dieses Verhältnis ist die ICC."></div>
   </section>
 
   <details class="acc" id="acc-1" open>
@@ -89,7 +90,7 @@
       <ol class="check">
         <li><b>Sie kennen schon ein Modell für abhängige Daten: den gepaarten t-Test.</b> Er rechnet mit Differenzen pro Person und nimmt so das heraus, was eine Person mit sich selbst teilt. Das gemischte Modell verallgemeinert diese Idee auf beliebig viele Messungen pro Person und auf Gruppen wie Praxen.</li>
         <li><b>Aggregieren.</b> Man bildet pro Praxis einen Mittelwert und vergleicht die zehn Mittelwerte mit einem t-Test. Das ist korrekt, solange alle Praxen etwa gleich viele Patientinnen haben. Merkmale der einzelnen Patientin, etwa Alter oder Schmerz zu Beginn, lassen sich so aber nicht mehr berücksichtigen.</li>
-        <li><b>Gemischtes Modell.</b> Es schätzt neben den festen Effekten (Behandlung, Alter, Zeit) die Streuung zwischen den Praxen als eigenen Parameter, den <b>Zufallseffekt</b>. Bei gleich großen Praxen liefert es für die Behandlung dasselbe Ergebnis wie der t-Test auf die Praxis-Mittelwerte. Es kann aber mehr: ungleich große Gruppen, Merkmale auf beiden Ebenen, fehlende Messungen.</li>
+        <li><b>Gemischtes Modell.</b> Es gibt jeder Praxis einen Zufallseffekt u<sub>0i</sub> und schätzt die Streuung zwischen den Praxen als eigenen Parameter, genau wie in <a href="../warum/#acc-2">Warum gemischte Modelle?</a> für Personen. Bei gleich großen Praxen liefert es für die Behandlung dasselbe Ergebnis wie der t-Test auf die Praxis-Mittelwerte. Es kann aber mehr: ungleich große Gruppen, Merkmale auf beiden Ebenen, fehlende Messungen.</li>
         <li><b>Die Randomisierungseinheit bestimmt die Fallzahl.</b> Wer Praxen randomisiert, hat im Kern zehn Beobachtungen, nicht zweihundert. Die Fallzahlplanung multipliziert deshalb die Fallzahl eines individuell randomisierten RCT mit dem Designeffekt.</li>
         <li><b>Weitere Patientinnen pro Praxis helfen nur begrenzt.</b> Ab einer gewissen Größe bringen weitere Praxen viel mehr als weitere Patientinnen pro Praxis. Probieren Sie es oben aus: Bei ICC = 0,2 ändert sich die effektive Fallzahl zwischen 20 und 40 Patientinnen pro Praxis kaum.</li>
       </ol>
@@ -122,11 +123,11 @@
 </footer>
 <script src="../../assets/vendor/katex/katex.min.js"></script>
 <script src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
-<script src="../../assets/js/tex.js?v=202611280940"></script>
-<script src="../../assets/js/reg.js?v=202611280940"></script>
-<script src="../gm-common.js?v=202611280940"></script>
-<script src="../lmm.js?v=202611280940"></script>
-<script src="abhaengige-daten.js?v=202611280940"></script>
-<script src="../../assets/js/path.js?v=202611280940"></script>
+<script src="../../assets/js/tex.js?v=202611281037"></script>
+<script src="../../assets/js/reg.js?v=202611281037"></script>
+<script src="../gm-common.js?v=202611281037"></script>
+<script src="../lmm.js?v=202611281037"></script>
+<script src="abhaengige-daten.js?v=202611281037"></script>
+<script src="../../assets/js/path.js?v=202611281037"></script>
 </body>
 </html>
