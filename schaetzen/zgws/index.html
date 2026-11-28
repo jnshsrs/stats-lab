@@ -6,9 +6,9 @@
 <title>Zentraler Grenzwertsatz · Stats Lab</title>
 <meta name="description" content="Vom Zentralen Grenzwertsatz über den Standardfehler zum Konfidenzintervall, interaktiv mit vier Populationen.">
 <link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="../../assets/css/base.css?v=202611281057">
+<link rel="stylesheet" href="../../assets/css/base.css?v=202611281103">
 <link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
-<link rel="stylesheet" href="zgws.css?v=202611281057">
+<link rel="stylesheet" href="zgws.css?v=202611281103">
 </head>
 <body>
 <header class="site-header">
@@ -136,8 +136,8 @@
       <details class="deep" id="ki-mitte">
         <summary>Exkurs: Ist die Mitte des Intervalls wahrscheinlicher?</summary>
         <div class="deep-body">
-          <p>Viele stellen sich über dem Konfidenzintervall eine Glockenkurve vor: In der Mitte liege der wahre Wert wahrscheinlich, an den Rändern unwahrscheinlich. Das Beispiel stammt aus dem <a href="../../testen/t-test-varianten/#praktikum">Messpraktikum</a>: Der Oberarmumfang am Trainingsarm nahm bei 10 Personen im Mittel um 0,65 cm zu, 95-%-KI 0,18 bis 1,12 cm. Drei Arten, dieses Intervall zu lesen:</p>
-          <div class="seg" role="group" aria-label="Lesart" id="km-view"><button type="button" data-v="0" aria-pressed="true">Falsche Lesart: Verteilung über μ</button><button type="button" data-v="1" aria-pressed="false">Richtig: das Intervall wackelt</button><button type="button" data-v="2" aria-pressed="false">Richtig: Kompatibilität mit den Daten</button></div>
+          <p>Viele stellen sich über dem Konfidenzintervall eine Glockenkurve vor: In der Mitte liege der wahre Wert wahrscheinlich, an den Rändern unwahrscheinlich. Das Beispiel stammt aus dem <a href="../../testen/t-test-varianten/#praktikum">Messpraktikum</a>: Der Oberarmumfang am Trainingsarm nahm bei 10 Personen im Mittel um 0,65 cm zu, 95-%-KI 0,18 bis 1,12 cm. Drei Arten, dieses Intervall zu lesen. Für die Lehre reichen die ersten beiden; die dritte ist eine Vertiefung für alle, die es genau wissen wollen.</p>
+          <div class="seg" role="group" aria-label="Lesart" id="km-view"><button type="button" data-v="0" aria-pressed="true">Falsche Lesart: Verteilung über μ</button><button type="button" data-v="1" aria-pressed="false">Richtig: das Intervall wackelt</button><button type="button" data-v="2" aria-pressed="false">Für Genaue: Kompatibilitätskurve <span class="flag">Vertiefung</span></button></div>
           <svg class="chart" id="km" viewBox="0 0 900 320" role="img" aria-label="Lesarten des Konfidenzintervalls"></svg>
           <div class="ctrl" id="km-ctrl" hidden><label for="km-mu">Angenommener Wert μ₀: <output id="km-mu-v"></output></label><input id="km-mu" type="range" min="-0.4" max="1.7" step="0.01" value="0.3"></div>
           <p class="callout" id="km-text"></p>
@@ -155,13 +155,13 @@
     <span class="footer-links"><a href="https://github.com/jnshsrs/stats-lab">Quellcode auf GitHub</a><span>Ohne Cookies und Tracking</span></span>
   </div>
 </footer>
-<script src="wuerfel.js?v=202611281057"></script>
+<script src="wuerfel.js?v=202611281103"></script>
 <script src="../../assets/vendor/katex/katex.min.js"></script>
 <script src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
-<script src="../../assets/js/tex.js?v=202611281057"></script>
-<script src="../../assets/js/reg.js?v=202611281057"></script>
-<script src="ki-mitte.js?v=202611281057"></script>
-<script src="zgws.js?v=202611281057"></script>
-<script src="../../assets/js/path.js?v=202611281057"></script>
+<script src="../../assets/js/tex.js?v=202611281103"></script>
+<script src="../../assets/js/reg.js?v=202611281103"></script>
+<script src="ki-mitte.js?v=202611281103"></script>
+<script src="zgws.js?v=202611281103"></script>
+<script src="../../assets/js/path.js?v=202611281103"></script>
 </body>
 </html>
