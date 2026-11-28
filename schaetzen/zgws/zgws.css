@@ -97,3 +97,4 @@ input[type=range] { width: 100%; accent-color: var(--accent); margin: 6px 0 0; }
 #km text.strong { fill: var(--fg); font-weight: 600; }
 #km text.bad { fill: var(--beta-ink); font-weight: 600; font-family: var(--font-sans); font-size: 15px; }
 #km text { paint-order: stroke; stroke: var(--surface); stroke-width: 4px; stroke-linejoin: round; }
+.deep-body .flag { display: inline-block; font: 600 11px var(--font-mono); text-transform: uppercase; letter-spacing: .04em; border: 1px solid currentColor; border-radius: 999px; padding: 1px 7px; margin-left: 4px; vertical-align: 1px; opacity: .8; }
