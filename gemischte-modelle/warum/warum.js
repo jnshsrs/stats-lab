@@ -31,9 +31,9 @@ const WAYS = [
   { lab: "t-Test der Veränderung", m: nCh * 2, p: nCh, est: chT.d, se: chT.se, pv: chT.p, prob: "nur zwei Zeitpunkte; Woche 4 ungenutzt; Personen mit Lücke fallen ganz heraus",
     cl: `Pro Person wird Woche 14 minus vor OP gerechnet, der Ausgangsunterschied ist damit raus. Aber Woche 4 bleibt ungenutzt, und wer in Woche 14 fehlt, fällt mit allen Messungen heraus. Im RCT von Müller-Torrente et al. (2021), das wir hier betrachten, betraf das nur ${IDS.length - nCh} Personen. Bei mehr Zeitpunkten und mehr Drop-outs wird das schnell zum Problem.` },
   { lab: "Regression über alle Zeilen", m: R.length, p: R.length, est: O.b[5], se: O.se[5], pv: O.p[5], prob: `zählt ${R.length} Messungen als ${R.length} Personen; Standardfehler falsch, weil die Messungen derselben Person zusammenhängen und die Regression das nicht weiß`,
-    cl: `Alle ${R.length} Messungen gehen ein, Gruppe × Zeitpunkt liefert den richtigen Effekt. Doch die Regression kennt keine Personen: Für sie sind es ${R.length} Unbekannte. Hier ist ihr Standardfehler zu groß (${fmt(O.se[5], 2)} statt ${fmt(F.se[5], 2)}), weil sie nicht weiß, dass jede Person ihre eigene Kontrolle ist. Bei Vergleichen zwischen Praxen ist er dagegen zu klein, siehe <a href="../abhaengige-daten/">Abhängige Daten</a>.` },
+    cl: `Alle ${R.length} Messungen gehen ein, Gruppe × Zeitpunkt liefert den richtigen Effekt. Doch die Regression kennt keine Personen: Für sie sind es ${R.length} Unbekannte. Hier ist ihr Standardfehler zu groß (${fmt(O.se[5], 2)} statt ${fmt(F.se[5], 2)}), weil sie nicht weiß, dass jede Person ihre eigene Kontrolle ist. Bei Vergleichen zwischen Praxen ist er dagegen zu klein, siehe <a href="../abhaengige-daten/">Abhängige Daten</a>. Übrigens ist die Linie die Regressionsvorhersage: Weil der Zeitpunkt als Kategorie eingeht (zwei Hilfsvariablen für Woche 4 und Woche 14), entsteht kein gerader Trend, sondern die Vorhersage trifft genau die drei Gruppenmittel. Eine Gerade entstünde mit der Zeit als metrischer Variable, wie in <a href="../random-slopes/">Random Slopes</a>.` },
   { lab: "Gemischtes Modell", m: R.length, p: IDS.length, est: F.beta[5], se: F.se[5], pv: pF, prob: "nutzt alle Messungen und weiß, welche zu einer Person gehören",
-    cl: `Alle ${R.length} Messungen gehen ein, auch die der Personen mit Lücke, und das Modell weiß, dass sie von ${IDS.length} Personen stammen. Dafür bekommt jede Person ihr eigenes Niveau: einen Zufallseffekt. Ergebnis: ${fmt(F.beta[5], 2)} Punkte (95-%-KI ${fmt(F.beta[5] - tinv(0.975, DF) * F.se[5], 2)} bis ${fmt(F.beta[5] + tinv(0.975, DF) * F.se[5], 2)}), mit einem Standardfehler, der die Abhängigkeit der Messungen berücksichtigt.` }
+    cl: `Alle ${R.length} Messungen gehen ein, auch die der Personen mit Lücke, und das Modell weiß, dass sie von ${IDS.length} Personen stammen. Dafür bekommt jede Person ihr eigenes Niveau: einen Zufallseffekt. Ergebnis: ${fmt(F.beta[5], 2)} Punkte (95-%-KI ${fmt(F.beta[5] - tinv(0.975, DF) * F.se[5], 2)} bis ${fmt(F.beta[5] + tinv(0.975, DF) * F.se[5], 2)}), mit einem Standardfehler, der die Abhängigkeit der Messungen berücksichtigt. Die Linie ist die Vorhersage des Modells. In der Reha-Gruppe liegt sie in Woche 4 und Woche 14 knapp 0,05 Punkte unter den beobachteten Mittelwerten: Die zwei Personen ohne spätere Messung hatten vor der OP weniger Schmerz als der Durchschnitt (6 und 4 statt 6,8), und das Modell nimmt an, dass sie auch später eher darunter lägen.` }
 ];
 let way = 0;
 function draw1() {
@@ -52,12 +52,14 @@ function draw1() {
         s += `<circle cx="${f.sx(t + jit)}" cy="${f.sy(v)}" r="${out ? 4.5 : used ? 2.8 : 2.2}" fill="${out ? "var(--beta-ink)" : used ? "var(--pal-5)" : "var(--pal-2)"}" ${used || out ? "" : 'fill-opacity=".7"'}/>`;
       });
     });
-    const ts = way === 0 ? [2] : way === 1 ? [0, 2] : [0, 1, 2], ms = ts.map(t => [t, mean(cell(g, t))]);
+    // Weg 3 und 4: Linie = Vorhersage des Modells (Zeit kategorial), sonst beobachtete Gruppenmittel
+    const iv = g === "Intervention" ? 1 : 0, pred = (B, t) => B[0] + (t === 1 ? B[1] : t === 2 ? B[2] : 0) + iv * (B[3] + (t === 1 ? B[4] : t === 2 ? B[5] : 0));
+    const ts = way === 0 ? [2] : way === 1 ? [0, 2] : [0, 1, 2], ms = ts.map(t => [t, way === 2 ? pred(O.b, t) : way === 3 ? pred(F.beta, t) : mean(cell(g, t))]);
     if (ms.length > 1) s += `<polyline points="${ms.map(([t, m]) => `${f.sx(t)},${f.sy(m)}`).join(" ")}" fill="none" stroke="${col}" stroke-width="4"/>`;
     ms.forEach(([t, m]) => s += `<circle cx="${f.sx(t)}" cy="${f.sy(m)}" r="7" fill="${col}" stroke="var(--surface)" stroke-width="2"/>`);
     $(id).innerHTML = s;
   });
-  const L = ['<span><i style="background:var(--pal-5);border-radius:50%;width:8px;height:8px"></i>Messung, geht ein</span>', '<span><i style="background:var(--pal-2);border-radius:50%;width:8px;height:8px"></i>Messung, bleibt ungenutzt</span>', '<span><i style="background:var(--fg);height:4px"></i>Gruppenmittel</span>'];
+  const L = ['<span><i style="background:var(--pal-5);border-radius:50%;width:8px;height:8px"></i>Messung, geht ein</span>', '<span><i style="background:var(--pal-2);border-radius:50%;width:8px;height:8px"></i>Messung, bleibt ungenutzt</span>', (way >= 2 ? '<span><i style="background:var(--fg);height:4px"></i>Vorhersage des Modells</span>' : '<span><i style="background:var(--fg);height:4px"></i>Gruppenmittel</span>')];
   if (way === 1) L.push('<span><i style="background:var(--beta-ink);border-radius:50%;width:8px;height:8px"></i>Person fällt ganz heraus</span>');
   if (way === 1 || way === 3) L.push('<span><i style="background:var(--pal-3);height:2px"></i>Linie: Messungen derselben Person</span>');
   if (way === 2) L.push('<span>keine Linien: die Regression kennt keine Personen</span>');
