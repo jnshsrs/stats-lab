@@ -26,6 +26,8 @@ const PATH = [
   ["entscheidung", "Entscheidungstheorie", 3],
   ["fallzahl", "Fallzahl und Power", 3],
   ["multiples-testen", "Multiples Testen", 3],
+  ["anova", "Mehr als zwei Gruppen: einfaktorielle ANOVA", 3],
+  ["rangtests", "Rangtests: Mann-Whitney, Wilcoxon, Kruskal-Wallis", 3],
   ["chi-quadrat", "Chi-Quadrat-Test", 3],
   ["regression-mitte", "Regression zur Mitte", 4],
   ["mammografie", "Positiver Befund: Gigerenzers Mammografie-Aufgabe", 4],

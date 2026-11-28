@@ -45,5 +45,5 @@ function logit(y, cols) {
   const fit = X.map(r => 1 / (1 + Math.exp(-r.reduce((a, v, j) => a + v * b[j], 0))));
   return { b, se, z, p, wald: z.map(v => v * v), V, ll, ll0, chi2: 2 * (ll - ll0), n, fit, nagelkerke: (1 - Math.exp(2 * (ll0 - ll) / n)) / (1 - Math.exp(2 * ll0 / n)) };
 }
-window.REG = { ols, cor, mean, tcdf, tinv, fcdf, logit, pnorm };
+window.REG = { ols, cor, mean, tcdf, tinv, fcdf, logit, pnorm, lgamma, ibeta };
 })();

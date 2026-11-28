@@ -26,6 +26,8 @@ const FIG = {
   binom: () => ax("", "Anzahl") + `<rect x="90" y="40" width="60" height="104" class="i"/><rect x="190" y="88" width="60" height="56" class="k"/><text x="120" y="${H - 10}" text-anchor="middle">Treffer</text><text x="220" y="${H - 10}" text-anchor="middle">kein Treffer</text><line class="ref" x1="60" x2="290" y1="71" y2="71"/><text x="290" y="64" text-anchor="end" class="strong">erwartet bei p₀</text>`,
   chi: () => `<rect x="40" y="20" width="110" height="60" class="i"/><rect x="40" y="80" width="110" height="60" class="k" fill-opacity=".5"/><rect x="170" y="20" width="110" height="34" class="i"/><rect x="170" y="54" width="110" height="86" class="k" fill-opacity=".5"/><text x="95" y="158" text-anchor="middle">Programm</text><text x="225" y="158" text-anchor="middle">Standard</text><text x="95" y="54" text-anchor="middle" fill="#fff">ja</text><text x="225" y="42" text-anchor="middle" fill="#fff">ja</text><text x="95" y="114" text-anchor="middle">nein</text><text x="225" y="102" text-anchor="middle">nein</text>`,
   logit: () => { let s = ax("Einflussgröße x", "Wahrscheinlichkeit"); let d = ""; for (let x = 50; x <= 300; x += 5) { const p = 1 / (1 + Math.exp(-(x - 175) / 28)); d += (d ? "L" : "M") + x + "," + (134 - p * 110).toFixed(1); } for (let i = 0; i < 26; i++) { const x = 50 + u(i, 19) * 250, p = 1 / (1 + Math.exp(-(x - 175) / 28)), y = u(i, 20) < p ? 1 : 0; s += dot(x, 134 - y * 110 + (u(i, 21) - .5) * 8, y ? "i" : "k", 3.4); } return s + `<path d="${d}" fill="none" class="m"/>`; },
+  k3: () => ax("", "Messwert") + grp(80, 96, 10, "k", 23, 13) + grp(170, 76, 10, "i", 24, 13) + grp(260, 58, 10, "il", 25, 13).replace(/class="il"/g, 'class="i" fill-opacity=".55"'),
+  ord2: () => { let s = ax("", ""); [[3, 5, 4, 2, 1], [1, 2, 4, 5, 3]].forEach((cnt, g) => cnt.forEach((c, j) => { for (let i = 0; i < c; i++) s += dot(70 + j * 52 + (g ? 10 : -10), 136 - i * 11 - g * 0, g ? "i" : "k", 4.2); })); return s + `<text x="52" y="${H - 8}">1</text><text x="${70 + 4 * 52}" y="${H - 8}">5</text>`; },
   glmm: () => { let s = ax("Zeit", "Wahrscheinlichkeit"); for (let i = 0; i < 7; i++) { const c = 140 + z(i, 22) * 40; let d = ""; for (let x = 50; x <= 300; x += 6) { const p = 1 / (1 + Math.exp(-(x - c) / 30)); d += (d ? "L" : "M") + x + "," + (134 - p * 110).toFixed(1); } s += `<path d="${d}" fill="none" class="${i % 2 ? "il" : "kl"}" stroke-width="1.5" stroke-opacity=".7"/>`; } return s; }
 };
 const fig = (k, cap) => `<figure><svg class="schema" viewBox="0 0 ${W} ${H}" role="img" aria-label="${cap}">${FIG[k]()}</svg><figcaption>${cap}</figcaption></figure>`;
@@ -85,6 +87,23 @@ const RES = {
     why: "Ein Ergebnis ja oder nein, und eine metrische Einflussgröße oder mehrere Einflüsse, für die adjustiert werden soll. Das Modell schätzt die Odds auf der Logit-Skala; auf der Wahrscheinlichkeitsskala helfen Marginal Effects.",
     rep: "Odds Ratio pro sinnvoller Einheit mit 95-%-KI und p; Zahl der Ereignisse; bei Bedarf AME in Prozentpunkten", spss: "Analysieren → Regression → Binär logistisch; unter „Optionen“ KI für Exp(B)", r: "glm(knorpeldefekt ~ alpha + schmerz, family = binomial, data = d)",
     links: [["logistische-regression/s-kurve/", "Von der Geraden zur S-Kurve"], ["logistische-regression/cam-morphologie/", "Cam-Morphologie"]] },
+  anova: { name: "Einfaktorielle ANOVA", fig: ["k3", "Drei unabhängige Gruppen, je eine Messung"],
+    why: "Drei oder mehr Gruppen verschiedener Personen, eine metrische Zielgröße. Ein einziger F-Test statt vieler t-Tests hält α bei 5 %. Ist er signifikant, zeigen Post-hoc-Vergleiche, welche Gruppen sich unterscheiden.",
+    rep: "F mit beiden Freiheitsgraden, p, η²; Paarvergleiche mit korrigiertem KI", spss: "Analysieren → Mittelwerte vergleichen → Einfaktorielle ANOVA; Post hoc Bonferroni oder Tukey, Optionen Homogenitätstest und Welch", r: "summary(aov(zbi ~ gruppe, data = d))",
+    links: [["testen/anova/", "Einfaktorielle ANOVA"], ["testen/multiples-testen/", "Multiples Testen"]] },
+  mwu: { name: "Mann-Whitney-U-Test", fig: ["ord2", "Zwei Gruppen, Antworten auf einer Stufenskala"],
+    why: "Zwei unabhängige Gruppen, eine ordinale Zielgröße wie ein einzelnes Likert-Item, oder eine metrische mit starken Ausreißern bei kleinen Gruppen. Der Test rechnet mit Rängen und prüft, ob die eine Gruppe systematisch höher liegt.",
+    rep: "Median (IQR) je Gruppe, U, z, p, Effektstärke r", spss: "Analysieren → Nicht parametrische Tests → Alte Dialogfelder → 2 unabhängige Stichproben", r: "wilcox.test(zufr ~ gruppe, data = d)",
+    links: [["testen/rangtests/#acc-1", "Rangtests: Mann-Whitney"]] },
+  wil: { name: "Wilcoxon-Vorzeichen-Rang-Test", fig: ["tp", "Dieselben Personen vorher und nachher"],
+    why: "Dieselben Personen zweimal auf einer ordinalen Skala gemessen. Gerechnet wird mit den Rängen der Differenzen, Personen ohne Veränderung fallen heraus.",
+    rep: "Median (IQR) vorher und nachher, z, p, Effektstärke r", spss: "Analysieren → Nicht parametrische Tests → Alte Dialogfelder → 2 verbundene Stichproben", r: "wilcox.test(d$nach, d$vor, paired = TRUE)",
+    links: [["testen/rangtests/#acc-2", "Rangtests: Wilcoxon"]],
+    warn: "Ohne Kontrollgruppe zeigt das Ergebnis eine Veränderung, nicht deren Ursache." },
+  kw: { name: "Kruskal-Wallis-Test", fig: ["k3", "Drei oder mehr Gruppen, ordinale Antworten"],
+    why: "Drei oder mehr unabhängige Gruppen, eine ordinale Zielgröße. Das Gegenstück zur einfaktoriellen ANOVA auf Rängen; danach paarweise Vergleiche mit Korrektur (Dunn-Bonferroni).",
+    rep: "Median (IQR) je Gruppe, H, df, p, η²_H; korrigierte Paarvergleiche", spss: "Analysieren → Nicht parametrische Tests → Alte Dialogfelder → K unabhängige Stichproben", r: "kruskal.test(zufr ~ setting, data = d)",
+    links: [["testen/rangtests/#acc-3", "Rangtests: Kruskal-Wallis"], ["testen/anova/", "Einfaktorielle ANOVA"]] },
   glmm: { name: "Gemischtes logistisches Modell (Ausblick)", fig: ["glmm", "Wiederholte Ja-Nein-Messungen je Person"],
     why: "Ein Ergebnis ja oder nein, wiederholt gemessen oder in Clustern. Die logistische Regression bekommt wie das lineare Modell einen Zufallseffekt pro Person oder Praxis. Bei nur zwei Zeitpunkten und einer Gruppe reicht der McNemar-Test.",
     rep: "Odds Ratio der Wechselwirkung Gruppe × Zeit mit 95-%-KI; Varianz des Zufallseffekts", spss: "Analysieren → Gemischte Modelle → Verallgemeinert linear; Verteilung binomial, Verknüpfung Logit", r: "lme4::glmer(schmerzfrei ~ gruppe * zeit + (1 | id), family = binomial, data = d)",
@@ -96,6 +115,7 @@ const RES = {
 const TREE = {
   start: { q: "Was wird gemessen? Die Zielgröße", o: [
     ["metrisch", "Schmerz auf der NRS, Bewegungsumfang in Grad, Kraft, Gehgeschwindigkeit", "met"],
+    ["ordinal", "geordnete Stufen: Zufriedenheit 1 bis 5, Schweregrad leicht, mittel, schwer", "ord"],
     ["binär", "ja oder nein: Knorpeldefekt, Rückkehr in den Sport, Rezidiv", "bin"]] },
   met: { q: "Wie hängen die Messungen zusammen?", o: [
     ["unabhängig", "jede Person einmal gemessen, keine Gruppierung", "met-u"],
@@ -104,6 +124,7 @@ const TREE = {
   "met-u": { q: "Was wird verglichen?", o: [
     ["mit einem festen Wert", "eine Stichprobe gegen Normwert oder Sollwert", "=t1"],
     ["zwei Gruppen", "Intervention gegen Kontrolle, ohne weitere Einflüsse", "=t2"],
+    ["drei oder mehr Gruppen", "etwa drei Versorgungsformen, ohne weitere Einflüsse", "=anova"],
     ["Zusammenhang mit einer metrischen Größe", "etwa Quadrizepskraft und Gehgeschwindigkeit", "=reg"],
     ["mehrere Einflüsse zugleich", "ein Effekt, adjustiert für Alter oder Confounder", "=mreg"]] },
   "met-w": { q: "Wie viele Gruppen und Zeitpunkte?", o: [
@@ -111,6 +132,10 @@ const TREE = {
     ["zwei Gruppen, vorher und nachher", "RCT mit Ausgangs- und Endmessung, kaum fehlende Werte", "=ancova"],
     ["drei oder mehr Zeitpunkte oder fehlende Werte", "RCT mit Verlaufsmessungen und Drop-outs", "=ri"],
     ["viele Zeitpunkte, unterschiedliche Verläufe", "Zeit metrisch, jede Person verändert sich anders schnell", "=rs"]] },
+  ord: { q: "Wie hängen die Messungen zusammen, und was wird verglichen?", o: [
+    ["zwei unabhängige Gruppen", "Zufriedenheit mit und ohne Hebammenbetreuung", "=mwu"],
+    ["dieselben Personen, zwei Messungen", "Schweregrad vor und nach der Therapie", "=wil"],
+    ["drei oder mehr unabhängige Gruppen", "Zufriedenheit in Praxis, Hausbesuch und Teletherapie", "=kw"]] },
   bin: { q: "Wie hängen die Messungen zusammen?", o: [
     ["unabhängig", "jede Person einmal gemessen, keine Gruppierung", "bin-u"],
     ["Messwiederholung oder Cluster", "dieselben Personen mehrfach, oder Personen in Praxen", "=glmm"]] },
@@ -119,7 +144,7 @@ const TREE = {
     ["zwei Gruppen", "Rückkehr in den Sport mit und ohne Programm", "=chi"],
     ["metrische Einflussgröße oder Adjustierung", "Knorpeldefekt und Alpha-Winkel, adjustiert für Schmerz", "=logit"]] }
 };
-const SHORT = { start: "Zielgröße", met: "Datenstruktur", bin: "Datenstruktur", "met-u": "Vergleich", "met-w": "Gruppen und Zeitpunkte", "bin-u": "Vergleich" };
+const SHORT = { start: "Zielgröße", met: "Datenstruktur", bin: "Datenstruktur", ord: "Struktur und Vergleich", "met-u": "Vergleich", "met-w": "Gruppen und Zeitpunkte", "bin-u": "Vergleich" };
 let path = []; // gewählte Indizes
 function walk() { // Knoten entlang des Pfads
   const nodes = ["start"]; let res = null;
@@ -198,6 +223,7 @@ const OV = [
   ["metrisch", "unabhängig, mehrere Einflüsse", "Multiple Regression", "adjustierter Koeffizient", "regression/multiple-regression/"],
   ["metrisch", "gepaart, zwei Messungen", "Gepaarter t-Test", "mittlere Differenz", "testen/t-test-varianten/#acc-1"],
   ["metrisch", "zwei Gruppen, vorher und nachher", "ANCOVA (Regression mit Ausgangswert)", "adjustierte Differenz", "regression/multiple-regression/"],
+  ["metrisch", "unabhängig, drei und mehr Gruppen", "Einfaktorielle ANOVA", "F, η², Paarvergleiche", "testen/anova/"],
   ["metrisch", "Messwiederholung, drei und mehr Zeitpunkte", "Gemischtes Modell, Random Intercept", "Gruppe × Zeit", "gemischte-modelle/hueftarthroskopie/"],
   ["metrisch", "Messwiederholung, Verläufe unterschiedlich", "Gemischtes Modell, Random Slope", "Steigungsdifferenz", "gemischte-modelle/random-slopes/"],
   ["metrisch", "Cluster (Praxen, Teams)", "Gemischtes Modell, Random Intercept je Cluster", "Effekt, ICC", "gemischte-modelle/abhaengige-daten/"],
@@ -206,7 +232,10 @@ const OV = [
   ["binär", "unabhängig, metrischer Einfluss oder Adjustierung", "Logistische Regression", "OR pro Einheit, AME", "logistische-regression/cam-morphologie/"],
   ["binär", "gepaart oder Cluster", "McNemar-Test, gemischtes logistisches Modell", "OR", ""],
   ["Zeit bis zum Ereignis", "unabhängig", "Kaplan-Meier, Cox-Regression", "Hazard Ratio", ""],
-  ["ordinal mit wenigen Stufen", "unabhängig", "Mann-Whitney-U-Test, ordinale Regression", "Rangunterschied, OR", ""]
+  ["ordinal", "unabhängig, zwei Gruppen", "Mann-Whitney-U-Test", "Median (IQR), r", "testen/rangtests/#acc-1"],
+  ["ordinal", "gepaart, zwei Messungen", "Wilcoxon-Vorzeichen-Rang-Test", "Median (IQR), r", "testen/rangtests/#acc-2"],
+  ["ordinal", "unabhängig, drei und mehr Gruppen", "Kruskal-Wallis-Test", "H, η²_H", "testen/rangtests/#acc-3"],
+  ["ordinal", "mit Adjustierung", "ordinale Regression", "OR", ""]
 ];
 $("ov").innerHTML = `<thead><tr><th>Zielgröße</th><th>Datenstruktur und Vergleich</th><th>Verfahren</th><th>Berichtet wird</th></tr></thead><tbody>` +
   OV.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[4] ? `<a href="${R}${r[4]}">${r[2]}</a>` : `${r[2]} <span class="note">(Ausblick)</span>`}</td><td>${r[3]}</td></tr>`).join("") + `</tbody>`;
