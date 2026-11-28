@@ -6,9 +6,9 @@
 <title>Warum gemischte Modelle? · Stats Lab</title>
 <meta name="description" content="Warum gemischte Modelle: vier Auswertungswege für dasselbe RCT mit Messwiederholung, Zerlegung einer Messung in festen Teil, Zufallseffekt der Person und Rest, Begriffe und Synonyme.">
 <link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="../../assets/css/base.css?v=202611281114">
+<link rel="stylesheet" href="../../assets/css/base.css?v=202611281119">
 <link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
-<link rel="stylesheet" href="../gemischte-modelle.css?v=202611281114">
+<link rel="stylesheet" href="../gemischte-modelle.css?v=202611281119">
 </head>
 <body>
 <header class="site-header">
@@ -56,7 +56,7 @@
         <div class="ctrl"><div class="ctrl-head"><label for="pers">Person</label></div><select class="sel" id="pers"></select></div>
         <div class="ctrl"><span class="lbl-plain">Termin</span><div class="seg" role="group" aria-label="Termin" id="tt"><button type="button" data-t="0" aria-pressed="false">vor OP</button><button type="button" data-t="1" aria-pressed="false">Woche 4</button><button type="button" data-t="2" aria-pressed="true">Woche 14</button></div></div>
       </div>
-      <svg class="chart" id="c2" viewBox="0 0 900 400" role="img" aria-label="Zerlegung einer Messung in festen Teil, Personenabweichung und Rest"></svg>
+      <svg class="chart" id="c2" viewBox="0 0 900 420" role="img" aria-label="Zerlegung einer Messung in festen Teil, Personenabweichung und Rest"></svg>
       <div class="legend"><span><i style="background:var(--therapie)"></i>fester Effekt (β)</span><span><i style="background:var(--therapie);opacity:.35;outline:2px solid var(--therapie);outline-offset:-2px"></i>Zwischenergebnis: fester Teil</span><span><i style="background:var(--beta-ink)"></i>Zufallseffekt der Person (u₀ᵢ)</span><span><i style="background:repeating-linear-gradient(45deg,var(--muted) 0 2px,transparent 2px 5px);outline:1px solid var(--muted)"></i>Rest der Messung (eᵢⱼ)</span><span><i style="background:var(--fg)"></i>gemessener Wert</span></div>
       <div class="formula" id="f2"></div>
       <p class="callout" id="cl2"></p>
@@ -64,7 +64,13 @@
         <div class="explain-box fest"><b>Fester Effekt</b><ul><li>gilt für alle Personen gleich: Gruppe, Zeitpunkt, ihre Wechselwirkung</li><li>beantwortet die Frage der Studie und wird einzeln berichtet, mit KI und p-Wert</li><li>würde in einer Wiederholung der Studie wieder geschätzt</li></ul></div>
         <div class="explain-box zuf"><b>Zufallseffekt</b><ul><li>für jede Person anders: ihr eigenes Niveau u<sub>0i</sub></li><li>die Personen sind eine Zufallsstichprobe; Person 17 interessiert nicht für sich</li><li>geschätzt wird deshalb nur, wie stark Personen streuen (τ), nicht 90 einzelne Parameter</li></ul></div>
       </div>
-      <p class="text">„Zufällig“ heißt nicht willkürlich, sondern: Wer in der Studie landet, ist Zufall, und mit ihm seine Abweichung. Die 90 geschätzten Abweichungen û<sub>0i</sub> unten sind wie eine Stichprobe aus einer Normalverteilung mit Streuung τ. Die gewählte Person ist markiert.</p>
+      <p class="text">„Zufällig“ heißt nicht willkürlich, sondern: Wer in der Studie landet, ist Zufall, und mit ihm seine Abweichung. Das Modell behandelt die Abweichungen u<sub>0i</sub> deshalb wie eine Stichprobe aus einer Normalverteilung und schätzt nur deren Streuung τ.</p>
+      <div class="infobox" id="tau-box">
+        <p><b>Was ist τ (tau)?</b> τ ist die Standardabweichung der persönlichen Niveaus: wie stark sich Personen in ihrem Schmerz unterscheiden, wenn Gruppe und Termin herausgerechnet sind. <span id="tau-num"></span></p>
+        <p><b>Warum ein Parameter statt 90?</b> Das Modell schätzt nur τ. Die Werte der einzelnen Personen û<sub>0i</sub> werden erst danach vorhergesagt und dabei zur Mitte gezogen, umso stärker, je weniger Messungen eine Person hat (<a href="../partial-pooling/">Partial Pooling</a>). Inhaltlich interessiert die Streuung, nicht eine bestimmte Person.</p>
+        <p><b>Nicht verwechseln:</b> τ ist nicht die Standardabweichung der beobachteten Personenmittelwerte. Die enthalten noch die Schwankung von Termin zu Termin und streuen deshalb etwas breiter. τ ist die bereinigte Streuung.</p>
+      </div>
+      <p class="text">Unten die 90 vorhergesagten Abweichungen û<sub>0i</sub> mit der geschätzten Normalverteilung. Die Fläche markiert ±1,96 · τ, den Bereich, in dem etwa 95 % der persönlichen Niveaus liegen. Die gewählte Person ist hervorgehoben.</p>
       <svg class="chart" id="c3" viewBox="0 0 900 190" role="img" aria-label="Verteilung der Personenabweichungen"></svg>
     </div>
   </details>
@@ -80,6 +86,7 @@
           <tr><td>Random Intercept</td><td>Zufallseffekt für den Achsenabschnitt: eigenes Niveau je Einheit.</td><td>(1 | id) in R, INTERCEPT in SPSS</td></tr>
           <tr><td>Random Slope</td><td>Zufallseffekt für eine Steigung: eigene Veränderung je Einheit.</td><td>nicht im Modell, siehe <a href="../random-slopes/">Random Slopes</a></td></tr>
           <tr><td>Ebene</td><td>Ebene 1 sind die Messungen, Ebene 2 die Einheiten, in denen sie stecken.</td><td>266 Messungen (Ebene 1) in 90 Personen (Ebene 2)</td></tr>
+          <tr><td>τ (tau)</td><td>Standardabweichung der persönlichen Niveaus u<sub>0i</sub>; etwa 95 % der Personen liegen innerhalb ±1,96 · τ um ihr Gruppenmittel.</td><td id="tau3"></td></tr>
           <tr><td>Varianzkomponenten</td><td>Streuung zwischen den Einheiten (τ²) und innerhalb (σ²).</td><td id="vk"></td></tr>
           <tr><td>ICC</td><td>Anteil der Streuung zwischen den Einheiten: τ² ÷ (τ² + σ²).</td><td id="icc3"></td></tr>
           <tr><td>Langes Format</td><td>Eine Zeile pro Messung statt pro Person; Voraussetzung in SPSS und R.</td><td><a href="../daten/fai_reha.csv">fai_reha.csv</a>: 270 Zeilen</td></tr>
@@ -118,12 +125,12 @@
 </footer>
 <script src="../../assets/vendor/katex/katex.min.js"></script>
 <script src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
-<script src="../../assets/js/tex.js?v=202611281114"></script>
-<script src="../../assets/js/reg.js?v=202611281114"></script>
-<script src="../gm-common.js?v=202611281114"></script>
-<script src="../lmm.js?v=202611281114"></script>
-<script src="../daten/fai_reha.js?v=202611281114"></script>
-<script src="warum.js?v=202611281114"></script>
-<script src="../../assets/js/path.js?v=202611281114"></script>
+<script src="../../assets/js/tex.js?v=202611281119"></script>
+<script src="../../assets/js/reg.js?v=202611281119"></script>
+<script src="../gm-common.js?v=202611281119"></script>
+<script src="../lmm.js?v=202611281119"></script>
+<script src="../daten/fai_reha.js?v=202611281119"></script>
+<script src="warum.js?v=202611281119"></script>
+<script src="../../assets/js/path.js?v=202611281119"></script>
 </body>
 </html>

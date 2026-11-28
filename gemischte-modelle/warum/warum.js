@@ -92,10 +92,11 @@ function draw2() {
     ["Rest", "eᵢⱼ", fix + u, y, "rest"],
     ["= gemessen", "yᵢⱼ", 0, y, "end"]
   ];
-  const H2 = 400, f = frame(900, H2, -0.6, steps.length - 0.4, 0, 10, { P: { L: 46, R: 14, T: 44, B: 56 }, nx: 0, yl: "Schmerz (VAS)" });
-  const zone = (i0, i1, lab, col) => `<rect x="${f.sx(i0) - 52}" y="6" width="${f.sx(i1) - f.sx(i0) + 104}" height="${H2 - 56 - 6}" rx="8" fill="${col}" fill-opacity=".07"/><text x="${(f.sx(i0) + f.sx(i1)) / 2}" y="26" text-anchor="middle" class="strong" style="fill:${col}">${lab}</text>`;
+  const H2 = 420, f = frame(900, H2, -0.6, steps.length - 0.4, 0, 10, { P: { L: 46, R: 14, T: 62, B: 56 }, nx: 0, yl: "Schmerz (VAS)" });
+  const zone = (i0, i1, lab, col, sub = "") => `<rect x="${f.sx(i0) - 52}" y="6" width="${f.sx(i1) - f.sx(i0) + 104}" height="${H2 - 56 - 6}" rx="8" fill="${col}" fill-opacity=".07"/><text x="${(f.sx(i0) + f.sx(i1)) / 2}" y="26" text-anchor="middle" class="strong" style="fill:${col}">${lab}</text>` + (sub ? `<text x="${(f.sx(i0) + f.sx(i1)) / 2}" y="44" text-anchor="middle" style="fill:${col}">${sub}</text>` : "");
+  const thx = iv && tt ? `enthält den Therapieeffekt β${sb(tt + 3)} (im Balken Gruppe)` : iv ? "vor der OP noch kein Therapieeffekt" : "Kontrollgruppe: kein Therapieeffekt";
   let s = `<defs><pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="6" height="6" fill="var(--surface)"/><line x1="0" y1="0" x2="0" y2="6" stroke="var(--muted)" stroke-width="3"/></pattern></defs>`;
-  s += zone(0, 3, "fester Teil: für alle in der Gruppe gleich", "var(--therapie)") + zone(4, 5, "individuell: nur diese Person", "var(--beta-ink)") + f.s;
+  s += zone(0, 3, "fester Teil: für alle in der Gruppe gleich", "var(--therapie)", thx) + zone(4, 5, "individuell: nur diese Person", "var(--beta-ink)") + f.s;
   const bw = 70, ST = {
     fest: 'fill="var(--therapie)"',
     zw: 'fill="var(--therapie)" fill-opacity=".18" stroke="var(--therapie)" stroke-width="2.5"',
@@ -113,11 +114,12 @@ function draw2() {
   $("c2").innerHTML = s;
   const C1 = "\\color{#045A8D}", C2 = "\\color{#57528F}", C3 = "\\color{#5B6475}";
   $("f2").innerHTML = TS(String.raw`y_{ij} = ${C1}\underbrace{${tz(fmt(fix, 2))}}_{\text{fest}} \color{#1B2433} ${u < 0 ? "-" : "+"} ${C2}\underbrace{${tz(fmt(Math.abs(u), 2))}}_{u_{0i}\text{: Person}} \color{#1B2433} ${e < 0 ? "-" : "+"} ${C3}\underbrace{${tz(fmt(Math.abs(e), 2))}}_{e_{ij}\text{: Rest}} \color{#1B2433} = ${tz(fmt(y, 2))}`, `y = ${fmt(fix, 2)} + ${fmt(u, 2)} + ${fmt(e, 2)} = ${fmt(y, 2)}`);
-  $("cl2").innerHTML = `Der <b>feste Teil</b> (${fmt(fix, 2)}) ist für alle Personen der ${iv ? "Reha-Gruppe" : "Kontrollgruppe"} zu diesem Termin gleich. <b>Person ${pid}</b> liegt ${u >= 0 ? "über" : "unter"} diesem Mittel, um ${fmt(Math.abs(u), 2)} Punkte, und zwar an allen drei Terminen gleich: Das ist ihr Zufallseffekt u<sub>0i</sub>. Genau diese gemeinsame Abweichung macht die Messungen einer Person ähnlich, und genau sie fehlte der Regression in Weg 3. Der <b>Rest</b> (${fmt(e, 2)}) ist das, was an diesem Termin zusätzlich schwankt.`;
+  $("cl2").innerHTML = `Der <b>feste Teil</b> (${fmt(fix, 2)}) ist für alle Personen der ${iv ? "Reha-Gruppe" : "Kontrollgruppe"} zu diesem Termin gleich. <b>Person ${pid}</b> liegt ${u >= 0 ? "über" : "unter"} diesem Mittel, um ${fmt(Math.abs(u), 2)} Punkte, und zwar an allen drei Terminen gleich: Das ist ihr Zufallseffekt u<sub>0i</sub>. Genau diese gemeinsame Abweichung macht die Messungen einer Person ähnlich, und genau sie fehlte der Regression in Weg 3. Der <b>Rest</b> (${fmt(e, 2)}) ist das, was an diesem Termin zusätzlich schwankt.` + (iv && tt ? ` Im festen Teil steckt der Therapieeffekt: β${sb(tt + 3)} = ${fmt(b[tt + 3], 2)}. Um ${fmt(Math.abs(b[tt + 3]), 2)} Punkte ${b[tt + 3] < 0 ? "sinkt" : "steigt"} der Schmerz der Reha-Gruppe bis ${TL[tt]} stärker als in der Kontrolle. Die übrigen festen Koeffizienten sind Bezugspunkte: Ausgangsniveau, natürlicher Verlauf, Ausgangsunterschied.` : "");
   // Verteilung der Personenabweichungen
   const g = frame(900, 190, -4, 4, 0, 1, { P: { L: 30, R: 20, T: 14, B: 40 }, ny: 0, nx: 8, xl: "Abweichung der Person vom Gruppenmittel (Punkte)", fx: v => (v > 0 ? "+" : "") + fmt(v, 0) });
   let q = g.s, dpath = "";
   for (let x = -4; x <= 4.001; x += 0.1) { const dn = Math.exp(-0.5 * (x / tau) ** 2); dpath += (dpath ? "L" : "M") + g.sx(x).toFixed(1) + "," + g.sy(dn * 0.85).toFixed(1); }
+  q += `<rect x="${g.sx(-1.96 * tau)}" y="${g.sy(1)}" width="${g.sx(1.96 * tau) - g.sx(-1.96 * tau)}" height="${g.sy(0) - g.sy(1)}" fill="var(--beta-ink)" fill-opacity=".08"/><line x1="${g.sx(-tau)}" x2="${g.sx(tau)}" y1="${g.sy(0.94)}" y2="${g.sy(0.94)}" stroke="var(--beta-ink)" stroke-width="2"/><text x="${g.sx(tau) + 6}" y="${g.sy(0.94) + 4}" style="fill:var(--beta-ink)" class="strong">±τ</text><text x="${g.sx(1.96 * tau) - 6}" y="${g.sy(0.75)}" text-anchor="end">95 % der Personen</text>`;
   q += `<path d="${dpath}" fill="none" stroke="var(--kontrolle-ink)" stroke-width="2"/>`;
   const sorted = IDS.map(p => [p, U[p]]).sort((a, c) => a[1] - c[1]), bins = {};
   sorted.forEach(([p, v]) => { const k = Math.round(v / 0.2); bins[k] = (bins[k] || 0) + 1; const yy = g.sy(0) - 6 - (bins[k] - 1) * 7; q += `<circle cx="${g.sx(v)}" cy="${yy}" r="${p === pid ? 6 : 3.2}" fill="${p === pid ? "var(--beta-ink)" : "var(--pal-4)"}" ${p === pid ? 'stroke="var(--surface)" stroke-width="2"' : ""}/>`; });
@@ -127,6 +129,8 @@ function draw2() {
 $("pers").addEventListener("change", e => { pid = e.target.value; draw2(); });
 $("tt").addEventListener("click", e => { const b = pick(e, $("tt")); if (!b || b.disabled) return; tt = +b.dataset.t; draw2(); });
 draw2();
+$("tau-num").innerHTML = `Hier: τ = ${fmt(tau, 2)} VAS-Punkte. Etwa 95 % der Personen liegen also innerhalb von ±${fmt(1.96 * tau, 1)} Punkten um ihr Gruppenmittel: Manche haben grundsätzlich fast ${fmt(1.96 * tau, 0)} Punkte mehr Schmerz als der Durchschnitt ihrer Gruppe, andere fast ${fmt(1.96 * tau, 0)} Punkte weniger. Zum Vergleich: Von Termin zu Termin schwankt eine Person um σ = ${fmt(sig, 2)} Punkte.`;
+$("tau3").innerHTML = `τ = ${fmt(tau, 2)} Punkte: 95 % der Personen innerhalb ±${fmt(1.96 * tau, 1)} Punkte`;
 $("vk").innerHTML = `τ² = ${fmt(tau ** 2, 2)} zwischen den Personen, σ² = ${fmt(sig ** 2, 2)} innerhalb`;
 $("icc3").innerHTML = `${fmt(tau ** 2 / (tau ** 2 + sig ** 2), 2)}: ${fmt(100 * tau ** 2 / (tau ** 2 + sig ** 2), 0)} % der Streuung liegen zwischen den Personen`;
 })();
