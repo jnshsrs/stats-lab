@@ -85,3 +85,15 @@ input[type=range] { width: 100%; accent-color: var(--accent); margin: 6px 0 0; }
 /* LaTeX */
 .formula .katex-display { margin: 2px 0; text-align: left; overflow-x: auto; overflow-y: hidden; }
 .formula .katex-display > .katex { text-align: left; }
+/* Exkurs: Ist die Mitte des Intervalls wahrscheinlicher? */
+.deep { border: 1px dashed var(--line); border-radius: 10px; padding: 0; margin-top: 6px; }
+.deep > summary { cursor: pointer; padding: 10px 14px; font-weight: 600; color: var(--accent); }
+.deep[open] > summary { border-bottom: 1px dashed var(--line); }
+.deep-body { padding: 12px 16px 16px; display: flex; flex-direction: column; gap: 12px; font-size: 15.5px; line-height: 1.55; }
+.deep-body p { margin: 0; max-width: 80ch; }
+.deep-body .note { font-size: 13.5px; color: var(--muted); }
+#km-view button { white-space: normal; }
+#km text { font-family: var(--font-mono); font-size: 13px; fill: var(--muted); }
+#km text.strong { fill: var(--fg); font-weight: 600; }
+#km text.bad { fill: var(--beta-ink); font-weight: 600; font-family: var(--font-sans); font-size: 15px; }
+#km text { paint-order: stroke; stroke: var(--surface); stroke-width: 4px; stroke-linejoin: round; }
