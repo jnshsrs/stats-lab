@@ -6,9 +6,9 @@
 <title>Partial Pooling · Stats Lab</title>
 <meta name="description" content="Gemischte Modelle bei Messwiederholungen: Complete, No und Partial Pooling an sechzehn Schmerzverläufen mit unterschiedlich vielen Messungen, Schrumpfung zur Mitte, feste Effekte und Zufallseffekte, SPSS und R.">
 <link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="../../assets/css/base.css?v=202611280940">
+<link rel="stylesheet" href="../../assets/css/base.css?v=202611281037">
 <link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
-<link rel="stylesheet" href="../gemischte-modelle.css?v=202611280940">
+<link rel="stylesheet" href="../gemischte-modelle.css?v=202611281037">
 </head>
 <body>
 <header class="site-header">
@@ -32,6 +32,7 @@
     <h1>Partial Pooling</h1>
     <p class="byline">Dr. Jens Hüsers · Forschungsmethodik</p>
     <p class="lede">Sechzehn Patientinnen mit Kniearthrose geben alle zwei Wochen ihren Schmerz an. Manche kommen zu jedem Termin, manche nur ein- oder zweimal. Wie schätzt man den Verlauf einer Person, von der es nur eine Messung gibt? Man kann alle gleich behandeln, jede für sich auswerten oder den Mittelweg gehen. Den Mittelweg geht das gemischte Modell, und er heißt <b>Partial Pooling</b>.</p>
+    <div class="mcard" data-on="u0" data-note="Hier geht es darum, wie das Modell den Zufallseffekt u<sub>0i</sub> für jede einzelne Person schätzt: aus ihren eigenen Messungen und aus dem, was alle anderen über die Streuung τ verraten. x<sub>ij</sub> ist hier die Woche."></div>
   </section>
 
   <details class="acc" id="acc-1" open>
@@ -77,7 +78,7 @@
       <p class="callout" id="cl3"></p>
       <ol class="check">
         <li><b>Feste Effekte</b> gelten für alle: der mittlere Schmerz zu Beginn (β₀) und die mittlere Veränderung pro Woche (β₁). Sie stehen in der Ergebnistabelle wie bei der Regression, mit Standardfehler und Konfidenzintervall.</li>
-        <li><b>Zufallseffekte</b> beschreiben, wie stark sich die Personen unterscheiden. Das Modell schätzt nicht sechzehn freie Achsenabschnitte, sondern deren Streuung τ². Die Werte der einzelnen Personen (û) sind ein Nebenprodukt.</li>
+        <li><b>Zufallseffekte</b> beschreiben, wie stark sich die Personen unterscheiden. Das Modell schätzt nicht sechzehn freie Achsenabschnitte, sondern deren Streuung τ². Die Werte der einzelnen Personen (û) sind ein Nebenprodukt. Ausführlich in <a href="../warum/#acc-2">Warum gemischte Modelle?</a></li>
         <li><b>Keine Messung geht verloren.</b> Die Messwiederholungs-ANOVA braucht vollständige Daten und wirft jede Person mit einem fehlenden Termin hinaus. Das gemischte Modell nutzt jede vorhandene Messung, auch die Person mit nur einem Termin. Das ist gültig, solange das Fehlen mit den beobachteten Werten erklärt werden kann (missing at random).</li>
         <li><b>Unterschiedliche Messzeitpunkte</b> sind kein Problem, die Zeit ist eine gewöhnliche metrische Variable.</li>
       </ol>
@@ -109,11 +110,11 @@
 </footer>
 <script src="../../assets/vendor/katex/katex.min.js"></script>
 <script src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
-<script src="../../assets/js/tex.js?v=202611280940"></script>
-<script src="../../assets/js/reg.js?v=202611280940"></script>
-<script src="../gm-common.js?v=202611280940"></script>
-<script src="../lmm.js?v=202611280940"></script>
-<script src="partial-pooling.js?v=202611280940"></script>
-<script src="../../assets/js/path.js?v=202611280940"></script>
+<script src="../../assets/js/tex.js?v=202611281037"></script>
+<script src="../../assets/js/reg.js?v=202611281037"></script>
+<script src="../gm-common.js?v=202611281037"></script>
+<script src="../lmm.js?v=202611281037"></script>
+<script src="partial-pooling.js?v=202611281037"></script>
+<script src="../../assets/js/path.js?v=202611281037"></script>
 </body>
 </html>

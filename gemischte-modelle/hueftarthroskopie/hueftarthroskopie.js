@@ -62,8 +62,8 @@ function draw3() {
   const m = META[v], M = fitModel(v, locf), { f, times, k, df, names } = M, d = m.d;
   const W = t => t === 1 ? "W4" : "W14";
   const terms = ["\\beta_0", ...times.map((t, j) => `\\beta_${j + 1}\\cdot \\text{${W(t)}}_{ij}`), `\\beta_${k + 1}\\cdot \\text{Int}_i`, ...times.map((t, j) => `\\beta_${k + 2 + j}\\cdot \\text{Int}_i \\cdot \\text{${W(t)}}_{ij}`)];
-  $("f3").innerHTML = TB(`\\text{${tz(m.lab)}}_{ij} = ${terms.join(" + ")} + u_i + e_{ij}`, "Modellgleichung") +
-    `<span class="dim">Hilfsvariablen (0 oder 1): ${times.map(t => `${W(t)} = 1 bei ${TL[t]}`).join(", ")}, sonst 0; Int = 1 in der Reha-Gruppe, 0 in der Kontrollgruppe. u<sub>i</sub>: Abweichung der Person i vom Mittel ihrer Gruppe, e<sub>ij</sub>: Rest der einzelnen Messung.</span>`;
+  $("f3").innerHTML = TB(`\\text{${tz(m.lab)}}_{ij} = ${terms.join(" + ")} + u_{0i} + e_{ij}`, "Modellgleichung") +
+    `<span class="dim">Hilfsvariablen (0 oder 1): ${times.map(t => `${W(t)} = 1 bei ${TL[t]}`).join(", ")}, sonst 0; Int = 1 in der Reha-Gruppe, 0 in der Kontrollgruppe. u<sub>0i</sub>: Abweichung der Person i vom Mittel ihrer Gruppe, e<sub>ij</sub>: Rest der einzelnen Messung.</span>`;
   const dir = b => b < 0 ? "sinkt" : "steigt", U = m.unit, A = x => fmt(Math.abs(x), d);
   const sym = ["β₀", ...times.map((_, j) => "β" + "₁₂"[j]), "β" + "₁₂₃"[k], ...times.map((_, j) => "β" + "₃₄₅"[k - 1 + j])];
   const interp = i => {

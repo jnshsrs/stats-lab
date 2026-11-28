@@ -62,7 +62,7 @@ const RES = {
   ri: { name: "Gemischtes Modell mit Random Intercept", fig: ["ri", "Verläufe je Person, einzelne Messungen fehlen"],
     why: "Mehrere Messzeitpunkte pro Person, zwei oder mehr Gruppen, oft fehlende Werte. Gruppe, Zeit und ihre Wechselwirkung sind feste Effekte, der Achsenabschnitt pro Person ist zufällig. Alle vorhandenen Messungen gehen ein.",
     rep: "Wechselwirkung Gruppe × Zeitpunkt mit 95-%-KI und p; Streuung zwischen Personen und Residualstreuung oder ICC", spss: "Analysieren → Gemischte Modelle → Linear; Subjekt id, Faktoren gruppe und zeit; unter „Fest“ gruppe, zeit und gruppe*zeit, unter „Zufällig“ der konstante Term", r: "lme4::lmer(schmerz ~ gruppe * zeit + (1 | id), data = d)",
-    links: [["gemischte-modelle/hueftarthroskopie/", "Reha nach Hüftarthroskopie"], ["gemischte-modelle/partial-pooling/", "Partial Pooling"]] },
+    links: [["gemischte-modelle/warum/", "Warum gemischte Modelle?"], ["gemischte-modelle/hueftarthroskopie/", "Reha nach Hüftarthroskopie"]] },
   rs: { name: "Gemischtes Modell mit Random Slope", fig: ["rs", "Eigene Steigung je Person"],
     why: "Viele Messzeitpunkte, Zeit als metrische Größe, und die Personen verändern sich unterschiedlich schnell. Ohne zufällige Steigung sind die Standardfehler für den Zeiteffekt und die Wechselwirkung zu klein.",
     rep: "Steigung pro Zeiteinheit je Gruppe und deren Differenz (Gruppe × Zeit) mit 95-%-KI; Streuung der Steigungen", spss: "Analysieren → Gemischte Modelle → Linear; Subjekt id, Kovariate woche; unter „Zufällig“ der konstante Term und woche, Kovarianztyp „Unstrukturiert“", r: "lme4::lmer(schmerz ~ gruppe * woche + (woche | id), data = d)",

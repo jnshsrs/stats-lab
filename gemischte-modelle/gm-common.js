@@ -29,3 +29,13 @@ function ttest(a, b) {
 const tz = x => String(x).replace(/\./g, "{.}").replace(/,/g, "{,}").replace(/−/g, "-");
 window.GM = { fmt, fp, rng, rnorm, ticks, frame, pick, mean, sd, ttest, tz };
 })();
+/* Modellkarte: dieselbe Gleichung oben in jeder Station, der Teil der Station ist markiert.
+   <div class="mcard" data-on="u0,e" data-note="..."></div> */
+(() => {
+const T = [["b", "β<sub>0</sub> + β<sub>1</sub> · x<sub>ij</sub>", "fest: für alle gleich"], ["u0", "u<sub>0i</sub>", "zufällig: Niveau von i"], ["u1", "u<sub>1i</sub> · x<sub>ij</sub>", "zufällig: Steigung von i"], ["e", "e<sub>ij</sub>", "Rest: Messung j"]];
+document.querySelectorAll(".mcard[data-on]").forEach(el => {
+  const on = el.dataset.on.split(",");
+  el.innerHTML = `<span class="mc-lab">Das Modell dieses Blocks</span><div class="mc-eq"><span class="mc-y">y<sub>ij</sub> =</span>${T.map(([k, f, l], i) => `${i ? '<span class="mc-plus">+</span>' : ""}<span class="mc-t${on.includes(k) ? " on" : ""}"><span class="mc-f">${f}</span><small>${l}</small></span>`).join("")}</div><p class="mc-note">${el.dataset.note}</p>`;
+});
+})();
+

@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Warum gemischte Modelle? · Stats Lab</title>
+<meta name="description" content="Warum gemischte Modelle: vier Auswertungswege für dasselbe RCT mit Messwiederholung, Zerlegung einer Messung in festen Teil, Zufallseffekt der Person und Rest, Begriffe und Synonyme.">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../assets/css/base.css?v=202611281037">
+<link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../gemischte-modelle.css?v=202611281037">
+</head>
+<body>
+<header class="site-header">
+  <div class="column">
+    <a class="brand" href="../../">
+      <svg class="brand-mark" viewBox="0 0 22 22" aria-hidden="true"><path d="M1 19 C5 19 6 4 9 4 S13 19 17 19" fill="none" class="bm-a" stroke-width="2.2" stroke-linecap="round"/><path d="M5 19 C9 19 10 7 13 7 S17 19 21 19" fill="none" class="bm-b" stroke-width="2.2" stroke-linecap="round"/></svg>
+      Stats Lab
+    </a>
+    <nav class="site-nav" aria-label="Hauptnavigation">
+      <a href="../../">Visualisierungen</a>
+      <a href="../../lernreisen/">Lernreisen</a>
+      <a href="../../glossar/">Glossar</a>
+      <a href="https://github.com/jnshsrs/stats-lab">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main class="column">
+  <section class="intro">
+    <a class="back" href="../../">← Alle Visualisierungen</a>
+    <h1>Warum gemischte Modelle?</h1>
+    <p class="byline">Dr. Jens Hüsers · Forschungsmethodik</p>
+    <p class="lede">90 Personen nach Hüftarthroskopie, Schmerz vor der OP, nach 4 und nach 14 Wochen, zwei Gruppen, ein paar fehlende Termine. So sehen die meisten Physiotherapie-Studien mit Verlauf aus. Die Werkzeuge aus FM1 und FM2 passen dazu nur halb. Diese Station zeigt, was dabei verloren geht, was ein gemischtes Modell anders macht und woher der Name kommt.</p>
+    <div class="mcard" data-on="b,u0,u1,e" data-note="Jede Messung y<sub>ij</sub> (Messung j von Person i) setzt sich aus einem festen Teil zusammen, der für alle gilt, und aus zufälligen Teilen, die für jede Person anders sind. Fest plus zufällig: daher der Name „gemischtes Modell“. Die folgenden Stationen nehmen sich je einen Baustein vor."></div>
+  </section>
+
+  <details class="acc" id="acc-1" open>
+    <summary><span class="acc-no">1</span><span class="acc-title">Vier Wege, dieselben Daten auszuwerten<span class="acc-teaser">Was die bekannten Werkzeuge mit drei Messungen pro Person machen.</span></span></summary>
+    <div class="acc-body">
+      <p class="text">Die Frage des RCT: Senkt eine supervidierte Reha den Schmerz bis Woche 14 stärker als die Standardversorgung? Jede Linie ist eine Person. Wählen Sie, wie ausgewertet wird, und achten Sie darauf, welche Messungen dabei noch zählen.</p>
+      <div class="seg wide four" role="group" aria-label="Auswertung" id="way"><button type="button" data-w="0" aria-pressed="true"><b>1</b>t-Test der Endwerte</button><button type="button" data-w="1" aria-pressed="false"><b>2</b>t-Test der Veränderung</button><button type="button" data-w="2" aria-pressed="false"><b>3</b>Regression über alle Zeilen</button><button type="button" data-w="3" aria-pressed="false"><b>4</b>Gemischtes Modell</button></div>
+      <div class="two-charts"><figure><figcaption>Standardversorgung</figcaption><svg class="chart" id="c1k" viewBox="0 0 520 380" role="img" aria-label="Schmerzverläufe der Kontrollgruppe"></svg></figure><figure><figcaption>Supervidierte Reha</figcaption><svg class="chart" id="c1i" viewBox="0 0 520 380" role="img" aria-label="Schmerzverläufe der Reha-Gruppe"></svg></figure></div>
+      <div class="legend" id="leg1"></div>
+      <p class="callout" id="cl1"></p>
+      <div class="tab-wrap"><table class="anova vgl" id="t1"></table></div>
+      <p class="note">Effekt: Wie viel stärker der Schmerz in der Reha-Gruppe sinkt als in der Kontrolle, in Punkten auf der VAS 0 bis 10 (negativ heißt weniger Schmerz). Die vermutlich fortgeschriebenen Werte von zwei Personen (I44, I45) sind als fehlend behandelt, siehe <a href="../hueftarthroskopie/#acc-1">Studie und Datensatz</a>.</p>
+    </div>
+  </details>
+
+  <details class="acc" id="acc-2" open>
+    <summary><span class="acc-no">2</span><span class="acc-title">Was heißt „gemischt“?<span class="acc-teaser">Eine Messung zerlegt: fester Teil, Person, Rest.</span></span></summary>
+    <div class="acc-body">
+      <p class="text">Das gemischte Modell aus Weg 4 erklärt jede einzelne Messung als Summe aus drei Teilen. Wählen Sie eine Person und einen Termin.</p>
+      <div class="panel-grid">
+        <div class="ctrl"><div class="ctrl-head"><label for="pers">Person</label></div><select class="sel" id="pers"></select></div>
+        <div class="ctrl"><span class="lbl-plain">Termin</span><div class="seg" role="group" aria-label="Termin" id="tt"><button type="button" data-t="0" aria-pressed="false">vor OP</button><button type="button" data-t="1" aria-pressed="false">Woche 4</button><button type="button" data-t="2" aria-pressed="true">Woche 14</button></div></div>
+      </div>
+      <svg class="chart" id="c2" viewBox="0 0 900 380" role="img" aria-label="Zerlegung einer Messung in festen Teil, Personenabweichung und Rest"></svg>
+      <div class="formula" id="f2"></div>
+      <p class="callout" id="cl2"></p>
+      <div class="fz-row">
+        <div class="explain-box fest"><b>Fester Effekt</b><ul><li>gilt für alle Personen gleich: Gruppe, Zeitpunkt, ihre Wechselwirkung</li><li>beantwortet die Frage der Studie und wird einzeln berichtet, mit KI und p-Wert</li><li>würde in einer Wiederholung der Studie wieder geschätzt</li></ul></div>
+        <div class="explain-box zuf"><b>Zufallseffekt</b><ul><li>für jede Person anders: ihr eigenes Niveau u<sub>0i</sub></li><li>die Personen sind eine Zufallsstichprobe; Person 17 interessiert nicht für sich</li><li>geschätzt wird deshalb nur, wie stark Personen streuen (τ), nicht 90 einzelne Parameter</li></ul></div>
+      </div>
+      <p class="text">„Zufällig“ heißt nicht willkürlich, sondern: Wer in der Studie landet, ist Zufall, und mit ihm seine Abweichung. Die 90 geschätzten Abweichungen û<sub>0i</sub> unten sind wie eine Stichprobe aus einer Normalverteilung mit Streuung τ. Die gewählte Person ist markiert.</p>
+      <svg class="chart" id="c3" viewBox="0 0 900 190" role="img" aria-label="Verteilung der Personenabweichungen"></svg>
+    </div>
+  </details>
+
+  <details class="acc" id="acc-3" open>
+    <summary><span class="acc-no">3</span><span class="acc-title">Begriffe und Synonyme<span class="acc-teaser">Damit Artikel, SPSS und R dieselbe Sprache sprechen.</span></span></summary>
+    <div class="acc-body">
+      <div class="tab-wrap"><table class="when stack">
+        <thead><tr><th>Begriff</th><th>Bedeutung</th><th>Im Hüftarthroskopie-Beispiel</th></tr></thead>
+        <tbody>
+          <tr><td>Fester Effekt</td><td>Parameter, der für alle gilt; wird wie ein Regressionskoeffizient berichtet.</td><td>Gruppe, Zeitpunkt, Gruppe × Zeitpunkt</td></tr>
+          <tr><td>Zufallseffekt</td><td>Abweichung einer Einheit (Person, Praxis) vom festen Teil; das Modell schätzt ihre Streuung.</td><td>u<sub>0i</sub>: eigenes Schmerzniveau jeder Person</td></tr>
+          <tr><td>Random Intercept</td><td>Zufallseffekt für den Achsenabschnitt: eigenes Niveau je Einheit.</td><td>(1 | id) in R, INTERCEPT in SPSS</td></tr>
+          <tr><td>Random Slope</td><td>Zufallseffekt für eine Steigung: eigene Veränderung je Einheit.</td><td>nicht im Modell, siehe <a href="../random-slopes/">Random Slopes</a></td></tr>
+          <tr><td>Ebene</td><td>Ebene 1 sind die Messungen, Ebene 2 die Einheiten, in denen sie stecken.</td><td>266 Messungen (Ebene 1) in 90 Personen (Ebene 2)</td></tr>
+          <tr><td>Varianzkomponenten</td><td>Streuung zwischen den Einheiten (τ²) und innerhalb (σ²).</td><td id="vk"></td></tr>
+          <tr><td>ICC</td><td>Anteil der Streuung zwischen den Einheiten: τ² ÷ (τ² + σ²).</td><td id="icc3"></td></tr>
+          <tr><td>Langes Format</td><td>Eine Zeile pro Messung statt pro Person; Voraussetzung in SPSS und R.</td><td><a href="../daten/fai_reha.csv">fai_reha.csv</a>: 270 Zeilen</td></tr>
+        </tbody>
+      </table></div>
+      <p class="callout">In Artikeln heißt dasselbe Modell auch <b>Linear Mixed Model (LMM)</b>, <b>Mehrebenenmodell</b> (multilevel model), <b>hierarchisches lineares Modell</b> oder <b>Random-Effects-Modell</b>. Ist die Zielgröße binär, wird daraus ein verallgemeinertes gemischtes Modell (GLMM), siehe <a href="../../auswertung/verfahrenswahl/#acc-1">Verfahrenswahl</a>.</p>
+    </div>
+  </details>
+
+  <details class="acc" id="acc-4" open>
+    <summary><span class="acc-no">4</span><span class="acc-title">Der Weg durch den Block<span class="acc-teaser">Welche Station welchen Baustein erklärt.</span></span></summary>
+    <div class="acc-body">
+      <ol class="check">
+        <li><a href="../abhaengige-daten/"><b>Abhängige Daten</b></a>: Wie viel ist die Ähnlichkeit wert? Die ICC misst den Anteil von u<sub>0i</sub> an der Streuung, der Designeffekt rechnet ihn in Fallzahl um. Beispiel: Patientinnen in Praxen.</li>
+        <li><a href="../partial-pooling/"><b>Partial Pooling</b></a>: Wie schätzt das Modell u<sub>0i</sub> für jede Person, auch bei nur einer Messung? Wer wenig gemessen wurde, wird zur Mitte gezogen.</li>
+        <li><a href="../random-slopes/"><b>Random Slopes</b></a>: Der zweite Zufallseffekt u<sub>1i</sub>. Jede Person verändert sich unterschiedlich schnell.</li>
+        <li><a href="../hueftarthroskopie/"><b>Werkstatt Hüftarthroskopie</b></a>: Die Daten aus Abschnitt 1 selbst aufbereiten und in SPSS oder R rechnen.</li>
+      </ol>
+    </div>
+  </details>
+
+  <section class="block refs" aria-labelledby="refs-h">
+    <h2 id="refs-h">Quellen</h2>
+    <ul><li>Müller-Torrente, A. et al. (2021). Benefits of a specific and supervised rehabilitation program in femoroacetabular impingement patients undergoing hip arthroscopy: A randomized control trial. Journal of Clinical Medicine, 10(14), 3125. <a href="https://doi.org/10.3390/jcm10143125">doi:10.3390/jcm10143125</a>; Daten <a href="https://zenodo.org/records/22206659">Zenodo</a>, CC BY 4.0.</li>
+    <li>Twisk, J. W. R. (2019). Applied Mixed Model Analysis: A Practical Guide (2. Aufl.). Cambridge University Press.</li>
+    <li>Gelman, A., &amp; Hill, J. (2007). Data Analysis Using Regression and Multilevel/Hierarchical Models. Cambridge University Press.</li>
+</ul>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="column">
+    <span>© 2026 Dr. Jens Hüsers · Lehrmaterial für Forschungsmethodik und Statistik</span>
+    <span class="footer-links"><a href="https://github.com/jnshsrs/stats-lab">Quellcode auf GitHub</a><span>Ohne Cookies und Tracking</span></span>
+  </div>
+</footer>
+<script src="../../assets/vendor/katex/katex.min.js"></script>
+<script src="../../assets/vendor/katex/contrib/auto-render.min.js"></script>
+<script src="../../assets/js/tex.js?v=202611281037"></script>
+<script src="../../assets/js/reg.js?v=202611281037"></script>
+<script src="../gm-common.js?v=202611281037"></script>
+<script src="../lmm.js?v=202611281037"></script>
+<script src="../daten/fai_reha.js?v=202611281037"></script>
+<script src="warum.js?v=202611281037"></script>
+<script src="../../assets/js/path.js?v=202611281037"></script>
+</body>
+</html>
